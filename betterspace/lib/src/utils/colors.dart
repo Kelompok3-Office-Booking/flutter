@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:betterspace/src/utils/hex_color.dart';
 
 class MyColor {
-  static Color primaryColor = Colors.redAccent;
+  static HexColor redColor = HexColor('eb3734');
 }
