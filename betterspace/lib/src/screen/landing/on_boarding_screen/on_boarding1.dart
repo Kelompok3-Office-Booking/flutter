@@ -1,4 +1,6 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
+import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardingOne extends StatelessWidget {
@@ -27,16 +29,25 @@ class OnBoardingOne extends StatelessWidget {
                 width: AdaptSize.screenWidth * .9767,
               ),
             ),
-            const SizedBox(
-              height: 16,
+            SizedBox(
+              height: AdaptSize.screenHeight * .026,
             ),
-            const Text('Flexible Workspace'),
+            AutoSizeText(
+              'Flexible Workspace',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4!
+                  .copyWith(color: MyColor.darkColor),
+              maxLines: 1,
+            ),
             const SizedBox(
               height: 5,
             ),
-            const Text(
+            AutoSizeText(
               'Kami ada dimanapun dan kapanpun anda butuhkan',
-              maxLines: 3,
+              style: Theme.of(context).textTheme.bodyText1,
+              minFontSize: 10,
+              maxLines: 2,
             ),
           ],
         ),

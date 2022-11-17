@@ -1,8 +1,10 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class TextButtonWidget extends StatelessWidget {
   final String text;
   final Color? foregroundColor;
+  final Color? fontColor;
   final Function() onPressed;
 
   const TextButtonWidget({
@@ -10,6 +12,7 @@ class TextButtonWidget extends StatelessWidget {
     this.foregroundColor,
     required this.text,
     required this.onPressed,
+    this.fontColor,
   }) : super(key: key);
 
   @override
@@ -22,7 +25,11 @@ class TextButtonWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(40),
         ),
       ),
-      child: Text(text),
+      child: AutoSizeText(
+        text,
+        minFontSize: 10,
+        style: Theme.of(context).textTheme.button!.copyWith(color: fontColor),
+      ),
     );
   }
 }

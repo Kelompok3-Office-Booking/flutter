@@ -43,7 +43,7 @@ class _OnBoardinViewState extends State<OnBoardinView> {
           children: _onBoardingPage,
         ),
         Positioned(
-          bottom: AdaptSize.screenHeight * .09,
+          bottom: AdaptSize.screenHeight * .07,
           left: AdaptSize.screenWidth * .04,
           right: AdaptSize.screenWidth * .04,
           child: Column(
@@ -51,14 +51,15 @@ class _OnBoardinViewState extends State<OnBoardinView> {
               /// smooth page indicator
               _buildIndicator(),
               SizedBox(
-                height: AdaptSize.screenHeight * .089,
+                height: AdaptSize.screenHeight * .12,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   /// skip
                   TextButtonWidget(
-                    text: 'Skip',
+                    text: 'Lewati',
+                    fontColor: MyColor.grayLightColor,
                     onPressed: () {},
                   ),
 
@@ -71,9 +72,15 @@ class _OnBoardinViewState extends State<OnBoardinView> {
                     sizeheight: AdaptSize.screenHeight * .06,
                     backgroundColor: MyColor.darkColor,
                     borderRadius: BorderRadius.circular(40),
-                    child: Text(
-                      'Selanjutnya',
-                      style: TextStyle(fontSize: AdaptSize.screenHeight * .022),
+                    child: FittedBox(
+                      fit: BoxFit.contain,
+                      child: Text(
+                        'Selanjutnya',
+                        style: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: Colors.white),
+                      ),
                     ),
                   ),
                 ],

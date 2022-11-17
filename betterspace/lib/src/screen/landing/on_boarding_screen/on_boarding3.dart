@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -13,7 +14,9 @@ class OnBoardingThree extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.only(left: 20.0, right: 20.0),
+        padding: EdgeInsets.only(
+            left: AdaptSize.screenWidth * .04,
+            right: AdaptSize.screenWidth * .04),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -23,20 +26,30 @@ class OnBoardingThree extends StatelessWidget {
             Center(
               child: Image.asset(
                 'assets/image_assets/onboarding3.png',
-                height: AdaptSize.screenHeight * .300,
+                height: AdaptSize.screenHeight * .3,
                 width: AdaptSize.screenWidth * .9767,
               ),
             ),
-            const SizedBox(
-              height: 16,
+            SizedBox(
+              height: AdaptSize.screenHeight * .026,
             ),
-            const Text('Find Inspiration'),
+            AutoSizeText(
+              'Find Inspiration',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4!
+                  .copyWith(color: MyColor.darkColor),
+
+              maxLines: 1,
+            ),
             const SizedBox(
               height: 5,
             ),
-            const Text(
+            AutoSizeText(
               'Dapatkan ide cemerlang dengan bekerja di tempat yang nyaman',
-              maxLines: 3,
+              style: Theme.of(context).textTheme.bodyText1,
+              minFontSize: 10,
+              maxLines: 2,
             ),
           ],
         ),
