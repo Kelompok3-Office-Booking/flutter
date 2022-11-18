@@ -3,9 +3,11 @@ import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding2.d
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding3.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/text_button_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardinView extends StatefulWidget {
@@ -38,52 +40,58 @@ class _OnBoardinViewState extends State<OnBoardinView> {
 
     return Stack(
       children: [
+        /// view
         PageView(
           controller: _pageController,
           children: _onBoardingPage,
         ),
+
+        /// animasi smooth indicator
+        Positioned(
+          top: AdaptSize.screenHeight * .48,
+          left: AdaptSize.screenWidth * .4,
+          right: AdaptSize.screenWidth * .4,
+          child: _buildIndicator(),
+        ),
+
+        /// button
         Positioned(
           bottom: AdaptSize.screenHeight * .07,
-          left: AdaptSize.screenWidth * .04,
-          right: AdaptSize.screenWidth * .04,
-          child: Column(
+          left: AdaptSize.screenWidth * .05,
+          right: AdaptSize.screenWidth * .05,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              /// smooth page indicator
-              _buildIndicator(),
-              SizedBox(
-                height: AdaptSize.screenHeight * .12,
+              /// skip
+              TextButtonWidget(
+                text: 'Lewati',
+                fontColor: MyColor.grayLightColor,
+                onPressed: () {
+                  context
+                      .read<NavigasiViewModel>()
+                      .navigasiToLoginScreen(context);
+                },
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  /// skip
-                  TextButtonWidget(
-                    text: 'Lewati',
-                    fontColor: MyColor.grayLightColor,
-                    onPressed: () {},
-                  ),
 
-                  const Spacer(),
+              const Spacer(),
 
-                  /// button next
-                  ButtonWidget(
-                    onPressed: () {},
-                    sizeWidth: AdaptSize.screenWidth * .3,
-                    sizeheight: AdaptSize.screenHeight * .06,
-                    backgroundColor: MyColor.darkColor,
-                    borderRadius: BorderRadius.circular(40),
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Text(
-                        'Selanjutnya',
-                        style: Theme.of(context)
-                            .textTheme
-                            .button!
-                            .copyWith(color: Colors.white),
-                      ),
-                    ),
+              /// button next
+              ButtonWidget(
+                onPressed: () {},
+                sizeWidth: AdaptSize.screenWidth * .3,
+                sizeheight: AdaptSize.screenHeight * .06,
+                backgroundColor: MyColor.darkBlueColor,
+                borderRadius: BorderRadius.circular(10),
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Text(
+                    'Selanjutnya',
+                    style: Theme.of(context)
+                        .textTheme
+                        .button!
+                        .copyWith(color: MyColor.whiteColor),
                   ),
-                ],
+                ),
               ),
             ],
           ),

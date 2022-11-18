@@ -11,7 +11,7 @@ class OnBoardingOne extends StatelessWidget {
     /// inisialisasi media query
     AdaptSize.size(context: context);
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyColor.whiteColor,
       body: Padding(
         padding: EdgeInsets.only(
             left: AdaptSize.screenWidth * .04,
@@ -30,7 +30,7 @@ class OnBoardingOne extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: AdaptSize.screenHeight * .026,
+              height: AdaptSize.screenHeight * .1,
             ),
             AutoSizeText(
               'Flexible Workspace',
