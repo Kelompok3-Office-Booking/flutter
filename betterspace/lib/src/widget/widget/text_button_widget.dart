@@ -22,7 +22,7 @@ class TextButtonWidget extends StatelessWidget {
       style: TextButton.styleFrom(
         foregroundColor: foregroundColor,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(40),
+          borderRadius: BorderRadius.circular(10),
         ),
       ),
       child: AutoSizeText(
