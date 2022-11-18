@@ -41,9 +41,11 @@ class _OnBoardinViewState extends State<OnBoardinView> {
     return Stack(
       children: [
         /// view
-        PageView(
+        PageView.builder(
           controller: _pageController,
-          children: _onBoardingPage,
+          itemBuilder: (context, index) {
+            return _onBoardingPage[index % _onBoardingPage.length];
+          },
         ),
 
         /// animasi smooth indicator
@@ -77,7 +79,11 @@ class _OnBoardinViewState extends State<OnBoardinView> {
 
               /// button next
               ButtonWidget(
-                onPressed: () {},
+                onPressed: () {
+                  _pageController.nextPage(
+                      duration: const Duration(milliseconds: 600),
+                      curve: Curves.ease);
+                },
                 sizeWidth: AdaptSize.screenWidth * .3,
                 sizeheight: AdaptSize.screenHeight * .06,
                 backgroundColor: MyColor.darkBlueColor,
