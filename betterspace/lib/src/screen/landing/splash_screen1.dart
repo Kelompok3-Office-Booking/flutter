@@ -1,5 +1,5 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
-import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
+import 'package:betterspace/src/screen/landing/splash_screen2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
@@ -22,9 +22,9 @@ class SplashScreenOne extends StatelessWidget {
           ],
         ),
       ),
-      nextScreen: OnBoardinView(),
+      nextScreen: const SplashScreenTwo(),
       splashIconSize: 250, //icon size
-      duration: 3000, //durasi splash
+      duration: 800, //durasi splash
       splashTransition:
           SplashTransition.fadeTransition, //animasi transisi splash element
       pageTransitionType:
