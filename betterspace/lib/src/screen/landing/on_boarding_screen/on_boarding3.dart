@@ -12,7 +12,7 @@ class OnBoardingThree extends StatelessWidget {
     AdaptSize.size(context: context);
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: MyColor.whiteColor,
       body: Padding(
         padding: EdgeInsets.only(
             left: AdaptSize.screenWidth * .04,
@@ -31,7 +31,7 @@ class OnBoardingThree extends StatelessWidget {
               ),
             ),
             SizedBox(
-              height: AdaptSize.screenHeight * .026,
+              height: AdaptSize.screenHeight * .1,
             ),
             AutoSizeText(
               'Find Inspiration',

@@ -1,9 +1,10 @@
 import 'package:betterspace/src/screen/landing/splash_screen1.dart';
 import 'package:betterspace/src/utils/text_theme.dart';
+import 'package:betterspace/src/view_model/menu_view_model.dart';
+import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'src/screen/landing/on_boarding_screen/on_boarding_view.dart';
+import 'package:provider/provider.dart';
 
 void main() {
   runApp(const BetterSpaceApp());
@@ -15,11 +16,18 @@ class BetterSpaceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: const SplashScreenOne(),
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        textTheme: myTextTheme,
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_) => NavigasiViewModel()),
+        ChangeNotifierProvider(create: (_) => MenuViewModel()),
+
+      ],
+      child: MaterialApp(
+        home: const SplashScreenOne(),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          textTheme: myTextTheme,
+        ),
       ),
     );
   }
