@@ -1,4 +1,5 @@
 import 'package:betterspace/src/screen/landing/splash_screen1.dart';
+import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/text_theme.dart';
 import 'package:betterspace/src/view_model/menu_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -20,13 +21,15 @@ class BetterSpaceApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => NavigasiViewModel()),
         ChangeNotifierProvider(create: (_) => MenuViewModel()),
-
       ],
       child: MaterialApp(
         home: const SplashScreenOne(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           textTheme: myTextTheme,
+          colorScheme: Theme.of(context)
+              .colorScheme
+              .copyWith(secondary: MyColor.whiteColor),
         ),
       ),
     );

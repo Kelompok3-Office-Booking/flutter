@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +32,7 @@ class OnBoardingThree extends StatelessWidget {
             SizedBox(
               height: AdaptSize.screenHeight * .1,
             ),
-            AutoSizeText(
+            Text(
               'Find Inspiration',
               style: Theme.of(context)
                   .textTheme
@@ -45,11 +44,11 @@ class OnBoardingThree extends StatelessWidget {
             const SizedBox(
               height: 5,
             ),
-            AutoSizeText(
+            Text(
               'Dapatkan ide cemerlang dengan bekerja di tempat yang nyaman',
               style: Theme.of(context).textTheme.bodyText1,
-              minFontSize: 10,
               maxLines: 2,
+              overflow: TextOverflow.ellipsis,
             ),
           ],
         ),

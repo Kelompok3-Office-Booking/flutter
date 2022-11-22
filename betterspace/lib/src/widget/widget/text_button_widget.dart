@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 
 class TextButtonWidget extends StatelessWidget {
@@ -27,10 +26,9 @@ class TextButtonWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
       ),
-      child: AutoSizeText(
+      child: Text(
         text,
-        minFontSize: 10,
-        style: textStyle,
+        style: Theme.of(context).textTheme.button!.copyWith(color: fontColor),
       ),
     );
   }

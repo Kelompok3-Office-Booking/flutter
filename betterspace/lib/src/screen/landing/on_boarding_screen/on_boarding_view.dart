@@ -41,9 +41,11 @@ class _OnBoardinViewState extends State<OnBoardinView> {
     return Stack(
       children: [
         /// view
-        PageView(
+        PageView.builder(
           controller: _pageController,
-          children: _onBoardingPage,
+          itemBuilder: (context, index) {
+            return _onBoardingPage[index % _onBoardingPage.length];
+          },
         ),
 
         /// animasi smooth indicator
