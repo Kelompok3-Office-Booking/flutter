@@ -8,5 +8,6 @@ class MyColor {
   static HexColor grayLightColor = HexColor('6E7A95');
   static HexColor whiteColor = HexColor('FCFCFC');
   static HexColor darkBlueColor = HexColor('2943A3');
+  static HexColor netralColor = HexColor('F5F5F5');
   static Color transparanColor = Colors.transparent;
 }

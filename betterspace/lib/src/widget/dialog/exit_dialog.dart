@@ -9,7 +9,7 @@ Future showExitDialog(BuildContext context) {
         return CupertinoAlertDialog(
           content: Text(
             'Yakin Mau Keluar ?',
-            style: Theme.of(context).textTheme.headline6,
+            style: Theme.of(context).textTheme.bodyText1,
           ),
           actions: [
             CupertinoDialogAction(
@@ -20,7 +20,7 @@ Future showExitDialog(BuildContext context) {
                 'Batal',
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodyText2!
                     .copyWith(color: MyColor.darkBlueColor),
               ),
             ),
@@ -32,7 +32,7 @@ Future showExitDialog(BuildContext context) {
                 'Keluar',
                 style: Theme.of(context)
                     .textTheme
-                    .bodyText1!
+                    .bodyText2!
                     .copyWith(color: MyColor.redColor),
               ),
             ),
