@@ -69,7 +69,7 @@ class _OnBoardinViewState extends State<OnBoardinView> {
                 onPressed: () {
                   context
                       .read<NavigasiViewModel>()
-                      .navigasiToLoginScreen(context);
+                      .navigasiToRegisterScreen(context);
                 },
               ),
 
@@ -77,7 +77,9 @@ class _OnBoardinViewState extends State<OnBoardinView> {
 
               /// button next
               ButtonWidget(
-                onPressed: () {},
+                onPressed: () {
+                  NavigasiViewModel().navigasiToRegisterScreen(context);
+                },
                 sizeWidth: AdaptSize.screenWidth * .3,
                 sizeheight: AdaptSize.screenHeight * .06,
                 backgroundColor: MyColor.darkBlueColor,

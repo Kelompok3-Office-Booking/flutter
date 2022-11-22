@@ -5,11 +5,13 @@ class TextButtonWidget extends StatelessWidget {
   final String text;
   final Color? foregroundColor;
   final Color? fontColor;
+  final TextStyle? textStyle;
   final Function() onPressed;
 
   const TextButtonWidget({
     Key? key,
     this.foregroundColor,
+    this.textStyle,
     required this.text,
     required this.onPressed,
     this.fontColor,
@@ -28,7 +30,7 @@ class TextButtonWidget extends StatelessWidget {
       child: AutoSizeText(
         text,
         minFontSize: 10,
-        style: Theme.of(context).textTheme.button!.copyWith(color: fontColor),
+        style: textStyle,
       ),
     );
   }
