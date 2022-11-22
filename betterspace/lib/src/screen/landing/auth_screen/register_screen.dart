@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -27,6 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
     AdaptSize.size(context: context);
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Center(
           child: Padding(
             padding: EdgeInsets.only(
@@ -39,7 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Padding(
                   padding:
                       EdgeInsets.only(bottom: AdaptSize.screenHeight / 400),
-                  child: AutoSizeText(
+                  child: Text(
                     "Hi,",
                     style: Theme.of(context).textTheme.headline4,
                   ),
@@ -47,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Padding(
                   padding:
                       EdgeInsets.only(bottom: AdaptSize.screenHeight / 33.3),
-                  child: AutoSizeText(
+                  child: Text(
                     "let's register to use the app",
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
@@ -74,7 +74,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            AutoSizeText(
+                            Text(
                               "Gender",
                               style: Theme.of(context).textTheme.bodyMedium,
                             ),
@@ -93,7 +93,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               radioGenderVal = value!;
                                             });
                                           })),
-                                      AutoSizeText(
+                                      Text(
                                         "Male",
                                         style: Theme.of(context)
                                             .textTheme
@@ -115,7 +115,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                               radioGenderVal = value!;
                                             });
                                           })),
-                                      AutoSizeText(
+                                      Text(
                                         "Female",
                                         style: Theme.of(context)
                                             .textTheme
@@ -173,7 +173,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      AutoSizeText(
+                      Text(
                         "I agree to the",
                         style: Theme.of(context).textTheme.bodySmall,
                       ),
@@ -185,7 +185,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               .copyWith(color: Colors.blue),
                           fontColor: Colors.blue,
                           onPressed: () {}),
-                      AutoSizeText(
+                      Text(
                         "that apply",
                         style: Theme.of(context).textTheme.bodySmall,
                       )
@@ -199,7 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           backgroundColor: MyColor.darkBlueColor,
                           minimumSize: const Size.fromHeight(50)),
                       onPressed: () {},
-                      child: AutoSizeText("Register",
+                      child: Text("Register",
                           style: Theme.of(context)
                               .textTheme
                               .button!
@@ -214,7 +214,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AutoSizeText(
+                          Text(
                             "already have an account?",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),

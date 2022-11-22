@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -24,6 +23,7 @@ class _LoginScreenState extends State<LoginScreen> {
     AdaptSize.size(context: context);
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         body: Center(
           child: Padding(
             padding: EdgeInsets.only(
@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding:
                       EdgeInsets.only(bottom: AdaptSize.screenHeight / 400),
-                  child: AutoSizeText(
+                  child: Text(
                     "Welcome,",
                     style: Theme.of(context).textTheme.headline4,
                   ),
@@ -44,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Padding(
                   padding:
                       EdgeInsets.only(bottom: AdaptSize.screenHeight / 33.3),
-                  child: AutoSizeText(
+                  child: Text(
                     "let's login to use the app",
                     style: Theme.of(context).textTheme.bodyLarge,
                   ),
@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    AutoSizeText(
+                    Text(
                       "Forgot your Password?",
                       style: Theme.of(context).textTheme.bodySmall,
                     ),
@@ -105,7 +105,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             backgroundColor: MyColor.darkBlueColor,
                             minimumSize: const Size.fromHeight(50)),
                         onPressed: () {},
-                        child: AutoSizeText("Login",
+                        child: Text("Login",
                             style: Theme.of(context)
                                 .textTheme
                                 .button!
@@ -121,7 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          AutoSizeText(
+                          Text(
                             "don't have an account yet?",
                             style: Theme.of(context).textTheme.bodySmall,
                           ),
