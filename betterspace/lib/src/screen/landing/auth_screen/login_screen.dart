@@ -7,6 +7,7 @@ import 'package:betterspace/src/widget/widget/text_button_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -58,8 +59,9 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// email field
-              TextFormFields(
+              textFormFields(
                 obscureText: false,
+                textStyle: Theme.of(context).textTheme.bodyText1,
                 textInputAction: TextInputAction.done,
                 hintTexts: 'example@gmail.com',
                 label: 'Email',
@@ -71,9 +73,10 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// password field
-              TextFormFields(
+              textFormFields(
                 maxLines: 1,
                 obscureText: true,
+                textStyle: Theme.of(context).textTheme.bodyText1,
                 label: "Password",
                 controller: _passwordController,
                 hintTexts: "********",
@@ -91,22 +94,28 @@ class _LoginScreenState extends State<LoginScreen> {
                     "Forgot your Password?",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  TextButtonWidget(
+                  textButtonWidget(
                       foregroundColor: MyColor.darkBlueColor,
                       text: "Reset Passwords",
-                      textStyle: Theme.of(context).textTheme.bodySmall,
-                      fontColor: MyColor.darkBlueColor,
+                      textStyle:
+                          Theme.of(context).textTheme.bodySmall!.copyWith(
+                                color: MyColor.darkBlueColor,
+                              ),
                       onPressed: () {})
                 ],
               ),
 
               /// button login
-              ButtonWidget(
+              buttonWidget(
                 sizeheight: AdaptSize.screenHeight / 14,
                 sizeWidth: double.infinity,
                 borderRadius: BorderRadius.circular(10),
                 backgroundColor: MyColor.darkBlueColor,
-                onPressed: () {},
+                onPressed: () {
+                  context
+                      .read<NavigasiViewModel>()
+                      .navigasiToMenuScreen(context);
+                },
                 child: Text(
                   "Login",
                   style: Theme.of(context)
