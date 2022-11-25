@@ -7,6 +7,7 @@ import 'package:betterspace/src/widget/widget/text_button_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -106,7 +107,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 sizeWidth: double.infinity,
                 borderRadius: BorderRadius.circular(10),
                 backgroundColor: MyColor.darkBlueColor,
-                onPressed: () {},
+                onPressed: () {
+                  context.read<NavigasiViewModel>().navigasiToMenuScreen(context);
+                },
                 child: Text(
                   "Login",
                   style: Theme.of(context)

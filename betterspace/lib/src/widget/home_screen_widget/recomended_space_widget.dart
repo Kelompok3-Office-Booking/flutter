@@ -56,7 +56,6 @@ Widget recomenSpaces(context, Function() onTap) {
                             ),
                           ),
                         ),
-
                         Positioned(
                           left: 10,
                           top: 8,
@@ -65,27 +64,33 @@ Widget recomenSpaces(context, Function() onTap) {
                               /// ranting
                               Container(
                                 height: AdaptSize.screenHeight * .035,
-                                width: AdaptSize.screenHeight * .065,
+                                width: AdaptSize.screenHeight * .068,
                                 alignment: Alignment.center,
-                                padding: EdgeInsets.only(left: AdaptSize.screenHeight * .005, right: AdaptSize.screenHeight * .005),
+                                padding: EdgeInsets.only(
+                                    left: AdaptSize.screenHeight * .005,
+                                    right: AdaptSize.screenHeight * .005),
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(40),
                                   color: MyColor.grayLightColor.withOpacity(.6),
                                 ),
                                 child: Row(
                                   mainAxisAlignment:
-                                  MainAxisAlignment.spaceEvenly,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    const Icon(
+                                    Icon(
                                       Icons.star,
                                       color: Colors.amber,
+                                      size: AdaptSize.screenHeight * 0.025,
                                     ),
                                     Text(
                                       '${recomendedSpaces.ranting}',
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyText2!
-                                          .copyWith(color: MyColor.whiteColor),
+                                          .copyWith(
+                                              color: MyColor.whiteColor,
+                                              fontSize: AdaptSize.screenHeight *
+                                                  0.017),
                                     ),
                                   ],
                                 ),
@@ -137,7 +142,10 @@ Widget recomenSpaces(context, Function() onTap) {
                           child: Row(
                             children: [
                               /// icon lokasi
-                              const Icon(Icons.location_on_sharp),
+                              Icon(
+                                Icons.location_on_outlined,
+                                size: AdaptSize.screenHeight * .025,
+                              ),
 
                               /// keterangan lokasi
                               Text(
@@ -150,13 +158,15 @@ Widget recomenSpaces(context, Function() onTap) {
                                             AdaptSize.screenHeight * .014),
                               ),
 
-                              const SizedBox(
-                                width: 10,
+                              SizedBox(
+                                width: AdaptSize.screenHeight * .012,
                               ),
 
                               /// total person asset
                               SvgPicture.asset(
-                                  'assets/svg_assets/available.svg'),
+                                'assets/svg_assets/available.svg',
+                                height: AdaptSize.screenHeight * .025,
+                              ),
 
                               const SizedBox(
                                 width: 2,
@@ -173,12 +183,15 @@ Widget recomenSpaces(context, Function() onTap) {
                                             AdaptSize.screenHeight * .014),
                               ),
 
-                              const SizedBox(
-                                width: 10,
+                              SizedBox(
+                                width: AdaptSize.screenHeight * .012,
                               ),
 
                               /// icon penggaris
-                              SvgPicture.asset('assets/svg_assets/ruler.svg'),
+                              SvgPicture.asset(
+                                'assets/svg_assets/ruler.svg',
+                                height: AdaptSize.screenHeight * .025,
+                              ),
 
                               const SizedBox(
                                 width: 2,
@@ -222,7 +235,7 @@ Widget recomenSpaces(context, Function() onTap) {
                                   .textTheme
                                   .bodyText2!
                                   .copyWith(
-                                    fontSize: AdaptSize.screenHeight * .011),
+                                      fontSize: AdaptSize.screenHeight * .011),
                             ),
                           ],
                         ),
