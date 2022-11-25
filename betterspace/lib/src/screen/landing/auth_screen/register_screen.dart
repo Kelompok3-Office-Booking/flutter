@@ -69,7 +69,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Padding(
                   padding:
                       EdgeInsets.only(bottom: AdaptSize.screenHeight / 72.7),
-                  child: TextFormFields(
+                  child: textFormFields(
                     textInputAction: TextInputAction.done,
                     obscureText: false,
                     hintTexts: 'fullname',
@@ -136,7 +136,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 /// email field
-                TextFormFields(
+                textFormFields(
                   textInputAction: TextInputAction.done,
                   obscureText: false,
                   hintTexts: 'example@gmail.com',
@@ -149,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 /// password field
-                TextFormFields(
+                textFormFields(
                   textInputAction: TextInputAction.done,
                   maxLines: 1,
                   obscureText: true,
@@ -163,7 +163,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 /// confrim password field
-                TextFormFields(
+                textFormFields(
                   textInputAction: TextInputAction.done,
                   maxLines: 1,
                   obscureText: true,
@@ -202,7 +202,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 /// button register
-                ButtonWidget(
+                buttonWidget(
                   sizeheight: AdaptSize.screenHeight / 14,
                   sizeWidth: double.infinity,
                   borderRadius: BorderRadius.circular(10),

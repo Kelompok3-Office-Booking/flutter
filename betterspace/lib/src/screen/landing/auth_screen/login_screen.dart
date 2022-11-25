@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// email field
-              TextFormFields(
+              textFormFields(
                 obscureText: false,
                 textInputAction: TextInputAction.done,
                 hintTexts: 'example@gmail.com',
@@ -72,7 +72,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// password field
-              TextFormFields(
+              textFormFields(
                 maxLines: 1,
                 obscureText: true,
                 label: "Password",
@@ -92,7 +92,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     "Forgot your Password?",
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
-                  TextButtonWidget(
+                  textButtonWidget(
                       foregroundColor: MyColor.darkBlueColor,
                       text: "Reset Passwords",
                       textStyle: Theme.of(context).textTheme.bodySmall,
@@ -102,13 +102,15 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// button login
-              ButtonWidget(
+              buttonWidget(
                 sizeheight: AdaptSize.screenHeight / 14,
                 sizeWidth: double.infinity,
                 borderRadius: BorderRadius.circular(10),
                 backgroundColor: MyColor.darkBlueColor,
                 onPressed: () {
-                  context.read<NavigasiViewModel>().navigasiToMenuScreen(context);
+                  context
+                      .read<NavigasiViewModel>()
+                      .navigasiToMenuScreen(context);
                 },
                 child: Text(
                   "Login",

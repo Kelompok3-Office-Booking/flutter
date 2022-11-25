@@ -65,7 +65,7 @@ class _OnBoardinViewState extends State<OnBoardinView> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               /// skip
-              TextButtonWidget(
+              textButtonWidget(
                 text: 'Lewati',
                 fontColor: MyColor.grayLightColor,
                 onPressed: () {
@@ -78,7 +78,7 @@ class _OnBoardinViewState extends State<OnBoardinView> {
               const Spacer(),
 
               /// button next
-              ButtonWidget(
+              buttonWidget(
                 onPressed: () {
                   NavigasiViewModel().navigasiToRegisterScreen(context);
                 },
