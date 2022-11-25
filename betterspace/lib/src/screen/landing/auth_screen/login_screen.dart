@@ -61,6 +61,7 @@ class _LoginScreenState extends State<LoginScreen> {
               /// email field
               textFormFields(
                 obscureText: false,
+                textStyle: Theme.of(context).textTheme.bodyText1,
                 textInputAction: TextInputAction.done,
                 hintTexts: 'example@gmail.com',
                 label: 'Email',
@@ -75,6 +76,7 @@ class _LoginScreenState extends State<LoginScreen> {
               textFormFields(
                 maxLines: 1,
                 obscureText: true,
+                textStyle: Theme.of(context).textTheme.bodyText1,
                 label: "Password",
                 controller: _passwordController,
                 hintTexts: "********",
@@ -95,8 +97,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   textButtonWidget(
                       foregroundColor: MyColor.darkBlueColor,
                       text: "Reset Passwords",
-                      textStyle: Theme.of(context).textTheme.bodySmall,
-                      fontColor: MyColor.darkBlueColor,
+                      textStyle:
+                          Theme.of(context).textTheme.bodySmall!.copyWith(
+                                color: MyColor.darkBlueColor,
+                              ),
                       onPressed: () {})
                 ],
               ),

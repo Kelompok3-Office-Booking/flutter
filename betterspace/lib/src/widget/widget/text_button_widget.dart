@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
 Widget textButtonWidget({
-  context,
   String? text,
-  Color? foregroundColor,
-  Color? fontColor,
   TextStyle? textStyle,
+  Color? foregroundColor,
   Function()? onPressed,
 }) {
   return TextButton(
@@ -18,7 +16,7 @@ Widget textButtonWidget({
     ),
     child: Text(
       text!,
-      style: Theme.of(context).textTheme.button!.copyWith(color: fontColor),
+      style: textStyle,
     ),
   );
 }

@@ -67,7 +67,9 @@ class _OnBoardinViewState extends State<OnBoardinView> {
               /// skip
               textButtonWidget(
                 text: 'Lewati',
-                fontColor: MyColor.grayLightColor,
+                textStyle: Theme.of(context).textTheme.button!.copyWith(
+                      color: MyColor.grayLightColor,
+                    ),
                 onPressed: () {
                   context
                       .read<NavigasiViewModel>()

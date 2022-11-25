@@ -2,8 +2,8 @@ import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 Widget textFormFields({
-  context,
   TextEditingController? controller,
+  TextStyle? textStyle,
   Widget? suffixIcon,
   bool? obscureText,
   String? hintTexts,
@@ -26,7 +26,7 @@ Widget textFormFields({
       hintText: hintTexts,
       label: Text(
         '$label',
-        style: Theme.of(context).textTheme.bodyText1,
+        style: textStyle,
       ),
       floatingLabelBehavior: floatingLabelBehaviour,
       filled: true,
