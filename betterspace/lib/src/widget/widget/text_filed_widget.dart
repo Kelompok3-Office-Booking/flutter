@@ -1,3 +1,4 @@
+import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class TextFormFields extends StatelessWidget {
@@ -29,7 +30,7 @@ class TextFormFields extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      //cursorColor: MyColor.deepAqua,
+      cursorColor: MyColor.darkBlueColor,
       obscureText: obscureText,
       controller: controller,
       maxLines: maxLines,
@@ -47,20 +48,20 @@ class TextFormFields extends StatelessWidget {
         //fillColor: MyColor.border,
         suffixIcon: suffixIcon,
         errorBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-              //color: MyColor.errorColor,
+          borderSide: BorderSide(
+              color: MyColor.redColor,
               ),
           borderRadius: BorderRadius.circular(10),
         ),
         focusedBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-              //color: MyColor.deepAqua,
+          borderSide: BorderSide(
+              color: MyColor.grayLightColor,
               ),
           borderRadius: BorderRadius.circular(10),
         ),
         enabledBorder: OutlineInputBorder(
-          borderSide: const BorderSide(
-              //color: MyColor.outlineBorder,
+          borderSide: BorderSide(
+              color: MyColor.grayLightColor,
               ),
           borderRadius: BorderRadius.circular(10),
         ),

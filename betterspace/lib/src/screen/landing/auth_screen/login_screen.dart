@@ -1,9 +1,11 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-
+import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
 import 'package:betterspace/src/widget/widget/text_button_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -14,20 +16,29 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final formKey = GlobalKey<FormState>();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Center(
-        child: Padding(
-          padding: EdgeInsets.only(
-              top: AdaptSize.screenHeight / 16.6,
-              left: AdaptSize.screenWidth / 22.5,
-              right: AdaptSize.screenWidth / 22.5),
+      body: Padding(
+        padding: EdgeInsets.only(
+            top: AdaptSize.paddingTop,
+            left: AdaptSize.screenWidth / 22.5,
+            right: AdaptSize.screenWidth / 22.5),
+        child: Form(
+          key: _formKey,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -45,36 +56,34 @@ class _LoginScreenState extends State<LoginScreen> {
                   style: Theme.of(context).textTheme.bodyLarge,
                 ),
               ),
-              Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: AdaptSize.screenHeight / 33.3),
-                      child: TextFormFields(
-                        obscureText: false,
-                        hintTexts: 'example@gmail.com',
-                        label: 'Email',
-                        controller: emailController,
-                        floatingLabelBehaviour: FloatingLabelBehavior.always,
-                      ),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.only(
-                          bottom: AdaptSize.screenHeight / 66.6),
-                      child: TextFormFields(
-                        maxLines: 1,
-                        obscureText: true,
-                        label: "Password",
-                        controller: passwordController,
-                        hintTexts: "********",
-                        floatingLabelBehaviour: FloatingLabelBehavior.always,
-                      ),
-                    ),
-                  ],
-                ),
+
+              /// email field
+              TextFormFields(
+                obscureText: false,
+                textInputAction: TextInputAction.done,
+                hintTexts: 'example@gmail.com',
+                label: 'Email',
+                controller: _emailController,
               ),
+
+              SizedBox(
+                height: AdaptSize.screenHeight * .024,
+              ),
+
+              /// password field
+              TextFormFields(
+                maxLines: 1,
+                obscureText: true,
+                label: "Password",
+                controller: _passwordController,
+                hintTexts: "********",
+              ),
+
+              SizedBox(
+                height: AdaptSize.screenHeight * .012,
+              ),
+
+              /// reset password
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
@@ -83,58 +92,50 @@ class _LoginScreenState extends State<LoginScreen> {
                     style: Theme.of(context).textTheme.bodySmall,
                   ),
                   TextButtonWidget(
+                      foregroundColor: MyColor.darkBlueColor,
                       text: "Reset Passwords",
-                      textStyle: Theme.of(context)
-                          .textTheme
-                          .bodySmall!
-                          .copyWith(color: Colors.blue),
-                      fontColor: Colors.blue,
+                      textStyle: Theme.of(context).textTheme.bodySmall,
+                      fontColor: MyColor.darkBlueColor,
                       onPressed: () {})
                 ],
               ),
-              Padding(
-                padding: EdgeInsets.only(top: AdaptSize.screenHeight / 33.3),
-                child: SizedBox(
-                  height: AdaptSize.screenHeight / 20,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: MyColor.darkBlueColor,
-                          minimumSize: const Size.fromHeight(50)),
-                      onPressed: () {},
-                      child: Text("Login",
-                          style: Theme.of(context)
-                              .textTheme
-                              .button!
-                              .copyWith(color: MyColor.whiteColor))),
+
+              /// button login
+              ButtonWidget(
+                sizeheight: AdaptSize.screenHeight / 14,
+                sizeWidth: double.infinity,
+                borderRadius: BorderRadius.circular(10),
+                backgroundColor: MyColor.darkBlueColor,
+                onPressed: () {},
+                child: Text(
+                  "Login",
+                  style: Theme.of(context)
+                      .textTheme
+                      .button!
+                      .copyWith(color: MyColor.whiteColor),
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding:
-                      EdgeInsets.only(bottom: AdaptSize.screenHeight / 16.6),
-                  child: Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          "don't have an account yet?",
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        TextButtonWidget(
-                            text: "Register",
-                            textStyle: Theme.of(context)
-                                .textTheme
-                                .bodySmall!
-                                .copyWith(color: Colors.blue),
-                            fontColor: Colors.blue,
-                            onPressed: () {
-                              NavigasiViewModel()
-                                  .navigasiToRegisterScreen(context);
-                            }),
-                      ],
-                    ),
-                  ),
+
+              const Spacer(),
+
+              Padding(
+                padding: EdgeInsets.only(
+                  bottom: AdaptSize.screenHeight * 0.088,
+                ),
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: richTextWidget(
+                      text1: 'don\'t have an account yet? ',
+                      textStyle1: Theme.of(context).textTheme.bodyMedium,
+                      text2: 'Register',
+                      textStyle2: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: MyColor.darkBlueColor),
+                      recognizer: TapGestureRecognizer()
+                        ..onTap = () {
+                          NavigasiViewModel().navigasiPop(context);
+                        }),
                 ),
               )
             ],
