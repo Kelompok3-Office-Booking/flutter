@@ -4,23 +4,25 @@ class TextFormFields extends StatelessWidget {
   final TextEditingController? controller;
   final Widget? suffixIcon;
   final bool obscureText;
-  final String? hintText;
+  final String? hintTexts;
   final TextInputType? keyboardType;
   final int? maxLines;
   final int? minLines;
   final String? label;
   final TextInputAction? textInputAction;
+  final FloatingLabelBehavior? floatingLabelBehaviour;
 
   const TextFormFields({
     Key? key,
     this.controller,
     this.suffixIcon,
     this.keyboardType,
-    this.hintText,
+    this.hintTexts,
     this.maxLines,
     this.minLines,
     this.textInputAction,
     this.label,
+    this.floatingLabelBehaviour,
     required this.obscureText,
   }) : super(key: key);
 
@@ -35,10 +37,12 @@ class TextFormFields extends StatelessWidget {
       textInputAction: textInputAction,
       keyboardType: keyboardType,
       decoration: InputDecoration(
+        hintText: hintTexts,
         label: Text(
           '$label',
           style: Theme.of(context).textTheme.bodyText1,
         ),
+        floatingLabelBehavior: floatingLabelBehaviour,
         filled: true,
         //fillColor: MyColor.border,
         suffixIcon: suffixIcon,

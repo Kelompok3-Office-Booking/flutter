@@ -1,5 +1,7 @@
 import 'dart:async';
 import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
+import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
+import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:flutter/cupertino.dart';
@@ -38,12 +40,12 @@ class NavigasiViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  /// navigasi login ke menu screen
-  void navigasiToMenuScreen(BuildContext context) {
+  /// navigasi login ke register screen
+  void navigasiToRegisterScreen(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondAnimation) =>
-          const MenuScreen(),
+              const RegisterScreen(),
           transitionDuration: const Duration(milliseconds: 1200),
           transitionsBuilder: (context, animation, secondAnimation, child) {
             const begin = Offset(0.0, 1.0);
@@ -60,6 +62,56 @@ class NavigasiViewModel with ChangeNotifier {
             );
           },
         ),
-            (route) => false);
+        (route) => false);
+  }
+
+  ///navigasi ke terms and condition page
+  void navigasiToTermsAndConditionScreen(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondAnimation) =>
+              const TermsAndConditionViews(),
+          transitionDuration: const Duration(milliseconds: 1200),
+          transitionsBuilder: (context, animation, secondAnimation, child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset.zero;
+            const curve = Curves.linearToEaseOut;
+
+            var tween = Tween(begin: begin, end: end).chain(
+              CurveTween(curve: curve),
+            );
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
+        (route) => false);
+  }
+
+  /// navigasi login ke menu screen
+  void navigasiToMenuScreen(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondAnimation) =>
+              const MenuScreen(),
+          transitionDuration: const Duration(milliseconds: 1200),
+          transitionsBuilder: (context, animation, secondAnimation, child) {
+            const begin = Offset(0.0, 1.0);
+            const end = Offset.zero;
+            const curve = Curves.linearToEaseOut;
+
+            var tween = Tween(begin: begin, end: end).chain(
+              CurveTween(curve: curve),
+            );
+
+            return SlideTransition(
+              position: animation.drive(tween),
+              child: child,
+            );
+          },
+        ),
+        (route) => false);
   }
 }
