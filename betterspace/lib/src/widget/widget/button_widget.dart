@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
-Widget buttonWidget(
-{
+Widget buttonWidget({
   Color? backgroundColor,
   Color? foregroundColor,
   Function()? onPressed,
@@ -12,11 +11,12 @@ Widget buttonWidget(
   double? elevation,
   BorderSide? borderSide,
   BorderRadiusGeometry? borderRadius,
-}
-) {
-  return SizedBox(
+  EdgeInsetsGeometry? margin,
+}) {
+  return Container(
     width: sizeWidth,
     height: sizeheight,
+    margin: margin,
     child: ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
