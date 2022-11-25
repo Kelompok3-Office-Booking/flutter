@@ -22,6 +22,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController fullnameController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   GenderEnum _radioGenderVal = GenderEnum.male;
+  ValueNotifier<GenderEnum> radGenderVal =
+      ValueNotifier<GenderEnum>(GenderEnum.male);
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
@@ -77,50 +79,48 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         ),
                         Row(
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  right: AdaptSize.screenWidth / 45),
-                              child: Row(
-                                children: [
-                                  Radio<GenderEnum>(
+                            Row(
+                              children: [
+                                ValueListenableBuilder<GenderEnum>(
+                                  valueListenable: radGenderVal,
+                                  builder: ((context, values, child) {
+                                    return Radio<GenderEnum>(
                                       value: GenderEnum.male,
-                                      groupValue: _radioGenderVal,
-                                      onChanged: ((GenderEnum? value) {
-                                        setState(() {
-                                          _radioGenderVal = value!;
-                                        });
-                                      })),
-                                  Text(
-                                    "Male",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  )
-                                ],
-                              ),
+                                      groupValue: values,
+                                      onChanged: ((value) {
+                                        radGenderVal.value = value!;
+                                      }),
+                                    );
+                                  }),
+                                ),
+                                Text(
+                                  "Male",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
                             ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: AdaptSize.screenWidth / 45),
-                              child: Row(
-                                children: [
-                                  Radio<GenderEnum>(
+                            Row(
+                              children: [
+                                ValueListenableBuilder<GenderEnum>(
+                                  valueListenable: radGenderVal,
+                                  builder: ((context, values, child) {
+                                    return Radio<GenderEnum>(
                                       value: GenderEnum.female,
-                                      groupValue: _radioGenderVal,
-                                      onChanged: ((GenderEnum? value) {
-                                        setState(() {
-                                          _radioGenderVal = value!;
-                                        });
-                                      })),
-                                  Text(
-                                    "Female",
-                                    style:
-                                        Theme.of(context).textTheme.bodyMedium,
-                                  )
-                                ],
-                              ),
+                                      groupValue: values,
+                                      onChanged: ((value) {
+                                        radGenderVal.value = value!;
+                                      }),
+                                    );
+                                  }),
+                                ),
+                                Text(
+                                  "Female",
+                                  style: Theme.of(context).textTheme.bodyMedium,
+                                ),
+                              ],
                             ),
                           ],
-                        )
+                        ),
                       ],
                     ),
                   ),
@@ -210,24 +210,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 padding: EdgeInsets.only(bottom: AdaptSize.screenHeight / 16.6),
                 child: Align(
                   alignment: Alignment.bottomCenter,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "already have an account?",
-                        style: Theme.of(context).textTheme.bodySmall,
-                      ),
-                      TextButtonWidget(
-                          text: "Login",
-                          textStyle: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(color: Colors.blue),
-                          fontColor: Colors.blue,
-                          onPressed: () {
-                            NavigasiViewModel().navigasiToLoginScreen(context);
-                          }),
-                    ],
+                  child: RichText(
+                    text: TextSpan(
+                      text: "already have an account? ",
+                      style: Theme.of(context).textTheme.bodyMedium,
+                      children: <TextSpan>[
+                        TextSpan(
+                            text: "Login",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(color: Colors.blue),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                NavigasiViewModel()
+                                    .navigasiToLoginScreen(context);
+                              }),
+                      ],
+                    ),
                   ),
                 ),
               ),

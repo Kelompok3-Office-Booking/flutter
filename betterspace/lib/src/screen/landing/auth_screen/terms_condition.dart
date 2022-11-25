@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class TermsAndConditionViews extends StatefulWidget {
   const TermsAndConditionViews({super.key});
@@ -10,6 +11,8 @@ class TermsAndConditionViews extends StatefulWidget {
 class _TermsAndConditionViewsState extends State<TermsAndConditionViews> {
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+      body: Text("terms and condition page"),
+    );
   }
 }
