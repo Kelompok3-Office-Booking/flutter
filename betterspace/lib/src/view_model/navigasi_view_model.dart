@@ -3,6 +3,7 @@ import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
+import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -100,5 +101,15 @@ class NavigasiViewModel with ChangeNotifier {
           },
         ),
         (route) => false);
+  }
+
+  /// navigasi home ke search screen
+  void navigasiToSearchSpaces(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => const SearchSpaceScreen(),
+      ),
+    );
   }
 }
