@@ -3,6 +3,7 @@ import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/text_theme.dart';
 import 'package:betterspace/src/view_model/menu_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/onboarding_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,7 @@ class BetterSpaceApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(create: (_) => NavigasiViewModel()),
         ChangeNotifierProvider(create: (_) => MenuViewModel()),
+        ChangeNotifierProvider(create: (_) => OnboardingViewModel()),
       ],
       child: MaterialApp(
         home: const SplashScreenOne(),
