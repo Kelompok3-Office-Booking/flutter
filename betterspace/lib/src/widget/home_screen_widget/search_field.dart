@@ -10,6 +10,7 @@ Widget searchPlace(
   return TextFormField(
     controller: controller,
     cursorColor: MyColor.grayLightColor,
+    readOnly: true,
     decoration: InputDecoration(
       hintText: hintText,
       filled: true,

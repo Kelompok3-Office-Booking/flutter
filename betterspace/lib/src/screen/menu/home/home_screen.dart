@@ -2,9 +2,12 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/widget/home_screen_widget/all_populer.dart';
 import 'package:betterspace/src/widget/home_screen_widget/carousel_widget.dart';
-import 'package:betterspace/src/widget/home_screen_widget/popular_space_widget.dart';
+import 'package:betterspace/src/widget/home_screen_widget/meeting_rent_widget.dart';
+import 'package:betterspace/src/widget/home_screen_widget/office_rent_widget.dart';
+import 'package:betterspace/src/widget/home_screen_widget/popular_coworking_widget.dart';
 import 'package:betterspace/src/widget/home_screen_widget/recomended_space_widget.dart';
 import 'package:betterspace/src/widget/home_screen_widget/search_field.dart';
+import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -76,20 +79,20 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: AdaptSize.screenHeight * .016,
               ),
 
-
               /// text field
               Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(40),
                   boxShadow: [
                     BoxShadow(
-                      offset: const Offset(3,3),
+                      offset: const Offset(3, 3),
                       color: MyColor.grayLightColor.withOpacity(.4),
                       blurRadius: 3,
                     ),
                   ],
                 ),
-                child: searchPlace(     /// search field
+                child: searchPlace(
+                  /// search field
                   context,
                   'Mau kerja dimana hari ini ?',
                   searchController,
@@ -101,18 +104,25 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               SizedBox(
-                height: AdaptSize.screenHeight * .010,
+                height: AdaptSize.screenHeight * .016,
               ),
 
               /// promo
               carouselWidget(),
 
               SizedBox(
-                height: AdaptSize.screenHeight * .016,
+                height: AdaptSize.screenHeight * .008,
+              ),
+
+              /// divider
+              dividerWdiget(),
+
+              SizedBox(
+                height: AdaptSize.screenHeight * .008,
               ),
 
               /// all popular text
-              allSpaces(context, 'Popular WorkSpace', () {}),
+              allSpaces(context, 'Popular Coworking Space', () {}),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
@@ -121,15 +131,43 @@ class _HomeScreenState extends State<HomeScreen> {
               /// popular space
               popularSpaceWidget(() {}),
 
+              /// all office rent text
+              allSpaces(context, 'Office for Rent', () {}),
+
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
+              ),
+
+              /// office rent space
+              officeRentWidget((){}),
+
+              /// all meeting room text
+              allSpaces(context, 'Meeting Rooms', () {}),
+
+              SizedBox(
+                height: AdaptSize.screenHeight * .016,
+              ),
+
+              /// meeting space
+              meetingRoomWidget(() {}),
+
+
+              SizedBox(
+                height: AdaptSize.screenHeight * .008,
+              ),
+
+              /// divider
+              dividerWdiget(),
+
+              SizedBox(
+                height: AdaptSize.screenHeight * .008,
               ),
 
               /// text recomended spaces
               allSpaces(context, 'Recommendation', () {}),
 
-              const SizedBox(
-                height: 16,
+              SizedBox(
+                height: AdaptSize.screenHeight * .016,
               ),
 
               /// recomended spaces
