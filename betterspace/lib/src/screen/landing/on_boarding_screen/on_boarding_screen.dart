@@ -2,14 +2,22 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-class OnBoardingThree extends StatelessWidget {
-  const OnBoardingThree({Key? key}) : super(key: key);
+class OnBoardingScreen extends StatelessWidget {
+  final String image;
+  final String title;
+  final String description;
+
+  const OnBoardingScreen({
+    Key? key,
+    required this.image,
+    required this.title,
+    required this.description,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     /// inisialisasi media query
     AdaptSize.size(context: context);
-
     return Scaffold(
       backgroundColor: MyColor.whiteColor,
       body: Padding(
@@ -24,7 +32,7 @@ class OnBoardingThree extends StatelessWidget {
             ),
             Center(
               child: Image.asset(
-                'assets/image_assets/onboarding3.png',
+                image,
                 height: AdaptSize.screenHeight * .3,
                 width: AdaptSize.screenWidth * .9767,
               ),
@@ -33,21 +41,20 @@ class OnBoardingThree extends StatelessWidget {
               height: AdaptSize.screenHeight * .1,
             ),
             Text(
-              'Find Inspiration',
-              style: Theme.of(context)
-                  .textTheme
-                  .headline4!
-                  .copyWith(color: MyColor.darkColor),
-
+              title,
+              style: Theme.of(context).textTheme.headline6!.copyWith(
+                    color: MyColor.darkColor,
+                    fontSize: AdaptSize.screenHeight * .025,
+                  ),
               maxLines: 1,
             ),
             const SizedBox(
               height: 5,
             ),
             Text(
-              'Dapatkan ide cemerlang dengan bekerja di tempat yang nyaman',
+              description,
               style: Theme.of(context).textTheme.bodyText1,
-              maxLines: 2,
+              maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),
           ],

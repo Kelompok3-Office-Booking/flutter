@@ -1,9 +1,9 @@
-import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding1.dart';
-import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding2.dart';
-import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding3.dart';
+import 'package:betterspace/src/model/onboarding_model.dart';
+import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_screen.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/onboarding_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/text_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,13 +20,6 @@ class OnBoardinView extends StatefulWidget {
 class _OnBoardinViewState extends State<OnBoardinView> {
   final PageController _pageController = PageController();
 
-  /// list on boarding pages
-  final List<Widget> _onBoardingPage = [
-    const OnBoardingOne(),
-    const OnBoardingTwo(),
-    const OnBoardingThree(),
-  ];
-
   @override
   void dispose() {
     super.dispose();
@@ -41,12 +34,23 @@ class _OnBoardinViewState extends State<OnBoardinView> {
     return Stack(
       children: [
         /// view
-        PageView.builder(
-          controller: _pageController,
-          itemBuilder: (context, index) {
-            return _onBoardingPage[index % _onBoardingPage.length];
-          },
-        ),
+        Consumer<OnboardingViewModel>(builder: (context, value, child) {
+          return PageView.builder(
+            controller: _pageController,
+            itemCount: value.onboardList.length,
+            onPageChanged: (index) {
+              value.getStarted(index == 2);
+            },
+            itemBuilder: (context, index) {
+              final OnboardingModel onboard = value.onboardList[index];
+              return OnBoardingScreen(
+                image: onboard.image,
+                title: onboard.title,
+                description: onboard.description,
+              );
+            },
+          );
+        }),
 
         /// animasi smooth indicator
         Positioned(
@@ -66,7 +70,7 @@ class _OnBoardinViewState extends State<OnBoardinView> {
             children: [
               /// skip
               textButtonWidget(
-                text: 'Lewati',
+                text: 'Skip',
                 textStyle: Theme.of(context).textTheme.button!.copyWith(
                       color: MyColor.grayLightColor,
                     ),
@@ -80,25 +84,52 @@ class _OnBoardinViewState extends State<OnBoardinView> {
               const Spacer(),
 
               /// button next
-              buttonWidget(
-                onPressed: () {
-                  NavigasiViewModel().navigasiToRegisterScreen(context);
-                },
-                sizeWidth: AdaptSize.screenWidth * .3,
-                sizeheight: AdaptSize.screenHeight * .06,
-                backgroundColor: MyColor.darkBlueColor,
-                borderRadius: BorderRadius.circular(10),
-                child: FittedBox(
-                  fit: BoxFit.contain,
-                  child: Text(
-                    'Selanjutnya',
-                    style: Theme.of(context)
-                        .textTheme
-                        .button!
-                        .copyWith(color: MyColor.whiteColor),
-                  ),
-                ),
-              ),
+              Consumer<OnboardingViewModel>(builder: (context, value, child) {
+                return value.lastPage
+                    ? buttonWidget(
+                        onPressed: () {
+                          context
+                              .read<NavigasiViewModel>()
+                              .navigasiToRegisterScreen(context);
+                        },
+                        sizeWidth: AdaptSize.screenWidth * .3,
+                        sizeheight: AdaptSize.screenHeight * .06,
+                        backgroundColor: MyColor.darkBlueColor,
+                        borderRadius: BorderRadius.circular(10),
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            'Get Started',
+                            style: Theme.of(context)
+                                .textTheme
+                                .button!
+                                .copyWith(color: MyColor.whiteColor),
+                          ),
+                        ),
+                      )
+                    : buttonWidget(
+                        onPressed: () {
+                          _pageController.nextPage(
+                            duration: const Duration(seconds: 1),
+                            curve: Curves.ease,
+                          );
+                        },
+                        sizeWidth: AdaptSize.screenWidth * .3,
+                        sizeheight: AdaptSize.screenHeight * .06,
+                        backgroundColor: MyColor.darkBlueColor,
+                        borderRadius: BorderRadius.circular(10),
+                        child: FittedBox(
+                          fit: BoxFit.contain,
+                          child: Text(
+                            'Next',
+                            style: Theme.of(context)
+                                .textTheme
+                                .button!
+                                .copyWith(color: MyColor.whiteColor),
+                          ),
+                        ),
+                      );
+              })
             ],
           ),
         )
@@ -107,10 +138,11 @@ class _OnBoardinViewState extends State<OnBoardinView> {
   }
 
   Widget _buildIndicator() {
+    final pageIndex = Provider.of<OnboardingViewModel>(context, listen: false);
     AdaptSize.size(context: context);
     return SmoothPageIndicator(
       controller: _pageController,
-      count: _onBoardingPage.length,
+      count: pageIndex.onboardList.length,
       effect: ExpandingDotsEffect(
         dotWidth: AdaptSize.screenWidth * .021,
         dotHeight: AdaptSize.screenHeight * .011,
