@@ -29,7 +29,7 @@ Widget popularSpaceWidget(Function() onTap) {
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(1, 3),
-                    color: MyColor.darkColor.withOpacity(.4),
+                    color: MyColor.grayLightColor.withOpacity(.4),
                     blurRadius: 3,
                   ),
                 ],
