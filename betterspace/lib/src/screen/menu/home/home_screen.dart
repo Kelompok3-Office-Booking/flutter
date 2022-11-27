@@ -106,14 +106,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// promo
-              carouselWidget(),
+              carouselWidget(context),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,
               ),
 
               /// divider
-              dividerWdiget(),
+              dividerWdiget(
+                width: double.infinity,
+                opacity: .1,
+              ),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,
@@ -154,7 +157,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// divider
-              dividerWdiget(),
+              dividerWdiget(
+                width: double.infinity,
+                opacity: .1,
+              ),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,
