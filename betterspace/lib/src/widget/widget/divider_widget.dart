@@ -1,11 +1,14 @@
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 
-Widget dividerWdiget(){
+Widget dividerWdiget({
+  double? width,
+  double? opacity,
+}) {
   return SizedBox(
-    width: double.infinity,
+    width: width,
     child: Divider(
-      color: MyColor.grayLightColor.withOpacity(.1),
+      color: MyColor.grayLightColor.withOpacity(opacity!),
       thickness: 2,
     ),
   );

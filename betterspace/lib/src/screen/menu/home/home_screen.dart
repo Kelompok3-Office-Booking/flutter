@@ -28,15 +28,18 @@ class _HomeScreenState extends State<HomeScreen> {
         physics: const ScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.only(
-            top: AdaptSize.paddingTop + 5,
+            top: AdaptSize.paddingTop,
             left: AdaptSize.screenWidth * .016,
             right: AdaptSize.screenWidth * .016,
           ),
           child: Column(
             children: [
               /// header
-              SizedBox(
+              Container(
                 width: double.infinity,
+                margin: EdgeInsets.only(
+                  left: AdaptSize.screenWidth * .01,
+                ),
                 child: Row(
                   children: [
                     Column(
@@ -65,11 +68,13 @@ class _HomeScreenState extends State<HomeScreen> {
                     const Spacer(),
 
                     /// notification
-                    InkWell(
-                      onTap: () {},
-                      child: const Icon(
-                        Icons.notifications_none,
-                      ),
+                    IconButton(
+                      onPressed: () {
+                        context
+                            .read<NavigasiViewModel>()
+                            .navigasiToNotification(context);
+                      },
+                      icon: const Icon(Icons.notifications_none),
                     ),
                   ],
                 ),
@@ -101,14 +106,17 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// promo
-              carouselWidget(),
+              carouselWidget(context),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,
               ),
 
               /// divider
-              dividerWdiget(),
+              dividerWdiget(
+                width: double.infinity,
+                opacity: .1,
+              ),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,
@@ -149,7 +157,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// divider
-              dividerWdiget(),
+              dividerWdiget(
+                width: double.infinity,
+                opacity: .1,
+              ),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,

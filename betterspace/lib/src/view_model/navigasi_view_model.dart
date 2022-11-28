@@ -3,6 +3,7 @@ import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
+import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
@@ -135,6 +136,15 @@ class NavigasiViewModel with ChangeNotifier {
       context,
       CupertinoPageRoute(
         builder: (context) => const SearchSpaceScreen(),
+      ),
+    );
+  }
+
+  void navigasiToNotification(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => const NotificationScreen(),
       ),
     );
   }
