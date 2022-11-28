@@ -9,6 +9,9 @@ class MyColor {
   static HexColor whiteColor = HexColor('FCFCFC');
   static HexColor darkBlueColor = HexColor('2943A3');
   static HexColor netralColor = HexColor('F5F5F5');
+  static HexColor pc300 = HexColor('090C11');
+  static HexColor pc600 = HexColor('121721');
+  static HexColor pc700 = HexColor('3A3E46');
   static HexColor secondary500ColorWaitStatusBorder = HexColor('4D62B2');
   static HexColor secondary900ColorWaitStatusBody = HexColor('D4D9ED');
   static HexColor success300ColorSuccessStatusBorder = HexColor('39923D');
