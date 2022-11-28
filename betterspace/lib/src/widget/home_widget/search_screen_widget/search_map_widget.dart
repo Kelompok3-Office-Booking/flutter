@@ -29,7 +29,9 @@ Widget searchMapWidget(){
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(mapSpaces.mapImage),
+                Flexible(
+                    fit: FlexFit.tight,
+                    child: Image.asset(mapSpaces.mapImage)),
                 Padding(
                   padding: EdgeInsets.all(
                     AdaptSize.screenHeight * 0.008,
