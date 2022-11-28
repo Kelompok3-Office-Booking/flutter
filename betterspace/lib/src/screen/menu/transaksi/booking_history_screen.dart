@@ -102,7 +102,8 @@ class _bookingHistoryScreenState extends State<bookingHistoryScreen> {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                              color: Colors.white,
+                                              color: MyColor
+                                                  .secondary500ColorWaitStatusBorder,
                                               fontSize: 11),
                                     ),
                                   ),
