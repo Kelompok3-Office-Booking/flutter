@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
 
-class bookingHistoryScreen extends StatefulWidget {
-  const bookingHistoryScreen({super.key});
+class BookingHistoryScreen extends StatefulWidget {
+  const BookingHistoryScreen({super.key});
 
   @override
-  State<bookingHistoryScreen> createState() => _bookingHistoryScreenState();
+  State<BookingHistoryScreen> createState() => _BookingHistoryScreenState();
 }
 
-class _bookingHistoryScreenState extends State<bookingHistoryScreen> {
+class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
@@ -27,7 +27,10 @@ class _bookingHistoryScreenState extends State<bookingHistoryScreen> {
         ),
         title: Text(
           "Booking History",
-          style: Theme.of(context).textTheme.headline5,
+          style: Theme.of(context)
+              .textTheme
+              .headline5!
+              .copyWith(fontSize: AdaptSize.screenHeight / 1000 * 24),
         ),
       ),
       body: Padding(

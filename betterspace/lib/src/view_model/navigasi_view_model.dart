@@ -105,31 +105,6 @@ class NavigasiViewModel with ChangeNotifier {
         (route) => false);
   }
 
-  /// navigasi ke booking history screen
-  void navigateToBookingHistoryScreen(BuildContext context) {
-    Navigator.of(context).push(
-      PageRouteBuilder(
-        pageBuilder: (context, animation, secondAnimation) =>
-            const bookingHistoryScreen(),
-        transitionDuration: const Duration(milliseconds: 1200),
-        transitionsBuilder: (context, animation, secondAnimation, child) {
-          const begin = Offset(0.0, 1.0);
-          const end = Offset.zero;
-          const curve = Curves.linearToEaseOut;
-
-          var tween = Tween(begin: begin, end: end).chain(
-            CurveTween(curve: curve),
-          );
-
-          return SlideTransition(
-            position: animation.drive(tween),
-            child: child,
-          );
-        },
-      ),
-    );
-  }
-
   /// navigasi home ke search screen
   void navigasiToSearchSpaces(BuildContext context) {
     Navigator.push(
