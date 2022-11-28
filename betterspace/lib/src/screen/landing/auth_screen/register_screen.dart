@@ -42,7 +42,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.only(
-              top: AdaptSize.paddingTop,
+              top: AdaptSize.paddingTop + AdaptSize.screenHeight / 19,
               left: AdaptSize.screenWidth / 22.5,
               right: AdaptSize.screenWidth / 22.5),
           child: Form(

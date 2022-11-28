@@ -35,7 +35,7 @@ class _LoginScreenState extends State<LoginScreen> {
       resizeToAvoidBottomInset: false,
       body: Padding(
         padding: EdgeInsets.only(
-            top: AdaptSize.paddingTop,
+            top: AdaptSize.paddingTop + AdaptSize.screenHeight / 19,
             left: AdaptSize.screenWidth / 22.5,
             right: AdaptSize.screenWidth / 22.5),
         child: Form(
