@@ -1,5 +1,6 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/all_populer.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/carousel_widget.dart';
@@ -20,6 +21,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final getLocationUser =
+        Provider.of<GetLocationViewModel>(context, listen: false);
+    getLocationUser.getAddressFromLongLat(
+        getLocationUser.posLatitude, getLocationUser.posLongitude);
+  }
+
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
