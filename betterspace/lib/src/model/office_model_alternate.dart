@@ -1,1 +1,3 @@
-class OfficeModelAlter {}
+class OfficeModelAlter {
+  late String id;
+}
