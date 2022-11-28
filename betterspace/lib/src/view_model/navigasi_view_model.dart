@@ -5,6 +5,7 @@ import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart'
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
+import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -102,6 +103,31 @@ class NavigasiViewModel with ChangeNotifier {
           },
         ),
         (route) => false);
+  }
+
+  /// navigasi ke booking history screen
+  void navigateToBookingHistoryScreen(BuildContext context) {
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (context, animation, secondAnimation) =>
+            const bookingHistoryScreen(),
+        transitionDuration: const Duration(milliseconds: 1200),
+        transitionsBuilder: (context, animation, secondAnimation, child) {
+          const begin = Offset(0.0, 1.0);
+          const end = Offset.zero;
+          const curve = Curves.linearToEaseOut;
+
+          var tween = Tween(begin: begin, end: end).chain(
+            CurveTween(curve: curve),
+          );
+
+          return SlideTransition(
+            position: animation.drive(tween),
+            child: child,
+          );
+        },
+      ),
+    );
   }
 
   /// navigasi home ke search screen
