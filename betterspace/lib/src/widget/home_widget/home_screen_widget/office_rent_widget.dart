@@ -1,13 +1,12 @@
-import 'package:betterspace/src/model/data/meeting_room_model.dart';
 import 'package:betterspace/src/model/data/office_rent_data.dart';
-import 'package:betterspace/src/model/meeting_room_model.dart';
+import 'package:betterspace/src/model/office_rent_model.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-Widget meetingRoomWidget(Function() onTap) {
+Widget officeRentWidget(Function() onTap) {
   return SizedBox(
     height: AdaptSize.screenWidth * .654,
     width: double.infinity,
@@ -16,7 +15,7 @@ Widget meetingRoomWidget(Function() onTap) {
         scrollDirection: Axis.horizontal,
         itemCount: officeRent.length,
         itemBuilder: (context, index) {
-          final MeetingRoomsModel meetingRoomSpaces = meetingRoom[index];
+          final OfficeRentModel officeRentSpaces = officeRent[index];
           return InkWell(
             onTap: onTap,
             child: Container(
@@ -29,7 +28,7 @@ Widget meetingRoomWidget(Function() onTap) {
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(1, 3),
-                    color: MyColor.darkColor.withOpacity(.4),
+                    color: MyColor.grayLightColor.withOpacity(.4),
                     blurRadius: 3,
                   ),
                 ],
@@ -42,7 +41,7 @@ Widget meetingRoomWidget(Function() onTap) {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: Image.asset(
-                          meetingRoomSpaces.image,
+                          officeRentSpaces.image,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -73,7 +72,7 @@ Widget meetingRoomWidget(Function() onTap) {
                                     size: AdaptSize.screenHeight * 0.025,
                                   ),
                                   Text(
-                                    '${meetingRoomSpaces.ranting}',
+                                    '${officeRentSpaces.ranting}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText2!
@@ -100,7 +99,7 @@ Widget meetingRoomWidget(Function() onTap) {
                         children: [
                           /// space name
                           Text(
-                            meetingRoomSpaces.name,
+                            officeRentSpaces.name,
                             style: Theme.of(context)
                                 .textTheme
                                 .headline6!
@@ -112,7 +111,7 @@ Widget meetingRoomWidget(Function() onTap) {
                           const Spacer(),
 
                           /// space lokasi
-                          Text(meetingRoomSpaces.location),
+                          Text(officeRentSpaces.location),
 
                           const Spacer(),
 
@@ -124,7 +123,7 @@ Widget meetingRoomWidget(Function() onTap) {
 
                               /// keterangan lokasi
                               Text(
-                                meetingRoomSpaces.destination,
+                                officeRentSpaces.destination,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -132,12 +131,11 @@ Widget meetingRoomWidget(Function() onTap) {
                                         fontSize:
                                             AdaptSize.screenHeight * .012),
                               ),
-
-                              SizedBox(
+                             SizedBox(
                                 width: AdaptSize.screenHeight * .008,
                               ),
 
-                              /// keterangan available
+                              /// icon available
                               SvgPicture.asset(
                                   'assets/svg_assets/available.svg',
                                   height: AdaptSize.screenHeight * .023),
@@ -145,7 +143,7 @@ Widget meetingRoomWidget(Function() onTap) {
                                 width: 2,
                               ),
                               Text(
-                                '${meetingRoomSpaces.totalPerson}',
+                                '${officeRentSpaces.totalPerson}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -154,12 +152,11 @@ Widget meetingRoomWidget(Function() onTap) {
                                             AdaptSize.screenHeight * .012),
                               ),
 
-
                               SizedBox(
                                 width: AdaptSize.screenHeight * .008,
                               ),
 
-                              /// keterangan jarak
+                              /// icon penggaris
                               SvgPicture.asset(
                                 'assets/svg_assets/ruler.svg',
                                 height: AdaptSize.screenHeight * .023,
@@ -168,7 +165,7 @@ Widget meetingRoomWidget(Function() onTap) {
                                 width: 2,
                               ),
                               Text(
-                                meetingRoomSpaces.distance,
+                                officeRentSpaces.distance,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -188,7 +185,7 @@ Widget meetingRoomWidget(Function() onTap) {
                                         locale: 'id',
                                         symbol: 'Rp ',
                                         decimalDigits: 0)
-                                    .format(meetingRoomSpaces.price),
+                                    .format(officeRentSpaces.price),
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6!

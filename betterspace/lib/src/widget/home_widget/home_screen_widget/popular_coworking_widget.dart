@@ -1,21 +1,22 @@
-import 'package:betterspace/src/model/data/office_rent_data.dart';
-import 'package:betterspace/src/model/office_rent_model.dart';
+import 'package:betterspace/src/model/popular_coworking_model.dart';
+import 'package:betterspace/src/model/data/popular_coworking_data.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-Widget officeRentWidget(Function() onTap) {
+Widget popularSpaceWidget(Function() onTap) {
   return SizedBox(
     height: AdaptSize.screenWidth * .654,
     width: double.infinity,
     child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: officeRent.length,
+        itemCount: popularCoworkingSpace.length,
         itemBuilder: (context, index) {
-          final OfficeRentModel officeRentSpaces = officeRent[index];
+          final PopularCoworkingSpaceModel popularCoworking =
+              popularCoworkingSpace[index];
           return InkWell(
             onTap: onTap,
             child: Container(
@@ -28,7 +29,7 @@ Widget officeRentWidget(Function() onTap) {
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(1, 3),
-                    color: MyColor.darkColor.withOpacity(.4),
+                    color: MyColor.grayLightColor.withOpacity(.4),
                     blurRadius: 3,
                   ),
                 ],
@@ -41,7 +42,7 @@ Widget officeRentWidget(Function() onTap) {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: Image.asset(
-                          officeRentSpaces.image,
+                          popularCoworking.image,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -72,7 +73,7 @@ Widget officeRentWidget(Function() onTap) {
                                     size: AdaptSize.screenHeight * 0.025,
                                   ),
                                   Text(
-                                    '${officeRentSpaces.ranting}',
+                                    '${popularCoworking.ranting}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText2!
@@ -99,7 +100,7 @@ Widget officeRentWidget(Function() onTap) {
                         children: [
                           /// space name
                           Text(
-                            officeRentSpaces.name,
+                            popularCoworking.name,
                             style: Theme.of(context)
                                 .textTheme
                                 .headline6!
@@ -111,39 +112,21 @@ Widget officeRentWidget(Function() onTap) {
                           const Spacer(),
 
                           /// space lokasi
-                          Text(officeRentSpaces.location),
+                          Text(popularCoworking.location),
 
                           const Spacer(),
 
                           /// keterangan kapasitas dan lokasi
                           Row(
                             children: [
+
+                              /// icon lokasi
                               Icon(Icons.location_on_outlined,
                                   size: AdaptSize.screenHeight * .023),
 
                               /// keterangan lokasi
                               Text(
-                                officeRentSpaces.destination,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                        fontSize:
-                                            AdaptSize.screenHeight * .012),
-                              ),
-                             SizedBox(
-                                width: AdaptSize.screenHeight * .008,
-                              ),
-
-                              /// icon available
-                              SvgPicture.asset(
-                                  'assets/svg_assets/available.svg',
-                                  height: AdaptSize.screenHeight * .023),
-                              const SizedBox(
-                                width: 2,
-                              ),
-                              Text(
-                                '${officeRentSpaces.totalPerson}',
+                                popularCoworking.destination,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -156,7 +139,28 @@ Widget officeRentWidget(Function() onTap) {
                                 width: AdaptSize.screenHeight * .008,
                               ),
 
-                              /// icon penggaris
+                              /// keterangan available
+                              SvgPicture.asset(
+                                  'assets/svg_assets/available.svg',
+                                  height: AdaptSize.screenHeight * .023),
+                              const SizedBox(
+                                width: 2,
+                              ),
+                              Text(
+                                '${popularCoworking.totalPerson}',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
+                                        fontSize:
+                                            AdaptSize.screenHeight * .012),
+                              ),
+
+                              SizedBox(
+                                width: AdaptSize.screenHeight * .008,
+                              ),
+
+                              /// keteranganan jarak
                               SvgPicture.asset(
                                 'assets/svg_assets/ruler.svg',
                                 height: AdaptSize.screenHeight * .023,
@@ -165,7 +169,7 @@ Widget officeRentWidget(Function() onTap) {
                                 width: 2,
                               ),
                               Text(
-                                officeRentSpaces.distance,
+                                popularCoworking.distance,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -185,7 +189,7 @@ Widget officeRentWidget(Function() onTap) {
                                         locale: 'id',
                                         symbol: 'Rp ',
                                         decimalDigits: 0)
-                                    .format(officeRentSpaces.price),
+                                    .format(popularCoworking.price),
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6!

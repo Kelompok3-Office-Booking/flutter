@@ -1,12 +1,17 @@
+import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 Widget readOnlyWidget({
   context,
   TextEditingController? controller,
+  double? errBorderRadius,
+  double? fcsBorderRadius,
+  double? enblBorderRadius,
   Widget? suffixIcon,
   String? hint,
   Function()? onTap,
   Widget? label,
+  TextStyle? textStyle,
   TextInputAction? textInputAction,
 }) {
   return TextFormField(
@@ -17,27 +22,27 @@ Widget readOnlyWidget({
     decoration: InputDecoration(
       label: label,
       hintText: hint,
-      hintStyle: Theme.of(context).textTheme.bodyText1,
+      hintStyle: textStyle,
       filled: true,
       //fillColor: MyColor.border,
       suffixIcon: suffixIcon,
       errorBorder: OutlineInputBorder(
-        borderSide: const BorderSide(
-            //color: MyColor.errorColor,
-            ),
-        borderRadius: BorderRadius.circular(40),
+        borderSide: BorderSide(
+          color: MyColor.redColor,
+        ),
+        borderRadius: BorderRadius.circular(errBorderRadius!),
       ),
       focusedBorder: OutlineInputBorder(
-        borderSide: const BorderSide(
-            //color: MyColor.deepAqua,
-            ),
-        borderRadius: BorderRadius.circular(40),
+        borderSide: BorderSide(
+          color: MyColor.grayLightColor,
+        ),
+        borderRadius: BorderRadius.circular(fcsBorderRadius!),
       ),
       enabledBorder: OutlineInputBorder(
-        borderSide: const BorderSide(
-            //color: MyColor.outlineBorder,
-            ),
-        borderRadius: BorderRadius.circular(40),
+        borderSide: BorderSide(
+          color: MyColor.grayLightColor,
+        ),
+        borderRadius: BorderRadius.circular(enblBorderRadius!),
       ),
     ),
   );

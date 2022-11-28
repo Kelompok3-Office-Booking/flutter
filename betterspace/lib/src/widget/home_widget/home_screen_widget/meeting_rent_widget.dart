@@ -1,22 +1,22 @@
-import 'package:betterspace/src/model/popular_coworking_model.dart';
-import 'package:betterspace/src/model/data/popular_coworking_data.dart';
+import 'package:betterspace/src/model/data/meeting_room_model.dart';
+import 'package:betterspace/src/model/data/office_rent_data.dart';
+import 'package:betterspace/src/model/meeting_room_model.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-Widget popularSpaceWidget(Function() onTap) {
+Widget meetingRoomWidget(Function() onTap) {
   return SizedBox(
     height: AdaptSize.screenWidth * .654,
     width: double.infinity,
     child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: popularCoworkingSpace.length,
+        itemCount: officeRent.length,
         itemBuilder: (context, index) {
-          final PopularCoworkingSpaceModel popularCoworking =
-              popularCoworkingSpace[index];
+          final MeetingRoomsModel meetingRoomSpaces = meetingRoom[index];
           return InkWell(
             onTap: onTap,
             child: Container(
@@ -29,7 +29,7 @@ Widget popularSpaceWidget(Function() onTap) {
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(1, 3),
-                    color: MyColor.darkColor.withOpacity(.4),
+                    color: MyColor.grayLightColor.withOpacity(.4),
                     blurRadius: 3,
                   ),
                 ],
@@ -42,7 +42,7 @@ Widget popularSpaceWidget(Function() onTap) {
                       ClipRRect(
                         borderRadius: BorderRadius.circular(16),
                         child: Image.asset(
-                          popularCoworking.image,
+                          meetingRoomSpaces.image,
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -73,7 +73,7 @@ Widget popularSpaceWidget(Function() onTap) {
                                     size: AdaptSize.screenHeight * 0.025,
                                   ),
                                   Text(
-                                    '${popularCoworking.ranting}',
+                                    '${meetingRoomSpaces.ranting}',
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText2!
@@ -100,7 +100,7 @@ Widget popularSpaceWidget(Function() onTap) {
                         children: [
                           /// space name
                           Text(
-                            popularCoworking.name,
+                            meetingRoomSpaces.name,
                             style: Theme.of(context)
                                 .textTheme
                                 .headline6!
@@ -112,21 +112,19 @@ Widget popularSpaceWidget(Function() onTap) {
                           const Spacer(),
 
                           /// space lokasi
-                          Text(popularCoworking.location),
+                          Text(meetingRoomSpaces.location),
 
                           const Spacer(),
 
                           /// keterangan kapasitas dan lokasi
                           Row(
                             children: [
-
-                              /// icon lokasi
                               Icon(Icons.location_on_outlined,
                                   size: AdaptSize.screenHeight * .023),
 
                               /// keterangan lokasi
                               Text(
-                                popularCoworking.destination,
+                                meetingRoomSpaces.destination,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -147,7 +145,7 @@ Widget popularSpaceWidget(Function() onTap) {
                                 width: 2,
                               ),
                               Text(
-                                '${popularCoworking.totalPerson}',
+                                '${meetingRoomSpaces.totalPerson}',
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -156,11 +154,12 @@ Widget popularSpaceWidget(Function() onTap) {
                                             AdaptSize.screenHeight * .012),
                               ),
 
+
                               SizedBox(
                                 width: AdaptSize.screenHeight * .008,
                               ),
 
-                              /// keteranganan jarak
+                              /// keterangan jarak
                               SvgPicture.asset(
                                 'assets/svg_assets/ruler.svg',
                                 height: AdaptSize.screenHeight * .023,
@@ -169,7 +168,7 @@ Widget popularSpaceWidget(Function() onTap) {
                                 width: 2,
                               ),
                               Text(
-                                popularCoworking.distance,
+                                meetingRoomSpaces.distance,
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -189,7 +188,7 @@ Widget popularSpaceWidget(Function() onTap) {
                                         locale: 'id',
                                         symbol: 'Rp ',
                                         decimalDigits: 0)
-                                    .format(popularCoworking.price),
+                                    .format(meetingRoomSpaces.price),
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6!
