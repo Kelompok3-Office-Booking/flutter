@@ -23,7 +23,9 @@ Widget recomenSpaces(context, Function() onTap) {
             child: Container(
               height: AdaptSize.screenHeight * .16,
               width: double.infinity,
-              margin: EdgeInsets.only(bottom: AdaptSize.screenHeight * .008),
+              margin: EdgeInsets.only(
+                bottom: AdaptSize.screenHeight * .008,
+              ),
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 color: MyColor.whiteColor,
@@ -31,7 +33,7 @@ Widget recomenSpaces(context, Function() onTap) {
                 boxShadow: [
                   BoxShadow(
                     offset: const Offset(1, 3),
-                    color: MyColor.darkColor.withOpacity(.4),
+                    color: MyColor.grayLightColor.withOpacity(.4),
                     blurRadius: 3,
                   ),
                 ],
