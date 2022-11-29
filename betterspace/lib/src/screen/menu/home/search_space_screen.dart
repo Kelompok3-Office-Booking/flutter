@@ -132,22 +132,25 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                     ),
 
                     /// date text field
-                    readOnlyWidget(
-                      controller: _dateController,
-                      enblBorderRadius: 16,
-                      errBorderRadius: 16,
-                      fcsBorderRadius: 16,
-                      hint: 'day, date month year',
-                      textStyle:
-                          Theme.of(context).textTheme.bodyText1!.copyWith(
-                                color: MyColor.grayLightColor,
-                              ),
-                      onTap: () {
-                        pickedDate(context);
-                      },
-                      suffixIcon: Icon(
-                        CupertinoIcons.calendar,
-                        color: MyColor.grayLightColor,
+                    Flexible(
+                      fit: FlexFit.loose,
+                      child: readOnlyWidget(
+                        controller: _dateController,
+                        enblBorderRadius: 16,
+                        errBorderRadius: 16,
+                        fcsBorderRadius: 16,
+                        hint: 'day, date month year',
+                        textStyle:
+                            Theme.of(context).textTheme.bodyText1!.copyWith(
+                                  color: MyColor.grayLightColor,
+                                ),
+                        onTap: () {
+                          pickedDate(context);
+                        },
+                        suffixIcon: Icon(
+                          CupertinoIcons.calendar,
+                          color: MyColor.grayLightColor,
+                        ),
                       ),
                     ),
                   ],
