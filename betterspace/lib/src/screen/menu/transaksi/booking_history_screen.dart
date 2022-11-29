@@ -1,8 +1,6 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class BookingHistoryScreen extends StatefulWidget {
   const BookingHistoryScreen({super.key});
@@ -84,12 +82,10 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
                                     height: AdaptSize.screenHeight / 33.3,
                                     child: DecoratedBox(
                                       decoration: BoxDecoration(
-                                          color: MyColor
-                                              .secondary900ColorWaitStatusBody,
+                                          color: MyColor.secondary900,
                                           border: Border.all(
                                               width: 1,
-                                              color: MyColor
-                                                  .secondary500ColorWaitStatusBorder),
+                                              color: MyColor.secondary500),
                                           borderRadius:
                                               BorderRadius.circular(42)),
                                     ),
@@ -105,8 +101,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
                                           .textTheme
                                           .bodySmall!
                                           .copyWith(
-                                              color: MyColor
-                                                  .secondary500ColorWaitStatusBorder,
+                                              color: MyColor.secondary500,
                                               fontSize: 11),
                                     ),
                                   ),
@@ -218,7 +213,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
                               Padding(
                                 padding: EdgeInsets.only(
                                     right: AdaptSize.screenWidth / 60),
-                                child: Icon(
+                                child: const Icon(
                                   Icons.chevron_right,
                                   size: 24,
                                 ),

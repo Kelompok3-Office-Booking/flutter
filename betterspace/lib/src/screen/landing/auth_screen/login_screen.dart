@@ -24,11 +24,9 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
-
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -126,7 +124,8 @@ class _LoginScreenState extends State<LoginScreen> {
                     value.userLogin(context);
                   },
                   child: value.isLoading
-                      ? LoadingWidget.whiteButtonLoading : Text(
+                      ? LoadingWidget.whiteButtonLoading
+                      : Text(
                           "Login",
                           style: Theme.of(context)
                               .textTheme
