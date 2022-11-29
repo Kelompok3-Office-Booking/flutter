@@ -2,6 +2,8 @@ import 'package:betterspace/src/screen/landing/splash_screen1.dart';
 import 'package:betterspace/src/screen/menu/home/voucer_promo_screen.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/text_theme.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
+import 'package:betterspace/src/view_model/login_view_model.dart';
 import 'package:betterspace/src/view_model/menu_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/onboarding_view_model.dart';
@@ -28,6 +30,8 @@ class BetterSpaceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OnboardingViewModel()),
         ChangeNotifierProvider(create: (_) => SearchSpacesViewModel()),
         ChangeNotifierProvider(create: (_) => PromoViewModel()),
+        ChangeNotifierProvider(create: (_) => GetLocationViewModel()),
+        ChangeNotifierProvider(create: (_) => LoginViewModel()),
       ],
       child: MaterialApp(
         home: const SplashScreenOne(),
