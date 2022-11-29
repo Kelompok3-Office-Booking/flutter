@@ -39,7 +39,10 @@ class _MenuScreenState extends State<MenuScreen> {
       height: AdaptSize.screenHeight * .075,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: MyColor.darkColor,
+        color: MyColor.pc300,
+        border: Border.all(
+          color: MyColor.pc600,
+        ),
         borderRadius: BorderRadius.circular(40),
       ),
       child: Consumer<MenuViewModel>(builder: (context, value, index) {
@@ -48,9 +51,10 @@ class _MenuScreenState extends State<MenuScreen> {
           elevation: 0,
           type: BottomNavigationBarType.fixed,
           selectedItemColor: MyColor.whiteColor,
-          unselectedItemColor: MyColor.dark700Color,
+          unselectedItemColor: MyColor.pc700,
           selectedIconTheme: IconThemeData(size: AdaptSize.screenHeight * .028),
-          selectedLabelStyle: TextStyle(fontSize: AdaptSize.screenHeight * .013),
+          selectedLabelStyle:
+              TextStyle(fontSize: AdaptSize.screenHeight * .013),
           unselectedFontSize: AdaptSize.screenHeight * .011,
           onTap: (index) {
             value.onTappeed = index;
@@ -58,7 +62,7 @@ class _MenuScreenState extends State<MenuScreen> {
           currentIndex: value.currentPage,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.home),
+              icon: Icon(Icons.home_filled),
               label: 'Home',
             ),
             BottomNavigationBarItem(
@@ -66,11 +70,11 @@ class _MenuScreenState extends State<MenuScreen> {
               label: 'Transaksi',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.bookmark),
+              icon: Icon(Icons.bookmarks_outlined),
               label: 'History',
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.person),
+              icon: Icon(Icons.account_circle_outlined),
               label: 'Account',
             ),
           ],
