@@ -8,44 +8,41 @@ import 'package:provider/provider.dart';
 Widget carouselWidget(context) {
   final voucerPromo = Provider.of<PromoViewModel>(context, listen: false);
   final detailPromo = voucerPromo.voucerPromo;
-  return SizedBox(
-    height: AdaptSize.screenHeight * .139,
-    width: double.infinity,
-    child: CarouselSlider.builder(
-      itemCount: detailPromo.length,
-      itemBuilder: (context, index, img) {
+  return CarouselSlider.builder(
+    itemCount: detailPromo.length,
+    itemBuilder: (context, index, img) {
 
-        /// next page hero animation
-        return Hero(
-          tag: detailPromo[index].imagePromo,
-          child: Material(
-            child: InkWell(
-              borderRadius: BorderRadius.circular(16),
-              onTap: () {
-                Navigator.of(context).pushNamed(
-                  VoucerPromoScreen.routeName,
-                  arguments: detailPromo[index].id,
-                );
-              },
-              child: Padding(
-                padding: const EdgeInsets.only(
-                  left: 2.5,
-                  right: 2.5,
-                ),
-                child: Image.asset(
-                  detailPromo[index].imagePromo,
-                ),
+      /// next page hero animation
+      return Hero(
+        tag: detailPromo[index].imagePromo,
+        child: Material(
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16),
+            onTap: () {
+              Navigator.of(context).pushNamed(
+                VoucerPromoScreen.routeName,
+                arguments: detailPromo[index].id,
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: AdaptSize.screenWidth * .004,
+                right: AdaptSize.screenWidth * .004,
+              ),
+              child: Image.asset(
+                detailPromo[index].imagePromo,
               ),
             ),
           ),
-        );
-      },
-      options: CarouselOptions(
-        viewportFraction: .62,
-        autoPlay: true,
-        autoPlayCurve: Curves.fastOutSlowIn,
-        autoPlayInterval: const Duration(seconds: 3),
-      ),
+        ),
+      );
+    },
+    options: CarouselOptions(
+      aspectRatio: AdaptSize.screenHeight * .0019 / .7,
+      viewportFraction: .8,
+      autoPlay: true,
+      autoPlayCurve: Curves.fastOutSlowIn,
+      autoPlayInterval: const Duration(seconds: 3),
     ),
   );
 }

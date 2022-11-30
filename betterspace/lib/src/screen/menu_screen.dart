@@ -39,9 +39,9 @@ class _MenuScreenState extends State<MenuScreen> {
       height: AdaptSize.screenHeight * .075,
       width: double.infinity,
       decoration: BoxDecoration(
-        color: MyColor.pc300,
+        color: MyColor.primary300,
         border: Border.all(
-          color: MyColor.pc600,
+          color: MyColor.primary600,
         ),
         borderRadius: BorderRadius.circular(40),
       ),
@@ -50,8 +50,8 @@ class _MenuScreenState extends State<MenuScreen> {
           backgroundColor: MyColor.transparanColor,
           elevation: 0,
           type: BottomNavigationBarType.fixed,
-          selectedItemColor: MyColor.whiteColor,
-          unselectedItemColor: MyColor.pc700,
+          selectedItemColor: MyColor.primary900,
+          unselectedItemColor: MyColor.primary700,
           selectedIconTheme: IconThemeData(size: AdaptSize.screenHeight * .028),
           selectedLabelStyle:
               TextStyle(fontSize: AdaptSize.screenHeight * .013),

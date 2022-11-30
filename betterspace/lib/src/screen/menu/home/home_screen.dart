@@ -119,7 +119,7 @@ class _HomeScreenState extends State<HomeScreen> {
               carouselWidget(context),
 
               SizedBox(
-                height: AdaptSize.screenHeight * .008,
+                height: AdaptSize.screenHeight * .005,
               ),
 
               /// divider
