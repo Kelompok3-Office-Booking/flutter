@@ -11,9 +11,11 @@ Widget textFormFields({
   int? maxLines,
   int? minLines,
   String? label,
+  dynamic? validators,
+  AutovalidateMode? autoValidate,
   TextInputAction? textInputAction,
   FloatingLabelBehavior? floatingLabelBehaviour,
-}){
+}) {
   return TextFormField(
     cursorColor: MyColor.darkBlueColor,
     obscureText: obscureText!,
@@ -22,6 +24,8 @@ Widget textFormFields({
     minLines: minLines,
     textInputAction: textInputAction,
     keyboardType: keyboardType,
+    autovalidateMode: autoValidate,
+    validator: validators,
     decoration: InputDecoration(
       hintText: hintTexts,
       label: Text(
