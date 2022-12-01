@@ -2,6 +2,7 @@ import 'package:betterspace/src/model/onboarding_model.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_screen.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/onboarding_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
@@ -19,6 +20,12 @@ class OnBoardinView extends StatefulWidget {
 
 class _OnBoardinViewState extends State<OnBoardinView> {
   final PageController _pageController = PageController();
+
+  initState() {
+    super.initState();
+    Provider.of<GetLocationViewModel>(context, listen: false)
+        .checkAndGetPosition();
+  }
 
   @override
   void dispose() {

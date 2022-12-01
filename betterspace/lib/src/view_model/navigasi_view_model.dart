@@ -7,6 +7,7 @@ import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
 
 import 'package:betterspace/src/screen/menu_screen.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
 import 'package:flutter/cupertino.dart';
 
 class NavigasiViewModel with ChangeNotifier {
@@ -51,6 +52,15 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
           builder: (context) => const RegisterScreen(),
+        ),
+        (route) => false);
+  }
+
+  /// navigasi onboarding ke register screen
+  void navigasiToOfficeDetail(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+          builder: (context) => const OfficeDetailScreen(),
         ),
         (route) => false);
   }
