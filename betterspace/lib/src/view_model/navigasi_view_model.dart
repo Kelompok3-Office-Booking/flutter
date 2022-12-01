@@ -62,7 +62,7 @@ class NavigasiViewModel with ChangeNotifier {
   void navigasiToOfficeDetail(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
-          builder: (context) => const OfficeDetailScreen(),
+          builder: (context) => const BookingHistoryScreen(),
         ),
         (route) => false);
   }
