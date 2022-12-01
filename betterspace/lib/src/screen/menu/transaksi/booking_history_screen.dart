@@ -15,20 +15,16 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
     AdaptSize.size(context: context);
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 3,
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Icon(
-          Icons.chevron_left,
-          size: 28,
-          color: MyColor.dark700Color,
-        ),
-        title: Text(
-          "Booking History",
-          style: Theme.of(context)
-              .textTheme
-              .headline5!
-              .copyWith(fontSize: AdaptSize.screenHeight / 1000 * 24),
+        title: Center(
+          child: Text(
+            "Booking History",
+            style: Theme.of(context)
+                .textTheme
+                .headline5!
+                .copyWith(fontSize: AdaptSize.screenHeight / 1000 * 24),
+          ),
         ),
       ),
       body: Padding(
@@ -54,7 +50,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
                         elevation: 2,
                         child: ListTile(
                           leading: Icon(
-                            Icons.home,
+                            Icons.domain_outlined,
                             size: 40,
                             color: MyColor.dark700Color,
                           ),

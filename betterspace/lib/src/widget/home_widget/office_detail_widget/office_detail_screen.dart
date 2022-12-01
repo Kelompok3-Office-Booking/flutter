@@ -243,17 +243,56 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                         ),
                       ),
                       SizedBox(
-                          height: AdaptSize.pixel28,
-                          child: IconWithLabel().asrow(
-                              usedIcon: Icon(Icons.location_on_outlined),
-                              labelText: Text("50m",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(
-                                        color: MyColor.neutral100,
-                                      )),
-                              spacer: AdaptSize.pixel16))
+                        width: AdaptSize.screenWidth / 1.097,
+                        height: AdaptSize.pixel28,
+                        child: Row(
+                          children: [
+                            IconWithLabel().asrow(
+                                usedIcon: Icon(Icons.location_on_outlined),
+                                labelText: Text("50m",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: MyColor.neutral100,
+                                        )),
+                                spacer: AdaptSize.pixel4),
+                            Spacer(),
+                            IconWithLabel().asrow(
+                                usedIcon: Icon(Icons.location_on_outlined),
+                                labelText: Text("10m2",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: MyColor.neutral100,
+                                        )),
+                                spacer: AdaptSize.pixel4),
+                            Spacer(),
+                            IconWithLabel().asrow(
+                                usedIcon: Icon(Icons.person_outline),
+                                labelText: Text("350",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: MyColor.neutral100,
+                                        )),
+                                spacer: AdaptSize.pixel4),
+                            Spacer(),
+                            IconWithLabel().asrow(
+                                usedIcon: Icon(Icons.access_time),
+                                labelText: Text("08:00-11:00",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodyMedium!
+                                        .copyWith(
+                                          color: MyColor.neutral100,
+                                        )),
+                                spacer: AdaptSize.pixel4),
+                          ],
+                        ),
+                      )
                     ],
                   ),
                 ),
