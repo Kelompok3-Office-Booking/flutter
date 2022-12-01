@@ -8,6 +8,7 @@ import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
 import 'package:betterspace/src/widget/widget/text_button_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -74,6 +75,11 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintTexts: 'example@gmail.com',
                 label: 'Email',
                 controller: _emailController,
+                autoValidate: AutovalidateMode.onUserInteraction,
+                validators: (email) =>
+                    email == null || !EmailValidator.validate(email)
+                        ? "enter valid email"
+                        : null,
               ),
 
               SizedBox(
@@ -84,10 +90,17 @@ class _LoginScreenState extends State<LoginScreen> {
               textFormFields(
                 maxLines: 1,
                 obscureText: true,
+                textInputAction: TextInputAction.done,
                 textStyle: Theme.of(context).textTheme.bodyText1,
                 label: "Password",
                 controller: _passwordController,
                 hintTexts: "********",
+                validators: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Please enter some text';
+                  }
+                  return null;
+                },
               ),
 
               SizedBox(
@@ -121,7 +134,12 @@ class _LoginScreenState extends State<LoginScreen> {
                   borderRadius: BorderRadius.circular(10),
                   backgroundColor: MyColor.darkBlueColor,
                   onPressed: () async {
-                    value.userLogin(context);
+                    final is_valid = _formKey.currentState!.validate();
+                    if (is_valid == false) {
+                      return;
+                    } else {
+                      value.userLogin(context);
+                    }
                   },
                   child: value.isLoading
                       ? LoadingWidget.whiteButtonLoading
