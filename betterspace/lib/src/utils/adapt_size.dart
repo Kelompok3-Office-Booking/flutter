@@ -7,8 +7,8 @@ class AdaptSize {
     _mediaQueryData = MediaQuery.of(context);
     screenWidth = _mediaQueryData.size.width;
     screenHeight = _mediaQueryData.size.height;
-    dynamicBodyTextMedium = _mediaQueryData.size.height * .014;
-    dynamicBodyTextMedium = _mediaQueryData.size.height / 1000 * 12;
+    dynamicBodyTextMedium = _mediaQueryData.size.height * .018;
+    dynamicBodyTextSmall = _mediaQueryData.size.height / 1000 * 12;
 
     //padding
     paddingTop = _mediaQueryData.padding.top;
@@ -23,6 +23,7 @@ class AdaptSize {
     pixel18 = _mediaQueryData.size.width / 20;
     pixel20 = _mediaQueryData.size.width / 18;
     pixel22 = _mediaQueryData.size.width / 16.40;
+    pixel24 = _mediaQueryData.size.width / 15;
     pixel26 = _mediaQueryData.size.width / 13.9;
     pixel28 = _mediaQueryData.size.width / 12.9;
     pixel34 = _mediaQueryData.size.width / 10.6;
@@ -47,6 +48,7 @@ class AdaptSize {
   static late double pixel18;
   static late double pixel20;
   static late double pixel22;
+  static late double pixel24;
   static late double pixel26;
   static late double pixel28;
   static late double pixel34;

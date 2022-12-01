@@ -8,6 +8,7 @@ import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
 
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/sliver_experiment.dart';
 import 'package:flutter/cupertino.dart';
 
 class NavigasiViewModel with ChangeNotifier {
