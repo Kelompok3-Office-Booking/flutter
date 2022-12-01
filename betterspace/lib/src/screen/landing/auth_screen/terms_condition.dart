@@ -12,7 +12,7 @@ class _TermsAndConditionViewsState extends State<TermsAndConditionViews> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Text("terms and condition page"),
+      body: const Text("terms and condition page"),
     );
   }
 }

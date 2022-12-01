@@ -1,7 +1,10 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
+import 'package:betterspace/src/view_model/login_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
 import 'package:betterspace/src/widget/widget/text_button_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
@@ -20,6 +23,11 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -106,24 +114,26 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// button login
-              buttonWidget(
-                sizeheight: AdaptSize.screenHeight / 14,
-                sizeWidth: double.infinity,
-                borderRadius: BorderRadius.circular(10),
-                backgroundColor: MyColor.darkBlueColor,
-                onPressed: () {
-                  context
-                      .read<NavigasiViewModel>()
-                      .navigasiToMenuScreen(context);
-                },
-                child: Text(
-                  "Login",
-                  style: Theme.of(context)
-                      .textTheme
-                      .button!
-                      .copyWith(color: MyColor.whiteColor),
-                ),
-              ),
+              Consumer<LoginViewModel>(builder: (context, value, child) {
+                return buttonWidget(
+                  sizeheight: AdaptSize.screenHeight / 14,
+                  sizeWidth: double.infinity,
+                  borderRadius: BorderRadius.circular(10),
+                  backgroundColor: MyColor.darkBlueColor,
+                  onPressed: () async {
+                    value.userLogin(context);
+                  },
+                  child: value.isLoading
+                      ? LoadingWidget.whiteButtonLoading
+                      : Text(
+                          "Login",
+                          style: Theme.of(context)
+                              .textTheme
+                              .button!
+                              .copyWith(color: MyColor.whiteColor),
+                        ),
+                );
+              }),
 
               const Spacer(),
 
