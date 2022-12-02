@@ -4,7 +4,7 @@ dynamic transparentAppbarWidget(
     {required BuildContext context,
     Text? titles,
     double? titleSpacer,
-    IconButton? leadingIcon,
+    Widget? leadingIcon,
     List<IconButton>? actionIcon}) {
   return AppBar(
     titleSpacing: titleSpacer,
