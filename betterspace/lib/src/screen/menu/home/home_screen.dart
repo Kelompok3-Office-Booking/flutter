@@ -147,16 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// popular space
-              popularSpaceWidget(() {
-                /// ini baru dibuat belum dipindah ke view model
-                /// dipindah nanti aja kalo udah selesai
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const OfficeDetailScreen(),
-                  ),
-                );
-              }),
+              popularSpaceWidget(context),
 
               /// all office rent text
               allSpaces(context, 'Office for Rent', () {}),
@@ -169,12 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
               officeRentWidget(() {
                 /// ini baru dibuat belum dipindah ke view model
                 /// dipindah nanti aja kalo udah selesai
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const OfficeDetailScreen(),
-                  ),
-                );
               }),
 
               /// all meeting room text
@@ -188,12 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
               meetingRoomWidget(() {
                 /// ini baru dibuat belum dipindah ke view model
                 /// dipindah nanti aja kalo udah selesai
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const OfficeDetailScreen(),
-                  ),
-                );
               }),
 
               SizedBox(
@@ -221,12 +200,6 @@ class _HomeScreenState extends State<HomeScreen> {
               recomenSpaces(context, () {
                 /// ini baru dibuat belum dipindah ke view model
                 /// dipindah nanti aja kalo udah selesai
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const OfficeDetailScreen(),
-                  ),
-                );
               }),
             ],
           ),

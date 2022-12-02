@@ -8,6 +8,7 @@ class OfficeDataViewModels with ChangeNotifier {
 
   addRecord(OfficeModels officeDatas) {
     _listOfOfficeModels.add(officeDatas);
+    notifyListeners();
   }
 }
 

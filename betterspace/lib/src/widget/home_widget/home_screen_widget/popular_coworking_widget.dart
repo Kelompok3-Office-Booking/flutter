@@ -4,11 +4,13 @@ import 'package:betterspace/src/model/popular_coworking_model.dart';
 import 'package:betterspace/src/model/data/popular_coworking_data.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-Widget popularSpaceWidget(Function() onTap) {
+Widget popularSpaceWidget(contexts) {
   List<OfficeModels> listOfDummyOffice = OfficeDataDummy().listOfOfficeModels;
   return SizedBox(
     height: AdaptSize.screenWidth * .654,
@@ -21,7 +23,13 @@ Widget popularSpaceWidget(Function() onTap) {
           //final PopularCoworkingSpaceModel popularCoworking =popularCoworkingSpace[index];
 
           return InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: ((context) => OfficeDetailScreen(
+                          officeID: listOfDummyOffice[index].officeID))));
+            },
             child: Container(
               /// canvas
               margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
