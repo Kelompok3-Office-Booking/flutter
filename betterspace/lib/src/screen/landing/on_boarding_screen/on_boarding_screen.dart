@@ -16,8 +16,6 @@ class OnBoardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    /// inisialisasi media query
-    AdaptSize.size(context: context);
     return Scaffold(
       backgroundColor: MyColor.whiteColor,
       body: Padding(

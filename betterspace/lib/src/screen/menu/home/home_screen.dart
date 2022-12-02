@@ -10,8 +10,10 @@ import 'package:betterspace/src/widget/home_widget/home_screen_widget/meeting_re
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/office_rent_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/popular_coworking_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/recomended_space_widget.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -124,7 +126,7 @@ class _HomeScreenState extends State<HomeScreen> {
               carouselWidget(context),
 
               SizedBox(
-                height: AdaptSize.screenHeight * .008,
+                height: AdaptSize.screenHeight * .005,
               ),
 
               /// divider
@@ -145,7 +147,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// popular space
-              popularSpaceWidget(() {}),
+              popularSpaceWidget(() {
+                /// ini baru dibuat belum dipindah ke view model
+                /// dipindah nanti aja kalo udah selesai
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const OfficeDetailScreen(),
+                  ),
+                );
+              }),
 
               /// all office rent text
               allSpaces(context, 'Office for Rent', () {}),
@@ -155,7 +166,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// office rent space
-              officeRentWidget(() {}),
+              officeRentWidget(() {
+                /// ini baru dibuat belum dipindah ke view model
+                /// dipindah nanti aja kalo udah selesai
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const OfficeDetailScreen(),
+                  ),
+                );
+              }),
 
               /// all meeting room text
               allSpaces(context, 'Meeting Rooms', () {}),
@@ -165,7 +185,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// meeting space
-              meetingRoomWidget(() {}),
+              meetingRoomWidget(() {
+                /// ini baru dibuat belum dipindah ke view model
+                /// dipindah nanti aja kalo udah selesai
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const OfficeDetailScreen(),
+                  ),
+                );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,
@@ -189,7 +218,16 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// recomended spaces
-              recomenSpaces(context, () {}),
+              recomenSpaces(context, () {
+                /// ini baru dibuat belum dipindah ke view model
+                /// dipindah nanti aja kalo udah selesai
+                Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                    builder: (context) => const OfficeDetailScreen(),
+                  ),
+                );
+              }),
             ],
           ),
         ),
