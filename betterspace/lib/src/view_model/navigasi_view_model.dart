@@ -127,6 +127,7 @@ class NavigasiViewModel with ChangeNotifier {
     );
   }
 
+  /// navigasi ke halaman notifikasi
   void navigasiToNotification(BuildContext context) {
     Navigator.push(
       context,
@@ -134,5 +135,31 @@ class NavigasiViewModel with ChangeNotifier {
         builder: (context) => const NotificationScreen(),
       ),
     );
+  }
+
+  /// navigasi account setting by index
+  void navigasiSettingItem(context, dynamic settingItem) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (contex) => settingItem,
+      ),
+    );
+  }
+
+  /// navigasi log out
+  void navigasiLogout(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondAnimation) =>
+              const RegisterScreen(),
+          transitionsBuilder: (context, animation, secondAnimation, child) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        ),
+        (route) => false);
+    notifyListeners();
   }
 }
