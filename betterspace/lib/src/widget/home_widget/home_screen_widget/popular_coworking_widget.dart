@@ -1,28 +1,39 @@
+import 'package:betterspace/src/dummy_data/office_dummy_data.dart';
+import 'package:betterspace/src/dummy_data/office_dummy_models.dart';
 import 'package:betterspace/src/model/popular_coworking_model.dart';
 import 'package:betterspace/src/model/data/popular_coworking_data.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-Widget popularSpaceWidget(Function() onTap) {
+Widget popularSpaceWidget(contexts) {
+  List<OfficeModels> listOfDummyOffice = OfficeDataDummy().listOfOfficeModels;
   return SizedBox(
     height: AdaptSize.screenWidth * .654,
     width: double.infinity,
     child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.horizontal,
-        itemCount: popularCoworkingSpace.length,
+        itemCount: listOfDummyOffice.length,
         itemBuilder: (context, index) {
-          final PopularCoworkingSpaceModel popularCoworking =
-              popularCoworkingSpace[index];
+          //final PopularCoworkingSpaceModel popularCoworking =popularCoworkingSpace[index];
+
           return InkWell(
-            onTap: onTap,
+            onTap: () {
+              Navigator.push(
+                  context,
+                  CupertinoPageRoute(
+                      builder: ((context) => OfficeDetailScreen(
+                          officeID: listOfDummyOffice[index].officeID))));
+            },
             child: Container(
               /// canvas
               margin: const EdgeInsets.only(left: 5, right: 5, bottom: 10),
-              width: AdaptSize.screenWidth * .42,
+              width: AdaptSize.screenWidth * .45,
               decoration: BoxDecoration(
                 color: MyColor.whiteColor,
                 borderRadius: BorderRadius.circular(16),
@@ -40,12 +51,8 @@ Widget popularSpaceWidget(Function() onTap) {
                     children: [
                       /// image space
                       ClipRRect(
-                        borderRadius: BorderRadius.circular(16),
-                        child: Image.asset(
-                          popularCoworking.image,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
+                          borderRadius: BorderRadius.circular(16),
+                          child: listOfDummyOffice[index].officeLeadImage),
                       Positioned(
                         right: 10,
                         top: 8,
@@ -73,7 +80,9 @@ Widget popularSpaceWidget(Function() onTap) {
                                     size: AdaptSize.screenHeight * 0.025,
                                   ),
                                   Text(
-                                    '${popularCoworking.ranting}',
+                                    listOfDummyOffice[index]
+                                        .officeStarRating
+                                        .toString(),
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyText2!
@@ -100,7 +109,7 @@ Widget popularSpaceWidget(Function() onTap) {
                         children: [
                           /// space name
                           Text(
-                            popularCoworking.name,
+                            listOfDummyOffice[index].officeName,
                             style: Theme.of(context)
                                 .textTheme
                                 .headline6!
@@ -112,21 +121,22 @@ Widget popularSpaceWidget(Function() onTap) {
                           const Spacer(),
 
                           /// space lokasi
-                          Text(popularCoworking.location),
+                          Text(listOfDummyOffice[index].officeQuickLocation),
 
                           const Spacer(),
 
                           /// keterangan kapasitas dan lokasi
                           Row(
                             children: [
-
                               /// icon lokasi
                               Icon(Icons.location_on_outlined,
                                   size: AdaptSize.screenHeight * .023),
 
                               /// keterangan lokasi
                               Text(
-                                popularCoworking.destination,
+                                listOfDummyOffice[index]
+                                    .officeApproxDistance
+                                    .toString(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -147,7 +157,9 @@ Widget popularSpaceWidget(Function() onTap) {
                                 width: 2,
                               ),
                               Text(
-                                '${popularCoworking.totalPerson}',
+                                listOfDummyOffice[index]
+                                    .officePersonCapacity
+                                    .toString(),
                                 style: Theme.of(context)
                                     .textTheme
                                     .bodyText1!
@@ -168,14 +180,19 @@ Widget popularSpaceWidget(Function() onTap) {
                               const SizedBox(
                                 width: 2,
                               ),
-                              Text(
-                                popularCoworking.distance,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                        fontSize:
-                                            AdaptSize.screenHeight * .012),
+                              Flexible(
+                                fit: FlexFit.loose,
+                                child: Text(
+                                  listOfDummyOffice[index]
+                                      .officeArea
+                                      .toString(),
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(
+                                          fontSize:
+                                              AdaptSize.screenHeight * .012),
+                                ),
                               ),
                             ],
                           ),
@@ -189,7 +206,9 @@ Widget popularSpaceWidget(Function() onTap) {
                                         locale: 'id',
                                         symbol: 'Rp ',
                                         decimalDigits: 0)
-                                    .format(popularCoworking.price),
+                                    .format(listOfDummyOffice[index]
+                                        .officePricing
+                                        .officePrice),
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6!

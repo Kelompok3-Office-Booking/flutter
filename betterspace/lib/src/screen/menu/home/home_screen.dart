@@ -1,3 +1,5 @@
+import 'package:betterspace/src/dummy_data/office_dummy_data.dart';
+import 'package:betterspace/src/dummy_data/office_dummy_models.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
@@ -35,6 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
+    final OfficeDataDummy dataDummyForOfficeModels = OfficeDataDummy();
+    final List<OfficeModels> listOfOffice =
+        dataDummyForOfficeModels.listOfOfficeModels;
     return Scaffold(
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
@@ -142,16 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// popular space
-              popularSpaceWidget(() {
-                /// ini baru dibuat belum dipindah ke view model
-                /// dipindah nanti aja kalo udah selesai
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const OfficeDetailScreen(),
-                  ),
-                );
-              }),
+              popularSpaceWidget(context),
 
               /// all office rent text
               allSpaces(context, 'Office for Rent', () {}),
@@ -164,12 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
               officeRentWidget(() {
                 /// ini baru dibuat belum dipindah ke view model
                 /// dipindah nanti aja kalo udah selesai
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const OfficeDetailScreen(),
-                  ),
-                );
               }),
 
               /// all meeting room text
@@ -183,12 +173,6 @@ class _HomeScreenState extends State<HomeScreen> {
               meetingRoomWidget(() {
                 /// ini baru dibuat belum dipindah ke view model
                 /// dipindah nanti aja kalo udah selesai
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const OfficeDetailScreen(),
-                  ),
-                );
               }),
 
               SizedBox(
@@ -216,12 +200,6 @@ class _HomeScreenState extends State<HomeScreen> {
               recomenSpaces(context, () {
                 /// ini baru dibuat belum dipindah ke view model
                 /// dipindah nanti aja kalo udah selesai
-                Navigator.push(
-                  context,
-                  CupertinoPageRoute(
-                    builder: (context) => const OfficeDetailScreen(),
-                  ),
-                );
               }),
             ],
           ),

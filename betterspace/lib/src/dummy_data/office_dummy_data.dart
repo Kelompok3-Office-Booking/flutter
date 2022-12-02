@@ -8,11 +8,12 @@ class OfficeDataViewModels with ChangeNotifier {
 
   addRecord(OfficeModels officeDatas) {
     _listOfOfficeModels.add(officeDatas);
+    notifyListeners();
   }
 }
 
 class OfficeDataDummy {
-  List<OfficeModels> _listOfOfficeModels = [];
+  List<OfficeModels> listOfOfficeModels = [];
   final OfficePricing officePricings = OfficePricing(
       officePrice: 388888,
       officePriceUnits: "Persons",
@@ -83,13 +84,18 @@ class OfficeDataDummy {
         reviewStarsCount: 4,
         reviewHelpRateCount: 999),
   ];
+
   OfficeDataDummy() {
-    _listOfOfficeModels = [
+    listOfOfficeModels = [
       OfficeModels(
           officeID: '1',
-          officeName: "dummy office name",
+          officeName: "kantor telkom",
           officeLeadImage: const Image(
-              image: AssetImage("assets/image_assets/space_image/space1.png")),
+            image: AssetImage(
+              "assets/image_assets/space_image/space1.png",
+            ),
+            fit: BoxFit.cover,
+          ),
           officeGridImage: [
             const Image(
                 image:
@@ -122,7 +128,9 @@ class OfficeDataDummy {
           officeID: '2',
           officeName: "dummy office name",
           officeLeadImage: const Image(
-              image: AssetImage("assets/image_assets/space_image/space1.png")),
+            image: AssetImage("assets/image_assets/space_image/space1.png"),
+            fit: BoxFit.cover,
+          ),
           officeGridImage: [
             const Image(
                 image:
@@ -155,7 +163,9 @@ class OfficeDataDummy {
           officeID: '3',
           officeName: "dummy office name",
           officeLeadImage: const Image(
-              image: AssetImage("assets/image_assets/space_image/space1.png")),
+            image: AssetImage("assets/image_assets/space_image/space1.png"),
+            fit: BoxFit.cover,
+          ),
           officeGridImage: [
             const Image(
                 image:
@@ -188,7 +198,44 @@ class OfficeDataDummy {
           officeID: '4',
           officeName: "dummy office name",
           officeLeadImage: const Image(
-              image: AssetImage("assets/image_assets/space_image/space1.png")),
+            image: AssetImage("assets/image_assets/space_image/space1.png"),
+            fit: BoxFit.cover,
+          ),
+          officeGridImage: [
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+          ],
+          officeStarRating: 5,
+          officeQuickLocation: "dummy, Dummy Town",
+          officeDescription: "lorem ipsum sit dolor amet",
+          officeApproxDistance: 50,
+          officeArea: 50,
+          officePersonCapacity: 999,
+          officeOpenTime: DateTime.now(),
+          officeCloseTime: DateTime.now(),
+          officeLatitude: 1.1111111111,
+          officeLongitude: 1.211111111,
+          officePricing: officePricings,
+          listOfOfficeCapcityModels: listOfCapacityModels,
+          listOfOfficeFacilitiesModels: listOfOfficeFacilitesModels,
+          listOfOfficeReviewModels: listOfReviewModels),
+      OfficeModels(
+          officeID: '5',
+          officeName: "dummy office name",
+          officeLeadImage: const Image(
+            image: AssetImage("assets/image_assets/space_image/space1.png"),
+            fit: BoxFit.cover,
+          ),
           officeGridImage: [
             const Image(
                 image:

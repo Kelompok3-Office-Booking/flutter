@@ -60,7 +60,9 @@ class OfficeModels {
   late DateTime officeCloseTime;
   late double officeLatitude;
   late double officeLongitude;
+
   late OfficePricing officePricing;
+
   List<OfficeCapacityModels> listOfOfficeCapcityModels = [];
   List<OfficeFacilitiesModels> listOfOfficeFacilitiesModels = [];
   List<OfficeReviewModels> listOfOfficeReviewModels = [];

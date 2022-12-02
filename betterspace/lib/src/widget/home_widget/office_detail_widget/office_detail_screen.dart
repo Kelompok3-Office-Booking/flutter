@@ -1,3 +1,5 @@
+import 'package:betterspace/src/dummy_data/office_dummy_data.dart';
+import 'package:betterspace/src/dummy_data/office_dummy_models.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -8,13 +10,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class OfficeDetailScreen extends StatefulWidget {
-  const OfficeDetailScreen({super.key});
+  late String officeID;
+  OfficeDetailScreen({super.key, required this.officeID});
 
   @override
   State<OfficeDetailScreen> createState() => _OfficeDetailScreenState();
 }
 
 class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
+  List<OfficeModels> listOfDummyOffice = OfficeDataDummy().listOfOfficeModels;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,7 +115,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Working Space Zero",
+                  widget.officeID,
                   style: Theme.of(context).textTheme.headline6,
                 ),
                 Container(
@@ -251,7 +255,8 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
               height: AdaptSize.pixel8,
             ),
             Text(
-              "Genius Idea is one of the largest coworking spaces with a strategic location in Semarang. Services available in this coworking space include private offices, flexible desks, virtual offices to event spaces and kitchen labs.",
+              listOfDummyOffice[int.parse(widget.officeID) - 1]
+                  .officeDescription,
               style: Theme.of(context)
                   .textTheme
                   .bodyMedium!

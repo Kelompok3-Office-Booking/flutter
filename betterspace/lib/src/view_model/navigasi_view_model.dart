@@ -5,6 +5,7 @@ import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart'
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
+import 'package:betterspace/src/screen/menu/tersimpan/wishlist_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
 
 import 'package:betterspace/src/screen/menu_screen.dart';
@@ -59,10 +60,12 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi onboarding ke register screen
-  void navigasiToOfficeDetail(BuildContext context) {
+  void navigasiForTesting(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
-          builder: (context) => const BookingHistoryScreen(),
+          //change the target widget here
+
+          builder: (context) => const WishlistScreen(),
         ),
         (route) => false);
   }
