@@ -5,9 +5,11 @@ import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart'
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
+import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
 
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/sliver_experiment.dart';
 import 'package:flutter/cupertino.dart';
 
 class NavigasiViewModel with ChangeNotifier {
@@ -60,7 +62,7 @@ class NavigasiViewModel with ChangeNotifier {
   void navigasiToOfficeDetail(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
-          builder: (context) => const OfficeDetailScreen(),
+          builder: (context) => const BookingHistoryScreen(),
         ),
         (route) => false);
   }
