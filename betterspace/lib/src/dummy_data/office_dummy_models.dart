@@ -50,6 +50,7 @@ class OfficeModels {
   late String officeName;
   late Image officeLeadImage;
   List<Image> officeGridImage = [];
+  late int officeStarRating;
   late String officeQuickLocation;
   late String officeDescription;
   late double officeApproxDistance;
@@ -69,6 +70,7 @@ class OfficeModels {
     required this.officeName,
     required this.officeLeadImage,
     required this.officeGridImage,
+    required this.officeStarRating,
     required this.officeQuickLocation,
     required this.officeDescription,
     required this.officeApproxDistance,
