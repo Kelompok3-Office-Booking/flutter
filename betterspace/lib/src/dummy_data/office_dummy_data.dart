@@ -90,7 +90,21 @@ class OfficeDataDummy {
           officeName: "dummy office name",
           officeLeadImage: const Image(
               image: AssetImage("assets/image_assets/space_image/space1.png")),
-          officeGridImage: [],
+          officeGridImage: [
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+          ],
+          officeStarRating: 5,
           officeQuickLocation: "dummy, Dummy Town",
           officeDescription: "lorem ipsum sit dolor amet",
           officeApproxDistance: 50,
@@ -109,7 +123,21 @@ class OfficeDataDummy {
           officeName: "dummy office name",
           officeLeadImage: const Image(
               image: AssetImage("assets/image_assets/space_image/space1.png")),
-          officeGridImage: [],
+          officeGridImage: [
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+          ],
+          officeStarRating: 5,
           officeQuickLocation: "dummy, Dummy Town",
           officeDescription: "lorem ipsum sit dolor amet",
           officeApproxDistance: 50,
@@ -128,7 +156,21 @@ class OfficeDataDummy {
           officeName: "dummy office name",
           officeLeadImage: const Image(
               image: AssetImage("assets/image_assets/space_image/space1.png")),
-          officeGridImage: [],
+          officeGridImage: [
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+          ],
+          officeStarRating: 5,
           officeQuickLocation: "dummy, Dummy Town",
           officeDescription: "lorem ipsum sit dolor amet",
           officeApproxDistance: 50,
@@ -147,7 +189,21 @@ class OfficeDataDummy {
           officeName: "dummy office name",
           officeLeadImage: const Image(
               image: AssetImage("assets/image_assets/space_image/space1.png")),
-          officeGridImage: [],
+          officeGridImage: [
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+            const Image(
+                image:
+                    AssetImage("assets/image_assets/space_image/space1.png")),
+          ],
+          officeStarRating: 5,
           officeQuickLocation: "dummy, Dummy Town",
           officeDescription: "lorem ipsum sit dolor amet",
           officeApproxDistance: 50,
