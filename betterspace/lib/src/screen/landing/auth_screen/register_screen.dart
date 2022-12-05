@@ -173,6 +173,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   validators: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter passwords';
+                    } else if (value != null && value.length < 8 ||
+                        value.length > 25) {
+                      return 'Please enter password in range of 8 - 25 characters';
                     }
                     return null;
                   },
@@ -194,6 +197,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   validators: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter passwords';
+                    } else if (value != null && value.length < 8 ||
+                        value.length > 25) {
+                      return 'Please enter password in range of 8 - 25 characters';
                     }
                     return null;
                   },

@@ -97,7 +97,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 hintTexts: "********",
                 validators: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Please enter some text';
+                    return 'Please enter passwords';
+                  } else if (value != null && value.length < 8 ||
+                      value.length > 25) {
+                    return 'Please enter password in range of 8 - 25 characters';
                   }
                   return null;
                 },
