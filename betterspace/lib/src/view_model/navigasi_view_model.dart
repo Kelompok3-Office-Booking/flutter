@@ -11,6 +11,7 @@ import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dar
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/sliver_experiment.dart';
+import 'package:betterspace/src/widget/widget/google_maps.dart';
 import 'package:flutter/cupertino.dart';
 
 class NavigasiViewModel with ChangeNotifier {
@@ -164,5 +165,15 @@ class NavigasiViewModel with ChangeNotifier {
         ),
         (route) => false);
     notifyListeners();
+  }
+
+  /// navigasi open google maps (ditail screen)
+  void navigasiOpenGoogleMaps(context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => const GoogleMapsWidget(),
+      ),
+    );
   }
 }
