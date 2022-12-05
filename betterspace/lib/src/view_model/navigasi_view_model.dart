@@ -59,17 +59,6 @@ class NavigasiViewModel with ChangeNotifier {
         (route) => false);
   }
 
-  /// navigasi onboarding ke register screen
-  void navigasiForTesting(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(
-          //change the target widget here
-
-          builder: (context) => const WishlistScreen(),
-        ),
-        (route) => false);
-  }
-
   ///navigasi ke terms and condition page
   void navigasiToTermsAndConditionScreen(BuildContext context) {
     Navigator.of(context).push(
@@ -164,5 +153,16 @@ class NavigasiViewModel with ChangeNotifier {
         ),
         (route) => false);
     notifyListeners();
+  }
+
+  /// navigasi onboarding ke register screen
+  void navigasiForTesting(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+          //change the target widget here
+
+          builder: (context) => const WishlistScreen(),
+        ),
+        (route) => false);
   }
 }

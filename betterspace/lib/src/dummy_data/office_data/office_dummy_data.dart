@@ -1,5 +1,4 @@
-import 'package:betterspace/src/dummy_data/office_dummy_models.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart';
 import 'package:flutter/material.dart';
 
 class OfficeDataViewModels with ChangeNotifier {

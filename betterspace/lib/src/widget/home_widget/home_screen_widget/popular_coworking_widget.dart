@@ -1,5 +1,5 @@
-import 'package:betterspace/src/dummy_data/office_dummy_data.dart';
-import 'package:betterspace/src/dummy_data/office_dummy_models.dart';
+import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
+import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart';
 import 'package:betterspace/src/model/popular_coworking_model.dart';
 import 'package:betterspace/src/model/data/popular_coworking_data.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
