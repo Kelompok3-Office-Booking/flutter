@@ -49,7 +49,6 @@ class OfficeModels {
   late String officeID;
   late String officeName;
   late Image officeLeadImage;
-
   late int officeStarRating;
   late String officeQuickLocation;
   late String officeDescription;
