@@ -49,7 +49,7 @@ class OfficeModels {
   late String officeID;
   late String officeName;
   late Image officeLeadImage;
-  List<Image> officeGridImage = [];
+
   late int officeStarRating;
   late String officeQuickLocation;
   late String officeDescription;
@@ -60,9 +60,8 @@ class OfficeModels {
   late DateTime officeCloseTime;
   late double officeLatitude;
   late double officeLongitude;
-
   late OfficePricing officePricing;
-
+  List<Image> officeGridImage = [];
   List<OfficeCapacityModels> listOfOfficeCapcityModels = [];
   List<OfficeFacilitiesModels> listOfOfficeFacilitiesModels = [];
   List<OfficeReviewModels> listOfOfficeReviewModels = [];

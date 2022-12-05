@@ -167,7 +167,7 @@ class NavigasiViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  /// navigasi open google maps (ditail screen)
+  /// navigasi open google maps
   void navigasiOpenGoogleMaps(context) {
     Navigator.push(
       context,

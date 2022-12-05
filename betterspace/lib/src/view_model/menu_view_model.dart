@@ -1,6 +1,7 @@
 import 'package:betterspace/src/screen/menu/account/account_screen.dart';
 import 'package:betterspace/src/screen/menu/home/home_screen.dart';
 import 'package:betterspace/src/screen/menu/tersimpan/tersimpan_screen.dart';
+import 'package:betterspace/src/screen/menu/tersimpan/wishlist_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
 
 import 'package:betterspace/src/widget/dialog/exit_dialog.dart';
@@ -14,7 +15,7 @@ class MenuViewModel with ChangeNotifier {
   final List<Widget> _pages = [
     const HomeScreen(),
     const BookingHistoryScreen(),
-    const TersimpanScreen(),
+    const WishlistScreen(),
     const AccountScreen(),
   ];
 
