@@ -16,7 +16,7 @@ class _SplashScreenTwoState extends State<SplashScreenTwo> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
       Provider.of<NavigasiViewModel>(context, listen: false)
-          .navigasiForTesting(context);
+          .navigasiToOnboardingView(context);
     });
   }
 
