@@ -4,6 +4,7 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/hex_color_convert.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_metod_screen.dart';
 import 'package:betterspace/src/widget/widget/bottom_sheed_widget.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
@@ -466,7 +467,9 @@ class OfficeDetailScreen extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: footerDetail(
               context: context,
-              bookingButton: () {},
+              bookingButton: () {
+                Navigator.push(context, CupertinoPageRoute(builder: (context)=>PaymentMetodScreen()));
+              },
             ),
           ),
         ],
