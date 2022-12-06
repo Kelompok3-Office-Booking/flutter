@@ -4,6 +4,7 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/frame_image_items.dart';
+import 'package:betterspace/src/widget/widget/horizontal_timepicker.dart';
 import 'package:betterspace/src/widget/widget/icon_with_label.dart';
 import 'package:betterspace/src/widget/widget/item_card.dart';
 import 'package:betterspace/src/widget/widget/transaction_status_widget.dart';
@@ -19,6 +20,7 @@ class DetailOrderScreens extends StatefulWidget {
 }
 
 class _DetailOrderScreensState extends State<DetailOrderScreens> {
+  late ValueNotifier<int> selectedHour = ValueNotifier<int>(8);
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
@@ -192,6 +194,20 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                         iconSize: AdaptSize.pixel24,
                         fontSizes: AdaptSize.screenHeight / 1000 * 18,
                       ),
+                    ),
+                    SizedBox(
+                        height: AdaptSize.pixel24,
+                        child: ValueListenableBuilder(
+                            valueListenable: selectedHour,
+                            builder: ((context, value, child) {
+                              return horizontalTimePicker(
+                                  contexts: context, isSelected: selectedHour);
+                            }))),
+                    ValueListenableBuilder(
+                      valueListenable: selectedHour,
+                      builder: ((context, value, child) {
+                        return Text(selectedHour.value.toString());
+                      }),
                     )
                   ],
                 ),
