@@ -39,6 +39,7 @@ class BetterSpaceApp extends StatelessWidget {
         home: const SplashScreenOne(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          scaffoldBackgroundColor: MyColor.neutral900,
           textTheme: myTextTheme,
           colorScheme: Theme.of(context)
               .colorScheme

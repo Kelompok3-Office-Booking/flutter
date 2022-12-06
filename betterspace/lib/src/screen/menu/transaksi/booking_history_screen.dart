@@ -69,37 +69,38 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
                                 .copyWith(color: MyColor.dark700Color),
                           ),
                           trailing: SizedBox(
-                              width: AdaptSize.screenWidth / 4,
-                              height: AdaptSize.screenHeight / 33.3,
-                              child: Stack(
-                                children: [
-                                  SizedBox(
-                                    width: AdaptSize.screenWidth / 4,
-                                    height: AdaptSize.screenHeight / 33.3,
-                                    child: DecoratedBox(
-                                      decoration: BoxDecoration(
-                                          color: MyColor.success900,
-                                          border: Border.all(
-                                              width: 1,
-                                              color: MyColor.success400),
-                                          borderRadius:
-                                              BorderRadius.circular(42)),
-                                    ),
+                            width: AdaptSize.screenWidth / 4,
+                            height: AdaptSize.screenHeight / 33.3,
+                            child: Stack(
+                              children: [
+                                SizedBox(
+                                  width: AdaptSize.screenWidth / 4,
+                                  height: AdaptSize.screenHeight / 33.3,
+                                  child: DecoratedBox(
+                                    decoration: BoxDecoration(
+                                        color: MyColor.success900,
+                                        border: Border.all(
+                                            width: 1,
+                                            color: MyColor.success400),
+                                        borderRadius:
+                                            BorderRadius.circular(42)),
                                   ),
-                                  Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      "Accepted",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                              color: MyColor.success400,
-                                              fontSize: 11),
-                                    ),
-                                  )
-                                ],
-                              )),
+                                ),
+                                Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Accepted",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .bodySmall!
+                                        .copyWith(
+                                            color: MyColor.success400,
+                                            fontSize: 11),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(

@@ -49,7 +49,7 @@ class MyColor {
   static HexColor neutral600 = HexColor('B3B3B3');
   static HexColor neutral700 = HexColor('D6D6D6');
   static HexColor neutral800 = HexColor('F7F7F7');
-  static HexColor neutral900 = HexColor('F7F7F7');
+  static HexColor neutral900 = HexColor('FCFCFC');
 
   //success color
   static HexColor success50 = HexColor('173A18');

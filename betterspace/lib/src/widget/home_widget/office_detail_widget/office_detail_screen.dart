@@ -191,50 +191,30 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
               children: [
                 /// location
                 IconWithLabel().asrow(
-                    usedIcon: Icon(
-                      Icons.location_on_outlined,
-                      size: AdaptSize.screenHeight * .024,
-                    ),
-                    labelText: Text("50m",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: MyColor.neutral100,
-                            )),
+                    contexts: context,
+                    usedIcon: Icons.location_on_outlined,
+                    labelText: "50m",
                     spacer: AdaptSize.pixel4),
 
                 /// location 2
                 IconWithLabel().asrow(
-                    usedIcon: Icon(
-                      Icons.location_on_outlined,
-                      size: AdaptSize.screenHeight * .024,
-                    ),
-                    labelText: Text("10m2",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: MyColor.neutral100,
-                            )),
+                    contexts: context,
+                    usedIcon: Icons.location_on_outlined,
+                    labelText: "10m2",
                     spacer: AdaptSize.pixel4),
 
                 /// location 3
                 IconWithLabel().asrow(
-                    usedIcon: Icon(
-                      Icons.person_outline,
-                      size: AdaptSize.screenHeight * .024,
-                    ),
-                    labelText: Text("350",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: MyColor.neutral100,
-                            )),
+                    contexts: context,
+                    usedIcon: Icons.person_outline,
+                    labelText: "250",
                     spacer: AdaptSize.pixel4),
 
                 /// loccation 4
                 IconWithLabel().asrow(
-                    usedIcon: Icon(
-                      Icons.access_time,
-                      size: AdaptSize.screenHeight * .024,
-                    ),
-                    labelText: Text("08:00-11:00",
-                        style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                              color: MyColor.neutral100,
-                            )),
+                    contexts: context,
+                    usedIcon: Icons.access_time,
+                    labelText: "08:00-11:00",
                     spacer: AdaptSize.pixel4),
               ],
             ),

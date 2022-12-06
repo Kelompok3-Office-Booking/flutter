@@ -18,6 +18,7 @@ class AdaptSize {
     pixel4 = _mediaQueryData.size.width / 90;
     pixel5 = _mediaQueryData.size.width / 72;
     pixel6 = _mediaQueryData.size.width / 60;
+    pixel7 = _mediaQueryData.size.width / 51.4285714286;
     pixel8 = _mediaQueryData.size.width / 45;
     pixel10 = _mediaQueryData.size.width / 36;
     pixel12 = _mediaQueryData.size.width / 30;
@@ -55,6 +56,7 @@ class AdaptSize {
   static late double pixel3;
   static late double pixel5;
   static late double pixel6;
+  static late double pixel7;
   static late double pixel8;
   static late double pixel10;
   static late double pixel12;

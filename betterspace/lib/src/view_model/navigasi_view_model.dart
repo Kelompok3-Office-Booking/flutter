@@ -7,6 +7,7 @@ import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
 import 'package:betterspace/src/screen/menu/tersimpan/wishlist_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
+import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
 
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
@@ -161,7 +162,7 @@ class NavigasiViewModel with ChangeNotifier {
         CupertinoPageRoute(
           //change the target widget here
 
-          builder: (context) => const WishlistScreen(),
+          builder: (context) => const DetailOrderScreens(),
         ),
         (route) => false);
   }

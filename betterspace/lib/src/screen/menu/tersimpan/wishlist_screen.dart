@@ -129,21 +129,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               ),
                               Expanded(
                                 child: IconWithLabel().asrow(
-                                    usedIcon: Icon(
-                                      Icons.location_on_outlined,
-                                      color: MyColor.neutral100,
-                                      size: AdaptSize.screenHeight * .024,
-                                    ),
-                                    labelText: Text(
-                                      "Tebet, South Jakarta",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: MyColor.neutral100,
-                                              fontSize: AdaptSize
-                                                  .dynamicBodyTextRegular),
-                                    ),
+                                    contexts: context,
+                                    colors: MyColor.neutral100,
+                                    usedIcon: Icons.location_on_outlined,
+                                    labelText: "Tebet, South Jakarta",
                                     spacer: AdaptSize.pixel3),
                               )
                             ],
@@ -249,21 +238,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               ),
                               Expanded(
                                 child: IconWithLabel().asrow(
-                                    usedIcon: Icon(
-                                      Icons.location_on_outlined,
-                                      color: MyColor.neutral100,
-                                      size: AdaptSize.screenHeight * .024,
-                                    ),
-                                    labelText: Text(
-                                      "Tebet, South Jakarta",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: MyColor.neutral100,
-                                              fontSize: AdaptSize
-                                                  .dynamicBodyTextRegular),
-                                    ),
+                                    contexts: context,
+                                    colors: MyColor.neutral100,
+                                    usedIcon: Icons.location_on_outlined,
+                                    labelText: "Tebet, South Jakarta",
                                     spacer: AdaptSize.pixel3),
                               )
                             ],
@@ -369,21 +347,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               ),
                               Expanded(
                                 child: IconWithLabel().asrow(
-                                    usedIcon: Icon(
-                                      Icons.location_on_outlined,
-                                      color: MyColor.neutral100,
-                                      size: AdaptSize.screenHeight * .024,
-                                    ),
-                                    labelText: Text(
-                                      "Tebet, South Jakarta",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: MyColor.neutral100,
-                                              fontSize: AdaptSize
-                                                  .dynamicBodyTextRegular),
-                                    ),
+                                    contexts: context,
+                                    colors: MyColor.neutral100,
+                                    usedIcon: Icons.location_on_outlined,
+                                    labelText: "Tebet, South Jakarta",
                                     spacer: AdaptSize.pixel3),
                               )
                             ],
@@ -489,21 +456,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               ),
                               Expanded(
                                 child: IconWithLabel().asrow(
-                                    usedIcon: Icon(
-                                      Icons.location_on_outlined,
-                                      color: MyColor.neutral100,
-                                      size: AdaptSize.screenHeight * .024,
-                                    ),
-                                    labelText: Text(
-                                      "Tebet, South Jakarta",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(
-                                              color: MyColor.neutral100,
-                                              fontSize: AdaptSize
-                                                  .dynamicBodyTextRegular),
-                                    ),
+                                    contexts: context,
+                                    colors: MyColor.neutral100,
+                                    usedIcon: Icons.location_on_outlined,
+                                    labelText: "Tebet, South Jakarta",
                                     spacer: AdaptSize.pixel3),
                               )
                             ],
