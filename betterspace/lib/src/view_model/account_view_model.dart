@@ -94,4 +94,16 @@ class AccountViewModel with ChangeNotifier {
     ],
     [Icons.privacy_tip_outlined, 'Provacy Police', const PrivacyPolicyScreen()],
   ];
+
+  /// -------------------------------------------------------------------------
+  /// about web view loading
+
+  bool _webLoading = true;
+
+  get webLoading => _webLoading;
+
+  void completeLoading() {
+    _webLoading = false;
+    notifyListeners();
+  }
 }
