@@ -1,12 +1,15 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/transaction_view_model.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/success_payment_screen.dart';
 import 'package:betterspace/src/widget/home_widget/voucer_promo_widget/text_table_content.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/line_dash_widget.dart';
 import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -402,7 +405,9 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
             /// button have already payment
             buttonWidget(
-              onPressed: () {},
+              onPressed: () {
+                context.read<NavigasiViewModel>().navigasiSuccessPayment(context);
+              },
               backgroundColor: MyColor.secondary400,
               sizeheight: AdaptSize.screenHeight / 14,
               borderRadius: BorderRadius.circular(10),
