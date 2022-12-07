@@ -4,6 +4,8 @@ import 'package:betterspace/src/dummy_data/user_data/user_models.dart';
 class PaymentMethod {
   late String paymentMethodName;
   late double paymentMethodFee;
+  PaymentMethod(
+      {required this.paymentMethodName, required this.paymentMethodFee});
 }
 
 class TransactionDetailModels {
@@ -12,6 +14,12 @@ class TransactionDetailModels {
   late String transactionStatus;
   late DateTime transactionCreatedAt;
   late DateTime transactionValidationAt;
+  TransactionDetailModels(
+      {required this.transactionUsedPromoId,
+      required this.transactionTotalPrice,
+      required this.transactionStatus,
+      required this.transactionCreatedAt,
+      required this.transactionValidationAt});
 }
 
 class TransactionModels {
@@ -19,4 +27,10 @@ class TransactionModels {
   late UserModel transactionUserData;
   late OfficeModels transactionOfficesModels;
   late TransactionDetailModels transactionDetails;
+
+  TransactionModels(
+      {required this.transactionId,
+      required this.transactionUserData,
+      required this.transactionOfficesModels,
+      required this.transactionDetails});
 }

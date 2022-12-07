@@ -12,6 +12,7 @@ import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/sliver_experiment.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/success_payment_screen.dart';
 import 'package:betterspace/src/widget/widget/google_maps.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -57,17 +58,6 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
           builder: (context) => const RegisterScreen(),
-        ),
-        (route) => false);
-  }
-
-  /// navigasi onboarding ke register screen
-  void navigasiForTesting(BuildContext context) {
-    Navigator.of(context).pushAndRemoveUntil(
-        CupertinoPageRoute(
-          //change the target widget here
-
-          builder: (context) => const WishlistScreen(),
         ),
         (route) => false);
   }
@@ -168,6 +158,17 @@ class NavigasiViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  /// navigasi onboarding ke register screen
+  void navigasiForTesting(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+          //change the target widget here
+
+          builder: (context) => const WishlistScreen(),
+        ),
+        (route) => false);
+  }
+
   /// navigasi open google maps
   void navigasiOpenGoogleMaps(context) {
     Navigator.push(
@@ -178,11 +179,23 @@ class NavigasiViewModel with ChangeNotifier {
     );
   }
 
+  /// navigasi open google maps
   void navigasiToPaymentDetail(context) {
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (context) => const PaymentDetailScreen(),
+      ),
+    );
+  }
+
+  /// belum final
+  /// navigasi dari detail payment ke success payment
+  void navigasiSuccessPayment(context){
+    Navigator.push(
+      context,
+      CupertinoModalPopupRoute(
+        builder: (context) => const SuccessPaymentScreen(),
       ),
     );
   }
