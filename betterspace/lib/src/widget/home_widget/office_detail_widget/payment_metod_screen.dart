@@ -1,5 +1,6 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/transaction_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
@@ -202,7 +203,9 @@ class PaymentMetodScreen extends StatelessWidget {
             const Spacer(),
 
             buttonWidget(
-              onPressed: () {},
+              onPressed: () {
+                context.read<NavigasiViewModel>().navigasiToPaymentDetail(context);
+              },
               sizeWidth: double.infinity,
               sizeheight: AdaptSize.screenHeight / 14,
               borderRadius: BorderRadius.circular(10),

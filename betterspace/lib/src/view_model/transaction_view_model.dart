@@ -42,4 +42,16 @@ class TransactionViewModel with ChangeNotifier {
   ];
 
   get itemTransaction => _itemTransaction;
+
+  /// ------------------------------------------------------------------------
+  /// payment detail view model
+
+  bool _dropDown1 = false;
+
+  get dropDown1 => _dropDown1;
+
+  void isDropDown() {
+    _dropDown1 = !_dropDown1;
+    notifyListeners();
+  }
 }
