@@ -39,6 +39,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(

@@ -51,6 +51,9 @@ dependencies:
   geolocator: ^9.0.2
   geocoding: ^2.0.5
   image_picker: ^0.8.6
+  flutter_polyline_points: ^1.0.0
+  dio: ^4.0.6
+  barcode_widget: ^2.0.3
 
 
 dev_dependencies:
@@ -79,6 +82,7 @@ flutter:
   assets:
     - assets/svg_assets/
     - assets/image_assets/
+    - assets/image_assets/beverages_image/
     - assets/image_assets/promo_image/
     - assets/image_assets/space_image/
   #   - images/a_dot_burr.jpeg

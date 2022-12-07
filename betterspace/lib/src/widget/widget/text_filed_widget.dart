@@ -18,7 +18,7 @@ Widget textFormFields({
 }) {
   return TextFormField(
     cursorColor: MyColor.darkBlueColor,
-    obscureText: obscureText!,
+    obscureText: obscureText ?? false,
     controller: controller,
     maxLines: maxLines,
     minLines: minLines,

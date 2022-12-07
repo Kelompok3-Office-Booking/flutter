@@ -24,6 +24,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: defaultAppbarWidget(
         titles: "Detail Order",
         contexts: context,
@@ -45,29 +46,33 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                   width: AdaptSize.screenWidth / 1.097561,
                   child: ListView(
                     children: [
-                      SizedBox(
-                        height: AdaptSize.pixel24,
-                        child: Row(
-                          children: [
-                            Text(
-                              "Status",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                      color: MyColor.neutral100,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize:
-                                          AdaptSize.screenHeight / 1000 * 18),
-                            ),
-                            Spacer(),
-                            transactionStatusWidget(
-                                contexts: context,
-                                statusText: "Accepted",
-                                statusBodyColor: MyColor.success700,
-                                statusBorderColor: MyColor.success400,
-                                statusTextColor: MyColor.success400),
-                          ],
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: AdaptSize.pixel8, bottom: AdaptSize.pixel16),
+                        child: SizedBox(
+                          height: AdaptSize.pixel24,
+                          child: Row(
+                            children: [
+                              Text(
+                                "Status",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color: MyColor.neutral100,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            AdaptSize.screenHeight / 1000 * 18),
+                              ),
+                              Spacer(),
+                              transactionStatusWidget(
+                                  contexts: context,
+                                  statusText: "Accepted",
+                                  statusBodyColor: MyColor.success700,
+                                  statusBorderColor: MyColor.success400,
+                                  statusTextColor: MyColor.success400),
+                            ],
+                          ),
                         ),
                       ),
                       SizedBox(
