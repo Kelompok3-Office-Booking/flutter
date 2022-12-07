@@ -8,7 +8,7 @@ Future showExitDialog(BuildContext context) {
       builder: (context) {
         return CupertinoAlertDialog(
           content: Text(
-            'Yakin Mau Keluar ?',
+            'Are you sure want to exit ?',
             style: Theme.of(context).textTheme.bodyText1,
           ),
           actions: [
@@ -17,7 +17,7 @@ Future showExitDialog(BuildContext context) {
                 Navigator.pop(context, false);
               },
               child: Text(
-                'Batal',
+                'Cancel',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText2!
@@ -29,7 +29,7 @@ Future showExitDialog(BuildContext context) {
                 Navigator.pop(context, true);
               },
               child: Text(
-                'Keluar',
+                'Exit',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText2!
