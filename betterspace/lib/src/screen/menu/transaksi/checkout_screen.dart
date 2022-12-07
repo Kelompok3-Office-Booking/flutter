@@ -2,6 +2,8 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
+import 'package:betterspace/src/widget/widget/horizontal_month_picker.dart';
+import 'package:betterspace/src/widget/widget/horizontal_timepicker.dart';
 import 'package:betterspace/src/widget/widget/offiice_item_cards.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -15,6 +17,8 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+  ValueNotifier<int> selectedHour = ValueNotifier<int>(8);
+  ValueNotifier<int> selectedMonth = ValueNotifier<int>(1);
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
@@ -49,7 +53,57 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         SizedBox(
                           height: AdaptSize.screenWidth / 1.40625,
                           child: Column(
-                            children: [],
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Status",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color: MyColor.neutral100,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            AdaptSize.screenHeight / 1000 * 18),
+                              ),
+                              SizedBox(
+                                height: AdaptSize.screenWidth / 6.42857142,
+                              ),
+                              Text(
+                                "Select Time To Checkin",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color: MyColor.neutral100,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            AdaptSize.screenHeight / 1000 * 18),
+                              ),
+                              SizedBox(
+                                height: AdaptSize.pixel26,
+                                child: horizontalTimePicker(
+                                    contexts: context,
+                                    isSelected: selectedHour),
+                              ),
+                              Text(
+                                "For How Long?",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(
+                                        color: MyColor.neutral100,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize:
+                                            AdaptSize.screenHeight / 1000 * 18),
+                              ),
+                              SizedBox(
+                                height: AdaptSize.pixel26,
+                                child: horizontalMonthPicker(
+                                    contexts: context,
+                                    isSelected: selectedMonth),
+                              )
+                            ],
                           ),
                         )
                       ],
