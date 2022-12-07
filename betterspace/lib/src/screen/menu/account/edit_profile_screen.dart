@@ -151,6 +151,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       if (_key.currentState!.validate()) {
                         value.changeProfile(context,
                             'Your profile has been updated successfully!');
+                        _editNameController.clear();
                       }
                     },
                     child: value.isLoading

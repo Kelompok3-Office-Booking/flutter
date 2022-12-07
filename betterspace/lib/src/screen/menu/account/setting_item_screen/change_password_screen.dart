@@ -122,6 +122,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   onPressed: () async {
                     if (_key.currentState!.validate()) {
                       value.changeProfile(context, 'Your password has been updated successfully!');
+                      _updatePasswordController.clear();
+                      _confirmPasswordController.clear();
                     }
                   },
                   child: value.isLoading
