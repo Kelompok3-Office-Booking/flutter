@@ -13,11 +13,13 @@ class AdaptSize {
 
     //padding
     paddingTop = _mediaQueryData.padding.top;
+    pixel1 = _mediaQueryData.size.width / 360;
     pixel2 = _mediaQueryData.size.width / 180;
     pixel3 = _mediaQueryData.size.width / 120;
     pixel4 = _mediaQueryData.size.width / 90;
     pixel5 = _mediaQueryData.size.width / 72;
     pixel6 = _mediaQueryData.size.width / 60;
+    pixel7 = _mediaQueryData.size.width / 51.4285714286;
     pixel8 = _mediaQueryData.size.width / 45;
     pixel10 = _mediaQueryData.size.width / 36;
     pixel12 = _mediaQueryData.size.width / 30;
@@ -50,11 +52,13 @@ class AdaptSize {
 
   //dynamic padding
   static late double paddingTop;
+  static late double pixel1;
   static late double pixel2;
   static late double pixel4;
   static late double pixel3;
   static late double pixel5;
   static late double pixel6;
+  static late double pixel7;
   static late double pixel8;
   static late double pixel10;
   static late double pixel12;
