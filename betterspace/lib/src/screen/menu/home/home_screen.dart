@@ -2,7 +2,6 @@ import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
 import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
-import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/all_populer.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/carousel_widget.dart';
@@ -10,29 +9,13 @@ import 'package:betterspace/src/widget/home_widget/home_screen_widget/meeting_re
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/office_rent_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/popular_coworking_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/recomended_space_widget.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    final getLocationUser =
-        Provider.of<GetLocationViewModel>(context, listen: false);
-    getLocationUser.getAddressFromLongLat(
-        getLocationUser.posLatitude, getLocationUser.posLongitude);
-  }
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/widget/widget/custom_dialog.dart';
+import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
 import 'package:flutter/material.dart';
