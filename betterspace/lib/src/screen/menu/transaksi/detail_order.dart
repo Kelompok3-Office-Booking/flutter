@@ -34,7 +34,8 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
         child: Column(
           children: [
             Flexible(
-              flex: 842,
+              fit: FlexFit.loose,
+              flex: 12,
               child: Padding(
                 padding: EdgeInsets.only(
                     top: AdaptSize.pixel8,
@@ -575,11 +576,61 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
               ),
             ),
             Flexible(
-              flex: 114,
+              fit: FlexFit.loose,
+              flex: 4,
               child: SizedBox(
                 width: AdaptSize.screenWidth,
                 child: partialRoundedCard(
-                    childWidgets: Column(),
+                    childWidgets: Column(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              bottom: AdaptSize.pixel16,
+                              top: AdaptSize.pixel24),
+                          child: SizedBox(
+                            width: AdaptSize.screenWidth / 1.097561,
+                            height: AdaptSize.pixel40,
+                            child: ElevatedButton(
+                              onPressed: () {},
+                              child: Text(
+                                "Checkin Now",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyMedium!
+                                    .copyWith(color: MyColor.neutral700),
+                              ),
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: MyColor.neutral600),
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: AdaptSize.screenWidth / 1.097561,
+                          height: AdaptSize.pixel40,
+                          child: ElevatedButton(
+                            onPressed: () {},
+                            child: Text(
+                              "Booking Historys",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(color: MyColor.secondary400),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: MyColor.neutral900,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(8),
+                                ),
+                                side: BorderSide(
+                                    color: MyColor.secondary400,
+                                    width: AdaptSize.pixel2),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                     cardBottomPadding: 0,
                     cardTopLeftRadius: 8,
                     cardTopRightRadius: 8),
