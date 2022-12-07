@@ -10,6 +10,7 @@ import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/onboarding_view_model.dart';
 import 'package:betterspace/src/view_model/promo_view_model.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
+import 'package:betterspace/src/view_model/transaction_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,7 @@ class BetterSpaceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => GetLocationViewModel()),
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
         ChangeNotifierProvider(create: (_) => AccountViewModel()),
+        ChangeNotifierProvider(create: (_) => TransactionViewModel()),
       ],
       child: MaterialApp(
         home: const SplashScreenOne(),

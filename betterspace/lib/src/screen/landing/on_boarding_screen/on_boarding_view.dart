@@ -20,7 +20,8 @@ class OnBoardinView extends StatefulWidget {
 
 class _OnBoardinViewState extends State<OnBoardinView> {
   final PageController _pageController = PageController();
-
+  
+  @override
   initState() {
     super.initState();
     Provider.of<GetLocationViewModel>(context, listen: false)
@@ -38,109 +39,111 @@ class _OnBoardinViewState extends State<OnBoardinView> {
     /// inisialisasi media query
     AdaptSize.size(context: context);
 
-    return Stack(
-      children: [
-        /// view
-        Consumer<OnboardingViewModel>(builder: (context, value, child) {
-          return PageView.builder(
-            controller: _pageController,
-            itemCount: value.onboardList.length,
-            onPageChanged: (index) {
-              value.getStarted(index == 2);
-            },
-            itemBuilder: (context, index) {
-              final OnboardingModel onboard = value.onboardList[index];
-              return OnBoardingScreen(
-                image: onboard.image,
-                title: onboard.title,
-                description: onboard.description,
-              );
-            },
-          );
-        }),
+    return Scaffold(
+      body: Stack(
+        children: [
+          /// view
+          Consumer<OnboardingViewModel>(builder: (context, value, child) {
+            return PageView.builder(
+              controller: _pageController,
+              itemCount: value.onboardList.length,
+              onPageChanged: (index) {
+                value.getStarted(index == 2);
+              },
+              itemBuilder: (context, index) {
+                final OnboardingModel onboard = value.onboardList[index];
+                return OnBoardingScreen(
+                  image: onboard.image,
+                  title: onboard.title,
+                  description: onboard.description,
+                );
+              },
+            );
+          }),
 
-        /// animasi smooth indicator
-        Positioned(
-          top: AdaptSize.screenHeight * .48,
-          left: AdaptSize.screenWidth * .4,
-          right: AdaptSize.screenWidth * .4,
-          child: _buildIndicator(),
-        ),
-
-        /// button
-        Positioned(
-          bottom: AdaptSize.screenHeight * .07,
-          left: AdaptSize.screenWidth * .05,
-          right: AdaptSize.screenWidth * .05,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              /// skip
-              textButtonWidget(
-                text: 'Skip',
-                textStyle: Theme.of(context).textTheme.button!.copyWith(
-                      color: MyColor.grayLightColor,
-                    ),
-                onPressed: () {
-                  context
-                      .read<NavigasiViewModel>()
-                      .navigasiToRegisterScreen(context);
-                },
-              ),
-
-              const Spacer(),
-
-              /// button next
-              Consumer<OnboardingViewModel>(builder: (context, value, child) {
-                return value.lastPage
-                    ? buttonWidget(
-                        onPressed: () {
-                          context
-                              .read<NavigasiViewModel>()
-                              .navigasiToRegisterScreen(context);
-                        },
-                        sizeWidth: AdaptSize.screenWidth * .3,
-                        sizeheight: AdaptSize.screenHeight * .06,
-                        backgroundColor: MyColor.darkBlueColor,
-                        borderRadius: BorderRadius.circular(10),
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: Text(
-                            'Get Started',
-                            style: Theme.of(context)
-                                .textTheme
-                                .button!
-                                .copyWith(color: MyColor.whiteColor),
-                          ),
-                        ),
-                      )
-                    : buttonWidget(
-                        onPressed: () {
-                          _pageController.nextPage(
-                            duration: const Duration(seconds: 1),
-                            curve: Curves.ease,
-                          );
-                        },
-                        sizeWidth: AdaptSize.screenWidth * .3,
-                        sizeheight: AdaptSize.screenHeight * .06,
-                        backgroundColor: MyColor.darkBlueColor,
-                        borderRadius: BorderRadius.circular(10),
-                        child: FittedBox(
-                          fit: BoxFit.contain,
-                          child: Text(
-                            'Next',
-                            style: Theme.of(context)
-                                .textTheme
-                                .button!
-                                .copyWith(color: MyColor.whiteColor),
-                          ),
-                        ),
-                      );
-              })
-            ],
+          /// animasi smooth indicator
+          Positioned(
+            top: AdaptSize.screenHeight * .48,
+            left: AdaptSize.screenWidth * .4,
+            right: AdaptSize.screenWidth * .4,
+            child: _buildIndicator(),
           ),
-        )
-      ],
+
+          /// button
+          Positioned(
+            bottom: AdaptSize.screenHeight * .07,
+            left: AdaptSize.screenWidth * .05,
+            right: AdaptSize.screenWidth * .05,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                /// skip
+                textButtonWidget(
+                  text: 'Skip',
+                  textStyle: Theme.of(context).textTheme.button!.copyWith(
+                        color: MyColor.grayLightColor,
+                      ),
+                  onPressed: () {
+                    context
+                        .read<NavigasiViewModel>()
+                        .navigasiToRegisterScreen(context);
+                  },
+                ),
+
+                const Spacer(),
+
+                /// button next
+                Consumer<OnboardingViewModel>(builder: (context, value, child) {
+                  return value.lastPage
+                      ? buttonWidget(
+                          onPressed: () {
+                            context
+                                .read<NavigasiViewModel>()
+                                .navigasiToRegisterScreen(context);
+                          },
+                          sizeWidth: AdaptSize.screenWidth * .3,
+                          sizeheight: AdaptSize.screenHeight * .06,
+                          backgroundColor: MyColor.darkBlueColor,
+                          borderRadius: BorderRadius.circular(10),
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              'Get Started',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button!
+                                  .copyWith(color: MyColor.whiteColor),
+                            ),
+                          ),
+                        )
+                      : buttonWidget(
+                          onPressed: () {
+                            _pageController.nextPage(
+                              duration: const Duration(seconds: 1),
+                              curve: Curves.ease,
+                            );
+                          },
+                          sizeWidth: AdaptSize.screenWidth * .3,
+                          sizeheight: AdaptSize.screenHeight * .06,
+                          backgroundColor: MyColor.darkBlueColor,
+                          borderRadius: BorderRadius.circular(10),
+                          child: FittedBox(
+                            fit: BoxFit.contain,
+                            child: Text(
+                              'Next',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .button!
+                                  .copyWith(color: MyColor.whiteColor),
+                            ),
+                          ),
+                        );
+                })
+              ],
+            ),
+          )
+        ],
+      ),
     );
   }
 

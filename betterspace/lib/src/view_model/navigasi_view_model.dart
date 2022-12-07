@@ -7,11 +7,13 @@ import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
 import 'package:betterspace/src/screen/menu/tersimpan/wishlist_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
-import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
 
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/sliver_experiment.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/success_payment_screen.dart';
+import 'package:betterspace/src/widget/widget/google_maps.dart';
 import 'package:flutter/cupertino.dart';
 
 class NavigasiViewModel with ChangeNotifier {
@@ -162,8 +164,39 @@ class NavigasiViewModel with ChangeNotifier {
         CupertinoPageRoute(
           //change the target widget here
 
-          builder: (context) => const DetailOrderScreens(),
+          builder: (context) => const WishlistScreen(),
         ),
         (route) => false);
+  }
+
+  /// navigasi open google maps
+  void navigasiOpenGoogleMaps(context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => const GoogleMapsWidget(),
+      ),
+    );
+  }
+
+  /// navigasi open google maps
+  void navigasiToPaymentDetail(context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => const PaymentDetailScreen(),
+      ),
+    );
+  }
+
+  /// belum final
+  /// navigasi dari detail payment ke success payment
+  void navigasiSuccessPayment(context){
+    Navigator.push(
+      context,
+      CupertinoModalPopupRoute(
+        builder: (context) => const SuccessPaymentScreen(),
+      ),
+    );
   }
 }
