@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-Widget transparentAppbarWidge(
+dynamic transparentAppbarWidget(
     {required BuildContext context,
-    required Text titles,
+    Text? titles,
     double? titleSpacer,
-    IconButton? leadingIcon,
-    IconButton? actionIcon}) {
+    Widget? leadingIcon,
+    List<IconButton>? actionIcon}) {
   return AppBar(
     titleSpacing: titleSpacer,
     backgroundColor: Colors.transparent,
     elevation: 0,
     leading: leadingIcon,
     title: titles,
-    actions: [actionIcon!],
+    actions: actionIcon,
   );
 }

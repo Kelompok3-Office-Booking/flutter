@@ -1,3 +1,5 @@
+import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
+import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
@@ -8,8 +10,10 @@ import 'package:betterspace/src/widget/home_widget/home_screen_widget/meeting_re
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/office_rent_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/popular_coworking_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/recomended_space_widget.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -33,6 +37,9 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
+    final OfficeDataDummy dataDummyForOfficeModels = OfficeDataDummy();
+    final List<OfficeModels> listOfOffice =
+        dataDummyForOfficeModels.listOfOfficeModels;
     return Scaffold(
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
@@ -140,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// popular space
-              popularSpaceWidget(() {}),
+              popularSpaceWidget(context),
 
               /// all office rent text
               allSpaces(context, 'Office for Rent', () {}),
@@ -150,7 +157,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// office rent space
-              officeRentWidget(() {}),
+              officeRentWidget(() {
+                /// ini baru dibuat belum dipindah ke view model
+                /// dipindah nanti aja kalo udah selesai
+              }),
 
               /// all meeting room text
               allSpaces(context, 'Meeting Rooms', () {}),
@@ -160,7 +170,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// meeting space
-              meetingRoomWidget(() {}),
+              meetingRoomWidget(() {
+                /// ini baru dibuat belum dipindah ke view model
+                /// dipindah nanti aja kalo udah selesai
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,
@@ -184,7 +197,10 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// recomended spaces
-              recomenSpaces(context, () {}),
+              recomenSpaces(context, () {
+                /// ini baru dibuat belum dipindah ke view model
+                /// dipindah nanti aja kalo udah selesai
+              }),
             ],
           ),
         ),

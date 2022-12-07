@@ -5,6 +5,7 @@ import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
+import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
@@ -76,6 +77,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     textStyle: Theme.of(context).textTheme.bodyText1,
                     label: 'Full Name',
                     controller: _fullnameController,
+                    validators: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter some text';
+                      }
+                      return null;
+                    },
                   ),
                 ),
 
@@ -144,6 +151,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   textStyle: Theme.of(context).textTheme.bodyText1,
                   label: 'Email',
                   controller: _emailController,
+                  validators: (email) =>
+                      email == null || !EmailValidator.validate(email)
+                          ? "enter valid email"
+                          : null,
                 ),
 
                 SizedBox(
@@ -159,6 +170,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   label: "Password",
                   controller: _passwordController,
                   hintTexts: "Password",
+                  validators: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter passwords';
+                    } else if (value != null && value.length < 8 ||
+                        value.length > 25) {
+                      return 'Please enter password in range of 8 - 25 characters';
+                    }
+                    return null;
+                  },
                 ),
 
                 SizedBox(
@@ -174,6 +194,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   label: "Confirm Password",
                   controller: _confirmPasswordController,
                   hintTexts: "Confirm Password",
+                  validators: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter passwords';
+                    } else if (value != null && value.length < 8 ||
+                        value.length > 25) {
+                      return 'Please enter password in range of 8 - 25 characters';
+                    }
+                    return null;
+                  },
                 ),
 
                 SizedBox(
@@ -211,7 +240,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   sizeWidth: double.infinity,
                   borderRadius: BorderRadius.circular(10),
                   backgroundColor: MyColor.darkBlueColor,
-                  onPressed: () {},
+                  onPressed: () {
+                    final is_valid = _formKey.currentState!.validate();
+                    if (is_valid == false) {
+                      return;
+                    }
+                  },
                   child: Text(
                     "Register",
                     style: Theme.of(context)

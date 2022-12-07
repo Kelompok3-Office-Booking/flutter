@@ -5,8 +5,13 @@ import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart'
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
+import 'package:betterspace/src/screen/menu/tersimpan/wishlist_screen.dart';
+import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
+import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
 
 import 'package:betterspace/src/screen/menu_screen.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/sliver_experiment.dart';
 import 'package:flutter/cupertino.dart';
 
 class NavigasiViewModel with ChangeNotifier {
@@ -115,6 +120,7 @@ class NavigasiViewModel with ChangeNotifier {
     );
   }
 
+  /// navigasi ke halaman notifikasi
   void navigasiToNotification(BuildContext context) {
     Navigator.push(
       context,
@@ -122,5 +128,42 @@ class NavigasiViewModel with ChangeNotifier {
         builder: (context) => const NotificationScreen(),
       ),
     );
+  }
+
+  /// navigasi account setting by index
+  void navigasiSettingItem(context, dynamic settingItem) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (contex) => settingItem,
+      ),
+    );
+  }
+
+  /// navigasi log out
+  void navigasiLogout(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondAnimation) =>
+              const RegisterScreen(),
+          transitionsBuilder: (context, animation, secondAnimation, child) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        ),
+        (route) => false);
+    notifyListeners();
+  }
+
+  /// navigasi onboarding ke register screen
+  void navigasiForTesting(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        CupertinoPageRoute(
+          //change the target widget here
+
+          builder: (context) => const DetailOrderScreens(),
+        ),
+        (route) => false);
   }
 }

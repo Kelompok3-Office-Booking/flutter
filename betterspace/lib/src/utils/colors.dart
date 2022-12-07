@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class MyColor {
   static HexColor redColor = HexColor('FF5C3C');
+  static HexColor starYellow = HexColor('E5D11A');
   static HexColor darkColor = HexColor('121721');
   static HexColor dark700Color = HexColor('3A3E46');
   static HexColor grayLightColor = HexColor('6E7A95');
@@ -48,7 +49,7 @@ class MyColor {
   static HexColor neutral600 = HexColor('B3B3B3');
   static HexColor neutral700 = HexColor('D6D6D6');
   static HexColor neutral800 = HexColor('F7F7F7');
-  static HexColor neutral900 = HexColor('F7F7F7');
+  static HexColor neutral900 = HexColor('FCFCFC');
 
   //success color
   static HexColor success50 = HexColor('173A18');

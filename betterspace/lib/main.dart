@@ -2,6 +2,7 @@ import 'package:betterspace/src/screen/landing/splash_screen1.dart';
 import 'package:betterspace/src/screen/menu/home/voucer_promo_screen.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/text_theme.dart';
+import 'package:betterspace/src/view_model/account_view_model.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/login_view_model.dart';
 import 'package:betterspace/src/view_model/menu_view_model.dart';
@@ -32,11 +33,13 @@ class BetterSpaceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => PromoViewModel()),
         ChangeNotifierProvider(create: (_) => GetLocationViewModel()),
         ChangeNotifierProvider(create: (_) => LoginViewModel()),
+        ChangeNotifierProvider(create: (_) => AccountViewModel()),
       ],
       child: MaterialApp(
         home: const SplashScreenOne(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
+          scaffoldBackgroundColor: MyColor.neutral900,
           textTheme: myTextTheme,
           colorScheme: Theme.of(context)
               .colorScheme
