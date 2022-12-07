@@ -158,6 +158,8 @@ class VoucerPromoScreen extends StatelessWidget {
                       text4: voucerPromo.termCondition4,
                       text5: voucerPromo.termCondition5,
                       t5: true,
+                      withDivider: true,
+                      bottomDivider: false,
                       titleTextStyle: Theme.of(context)
                           .textTheme
                           .headline6!
@@ -186,6 +188,8 @@ class VoucerPromoScreen extends StatelessWidget {
                       text3: voucerPromo.howToUse3,
                       text4: voucerPromo.howToUse4,
                       t5: false,
+                      withDivider: true,
+                      bottomDivider: false,
                       titleTextStyle: Theme.of(context)
                           .textTheme
                           .headline6!
