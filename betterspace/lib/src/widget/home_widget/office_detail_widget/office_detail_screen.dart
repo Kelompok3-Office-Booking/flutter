@@ -4,8 +4,6 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/hex_color_convert.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_detail_screen.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_metod_screen.dart';
 import 'package:betterspace/src/widget/widget/bottom_sheed_widget.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
@@ -200,62 +198,30 @@ class OfficeDetailScreen extends StatelessWidget {
                     children: [
                       /// location
                       IconWithLabel().asrow(
-                          usedIcon: Icon(
-                            Icons.location_on_outlined,
-                            size: AdaptSize.screenHeight * .024,
-                          ),
-                          labelText: Text("50m",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: MyColor.neutral100,
-                                  )),
+                          contexts: context,
+                          usedIcon: Icons.location_on_outlined,
+                          labelText: "50m",
                           spacer: AdaptSize.pixel4),
 
                       /// location 2
                       IconWithLabel().asrow(
-                          usedIcon: Icon(
-                            Icons.location_on_outlined,
-                            size: AdaptSize.screenHeight * .024,
-                          ),
-                          labelText: Text("10m2",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: MyColor.neutral100,
-                                  )),
+                          contexts: context,
+                          usedIcon: Icons.location_on_outlined,
+                          labelText: "10m2",
                           spacer: AdaptSize.pixel4),
 
                       /// location 3
                       IconWithLabel().asrow(
-                          usedIcon: Icon(
-                            Icons.person_outline,
-                            size: AdaptSize.screenHeight * .024,
-                          ),
-                          labelText: Text("350",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: MyColor.neutral100,
-                                  )),
+                          contexts: context,
+                          usedIcon: Icons.person_outline,
+                          labelText: "250",
                           spacer: AdaptSize.pixel4),
 
                       /// loccation 4
                       IconWithLabel().asrow(
-                          usedIcon: Icon(
-                            Icons.access_time,
-                            size: AdaptSize.screenHeight * .024,
-                          ),
-                          labelText: Text("08:00-11:00",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(
-                                    color: MyColor.neutral100,
-                                  )),
+                          contexts: context,
+                          usedIcon: Icons.access_time,
+                          labelText: "08:00-11:00",
                           spacer: AdaptSize.pixel4),
                     ],
                   ),
@@ -324,15 +290,15 @@ class OfficeDetailScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                                /// text keterangan
-                                Text(
-                                  "Can Accomodate",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyMedium!
-                                      .copyWith(color: MyColor.neutral200),
-                                ),
-                                const Spacer(),
+                            /// text keterangan
+                            Text(
+                              "Can Accomodate",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(color: MyColor.neutral200),
+                            ),
+                            const Spacer(),
 
                                 /// detail person
                                 RichText(
