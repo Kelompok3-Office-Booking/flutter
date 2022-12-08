@@ -9,9 +9,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 Widget popularSpaceWidget(contexts) {
-  List<OfficeModels> listOfDummyOffice = OfficeDataDummy().listOfOfficeModels;
+  final dummyDataProviders =
+      Provider.of<OfficeDummyDataViewModels>(contexts, listen: false);
+  dummyDataProviders.addRecord(15);
+  final listOfDummyOffice = dummyDataProviders.listOfOfficeModels;
+
   return SizedBox(
     height: AdaptSize.screenWidth * .654,
     width: double.infinity,
@@ -121,7 +126,9 @@ Widget popularSpaceWidget(contexts) {
                           const Spacer(),
 
                           /// space lokasi
-                          Text(listOfDummyOffice[index].officeQuickLocation),
+                          Text(listOfDummyOffice[index].officeLocation.city +
+                              ", " +
+                              listOfDummyOffice[index].officeLocation.district),
 
                           const Spacer(),
 

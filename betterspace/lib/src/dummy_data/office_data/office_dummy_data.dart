@@ -1,279 +1,75 @@
 import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart';
+import 'package:faker/faker.dart';
 import 'package:flutter/material.dart';
 
-class OfficeDataViewModels with ChangeNotifier {
+class OfficeDummyDataViewModels with ChangeNotifier {
   List<OfficeModels> _listOfOfficeModels = [];
   List<OfficeModels> get listOfOfficeModels => _listOfOfficeModels;
 
-  addRecord(OfficeModels officeDatas) {
-    _listOfOfficeModels.add(officeDatas);
+  addRecord(int dataLength) {
+    DateTime fakeDate = DateTime.now();
+    var fakerInstance = new Faker();
+    for (int i = 1; i <= dataLength; i++) {
+      _listOfOfficeModels.add(
+        OfficeModels(
+          officeID: ("office" + i.toString()),
+          officeName: fakerInstance.company.name(),
+          officeType: i % 2 == 0 ? "office" : "coworking",
+          officeLeadImage: Image.network(fakerInstance.image.image()),
+          officeGridImage: [
+            Image.network(fakerInstance.image.image()),
+            Image.network(fakerInstance.image.image()),
+            Image.network(fakerInstance.image.image())
+          ],
+          officeStarRating: 5,
+          officeDescription: fakerInstance.lorem.sentence(),
+          officeApproxDistance: i + 50,
+          officeArea: i + 2 * (i + 2),
+          officePersonCapacity: ((i + 3) / 2) + 100,
+          officeOpenTime: fakeDate,
+          officeCloseTime: fakeDate,
+          officeLocation: OfficeLocation(
+            city: fakerInstance.address.city(),
+            district: fakerInstance.address.city(),
+            officeLatitude: fakerInstance.geo.latitude(),
+            officeLongitude: fakerInstance.geo.longitude(),
+          ),
+          officePricing: OfficePricing(
+              officePrice: fakerInstance.randomGenerator.decimal(),
+              officePriceUnits: i % 2 == 0 ? "hour" : "month",
+              officePricingCurrency: "Rp"),
+          listOfOfficeCapcityModels: [
+            OfficeCapacityModels(
+                capacityIcon: Icon(Icons.add),
+                capacityTitle: "dimension",
+                capacityValue: fakerInstance.randomGenerator.decimal(),
+                capacityUnits: "m")
+          ],
+          listOfOfficeFacilitiesModels: [
+            OfficeFacilitiesModels(
+                facilitiesIcon: Icon(Icons.add),
+                facilitiesTitle: fakerInstance.lorem.word())
+          ],
+          listOfOfficeReviewModels: [
+            OfficeReviewModels(
+                reviewerUserImage: Image.network(
+                  fakerInstance.image.image(
+                    keywords: ["people"],
+                  ),
+                ),
+                reviewerUserName: fakerInstance.person.name(),
+                reviewText: fakerInstance.lorem.sentence(),
+                reviewDate: fakeDate,
+                reviewStarsCount: 5,
+                reviewHelpRateCount: 99 + 1 * 2),
+          ],
+        ),
+      );
+    }
     notifyListeners();
   }
 }
 
 class OfficeDataDummy {
   List<OfficeModels> listOfOfficeModels = [];
-  final OfficePricing officePricings = OfficePricing(
-      officePrice: 388888,
-      officePriceUnits: "Persons",
-      officePricingCurrency: "Rp");
-  final List<OfficeCapacityModels> listOfCapacityModels = [
-    OfficeCapacityModels(
-        capacityIcon: Icon(Icons.add),
-        capacityTitle: "Working Desk",
-        capacityValue: 999,
-        capacityUnits: "desk"),
-    OfficeCapacityModels(
-        capacityIcon: Icon(Icons.add),
-        capacityTitle: "Working Desk",
-        capacityValue: 999,
-        capacityUnits: "desk"),
-    OfficeCapacityModels(
-        capacityIcon: Icon(Icons.add),
-        capacityTitle: "Working Desk",
-        capacityValue: 999,
-        capacityUnits: "desk"),
-    OfficeCapacityModels(
-        capacityIcon: Icon(Icons.add),
-        capacityTitle: "Working Desk",
-        capacityValue: 999,
-        capacityUnits: "desk"),
-  ];
-  final List<OfficeFacilitiesModels> listOfOfficeFacilitesModels = [
-    OfficeFacilitiesModels(
-        facilitiesIcon: Icon(Icons.add), facilitiesTitle: "High Speed Wifi"),
-    OfficeFacilitiesModels(
-        facilitiesIcon: Icon(Icons.add), facilitiesTitle: "High Speed Wifi"),
-    OfficeFacilitiesModels(
-        facilitiesIcon: Icon(Icons.add), facilitiesTitle: "High Speed Wifi"),
-    OfficeFacilitiesModels(
-        facilitiesIcon: Icon(Icons.add), facilitiesTitle: "High Speed Wifi"),
-  ];
-  final List<OfficeReviewModels> listOfReviewModels = [
-    OfficeReviewModels(
-        reviewerUserImage: const Image(
-            image: AssetImage("assets/image_assets/space_image/space1.png")),
-        reviewerUserName: "dummy name",
-        reviewText: "dummy text",
-        reviewDate: DateTime.now(),
-        reviewStarsCount: 4,
-        reviewHelpRateCount: 999),
-    OfficeReviewModels(
-        reviewerUserImage: const Image(
-            image: AssetImage("assets/image_assets/space_image/space1.png")),
-        reviewerUserName: "dummy name",
-        reviewText: "dummy text",
-        reviewDate: DateTime.now(),
-        reviewStarsCount: 4,
-        reviewHelpRateCount: 999),
-    OfficeReviewModels(
-        reviewerUserImage: const Image(
-            image: AssetImage("assets/image_assets/space_image/space1.png")),
-        reviewerUserName: "dummy name",
-        reviewText: "dummy text",
-        reviewDate: DateTime.now(),
-        reviewStarsCount: 4,
-        reviewHelpRateCount: 999),
-    OfficeReviewModels(
-        reviewerUserImage: const Image(
-            image: AssetImage("assets/image_assets/space_image/space1.png")),
-        reviewerUserName: "dummy name",
-        reviewText: "dummy text",
-        reviewDate: DateTime.now(),
-        reviewStarsCount: 4,
-        reviewHelpRateCount: 999),
-  ];
-
-  OfficeDataDummy() {
-    listOfOfficeModels = [
-      OfficeModels(
-          officeID: '1',
-          officeName: "kantor telkom",
-          officeType: "Coworking",
-          officeLeadImage: const Image(
-            image: AssetImage(
-              "assets/image_assets/space_image/space1.png",
-            ),
-            fit: BoxFit.cover,
-          ),
-          officeGridImage: [
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-          ],
-          officeStarRating: 5,
-          officeQuickLocation: "dummy, Dummy Town",
-          officeDescription: "lorem ipsum sit dolor amet",
-          officeApproxDistance: 50,
-          officeArea: 50,
-          officePersonCapacity: 999,
-          officeOpenTime: DateTime.now(),
-          officeCloseTime: DateTime.now(),
-          officeLatitude: 1.1111111111,
-          officeLongitude: 1.211111111,
-          officePricing: OfficePricing(
-              officePrice: 50000,
-              officePriceUnits: "hour",
-              officePricingCurrency: "Rp"),
-          listOfOfficeCapcityModels: listOfCapacityModels,
-          listOfOfficeFacilitiesModels: listOfOfficeFacilitesModels,
-          listOfOfficeReviewModels: listOfReviewModels),
-      OfficeModels(
-          officeID: '2',
-          officeName: "Office Zero",
-          officeType: "office",
-          officeLeadImage: const Image(
-            image: AssetImage("assets/image_assets/space_image/space1.png"),
-            fit: BoxFit.cover,
-          ),
-          officeGridImage: [
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-          ],
-          officeStarRating: 5,
-          officeQuickLocation: "dummy, Dummy Town",
-          officeDescription: "lorem ipsum sit dolor amet",
-          officeApproxDistance: 50,
-          officeArea: 50,
-          officePersonCapacity: 999,
-          officeOpenTime: DateTime.now(),
-          officeCloseTime: DateTime.now(),
-          officeLatitude: 1.1111111111,
-          officeLongitude: 1.211111111,
-          officePricing: OfficePricing(
-              officePrice: 900000,
-              officePriceUnits: "month",
-              officePricingCurrency: "Rp"),
-          listOfOfficeCapcityModels: listOfCapacityModels,
-          listOfOfficeFacilitiesModels: listOfOfficeFacilitesModels,
-          listOfOfficeReviewModels: listOfReviewModels),
-      OfficeModels(
-          officeID: '3',
-          officeName: "dummy office name",
-          officeType: "office",
-          officeLeadImage: const Image(
-            image: AssetImage("assets/image_assets/space_image/space1.png"),
-            fit: BoxFit.cover,
-          ),
-          officeGridImage: [
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-          ],
-          officeStarRating: 5,
-          officeQuickLocation: "dummy, Dummy Town",
-          officeDescription: "lorem ipsum sit dolor amet",
-          officeApproxDistance: 50,
-          officeArea: 50,
-          officePersonCapacity: 999,
-          officeOpenTime: DateTime.now(),
-          officeCloseTime: DateTime.now(),
-          officeLatitude: 1.1111111111,
-          officeLongitude: 1.211111111,
-          officePricing: officePricings,
-          listOfOfficeCapcityModels: listOfCapacityModels,
-          listOfOfficeFacilitiesModels: listOfOfficeFacilitesModels,
-          listOfOfficeReviewModels: listOfReviewModels),
-      OfficeModels(
-          officeID: '4',
-          officeName: "dummy office name",
-          officeType: "office",
-          officeLeadImage: const Image(
-            image: AssetImage("assets/image_assets/space_image/space1.png"),
-            fit: BoxFit.cover,
-          ),
-          officeGridImage: [
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-          ],
-          officeStarRating: 5,
-          officeQuickLocation: "dummy, Dummy Town",
-          officeDescription: "lorem ipsum sit dolor amet",
-          officeApproxDistance: 50,
-          officeArea: 50,
-          officePersonCapacity: 999,
-          officeOpenTime: DateTime.now(),
-          officeCloseTime: DateTime.now(),
-          officeLatitude: 1.1111111111,
-          officeLongitude: 1.211111111,
-          officePricing: officePricings,
-          listOfOfficeCapcityModels: listOfCapacityModels,
-          listOfOfficeFacilitiesModels: listOfOfficeFacilitesModels,
-          listOfOfficeReviewModels: listOfReviewModels),
-      OfficeModels(
-          officeID: '5',
-          officeName: "dummy office name",
-          officeType: "office",
-          officeLeadImage: const Image(
-            image: AssetImage("assets/image_assets/space_image/space1.png"),
-            fit: BoxFit.cover,
-          ),
-          officeGridImage: [
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-            const Image(
-                image:
-                    AssetImage("assets/image_assets/space_image/space1.png")),
-          ],
-          officeStarRating: 5,
-          officeQuickLocation: "dummy, Dummy Town",
-          officeDescription: "lorem ipsum sit dolor amet",
-          officeApproxDistance: 50,
-          officeArea: 50,
-          officePersonCapacity: 999,
-          officeOpenTime: DateTime.now(),
-          officeCloseTime: DateTime.now(),
-          officeLatitude: 1.1111111111,
-          officeLongitude: 1.211111111,
-          officePricing: officePricings,
-          listOfOfficeCapcityModels: listOfCapacityModels,
-          listOfOfficeFacilitiesModels: listOfOfficeFacilitesModels,
-          listOfOfficeReviewModels: listOfReviewModels),
-    ];
-  }
 }

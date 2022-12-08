@@ -35,6 +35,18 @@ class OfficeReviewModels {
       required this.reviewHelpRateCount});
 }
 
+class OfficeLocation {
+  late String city;
+  late String district;
+  late double officeLatitude;
+  late double officeLongitude;
+  OfficeLocation(
+      {required this.city,
+      required this.district,
+      required this.officeLatitude,
+      required this.officeLongitude});
+}
+
 class OfficePricing {
   late double officePrice;
   late String officePriceUnits;
@@ -51,15 +63,14 @@ class OfficeModels {
   late String officeType;
   late Image officeLeadImage;
   late int officeStarRating;
-  late String officeQuickLocation;
+
   late String officeDescription;
   late double officeApproxDistance;
   late double officeArea;
   late double officePersonCapacity;
   late DateTime officeOpenTime;
   late DateTime officeCloseTime;
-  late double officeLatitude;
-  late double officeLongitude;
+  late OfficeLocation officeLocation;
   late OfficePricing officePricing;
   List<Image> officeGridImage = [];
   List<OfficeCapacityModels> listOfOfficeCapcityModels = [];
@@ -73,15 +84,13 @@ class OfficeModels {
     required this.officeLeadImage,
     required this.officeGridImage,
     required this.officeStarRating,
-    required this.officeQuickLocation,
     required this.officeDescription,
     required this.officeApproxDistance,
     required this.officeArea,
     required this.officePersonCapacity,
     required this.officeOpenTime,
     required this.officeCloseTime,
-    required this.officeLatitude,
-    required this.officeLongitude,
+    required this.officeLocation,
     required this.officePricing,
     required this.listOfOfficeCapcityModels,
     required this.listOfOfficeFacilitiesModels,
