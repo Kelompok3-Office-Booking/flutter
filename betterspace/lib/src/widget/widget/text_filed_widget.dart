@@ -12,6 +12,8 @@ Widget textFormFields({
   int? minLines,
   String? label,
   dynamic? validators,
+  IconData? prefixIcons,
+  void Function()? preficIconFunction,
   AutovalidateMode? autoValidate,
   TextInputAction? textInputAction,
   FloatingLabelBehavior? floatingLabelBehaviour,
@@ -27,6 +29,8 @@ Widget textFormFields({
     autovalidateMode: autoValidate,
     validator: validators,
     decoration: InputDecoration(
+      prefixIcon:
+          IconButton(onPressed: preficIconFunction, icon: Icon(prefixIcons)),
       hintText: hintTexts,
       label: Text(
         '$label',
@@ -57,3 +61,5 @@ Widget textFormFields({
     ),
   );
 }
+
+void targetFunc() {}

@@ -89,6 +89,7 @@ class OfficeDataDummy {
       OfficeModels(
           officeID: '1',
           officeName: "kantor telkom",
+          officeType: "Coworking",
           officeLeadImage: const Image(
             image: AssetImage(
               "assets/image_assets/space_image/space1.png",
@@ -119,13 +120,17 @@ class OfficeDataDummy {
           officeCloseTime: DateTime.now(),
           officeLatitude: 1.1111111111,
           officeLongitude: 1.211111111,
-          officePricing: officePricings,
+          officePricing: OfficePricing(
+              officePrice: 50000,
+              officePriceUnits: "hour",
+              officePricingCurrency: "Rp"),
           listOfOfficeCapcityModels: listOfCapacityModels,
           listOfOfficeFacilitiesModels: listOfOfficeFacilitesModels,
           listOfOfficeReviewModels: listOfReviewModels),
       OfficeModels(
           officeID: '2',
-          officeName: "dummy office name",
+          officeName: "Office Zero",
+          officeType: "office",
           officeLeadImage: const Image(
             image: AssetImage("assets/image_assets/space_image/space1.png"),
             fit: BoxFit.cover,
@@ -154,13 +159,17 @@ class OfficeDataDummy {
           officeCloseTime: DateTime.now(),
           officeLatitude: 1.1111111111,
           officeLongitude: 1.211111111,
-          officePricing: officePricings,
+          officePricing: OfficePricing(
+              officePrice: 900000,
+              officePriceUnits: "month",
+              officePricingCurrency: "Rp"),
           listOfOfficeCapcityModels: listOfCapacityModels,
           listOfOfficeFacilitiesModels: listOfOfficeFacilitesModels,
           listOfOfficeReviewModels: listOfReviewModels),
       OfficeModels(
           officeID: '3',
           officeName: "dummy office name",
+          officeType: "office",
           officeLeadImage: const Image(
             image: AssetImage("assets/image_assets/space_image/space1.png"),
             fit: BoxFit.cover,
@@ -196,6 +205,7 @@ class OfficeDataDummy {
       OfficeModels(
           officeID: '4',
           officeName: "dummy office name",
+          officeType: "office",
           officeLeadImage: const Image(
             image: AssetImage("assets/image_assets/space_image/space1.png"),
             fit: BoxFit.cover,
@@ -231,6 +241,7 @@ class OfficeDataDummy {
       OfficeModels(
           officeID: '5',
           officeName: "dummy office name",
+          officeType: "office",
           officeLeadImage: const Image(
             image: AssetImage("assets/image_assets/space_image/space1.png"),
             fit: BoxFit.cover,

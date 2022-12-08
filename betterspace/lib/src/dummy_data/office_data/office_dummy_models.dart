@@ -48,6 +48,7 @@ class OfficePricing {
 class OfficeModels {
   late String officeID;
   late String officeName;
+  late String officeType;
   late Image officeLeadImage;
   late int officeStarRating;
   late String officeQuickLocation;
@@ -68,6 +69,7 @@ class OfficeModels {
   OfficeModels({
     required this.officeID,
     required this.officeName,
+    required this.officeType,
     required this.officeLeadImage,
     required this.officeGridImage,
     required this.officeStarRating,

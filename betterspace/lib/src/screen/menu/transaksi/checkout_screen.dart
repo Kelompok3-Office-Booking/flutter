@@ -1,16 +1,20 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/custom_radio_button.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/horizontal_month_picker.dart';
 import 'package:betterspace/src/widget/widget/horizontal_timepicker.dart';
 import 'package:betterspace/src/widget/widget/offiice_item_cards.dart';
+import 'package:betterspace/src/widget/widget/read_only_form.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -24,6 +28,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   ValueNotifier<int> selectedMonth = ValueNotifier<int>(1);
   ValueNotifier<int> selectedBeverageId = ValueNotifier<int>(1);
   TextEditingController discountFormController = TextEditingController();
+  final TextEditingController _dateController = TextEditingController();
+
+  @override
+  void dispose() {
+    super.dispose();
+    discountFormController.dispose();
+    _dateController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -121,6 +133,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
                     child: SizedBox(
                       height: AdaptSize.screenWidth / 6.42857142,
+                      child: readOnlyWidget(
+                        controller: _dateController,
+                        enblBorderRadius: 16,
+                        errBorderRadius: 16,
+                        fcsBorderRadius: 16,
+                        hint: 'day, date month year',
+                        textStyle:
+                            Theme.of(context).textTheme.bodyText1!.copyWith(
+                                  color: MyColor.grayLightColor,
+                                ),
+                        onTap: () {
+                          pickedDate(context);
+                        },
+                        suffixIcon: Icon(
+                          CupertinoIcons.calendar,
+                          color: MyColor.grayLightColor,
+                        ),
+                      ),
                     ),
                   ),
                   Padding(
@@ -273,6 +303,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: SizedBox(
                       height: AdaptSize.screenWidth / 6.4285714,
                       child: textFormFields(
+                          prefixIcons: Icons.percent_outlined,
+                          suffixIcon: Icon(Icons.percent),
                           label: "discount code",
                           hintTexts: "AXRRR#2",
                           controller: discountFormController),
@@ -285,5 +317,45 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         ),
       ),
     );
+  }
+
+  Future pickedDate(BuildContext context) async {
+    final dateProvider =
+        Provider.of<SearchSpacesViewModel>(context, listen: false);
+
+    dateProvider.dateNow = (await showDatePicker(
+      context: context,
+      initialDate: dateProvider.dateTime,
+      firstDate: DateTime(1999),
+      lastDate: DateTime(2050),
+      fieldLabelText: 'Booking Date',
+      fieldHintText: 'Month/Date/Year',
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: MyColor.darkBlueColor,
+              surface: MyColor.whiteColor,
+              onPrimary: MyColor.whiteColor,
+              onSurface: MyColor.darkColor,
+            ),
+            dialogTheme: DialogTheme(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
+              ),
+            ),
+            textButtonTheme: TextButtonThemeData(
+              style: TextButton.styleFrom(
+                foregroundColor: MyColor.darkBlueColor, // button text color
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    ))!;
+
+    dateProvider.pickdate();
+    _dateController.text = dateProvider.datePicked;
   }
 }
