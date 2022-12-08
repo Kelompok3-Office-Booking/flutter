@@ -32,8 +32,8 @@ Widget popularSpaceWidget(contexts) {
               Navigator.push(
                   context,
                   CupertinoPageRoute(
-                      builder: ((context) => OfficeDetailScreen(
-                          officeID: listOfDummyOffice[index].officeID))));
+                      builder: ((context) =>
+                          OfficeDetailScreen(officeID: index))));
             },
             child: Container(
               /// canvas
@@ -57,7 +57,8 @@ Widget popularSpaceWidget(contexts) {
                       /// image space
                       ClipRRect(
                           borderRadius: BorderRadius.circular(16),
-                          child: listOfDummyOffice[index].officeLeadImage),
+                          child: Image.network(
+                              listOfDummyOffice[index].officeLeadImage)),
                       Positioned(
                         right: 10,
                         top: 8,

@@ -9,17 +9,18 @@ class OfficeDummyDataViewModels with ChangeNotifier {
   addRecord(int dataLength) {
     DateTime fakeDate = DateTime.now();
     var fakerInstance = new Faker();
+    List<OfficeModels> datainstance = [];
     for (int i = 1; i <= dataLength; i++) {
-      _listOfOfficeModels.add(
+      datainstance.add(
         OfficeModels(
           officeID: ("office" + i.toString()),
           officeName: fakerInstance.company.name(),
           officeType: i % 2 == 0 ? "office" : "coworking",
-          officeLeadImage: Image.network(fakerInstance.image.image()),
+          officeLeadImage: fakerInstance.image.image(),
           officeGridImage: [
-            Image.network(fakerInstance.image.image()),
-            Image.network(fakerInstance.image.image()),
-            Image.network(fakerInstance.image.image())
+            fakerInstance.image.image(),
+            fakerInstance.image.image(),
+            fakerInstance.image.image()
           ],
           officeStarRating: 5,
           officeDescription: fakerInstance.lorem.sentence(),
@@ -66,7 +67,7 @@ class OfficeDummyDataViewModels with ChangeNotifier {
         ),
       );
     }
-    notifyListeners();
+    _listOfOfficeModels = datainstance;
   }
 }
 
