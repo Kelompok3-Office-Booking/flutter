@@ -12,7 +12,7 @@ PreferredSizeWidget defaultAppbarWidget({
   AdaptSize.size(context: contexts);
   return AppBar(
     bottom: PreferredSize(
-      preferredSize: const Size.fromHeight(4.0),
+      preferredSize: const Size.fromHeight(2.0),
       child: Container(
         color: MyColor.neutral800,
         height: 2.0,

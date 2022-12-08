@@ -1,3 +1,4 @@
+import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
 import 'package:betterspace/src/screen/landing/splash_screen1.dart';
 import 'package:betterspace/src/screen/menu/home/voucer_promo_screen.dart';
 import 'package:betterspace/src/utils/colors.dart';
@@ -28,6 +29,7 @@ class BetterSpaceApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NavigasiViewModel()),
+        ChangeNotifierProvider(create: (_) => OfficeDummyDataViewModels()),
         ChangeNotifierProvider(create: (_) => MenuViewModel()),
         ChangeNotifierProvider(create: (_) => OnboardingViewModel()),
         ChangeNotifierProvider(create: (_) => SearchSpacesViewModel()),

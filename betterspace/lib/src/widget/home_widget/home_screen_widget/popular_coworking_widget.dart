@@ -9,9 +9,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 Widget popularSpaceWidget(contexts) {
-  List<OfficeModels> listOfDummyOffice = OfficeDataDummy().listOfOfficeModels;
+  final dummyDataProviders =
+      Provider.of<OfficeDummyDataViewModels>(contexts, listen: false);
+  dummyDataProviders.addRecord(15);
+  final listOfDummyOffice = dummyDataProviders.listOfOfficeModels;
+
   return SizedBox(
     height: AdaptSize.screenWidth * .654,
     width: double.infinity,
@@ -27,8 +32,8 @@ Widget popularSpaceWidget(contexts) {
               Navigator.push(
                   context,
                   CupertinoPageRoute(
-                      builder: ((context) => OfficeDetailScreen(
-                          officeID: listOfDummyOffice[index].officeID))));
+                      builder: ((context) =>
+                          OfficeDetailScreen(officeID: index))));
             },
             child: Container(
               /// canvas
@@ -52,7 +57,8 @@ Widget popularSpaceWidget(contexts) {
                       /// image space
                       ClipRRect(
                           borderRadius: BorderRadius.circular(16),
-                          child: listOfDummyOffice[index].officeLeadImage),
+                          child: Image.network(
+                              listOfDummyOffice[index].officeLeadImage)),
                       Positioned(
                         right: 10,
                         top: 8,
@@ -121,7 +127,9 @@ Widget popularSpaceWidget(contexts) {
                           const Spacer(),
 
                           /// space lokasi
-                          Text(listOfDummyOffice[index].officeQuickLocation),
+                          Text(listOfDummyOffice[index].officeLocation.city +
+                              ", " +
+                              listOfDummyOffice[index].officeLocation.district),
 
                           const Spacer(),
 

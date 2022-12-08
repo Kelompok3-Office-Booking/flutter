@@ -130,7 +130,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               Expanded(
                                 child: IconWithLabel().asrow(
                                     contexts: context,
-                                    colors: MyColor.neutral100,
                                     usedIcon: Icons.location_on_outlined,
                                     labelText: "Tebet, South Jakarta",
                                     spacer: AdaptSize.pixel3),
@@ -239,7 +238,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               Expanded(
                                 child: IconWithLabel().asrow(
                                     contexts: context,
-                                    colors: MyColor.neutral100,
                                     usedIcon: Icons.location_on_outlined,
                                     labelText: "Tebet, South Jakarta",
                                     spacer: AdaptSize.pixel3),
@@ -348,7 +346,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               Expanded(
                                 child: IconWithLabel().asrow(
                                     contexts: context,
-                                    colors: MyColor.neutral100,
                                     usedIcon: Icons.location_on_outlined,
                                     labelText: "Tebet, South Jakarta",
                                     spacer: AdaptSize.pixel3),
@@ -457,7 +454,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               Expanded(
                                 child: IconWithLabel().asrow(
                                     contexts: context,
-                                    colors: MyColor.neutral100,
                                     usedIcon: Icons.location_on_outlined,
                                     labelText: "Tebet, South Jakarta",
                                     spacer: AdaptSize.pixel3),

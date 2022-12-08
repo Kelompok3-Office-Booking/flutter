@@ -12,7 +12,8 @@ class IconWithLabel {
     double? iconSize,
     double? spacer,
     double? fontSizes,
-    Color? colors,
+    Color? iconColor,
+    Color? fontColor,
     TextStyle? textStyles,
   }) {
     return Row(
@@ -23,14 +24,14 @@ class IconWithLabel {
           child: Icon(
             usedIcon,
             size: iconSize ?? AdaptSize.screenHeight * .024,
-            color: colors ?? MyColor.primary700,
+            color: iconColor ?? MyColor.primary700,
           ),
         ),
         Text(
           labelText,
           style: textStyles ??
               (Theme.of(contexts).textTheme.bodyMedium!.copyWith(
-                    color: colors ?? MyColor.neutral100,
+                    color: fontColor ?? MyColor.neutral100,
                     fontSize: fontSizes ?? AdaptSize.screenHeight / 1000 * 14,
                   )),
         ),

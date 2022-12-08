@@ -15,13 +15,16 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OfficeDetailScreen extends StatelessWidget {
-  final String officeID;
+  final int officeID;
 
   const OfficeDetailScreen({super.key, required this.officeID});
 
   @override
   Widget build(BuildContext context) {
-    List<OfficeModels> listOfDummyOffice = OfficeDataDummy().listOfOfficeModels;
+    final dummyDataProviders =
+        Provider.of<OfficeDummyDataViewModels>(context, listen: false);
+    List<OfficeModels> listOfDummyOffice =
+        dummyDataProviders.listOfOfficeModels;
     return Scaffold(
       body: Stack(
         children: [
@@ -121,7 +124,7 @@ class OfficeDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        officeID,
+                        listOfDummyOffice[officeID].officeName,
                         style: Theme.of(context).textTheme.headline6,
                       ),
                       Container(
@@ -243,8 +246,7 @@ class OfficeDetailScreen extends StatelessWidget {
                     height: AdaptSize.pixel8,
                   ),
                   Text(
-                    listOfDummyOffice[int.parse(officeID) - 1]
-                        .officeDescription,
+                    listOfDummyOffice[officeID].officeDescription,
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
@@ -291,15 +293,15 @@ class OfficeDetailScreen extends StatelessWidget {
                                   ),
                                 ),
 
-                            /// text keterangan
-                            Text(
-                              "Can Accomodate",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(color: MyColor.neutral200),
-                            ),
-                            const Spacer(),
+                                /// text keterangan
+                                Text(
+                                  "Can Accomodate",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyMedium!
+                                      .copyWith(color: MyColor.neutral200),
+                                ),
+                                const Spacer(),
 
                                 /// detail person
                                 RichText(
