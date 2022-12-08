@@ -8,7 +8,7 @@ import 'package:betterspace/src/screen/menu/account/setting_item_screen/term_con
 import 'package:betterspace/src/screen/menu/account/setting_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/widget/widget/custom_dialog.dart';
+import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
@@ -94,4 +94,16 @@ class AccountViewModel with ChangeNotifier {
     ],
     [Icons.privacy_tip_outlined, 'Provacy Police', const PrivacyPolicyScreen()],
   ];
+
+  /// -------------------------------------------------------------------------
+  /// about web view loading
+
+  bool _webLoading = true;
+
+  get webLoading => _webLoading;
+
+  void completeLoading() {
+    _webLoading = false;
+    notifyListeners();
+  }
 }
