@@ -3,6 +3,7 @@ import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
+import 'package:betterspace/src/screen/menu/home/filter_search_screen.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
 import 'package:betterspace/src/screen/menu/tersimpan/wishlist_screen.dart';
@@ -205,5 +206,40 @@ class NavigasiViewModel with ChangeNotifier {
   /// navigasi back check permission
   Future navigasiBackCheckPermission(BuildContext context) async {
     Navigator.pop(context);
+  }
+
+  /// navigasi to search filtering
+  void navigasiToFilterSearch(BuildContext context) {
+    Timer(
+      const Duration(milliseconds: 300),
+      () {
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondAnimation) =>
+                const FilterSearchScreen(),
+            transitionsBuilder: (context, animation, secondAnimation, child) =>
+                FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          ),
+        );
+      },
+    );
+    notifyListeners();
+  }
+
+  void navigasiToDetailSpace({
+    context,
+    required int officeId,
+  }) {
+    Navigator.push(
+      context,
+      CupertinoModalPopupRoute(
+        builder: (context) => OfficeDetailScreen(
+          officeID: officeId,
+        ),
+      ),
+    );
   }
 }

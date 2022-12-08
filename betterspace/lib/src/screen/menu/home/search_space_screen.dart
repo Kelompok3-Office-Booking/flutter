@@ -52,49 +52,76 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                     },
                     icon: Icon(
                       Icons.arrow_back_ios,
-                      size: AdaptSize.screenHeight * 0.022,
+                      size: AdaptSize.screenHeight * .022,
                     ),
                   ),
                   SizedBox(
-                    width: AdaptSize.screenWidth * 0.01,
+                    width: AdaptSize.screenWidth * .01,
                   ),
                   Text(
-                    'Find Your Best Work Place !',
+                    'Search',
                     style: Theme.of(context)
                         .textTheme
                         .headline6!
-                        .copyWith(fontSize: AdaptSize.screenHeight * 0.022),
+                        .copyWith(fontSize: AdaptSize.screenHeight * .022),
                   ),
                 ],
               ),
 
               SizedBox(
-                height: AdaptSize.screenHeight * 0.024,
+                height: AdaptSize.screenHeight * .016,
               ),
 
-              /// text field
-              searchPlace(
-                /// search field
-                context: context,
-                margin: EdgeInsets.only(
-                  left: AdaptSize.screenWidth * .022,
-                  right: AdaptSize.screenWidth * .022,
+              Card(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),),
+                elevation: 2.5,
+                color: MyColor.neutral900,
+                shadowColor: MyColor.grayLightColor.withOpacity(.4),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: AdaptSize.screenWidth * .008,
+                    bottom: AdaptSize.screenHeight * .022,
+                    top: AdaptSize.screenHeight * .022,
+                    right: AdaptSize.screenWidth * .008,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'With whom did you come here ?',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6!
+                            .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                      ),
+
+                      /// text field
+                      searchPlace(
+                        /// search field
+                        context: context,
+                        margin: EdgeInsets.only(
+                          top: AdaptSize.screenHeight * 0.016,
+                          bottom: AdaptSize.screenHeight * 0.016,
+                        ),
+                        hintText: 'Mau kerja dimana hari ini ?',
+                        controller: _searchController,
+                        prefixIcon: Icon(
+                          Icons.search,
+                          color: MyColor.darkColor.withOpacity(.8),
+                        ),
+                        onTap: () {
+                          context.read<NavigasiViewModel>().navigasiToFilterSearch(context);
+                        },
+                        readOnly: true,
+                      ),
+
+                      /// list map search
+                      searchMapWidget(),
+                    ],
+                  ),
                 ),
-                hintText: 'Mau kerja dimana hari ini ?',
-                controller: _searchController,
-                prefixIcon: Icon(
-                  Icons.search,
-                  color: MyColor.darkColor.withOpacity(.8),
-                ),
-                readOnly: false,
               ),
-
-              SizedBox(
-                height: AdaptSize.screenHeight * 0.024,
-              ),
-
-              /// list map search
-              searchMapWidget(),
 
               SizedBox(
                 height: AdaptSize.screenHeight * 0.034,
@@ -106,7 +133,7 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                 width: double.infinity,
                 padding: EdgeInsets.all(AdaptSize.screenHeight * .01),
                 decoration: BoxDecoration(
-                  color: MyColor.netralColor,
+                  color: MyColor.neutral900,
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
@@ -124,7 +151,7 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .headline6!
-                          .copyWith(fontSize: AdaptSize.screenHeight * 0.022),
+                          .copyWith(fontSize: AdaptSize.screenHeight * 0.016),
                     ),
 
                     SizedBox(
@@ -171,7 +198,7 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
-                      .copyWith(fontSize: AdaptSize.screenHeight * 0.022),
+                      .copyWith(fontSize: AdaptSize.screenHeight * .016),
                 ),
               ),
 
@@ -219,7 +246,8 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
 
   /// show date picker
   Future pickedDate(BuildContext context) async {
-    final dateProvider = Provider.of<SearchSpacesViewModel>(context, listen: false);
+    final dateProvider =
+        Provider.of<SearchSpacesViewModel>(context, listen: false);
 
     dateProvider.dateNow = (await showDatePicker(
       context: context,
