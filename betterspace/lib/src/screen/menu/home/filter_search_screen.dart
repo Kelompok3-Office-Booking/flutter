@@ -42,7 +42,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
           padding: EdgeInsets.only(
             left: AdaptSize.screenWidth * .016,
             right: AdaptSize.screenWidth * .016,
-            top: AdaptSize.paddingTop,
+            top: AdaptSize.paddingTop + 3,
           ),
           child: Column(
             children: [
@@ -51,8 +51,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                 /// search keyword
                 context: context,
                 margin: EdgeInsets.only(
-                  top: AdaptSize.screenHeight * 0.016,
-                  bottom: AdaptSize.screenHeight * 0.016,
+                  bottom: AdaptSize.screenHeight * .016,
                 ),
                 hintText: 'Type keyword...',
                 controller: _searchController,
@@ -64,7 +63,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                   splashColor: MyColor.neutral900,
                   icon: Icon(
                     Icons.arrow_back,
-                    color: MyColor.neutral600,
+                    color: MyColor.darkColor.withOpacity(.8),
                   ),
                 ),
                 suffixIcon: Icon(

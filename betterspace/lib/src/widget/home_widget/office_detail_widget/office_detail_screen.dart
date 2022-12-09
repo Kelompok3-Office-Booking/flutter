@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
 import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
@@ -7,8 +8,11 @@ import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/bottom_sheed_widget.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/icon_with_label.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -40,48 +44,54 @@ class OfficeDetailScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /// image header
-                  Container(
-                    height: AdaptSize.screenWidth / 1.3,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      color: Colors.brown,
-                      borderRadius: BorderRadius.circular(16),
-                      image: const DecorationImage(
-                        fit: BoxFit.cover,
-                        image: AssetImage(
-                            'assets/image_assets/space_image/space1.png'),
+                  CachedNetworkImage(
+                    imageUrl: listOfDummyOffice[officeID].officeLeadImage,
+                    imageBuilder: (context, imageProvider) => Container(
+                      height: AdaptSize.screenWidth / 1.3,
+                      width: double.infinity,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        image: DecorationImage(
+                          fit: BoxFit.cover,
+                          image: imageProvider,
+                        ),
+                      ),
+                      child: Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: IconButton(
+                              onPressed: () {
+                                context
+                                    .read<NavigasiViewModel>()
+                                    .navigasiPop(context);
+                              },
+                              icon: Icon(
+                                Icons.arrow_back_ios,
+                                size: AdaptSize.screenHeight * .024,
+                                color: MyColor.neutral900,
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.topRight,
+                            child: IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.bookmark_outline,
+                                size: AdaptSize.screenHeight * .024,
+                                color: MyColor.neutral900,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    child: Stack(
-                      children: [
-                        Align(
-                          alignment: Alignment.topLeft,
-                          child: IconButton(
-                            onPressed: () {
-                              context
-                                  .read<NavigasiViewModel>()
-                                  .navigasiPop(context);
-                            },
-                            icon: Icon(
-                              Icons.arrow_back_ios,
-                              size: AdaptSize.screenHeight * .024,
-                              color: MyColor.neutral900,
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: Alignment.topRight,
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: Icon(
-                              Icons.bookmark_outline,
-                              size: AdaptSize.screenHeight * .024,
-                              color: MyColor.neutral900,
-                            ),
-                          ),
-                        ),
-                      ],
+                    placeholder: (context, url) => shimmerLoading(
+                      child: commonShimmerLoadWidget(),
                     ),
+                    errorWidget: (context, url, error) =>
+                        commonShimmerFailedLoadWidget(),
                   ),
 
                   SizedBox(
@@ -93,23 +103,33 @@ class OfficeDetailScreen extends StatelessWidget {
                     height: AdaptSize.screenWidth / 3.5,
                     width: double.infinity,
                     child: ListView.builder(
-                      itemCount: 6,
+                      itemCount:
+                          listOfDummyOffice[officeID].officeGridImage.length,
                       scrollDirection: Axis.horizontal,
+                      physics: const NeverScrollableScrollPhysics(),
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: EdgeInsets.only(right: AdaptSize.pixel8),
-                          child: SizedBox(
-                            height: AdaptSize.screenWidth / 3.5,
-                            width: AdaptSize.screenWidth / 3.5,
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(16),
-                              child: const Image(
-                                image: AssetImage(
-                                    "assets/image_assets/space_image/space1.png"),
-                                fit: BoxFit.cover,
+                        return CachedNetworkImage(
+                          imageUrl: listOfDummyOffice[officeID]
+                              .officeGridImage[index],
+                          imageBuilder: (context, imageProvider) => Padding(
+                            padding: EdgeInsets.only(right: AdaptSize.pixel8),
+                            child: SizedBox(
+                              height: AdaptSize.screenWidth / 3.25,
+                              width: AdaptSize.screenWidth / 3.25,
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image(
+                                  image: imageProvider,
+                                  fit: BoxFit.cover,
+                                ),
                               ),
                             ),
                           ),
+                          placeholder: (context, url) => shimmerLoading(
+                            child: commonShimmerLoadWidget(),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              commonShimmerFailedLoadWidget(),
                         );
                       },
                     ),
@@ -149,7 +169,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                 width: AdaptSize.pixel34,
                                 child: Row(
                                   mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                      MainAxisAlignment.spaceEvenly,
                                   children: [
                                     Icon(
                                       Icons.star_rounded,
@@ -157,7 +177,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                       size: AdaptSize.pixel16,
                                     ),
                                     Text(
-                                      "0.0",
+                                      "${listOfDummyOffice[officeID].officeStarRating}",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodySmall!
@@ -186,12 +206,17 @@ class OfficeDetailScreen extends StatelessWidget {
                       SizedBox(
                         width: AdaptSize.screenWidth * .005,
                       ),
-                      Text(
-                        "Tebet, South Jakarta",
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium!
-                            .copyWith(color: MyColor.neutral100),
+                      Expanded(
+                        child: Text(
+                          '${listOfDummyOffice[officeID].officeLocation.city}, ${listOfDummyOffice[officeID].officeLocation.district}',
+                          style:
+                              Theme.of(context).textTheme.subtitle1!.copyWith(
+                                    color: MyColor.neutral100,
+                                    fontSize: AdaptSize.screenHeight * .014,
+                                  ),
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 2,
+                        ),
                       ),
                     ],
                   ),
@@ -204,28 +229,33 @@ class OfficeDetailScreen extends StatelessWidget {
                       IconWithLabel().asrow(
                           contexts: context,
                           usedIcon: Icons.location_on_outlined,
-                          labelText: "50m",
+                          labelText: listOfDummyOffice[officeID]
+                              .officeApproxDistance
+                              .toString(),
                           spacer: AdaptSize.pixel4),
 
                       /// location 2
                       IconWithLabel().asrow(
                           contexts: context,
                           usedIcon: Icons.location_on_outlined,
-                          labelText: "10m2",
+                          labelText:
+                              listOfDummyOffice[officeID].officeArea.toString(),
                           spacer: AdaptSize.pixel4),
 
                       /// location 3
                       IconWithLabel().asrow(
                           contexts: context,
                           usedIcon: Icons.person_outline,
-                          labelText: "250",
+                          labelText: listOfDummyOffice[officeID]
+                              .officePersonCapacity
+                              .toString(),
                           spacer: AdaptSize.pixel4),
 
                       /// loccation 4
                       IconWithLabel().asrow(
                           contexts: context,
                           usedIcon: Icons.access_time,
-                          labelText: "08:00-11:00",
+                          labelText: "08:00-23:00",
                           spacer: AdaptSize.pixel4),
                     ],
                   ),
@@ -275,7 +305,9 @@ class OfficeDetailScreen extends StatelessWidget {
                       physics: const NeverScrollableScrollPhysics(),
                       padding: EdgeInsets.only(top: AdaptSize.pixel8),
                       shrinkWrap: true,
-                      itemCount: 4,
+                      itemCount: listOfDummyOffice[officeID]
+                          .listOfOfficeCapcityModels
+                          .length,
                       itemBuilder: (context, index) {
                         return Column(
                           children: [
@@ -308,7 +340,9 @@ class OfficeDetailScreen extends StatelessWidget {
                                   text: TextSpan(
                                     children: [
                                       TextSpan(
-                                        text: "120",
+                                        text: listOfDummyOffice[officeID]
+                                            .listOfOfficeCapcityModels[index]
+                                            .capacityTitle,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium!
@@ -370,7 +404,7 @@ class OfficeDetailScreen extends StatelessWidget {
 
                   /// alamat
                   Text(
-                    'Jl. Jendral Sudirma No. 58, Kebayoran baru, South Jakarta',
+                    '${listOfDummyOffice[officeID].officeLocation.city}, ${listOfDummyOffice[officeID].officeLocation.district}',
                     style: Theme.of(context)
                         .textTheme
                         .bodyMedium!
@@ -437,7 +471,9 @@ class OfficeDetailScreen extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: footerDetail(
               context: context,
-              bookingButton: () {},
+              bookingButton: () {
+                context.read<NavigasiViewModel>().navigasiToCheckOut(context);
+              },
             ),
           ),
         ],
@@ -696,7 +732,7 @@ class OfficeDetailScreen extends StatelessWidget {
 
                   /// description
                   Text(
-                    'Keren banget ni boss senggol dongg',
+                    'Hmm, apayah, gua juga gatau nih',
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           fontSize: AdaptSize.screenHeight * .014,
                         ),
@@ -792,7 +828,7 @@ class OfficeDetailScreen extends StatelessWidget {
               Text(
                 NumberFormat.currency(
                         locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                    .format(100000),
+                    .format(Random().nextDouble() * 400000),
                 style: Theme.of(context).textTheme.headline6!.copyWith(
                       color: MyColor.darkBlueColor,
                       fontSize: AdaptSize.screenHeight * .016,
@@ -863,7 +899,9 @@ class OfficeDetailScreen extends StatelessWidget {
           /// button open google maps widget
           buttonWidget(
             onPressed: () {
-              context.read<GetLocationViewModel>().permissionLocationGMap(context);
+              context
+                  .read<GetLocationViewModel>()
+                  .permissionLocationGMap(context);
             },
             sizeheight: AdaptSize.screenHeight * .044,
             sizeWidth: double.infinity,

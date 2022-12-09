@@ -1,15 +1,17 @@
 import 'dart:async';
+import 'dart:math';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class GetLocationViewModel with ChangeNotifier {
-
   String text1 = 'Allow ';
   String text2 = 'Better Space App ';
-  String text3 = 'requires permission to access your phone\'s location, used to Calculate the distance of the office from your current position';
+  String text3 =
+      'requires permission to access your phone\'s location, used to Calculate the distance of the office from your current position';
   Position? _posisi;
 
   late double? lat;
@@ -107,6 +109,27 @@ class GetLocationViewModel with ChangeNotifier {
     if (serviceEnabled) {
       Provider.of<NavigasiViewModel>(context, listen: false)
           .navigasiOpenGoogleMaps(context);
+    }
+  }
+
+  /// calculate distance current user to office
+  Future<String> calculateDistance(
+    LatLng destinationLocation,
+  ) async {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((destinationLocation.latitude - _posisi!.latitude) * p) / 2 +
+        c(_posisi!.latitude * p) *
+            c(destinationLocation.latitude * p) *
+            (1 - c((destinationLocation.longitude - _posisi!.longitude) * p)) /
+            2;
+    var distance = 12742 * asin(sqrt(a));
+
+    if (distance < 1) {
+      return "${(double.parse(distance.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m";
+    } else {
+      return "${double.parse(distance.toStringAsFixed(2))} km";
     }
   }
 }

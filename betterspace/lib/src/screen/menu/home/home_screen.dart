@@ -1,16 +1,17 @@
+import 'dart:math';
 import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
-import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/all_populer.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/carousel_widget.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/meeting_rent_widget.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/office_rent_widget.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/popular_coworking_widget.dart';
+import 'package:betterspace/src/widget/home_widget/home_screen_widget/office_card_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/recomended_space_widget.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -20,9 +21,10 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
-    final OfficeDataDummy dataDummyForOfficeModels = OfficeDataDummy();
-    final List<OfficeModels> listOfOffice =
-        dataDummyForOfficeModels.listOfOfficeModels;
+    final dummyDataProviders =
+        Provider.of<OfficeDummyDataViewModels>(context, listen: false);
+    dummyDataProviders.addRecord(5);
+    final listOfDummyOffice = dummyDataProviders.listOfOfficeModels;
     return Scaffold(
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
@@ -122,15 +124,61 @@ class HomeScreen extends StatelessWidget {
                 height: AdaptSize.screenHeight * .008,
               ),
 
-              /// all popular text
+              /// all coworking text
               allSpaces(context, 'Popular Coworking Space', () {}),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
               ),
 
-              /// popular space
-              popularSpaceWidget(context),
+              /// coworking space
+              SizedBox(
+                height: AdaptSize.screenHeight * .31,
+                width: double.infinity,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: listOfDummyOffice.length,
+                    itemBuilder: (context, index) {
+                      return CachedNetworkImage(
+                        imageUrl: listOfDummyOffice[index].officeLeadImage,
+                        imageBuilder: (context, imageProvider) =>
+                            popularSpaceWidget(
+                          context: context,
+                          onTap: () {
+                            context
+                                .read<NavigasiViewModel>()
+                                .navigasiToDetailSpace(
+                                  context: context,
+                                  officeId: index,
+                                );
+                          },
+                          officeImage: imageProvider,
+                          officeName: listOfDummyOffice[index].officeName,
+                          officeLocation:
+                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
+                          officeStarRanting: listOfDummyOffice[index]
+                              .officeStarRating
+                              .toString(),
+                          officeApproxDistance: listOfDummyOffice[index]
+                              .officeApproxDistance
+                              .toString(),
+                          officePersonCapacity: listOfDummyOffice[index]
+                              .officePersonCapacity
+                              .toString(),
+                          officeArea:
+                              listOfDummyOffice[index].officeArea.toString(),
+                          hours: '/Hours',
+                          officePricing: Random().nextDouble() * 100000,
+                        ),
+                        placeholder: (context, url) => shimmerLoading(
+                          child: CardShimmerHomeLoading.verticalShimmerHome,
+                        ),
+                        errorWidget: (context, url, error) =>
+                            CardShimmerHomeLoading.verticalFailedLoadShimmer,
+                      );
+                    }),
+              ),
 
               /// all office rent text
               allSpaces(context, 'Office for Rent', () {}),
@@ -140,10 +188,53 @@ class HomeScreen extends StatelessWidget {
               ),
 
               /// office rent space
-              officeRentWidget(() {
-                /// ini baru dibuat belum dipindah ke view model
-                /// dipindah nanti aja kalo udah selesai
-              }),
+              SizedBox(
+                height: AdaptSize.screenHeight * .31,
+                width: double.infinity,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: listOfDummyOffice.length,
+                    itemBuilder: (context, index) {
+                      return CachedNetworkImage(
+                        imageUrl: listOfDummyOffice[index].officeLeadImage,
+                        imageBuilder: (context, imageProvider) =>
+                            popularSpaceWidget(
+                          context: context,
+                          onTap: () {
+                            context
+                                .read<NavigasiViewModel>()
+                                .navigasiToDetailSpace(
+                                  context: context,
+                                  officeId: index,
+                                );
+                          },
+                          officeImage: imageProvider,
+                          officeName: listOfDummyOffice[index].officeName,
+                          officeLocation:
+                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
+                          officeStarRanting: listOfDummyOffice[index]
+                              .officeStarRating
+                              .toString(),
+                          officeApproxDistance: listOfDummyOffice[index]
+                              .officeApproxDistance
+                              .toString(),
+                          officePersonCapacity: listOfDummyOffice[index]
+                              .officePersonCapacity
+                              .toString(),
+                          officeArea:
+                              listOfDummyOffice[index].officeArea.toString(),
+                          hours: '/Month',
+                          officePricing: Random().nextDouble() * 1000000,
+                        ),
+                        placeholder: (context, url) => shimmerLoading(
+                          child: CardShimmerHomeLoading.verticalShimmerHome,
+                        ),
+                        errorWidget: (context, url, error) =>
+                            CardShimmerHomeLoading.verticalFailedLoadShimmer,
+                      );
+                    }),
+              ),
 
               /// all meeting room text
               allSpaces(context, 'Meeting Rooms', () {}),
@@ -153,10 +244,53 @@ class HomeScreen extends StatelessWidget {
               ),
 
               /// meeting space
-              meetingRoomWidget(() {
-                /// ini baru dibuat belum dipindah ke view model
-                /// dipindah nanti aja kalo udah selesai
-              }),
+              SizedBox(
+                height: AdaptSize.screenHeight * .31,
+                width: double.infinity,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    scrollDirection: Axis.horizontal,
+                    itemCount: listOfDummyOffice.length,
+                    itemBuilder: (context, index) {
+                      return CachedNetworkImage(
+                        imageUrl: listOfDummyOffice[index].officeLeadImage,
+                        imageBuilder: (context, imageProvider) =>
+                            popularSpaceWidget(
+                          context: context,
+                          onTap: () {
+                            context
+                                .read<NavigasiViewModel>()
+                                .navigasiToDetailSpace(
+                                  context: context,
+                                  officeId: index,
+                                );
+                          },
+                          officeImage: imageProvider,
+                          officeName: listOfDummyOffice[index].officeName,
+                          officeLocation:
+                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
+                          officeStarRanting: listOfDummyOffice[index]
+                              .officeStarRating
+                              .toString(),
+                          officeApproxDistance: listOfDummyOffice[index]
+                              .officeApproxDistance
+                              .toString(),
+                          officePersonCapacity: listOfDummyOffice[index]
+                              .officePersonCapacity
+                              .toString(),
+                          officeArea:
+                              listOfDummyOffice[index].officeArea.toString(),
+                          hours: '/Hours',
+                          officePricing: Random().nextDouble() * 500000,
+                        ),
+                        placeholder: (context, url) => shimmerLoading(
+                          child: CardShimmerHomeLoading.verticalShimmerHome,
+                        ),
+                        errorWidget: (context, url, error) =>
+                            CardShimmerHomeLoading.verticalFailedLoadShimmer,
+                      );
+                    }),
+              ),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,
@@ -180,10 +314,55 @@ class HomeScreen extends StatelessWidget {
               ),
 
               /// recomended spaces
-              recomenSpaces(context, () {
-                /// ini baru dibuat belum dipindah ke view model
-                /// dipindah nanti aja kalo udah selesai
-              }),
+              MediaQuery.removePadding(
+                removeTop: true,
+                context: context,
+                child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    shrinkWrap: true,
+                    itemCount: listOfDummyOffice.length,
+                    itemBuilder: (context, index) {
+                      return CachedNetworkImage(
+                        imageUrl: listOfDummyOffice[index].officeLeadImage,
+                        imageBuilder: (context, imageProvider) =>
+                          recomenSpaces(
+                              context: context,
+                              onTap: () {
+                                context
+                                    .read<NavigasiViewModel>()
+                                    .navigasiToDetailSpace(
+                                      context: context,
+                                      officeId: index,
+                                    );
+                              },
+                              officeImage: imageProvider,
+                              officeName: listOfDummyOffice[index].officeName,
+                              officeLocation:
+                                  '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
+                              officeStarRanting: listOfDummyOffice[index]
+                                  .officeStarRating
+                                  .toString(),
+                              officeApproxDistance: listOfDummyOffice[index]
+                                  .officeApproxDistance
+                                  .toString(),
+                              officePersonCapacity: listOfDummyOffice[index]
+                                  .officePersonCapacity
+                                  .toString(),
+                              officeArea:
+                                  listOfDummyOffice[index].officeArea.toString(),
+                              hours: '/Hours',
+                              officePricing: Random().nextDouble() * 300000,
+                            ),
+                        placeholder: (context, url) => shimmerLoading(
+                          child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
+                        ),
+                        errorWidget: (context, url, error) =>
+                        CardShimmerHomeLoading.horizontalFailedShimmerHome,
+                      );
+
+                      //
+                    }),
+              ),
             ],
           ),
         ),
