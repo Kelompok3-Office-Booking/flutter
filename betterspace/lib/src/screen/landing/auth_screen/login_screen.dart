@@ -2,6 +2,7 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/login_view_model.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/loading_widget.dart';
@@ -39,6 +40,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final providerClient = Provider.of<LoginViewmodels>(context, listen: false);
+    final providerClientListen =
+        Provider.of<LoginViewmodels>(context, listen: true);
     AdaptSize.size(context: context);
     return Scaffold(
       resizeToAvoidBottomInset: false,

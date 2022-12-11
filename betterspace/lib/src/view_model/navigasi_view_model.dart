@@ -11,6 +11,7 @@ import 'package:betterspace/src/screen/menu/transaksi/checkout_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
 
 import 'package:betterspace/src/screen/menu_screen.dart';
+import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/sliver_experiment.dart';
@@ -166,7 +167,7 @@ class NavigasiViewModel with ChangeNotifier {
         CupertinoPageRoute(
           //change the target widget here
 
-          builder: (context) => const CheckoutScreen(),
+          builder: (context) => TestingScreenAPI(),
         ),
         (route) => false);
   }

@@ -8,3 +8,5 @@ enum PaymentMetodEnum {
   mandiri,
   other,
 }
+
+enum stateOfConnections { isDoingNothing, isStart, isLoading, isReady }
