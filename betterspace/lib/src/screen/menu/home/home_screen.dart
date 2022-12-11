@@ -22,7 +22,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
     final dummyDataProviders =
-        Provider.of<OfficeDummyDataViewModels>(context, listen: false);
+    Provider.of<OfficeDummyDataViewModels>(context, listen: false);
     dummyDataProviders.addRecord(5);
     final listOfDummyOffice = dummyDataProviders.listOfOfficeModels;
     return Scaffold(
@@ -36,6 +36,7 @@ class HomeScreen extends StatelessWidget {
           ),
           child: Column(
             children: [
+
               /// header
               Container(
                 width: double.infinity,
@@ -49,19 +50,21 @@ class HomeScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Hi Jhony',
-                          style: Theme.of(context)
+                          style: Theme
+                              .of(context)
                               .textTheme
                               .headline6!
                               .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .022),
+                              fontSize: AdaptSize.screenHeight * .022),
                         ),
                         Text(
                           'Find your best workspace!',
-                          style: Theme.of(context)
+                          style: Theme
+                              .of(context)
                               .textTheme
                               .headline6!
                               .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .022),
+                              fontSize: AdaptSize.screenHeight * .022),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 3,
                         ),
@@ -88,6 +91,7 @@ class HomeScreen extends StatelessWidget {
 
               /// search text field
               searchPlace(
+
                 /// search field
                 context: context,
                 hintText: 'Mau kerja dimana hari ini ?',
@@ -144,38 +148,41 @@ class HomeScreen extends StatelessWidget {
                         imageUrl: listOfDummyOffice[index].officeLeadImage,
                         imageBuilder: (context, imageProvider) =>
                             popularSpaceWidget(
-                          context: context,
-                          onTap: () {
-                            context
-                                .read<NavigasiViewModel>()
-                                .navigasiToDetailSpace(
+                              context: context,
+                              onTap: () {
+                                context
+                                    .read<NavigasiViewModel>()
+                                    .navigasiToDetailSpace(
                                   context: context,
                                   officeId: index,
                                 );
-                          },
-                          officeImage: imageProvider,
-                          officeName: listOfDummyOffice[index].officeName,
-                          officeLocation:
-                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
-                          officeStarRanting: listOfDummyOffice[index]
-                              .officeStarRating
-                              .toString(),
-                          officeApproxDistance: listOfDummyOffice[index]
-                              .officeApproxDistance
-                              .toString(),
-                          officePersonCapacity: listOfDummyOffice[index]
-                              .officePersonCapacity
-                              .toString(),
-                          officeArea:
+                              },
+                              officeImage: imageProvider,
+                              officeName: listOfDummyOffice[index].officeName,
+                              officeLocation:
+                              '${listOfDummyOffice[index].officeLocation
+                                  .city}, ${listOfDummyOffice[index]
+                                  .officeLocation.district}',
+                              officeStarRanting: listOfDummyOffice[index]
+                                  .officeStarRating
+                                  .toString(),
+                              officeApproxDistance: listOfDummyOffice[index]
+                                  .officeApproxDistance
+                                  .toString(),
+                              officePersonCapacity: listOfDummyOffice[index]
+                                  .officePersonCapacity
+                                  .toString(),
+                              officeArea:
                               listOfDummyOffice[index].officeArea.toString(),
-                          hours: '/Hours',
-                          officePricing: Random().nextDouble() * 100000,
-                        ),
-                        placeholder: (context, url) => shimmerLoading(
-                          child: CardShimmerHomeLoading.verticalShimmerHome,
-                        ),
+                              hours: '/Hours',
+                              officePricing: Random().nextDouble() * 100000,
+                            ),
+                        placeholder: (context, url) =>
+                            shimmerLoading(
+                              child: CardShimmerHomeLoading.verticalShimmerHome,
+                            ),
                         errorWidget: (context, url, error) =>
-                            CardShimmerHomeLoading.verticalFailedLoadShimmer,
+                        CardShimmerHomeLoading.verticalFailedLoadShimmer,
                       );
                     }),
               ),
@@ -200,38 +207,41 @@ class HomeScreen extends StatelessWidget {
                         imageUrl: listOfDummyOffice[index].officeLeadImage,
                         imageBuilder: (context, imageProvider) =>
                             popularSpaceWidget(
-                          context: context,
-                          onTap: () {
-                            context
-                                .read<NavigasiViewModel>()
-                                .navigasiToDetailSpace(
+                              context: context,
+                              onTap: () {
+                                context
+                                    .read<NavigasiViewModel>()
+                                    .navigasiToDetailSpace(
                                   context: context,
                                   officeId: index,
                                 );
-                          },
-                          officeImage: imageProvider,
-                          officeName: listOfDummyOffice[index].officeName,
-                          officeLocation:
-                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
-                          officeStarRanting: listOfDummyOffice[index]
-                              .officeStarRating
-                              .toString(),
-                          officeApproxDistance: listOfDummyOffice[index]
-                              .officeApproxDistance
-                              .toString(),
-                          officePersonCapacity: listOfDummyOffice[index]
-                              .officePersonCapacity
-                              .toString(),
-                          officeArea:
+                              },
+                              officeImage: imageProvider,
+                              officeName: listOfDummyOffice[index].officeName,
+                              officeLocation:
+                              '${listOfDummyOffice[index].officeLocation
+                                  .city}, ${listOfDummyOffice[index]
+                                  .officeLocation.district}',
+                              officeStarRanting: listOfDummyOffice[index]
+                                  .officeStarRating
+                                  .toString(),
+                              officeApproxDistance: listOfDummyOffice[index]
+                                  .officeApproxDistance
+                                  .toString(),
+                              officePersonCapacity: listOfDummyOffice[index]
+                                  .officePersonCapacity
+                                  .toString(),
+                              officeArea:
                               listOfDummyOffice[index].officeArea.toString(),
-                          hours: '/Month',
-                          officePricing: Random().nextDouble() * 1000000,
-                        ),
-                        placeholder: (context, url) => shimmerLoading(
-                          child: CardShimmerHomeLoading.verticalShimmerHome,
-                        ),
+                              hours: '/Month',
+                              officePricing: Random().nextDouble() * 1000000,
+                            ),
+                        placeholder: (context, url) =>
+                            shimmerLoading(
+                              child: CardShimmerHomeLoading.verticalShimmerHome,
+                            ),
                         errorWidget: (context, url, error) =>
-                            CardShimmerHomeLoading.verticalFailedLoadShimmer,
+                        CardShimmerHomeLoading.verticalFailedLoadShimmer,
                       );
                     }),
               ),
@@ -256,38 +266,41 @@ class HomeScreen extends StatelessWidget {
                         imageUrl: listOfDummyOffice[index].officeLeadImage,
                         imageBuilder: (context, imageProvider) =>
                             popularSpaceWidget(
-                          context: context,
-                          onTap: () {
-                            context
-                                .read<NavigasiViewModel>()
-                                .navigasiToDetailSpace(
+                              context: context,
+                              onTap: () {
+                                context
+                                    .read<NavigasiViewModel>()
+                                    .navigasiToDetailSpace(
                                   context: context,
                                   officeId: index,
                                 );
-                          },
-                          officeImage: imageProvider,
-                          officeName: listOfDummyOffice[index].officeName,
-                          officeLocation:
-                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
-                          officeStarRanting: listOfDummyOffice[index]
-                              .officeStarRating
-                              .toString(),
-                          officeApproxDistance: listOfDummyOffice[index]
-                              .officeApproxDistance
-                              .toString(),
-                          officePersonCapacity: listOfDummyOffice[index]
-                              .officePersonCapacity
-                              .toString(),
-                          officeArea:
+                              },
+                              officeImage: imageProvider,
+                              officeName: listOfDummyOffice[index].officeName,
+                              officeLocation:
+                              '${listOfDummyOffice[index].officeLocation
+                                  .city}, ${listOfDummyOffice[index]
+                                  .officeLocation.district}',
+                              officeStarRanting: listOfDummyOffice[index]
+                                  .officeStarRating
+                                  .toString(),
+                              officeApproxDistance: listOfDummyOffice[index]
+                                  .officeApproxDistance
+                                  .toString(),
+                              officePersonCapacity: listOfDummyOffice[index]
+                                  .officePersonCapacity
+                                  .toString(),
+                              officeArea:
                               listOfDummyOffice[index].officeArea.toString(),
-                          hours: '/Hours',
-                          officePricing: Random().nextDouble() * 500000,
-                        ),
-                        placeholder: (context, url) => shimmerLoading(
-                          child: CardShimmerHomeLoading.verticalShimmerHome,
-                        ),
+                              hours: '/Hours',
+                              officePricing: Random().nextDouble() * 500000,
+                            ),
+                        placeholder: (context, url) =>
+                            shimmerLoading(
+                              child: CardShimmerHomeLoading.verticalShimmerHome,
+                            ),
                         errorWidget: (context, url, error) =>
-                            CardShimmerHomeLoading.verticalFailedLoadShimmer,
+                        CardShimmerHomeLoading.verticalFailedLoadShimmer,
                       );
                     }),
               ),
@@ -325,20 +338,22 @@ class HomeScreen extends StatelessWidget {
                       return CachedNetworkImage(
                         imageUrl: listOfDummyOffice[index].officeLeadImage,
                         imageBuilder: (context, imageProvider) =>
-                          recomenSpaces(
+                            recomenSpaces(
                               context: context,
                               onTap: () {
                                 context
                                     .read<NavigasiViewModel>()
                                     .navigasiToDetailSpace(
-                                      context: context,
-                                      officeId: index,
-                                    );
+                                  context: context,
+                                  officeId: index,
+                                );
                               },
                               officeImage: imageProvider,
                               officeName: listOfDummyOffice[index].officeName,
                               officeLocation:
-                                  '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
+                              '${listOfDummyOffice[index].officeLocation
+                                  .city}, ${listOfDummyOffice[index]
+                                  .officeLocation.district}',
                               officeStarRanting: listOfDummyOffice[index]
                                   .officeStarRating
                                   .toString(),
@@ -349,13 +364,15 @@ class HomeScreen extends StatelessWidget {
                                   .officePersonCapacity
                                   .toString(),
                               officeArea:
-                                  listOfDummyOffice[index].officeArea.toString(),
+                              listOfDummyOffice[index].officeArea.toString(),
                               hours: '/Hours',
                               officePricing: Random().nextDouble() * 300000,
                             ),
-                        placeholder: (context, url) => shimmerLoading(
-                          child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
-                        ),
+                        placeholder: (context, url) =>
+                            shimmerLoading(
+                              child:
+                              CardShimmerHomeLoading.horizontalLoadShimmerHome,
+                            ),
                         errorWidget: (context, url, error) =>
                         CardShimmerHomeLoading.horizontalFailedShimmerHome,
                       );

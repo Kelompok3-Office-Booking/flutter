@@ -416,7 +416,15 @@ class OfficeDetailScreen extends StatelessWidget {
                     onTap: () {
                       modalBottomSheed(
                         context,
-                        showMaps(context),
+                        showMaps(
+                            context: context,
+                            onPressed: () {
+                              context
+                                  .read<GetLocationViewModel>()
+                                  .permissionLocationGMap(
+                                    context, officeID,
+                                  );
+                            }),
                       );
                     },
                     splashColor: MyColor.transparanColor,
@@ -857,7 +865,10 @@ class OfficeDetailScreen extends StatelessWidget {
   /// ------------------------------------------------------------------------
 
   /// maps bottom sheed
-  Widget showMaps(BuildContext context) {
+  Widget showMaps({
+    context,
+    Function()? onPressed,
+  }) {
     return Padding(
       padding: EdgeInsets.only(
         left: AdaptSize.screenWidth * .016,
@@ -898,11 +909,7 @@ class OfficeDetailScreen extends StatelessWidget {
 
           /// button open google maps widget
           buttonWidget(
-            onPressed: () {
-              context
-                  .read<GetLocationViewModel>()
-                  .permissionLocationGMap(context);
-            },
+            onPressed: onPressed,
             sizeheight: AdaptSize.screenHeight * .044,
             sizeWidth: double.infinity,
             borderRadius: BorderRadius.circular(10),

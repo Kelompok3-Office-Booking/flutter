@@ -169,11 +169,16 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi open google maps
-  void navigasiOpenGoogleMaps(context) {
+  void navigasiOpenGoogleMaps({
+    context,
+    required int officeId,
+  }) {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => const GoogleMapsWidget(),
+        builder: (context) => GoogleMapsWidget(
+          officeId: officeId,
+        ),
       ),
     );
   }
