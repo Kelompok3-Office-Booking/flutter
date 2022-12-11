@@ -1,5 +1,7 @@
+import 'package:betterspace/src/services/page_validators.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/login_view_model.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
@@ -134,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// button login
-              Consumer<LoginViewModel>(builder: (context, value, child) {
+              Consumer<LoginViewmodels>(builder: (context, value, child) {
                 return buttonWidget(
                   sizeheight: AdaptSize.screenHeight / 14,
                   sizeWidth: double.infinity,
@@ -145,10 +147,14 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (is_valid == false) {
                       return;
                     } else {
-                      value.userLogin(context);
+                      await providerClient.loginGetToken(
+                          userEmail: _emailController.text,
+                          userPassword: _passwordController.text);
+                      value.apiLoginState = stateOfConnections.isDoingNothing;
+                      nextScreen(value.isUserExist, context);
                     }
                   },
-                  child: value.isLoading
+                  child: value.apiLoginState == stateOfConnections.isLoading
                       ? LoadingWidget.whiteButtonLoading
                       : Text(
                           "Login",

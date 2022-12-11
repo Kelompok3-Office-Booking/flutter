@@ -30,6 +30,7 @@ class _MenuScreenState extends State<MenuScreen> {
   }
 
   Container _bottomNavBar(BuildContext context) {
+    AdaptSize.size(context: context);
     return Container(
       margin: EdgeInsets.only(
         left: AdaptSize.screenHeight * .01,

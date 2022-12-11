@@ -1,16 +1,24 @@
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:betterspace/src/screen/landing/splash_screen2.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 
-class SplashScreenOne extends StatelessWidget {
-  const SplashScreenOne({Key? key}) : super(key: key);
+class SplashScreenOne extends StatefulWidget {
+  const SplashScreenOne({super.key});
 
   @override
+  State<SplashScreenOne> createState() => _SplashScreenOneState();
+}
+
+class _SplashScreenOneState extends State<SplashScreenOne> {
+  @override
+  @override
   Widget build(BuildContext context) {
-    //need review!
-    //pakai package animated splash screen
+    final providerClient = Provider.of<LoginViewmodels>(context, listen: false);
+    providerClient.validateTokenIsExist();
     return AnimatedSplashScreen(
       splash: Center(
         child: Column(
