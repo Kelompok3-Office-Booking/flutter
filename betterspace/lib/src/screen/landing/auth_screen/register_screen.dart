@@ -3,7 +3,7 @@ import 'package:betterspace/src/services/page_validators.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/enums.dart';
-import 'package:betterspace/src/utils/parsers.dart';
+import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/register_viemodel.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
@@ -203,8 +203,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: _confirmPasswordController,
                   hintTexts: "Confirm Password",
                   validators: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter passwords';
+                    if (value == null ||
+                        value.isEmpty ||
+                        value != _passwordController.text) {
+                      return 'Please enter confirm passwords that match';
                     } else if (value != null && value.length < 8 ||
                         value.length > 25) {
                       return 'Please enter password in range of 8 - 25 characters';
@@ -278,7 +280,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 stateOfConnections.isLoading
                             ? LoadingWidget.whiteButtonLoading
                             : Text(
-                                "Login",
+                                "Register",
                                 style: Theme.of(context)
                                     .textTheme
                                     .button!

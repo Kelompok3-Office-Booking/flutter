@@ -2,7 +2,7 @@ import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/services/api_services.dart';
 import 'package:betterspace/src/services/constant.dart';
 import 'package:betterspace/src/utils/enums.dart';
-import 'package:betterspace/src/utils/parsers.dart';
+import 'package:betterspace/src/services/parsers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';

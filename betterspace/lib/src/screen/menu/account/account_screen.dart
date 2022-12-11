@@ -1,7 +1,10 @@
+import 'package:betterspace/src/services/page_validators.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/register_viemodel.dart';
 import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:flutter/material.dart';
@@ -16,6 +19,10 @@ class AccountScreen extends StatelessWidget {
         Provider.of<NavigasiViewModel>(context, listen: false);
     final accountProvider =
         Provider.of<AccountViewModel>(context, listen: false);
+    final userAccountProvider =
+        Provider.of<LoginViewmodels>(context, listen: false);
+    final userAccountProviderListen =
+        Provider.of<LoginViewmodels>(context, listen: true);
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -156,8 +163,17 @@ class AccountScreen extends StatelessWidget {
                                   title: 'Are you sure want to Logout ?',
                                   imageAsset:
                                       'assets/svg_assets/heart_break.svg',
-                                  onTap1: () {
-                                    navigasiProvider.navigasiLogout(context);
+                                  onTap1: () async {
+                                    await userAccountProvider
+                                        .logoutWithTokens();
+                                    isLogoutSuccess(
+                                        context: context,
+                                        logoutStatusCode:
+                                            userAccountProviderListen
+                                                .logoutStatusCode,
+                                        logoutConnectionState:
+                                            userAccountProviderListen
+                                                .apiLogoutState);
                                   },
                                   onTap2: () {
                                     navigasiProvider.navigasiPop(context);
