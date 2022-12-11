@@ -1,7 +1,10 @@
+import 'package:betterspace/src/model/user_models/user_models_for_regist.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/enums.dart';
+import 'package:betterspace/src/utils/parsers.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/register_viemodel.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
@@ -236,24 +239,44 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 /// button register
-                buttonWidget(
-                  sizeheight: AdaptSize.screenHeight / 14,
-                  sizeWidth: double.infinity,
-                  borderRadius: BorderRadius.circular(10),
-                  backgroundColor: MyColor.darkBlueColor,
-                  onPressed: () {
-                    final is_valid = _formKey.currentState!.validate();
-                    if (is_valid == false) {
-                      return;
-                    }
-                  },
-                  child: Text(
-                    "Register",
-                    style: Theme.of(context)
-                        .textTheme
-                        .button!
-                        .copyWith(color: MyColor.whiteColor),
-                  ),
+                ValueListenableBuilder(
+                  valueListenable: radGenderVal,
+                  builder: ((context, value, child) {
+                    return buttonWidget(
+                      sizeheight: AdaptSize.screenHeight / 14,
+                      sizeWidth: double.infinity,
+                      borderRadius: BorderRadius.circular(10),
+                      backgroundColor: MyColor.darkBlueColor,
+                      onPressed: () async {
+                        final is_valid = _formKey.currentState!.validate();
+                        if (is_valid == false) {
+                          return;
+                        } else {
+                          final responses =
+                              await RegisterViewmodel().createUser(
+                            userInfo: UserModelForRegist(
+                              full_name: _fullnameController.text,
+                              gender: genderEnumParsers(radGenderVal.value),
+                              email: _emailController.text,
+                              password: _passwordController.text,
+                              confirmation_password:
+                                  _confirmPasswordController.text,
+                            ),
+                          );
+                          if (responses != null) {
+                            NavigasiViewModel().navigasiToLoginScreen(context);
+                          }
+                        }
+                      },
+                      child: Text(
+                        "Register",
+                        style: Theme.of(context)
+                            .textTheme
+                            .button!
+                            .copyWith(color: MyColor.whiteColor),
+                      ),
+                    );
+                  }),
                 ),
 
                 /// button to login screen

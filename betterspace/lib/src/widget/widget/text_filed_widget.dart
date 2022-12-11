@@ -12,7 +12,7 @@ Widget textFormFields({
   int? minLines,
   String? label,
   dynamic? validators,
-  IconData? prefixIcons,
+  Widget? prefixIcons,
   void Function()? preficIconFunction,
   AutovalidateMode? autoValidate,
   TextInputAction? textInputAction,
@@ -29,8 +29,7 @@ Widget textFormFields({
     autovalidateMode: autoValidate,
     validator: validators,
     decoration: InputDecoration(
-      prefixIcon:
-          IconButton(onPressed: preficIconFunction, icon: Icon(prefixIcons)),
+      prefixIcon: prefixIcons,
       hintText: hintTexts,
       label: Text(
         '$label',

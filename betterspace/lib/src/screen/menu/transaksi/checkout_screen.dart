@@ -1,6 +1,7 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
+import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_metod_screen.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/custom_radio_button.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
@@ -11,9 +12,6 @@ import 'package:betterspace/src/widget/widget/read_only_form.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -49,12 +47,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               children: [
                 Padding(
                   padding: EdgeInsets.only(
-                      bottom: AdaptSize.pixel16, top: AdaptSize.pixel24),
+                    bottom: AdaptSize.pixel16,
+                    top: AdaptSize.pixel24,
+                  ),
                   child: SizedBox(
                     width: AdaptSize.screenWidth / 1.097561,
                     height: AdaptSize.pixel40,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        /// blm dipindah
+                        Navigator.push(context, CupertinoPageRoute(builder: (context)=>const PaymentMetodScreen()));
+                      },
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: MyColor.neutral600),
                       child: Text(
                         "Checkin Now",
                         style: Theme.of(context)
@@ -62,8 +67,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             .bodyMedium!
                             .copyWith(color: MyColor.neutral700),
                       ),
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: MyColor.neutral600),
                     ),
                   ),
                 ),
@@ -72,17 +75,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   height: AdaptSize.pixel40,
                   child: ElevatedButton(
                     onPressed: () {},
-                    child: Text(
-                      "Booking Historys",
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: MyColor.secondary400),
-                    ),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: MyColor.neutral900,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(
+                        borderRadius: const BorderRadius.all(
                           Radius.circular(8),
                         ),
                         side: BorderSide(
@@ -90,7 +86,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             width: AdaptSize.pixel2),
                       ),
                     ),
+                    child: Text(
+                      "Booking Historys",
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium!
+                          .copyWith(color: MyColor.secondary400),
+                    ),
                   ),
+                ),
+                SizedBox(
+                  height: AdaptSize.screenHeight * .012,
                 ),
               ],
             ),
@@ -101,7 +107,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       appBar: defaultAppbarWidget(
           contexts: context, titles: "Checkout", leadIconFunction: () {}),
       body: Padding(
-        padding: EdgeInsets.only(),
+        padding: const EdgeInsets.only(),
         child: SizedBox(
           width: AdaptSize.screenWidth,
           height: AdaptSize.screenHeight,
@@ -219,6 +225,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       valueListenable: selectedBeverageId,
                       builder: ((context, value, child) {
                         return ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
                           itemCount: 3,
                           itemBuilder: ((context, index) {
                             int controlledIndex = index + 1;
@@ -238,7 +245,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             AdaptSize.screenWidth / 6.428571428,
                                         height:
                                             AdaptSize.screenWidth / 6.428571428,
-                                        child: Image(
+                                        child: const Image(
                                           image: AssetImage(
                                               "assets/image_assets/beverages_image/beverage1.png"),
                                           fit: BoxFit.cover,
@@ -254,9 +261,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             CrossAxisAlignment.start,
                                         children: [
                                           Text(
-                                            "Hot Chocolate " +
-                                                selectedBeverageId.value
-                                                    .toString(),
+                                            "Hot Chocolate ${selectedBeverageId.value}",
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium!
@@ -268,7 +273,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                                             1000 *
                                                             16),
                                           ),
-                                          Spacer(),
+                                          const Spacer(),
                                           Text(
                                             "Hot chocolate can warm the body from cold air",
                                             style: Theme.of(context)
@@ -303,8 +308,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: SizedBox(
                       height: AdaptSize.screenWidth / 6.4285714,
                       child: textFormFields(
-                          prefixIcons: Icons.percent_outlined,
-                          suffixIcon: Icon(Icons.percent),
+                          prefixIcons: const Icon(Icons.percent_outlined),
+                          suffixIcon: const Icon(Icons.percent),
                           label: "discount code",
                           hintTexts: "AXRRR#2",
                           controller: discountFormController),
