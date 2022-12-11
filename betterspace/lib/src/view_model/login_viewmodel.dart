@@ -12,26 +12,39 @@ class LoginViewmodels with ChangeNotifier {
   UserToken? userTokens;
   bool isUserExist = false;
   String statusConnection = "-";
+  String logoutStatusCode = "-";
   stateOfConnections apiLoginState = stateOfConnections.isDoingNothing;
   stateOfConnections apiProfileState = stateOfConnections.isDoingNothing;
-  final _dio = Dio();
+  stateOfConnections apiLogoutState = stateOfConnections.isDoingNothing;
+  var _dio = Dio();
 
   logoutWithTokens() async {
-    const secureStorage = FlutterSecureStorage();
-    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
-    if (accessTokens != null) {
+    final _secureStorage = FlutterSecureStorage();
+    String? _accessTokens = await _secureStorage.read(key: "access_tokens_bs");
+    apiLogoutState = stateOfConnections.isStart;
+    notifyListeners();
+    if (_accessTokens != null) {
       try {
+        apiLogoutState = stateOfConnections.isLoading;
+        notifyListeners();
         Response logoutResponse = await _dio.post(
           constantValue().userLogoutWithToken,
-          options:
-              Options(headers: {"Authorization": "Bearer $accessTokens"}),
+          options: Options(headers: {"Authorization": "Bearer $_accessTokens"}),
         );
+        apiLogoutState = stateOfConnections.isReady;
+        notifyListeners();
         if (logoutResponse.statusCode == 200) {
-          destroyActiveUser(secureStorage);
-          print("${logoutResponse.statusCode}success status");
+          logoutStatusCode = logoutResponse.statusCode.toString();
+          notifyListeners();
+          destroyActiveUser(_secureStorage);
+          print(logoutResponse.statusCode.toString() + "success status");
         }
       } catch (e) {
         print("error : $e");
+        logoutStatusCode = e.toString();
+
+        apiLogoutState = stateOfConnections.isFailed;
+        notifyListeners();
       }
     }
     notifyListeners();
@@ -103,8 +116,8 @@ class LoginViewmodels with ChangeNotifier {
     const secureStorage = FlutterSecureStorage();
     String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
     if (refreshToken != null) {
-      Response responses = await UserService()
-          .refreshExpiredTokens(refreshTokens: refreshToken);
+      Response responses =
+          await UserService().refreshExpiredTokens(refreshTokens: refreshToken);
       if (responses.statusCode == 200) {
         await secureStorage.write(
             key: "access_tokens_bs",

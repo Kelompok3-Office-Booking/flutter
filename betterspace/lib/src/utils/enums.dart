@@ -9,4 +9,12 @@ enum PaymentMetodEnum {
   other,
 }
 
-enum stateOfConnections { isDoingNothing, isStart, isLoading, isReady }
+enum dataState { isReady, unAvailable, unknownError }
+
+enum stateOfConnections {
+  isDoingNothing,
+  isStart,
+  isLoading,
+  isReady,
+  isFailed
+}
