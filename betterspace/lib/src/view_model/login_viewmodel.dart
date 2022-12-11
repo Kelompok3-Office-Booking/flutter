@@ -29,8 +29,7 @@ class LoginViewmodels with ChangeNotifier {
         notifyListeners();
         Response logoutResponse = await _dio.post(
           constantValue().userLogoutWithToken,
-          options:
-              Options(headers: {"Authorization": "Bearer " + _accessTokens}),
+          options: Options(headers: {"Authorization": "Bearer $_accessTokens"}),
         );
         apiLogoutState = stateOfConnections.isReady;
         notifyListeners();
@@ -52,7 +51,7 @@ class LoginViewmodels with ChangeNotifier {
   }
 
   loginGetToken({required userEmail, required userPassword}) async {
-    final _secureStorage = FlutterSecureStorage();
+    const secureStorage = FlutterSecureStorage();
     apiLoginState = stateOfConnections.isStart;
     notifyListeners();
     try {
@@ -65,9 +64,9 @@ class LoginViewmodels with ChangeNotifier {
       if (responses.statusCode == 200) {
         if (responses.data["access_token"] != null) {
           userTokens = UserToken.fromJson(responses.data);
-          await _secureStorage.write(
+          await secureStorage.write(
               key: "access_tokens_bs", value: responses.data["access_token"]);
-          await _secureStorage.write(
+          await secureStorage.write(
               key: "refresh_token_bs", value: responses.data["refresh_token"]);
         }
       }
@@ -80,11 +79,11 @@ class LoginViewmodels with ChangeNotifier {
   }
 
   validateTokenIsExist() async {
-    final _secureStorage = FlutterSecureStorage();
-    String? _accessTokens = await _secureStorage.read(key: "access_tokens_bs");
-    if (_accessTokens != null) {
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
       isUserExist = true;
-      print("the user token is : $_accessTokens");
+      print("the user token is : $accessTokens");
       apiLoginState = stateOfConnections.isReady;
       notifyListeners();
     }
@@ -92,13 +91,13 @@ class LoginViewmodels with ChangeNotifier {
   }
 
   getProfile() async {
-    final _secureStorage = FlutterSecureStorage();
-    String? _accessTokens = await _secureStorage.read(key: "access_tokens_bs");
-    if (_accessTokens != null) {
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
       try {
         Response profResponse =
             await UserService().fetchProfile(tokens: userTokens!);
-        print("fetch pertama : " + profResponse.statusCode.toString());
+        print("fetch pertama : ${profResponse.statusCode}");
 
         if (profResponse.statusCode == 200) {
           userModels = userModelParser(profResponse.data, userTokens!);
@@ -114,20 +113,20 @@ class LoginViewmodels with ChangeNotifier {
   }
 
   refreshToken() async {
-    final _secureStorage = FlutterSecureStorage();
-    String? _refreshToken = await _secureStorage.read(key: "refresh_token_bs");
-    if (_refreshToken != null) {
-      Response responses = await UserService()
-          .refreshExpiredTokens(refreshTokens: _refreshToken);
+    const secureStorage = FlutterSecureStorage();
+    String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
+    if (refreshToken != null) {
+      Response responses =
+          await UserService().refreshExpiredTokens(refreshTokens: refreshToken);
       if (responses.statusCode == 200) {
-        await _secureStorage.write(
+        await secureStorage.write(
             key: "access_tokens_bs",
             value: responses.data["data"]["access_token"]);
-        await _secureStorage.write(
+        await secureStorage.write(
             key: "refresh_token_bs",
             value: responses.data["data"]["refresh_token"]);
       } else if (responses.statusCode == 401 || responses.statusCode == 403) {
-        destroyActiveUser(_secureStorage);
+        destroyActiveUser(secureStorage);
       } else {
         statusConnection = responses.statusCode.toString() +
             responses.statusMessage.toString();
@@ -159,9 +158,9 @@ class LoginViewmodels with ChangeNotifier {
       {required RequestOptions requestOptions,
       required String newAcessTokens,
       required Dio dio}) async {
-    final options = new Options(
+    final options = Options(
       method: requestOptions.method,
-      headers: {"Authorization": "Bearer " + newAcessTokens},
+      headers: {"Authorization": "Bearer $newAcessTokens"},
     );
     return dio.request<dynamic>(requestOptions.path,
         data: requestOptions.data,

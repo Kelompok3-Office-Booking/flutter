@@ -129,12 +129,7 @@ Widget popularSpaceWidget(contexts) {
                           /// space lokasi
                           Text(listOfDummyOffice[index].officeLocation.city +
                               ", " +
-                              listOfDummyOffice[index].officeLocation.district,style: Theme.of(context)
-                                    .textTheme
-                                    .bodyText1!
-                                    .copyWith(
-                                        fontSize:
-                                            AdaptSize.screenHeight * .012),),
+                              listOfDummyOffice[index].officeLocation.district),
 
                           const Spacer(),
 

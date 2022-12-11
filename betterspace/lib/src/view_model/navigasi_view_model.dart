@@ -3,18 +3,15 @@ import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
+import 'package:betterspace/src/screen/menu/home/filter_search_screen.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
-import 'package:betterspace/src/screen/menu/tersimpan/wishlist_screen.dart';
-import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/checkout_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
-
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_detail_screen.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/sliver_experiment.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/success_payment_screen.dart';
 import 'package:betterspace/src/widget/widget/google_maps.dart';
 import 'package:flutter/cupertino.dart';
@@ -173,11 +170,16 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi open google maps
-  void navigasiOpenGoogleMaps(context) {
+  void navigasiOpenGoogleMaps({
+    context,
+    required int officeId,
+  }) {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => const GoogleMapsWidget(),
+        builder: (context) => GoogleMapsWidget(
+          officeId: officeId,
+        ),
       ),
     );
   }
@@ -195,16 +197,84 @@ class NavigasiViewModel with ChangeNotifier {
   /// belum final
   /// navigasi dari detail payment ke success payment
   void navigasiSuccessPayment(context) {
-    Navigator.push(
-      context,
-      CupertinoModalPopupRoute(
-        builder: (context) => const SuccessPaymentScreen(),
-      ),
-    );
+    Navigator.pushAndRemoveUntil(
+        context,
+        CupertinoModalPopupRoute(
+            builder: (context) => const SuccessPaymentScreen()),
+        (route) => false);
+
+    notifyListeners();
   }
 
   /// navigasi back check permission
   Future navigasiBackCheckPermission(BuildContext context) async {
     Navigator.pop(context);
+  }
+
+  /// navigasi to search filtering
+  void navigasiToFilterSearch(BuildContext context) {
+    Timer(
+      const Duration(milliseconds: 300),
+      () {
+        Navigator.of(context).push(
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondAnimation) =>
+                const FilterSearchScreen(),
+            transitionsBuilder: (context, animation, secondAnimation, child) =>
+                FadeTransition(
+              opacity: animation,
+              child: child,
+            ),
+          ),
+        );
+      },
+    );
+    notifyListeners();
+  }
+
+  /// navigasi to detail office
+  void navigasiToDetailSpace({
+    context,
+    required int officeId,
+  }) {
+    Navigator.push(
+      context,
+      CupertinoModalPopupRoute(
+        builder: (context) => OfficeDetailScreen(
+          officeID: officeId,
+        ),
+      ),
+    );
+  }
+
+  /// navigasi back dari succes payment screen
+  Future<bool> navigasiBackToMenu(BuildContext context) async {
+    Navigator.pushReplacement(
+        context,
+        CupertinoDialogRoute(
+            builder: (context) => const MenuScreen(), context: context));
+    notifyListeners();
+    return Future(() => true);
+  }
+
+  /// navigasi success screen to detail order
+  void navigasiToDetailOrder(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => const DetailOrderScreens(),
+      ),
+    );
+    notifyListeners();
+  }
+
+  /// navigasi to checkout screen
+  void navigasiToCheckOut(BuildContext context) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => const CheckoutScreen(),
+      ),
+    );
   }
 }

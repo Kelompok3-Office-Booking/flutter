@@ -57,6 +57,10 @@ dependencies:
   dio: ^4.0.6
   barcode_widget: ^2.0.3
   webview_flutter: ^3.0.4
+  shared_preferences: ^2.0.15
+  lottie: ^2.0.0
+  geocoding: ^2.0.5
+  url_launcher: ^6.1.7
 
 
 dev_dependencies:
@@ -91,6 +95,7 @@ flutter:
     - assets/image_assets/beverages_image/
     - assets/image_assets/promo_image/
     - assets/image_assets/space_image/
+    - assets/lottie_assets/
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
