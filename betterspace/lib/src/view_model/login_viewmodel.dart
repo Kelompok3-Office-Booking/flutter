@@ -1,5 +1,6 @@
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/services/api_services.dart';
+import 'package:betterspace/src/services/constant.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/utils/parsers.dart';
 import 'package:dio/dio.dart';
@@ -14,6 +15,25 @@ class LoginViewmodels with ChangeNotifier {
   stateOfConnections apiLoginState = stateOfConnections.isDoingNothing;
   stateOfConnections apiProfileState = stateOfConnections.isDoingNothing;
   var _dio = Dio();
+
+  logoutWithTokens() async {
+    final _secureStorage = FlutterSecureStorage();
+    String? _accessTokens = await _secureStorage.read(key: "access_tokens_bs");
+    if (_accessTokens != null) {
+      try {
+        Response logoutResponse = await _dio.post(
+          constantValue().userLogoutWithToken,
+          options:
+              Options(headers: {"Authorization": "Bearer " + _accessTokens}),
+        );
+        if (logoutResponse.statusCode == 200) {
+          destroyActiveUser(_secureStorage);
+        }
+      } catch (e) {
+        print("error : $e");
+      }
+    }
+  }
 
   loginGetToken({required userEmail, required userPassword}) async {
     final _secureStorage = FlutterSecureStorage();
@@ -91,9 +111,7 @@ class LoginViewmodels with ChangeNotifier {
             key: "refresh_token_bs",
             value: responses.data["data"]["refresh_token"]);
       } else if (responses.statusCode == 401 || responses.statusCode == 403) {
-        _secureStorage.deleteAll();
-        userTokens = null;
-        isUserExist = false;
+        destroyActiveUser(_secureStorage);
       } else {
         statusConnection = responses.statusCode.toString() +
             responses.statusMessage.toString();
@@ -102,6 +120,12 @@ class LoginViewmodels with ChangeNotifier {
       print("no active user");
     }
     notifyListeners();
+  }
+
+  destroyActiveUser(FlutterSecureStorage flutterStorage) async {
+    await flutterStorage.deleteAll();
+    userTokens = null;
+    isUserExist = false;
   }
 
   resetLoginConnectionState() {
