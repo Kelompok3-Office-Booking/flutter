@@ -12,6 +12,7 @@ import 'package:betterspace/src/view_model/menu_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/onboarding_view_model.dart';
 import 'package:betterspace/src/view_model/promo_view_model.dart';
+import 'package:betterspace/src/view_model/register_viemodel.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/view_model/transaction_view_model.dart';
 import 'package:flutter/material.dart';
@@ -33,6 +34,7 @@ class BetterSpaceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => NavigasiViewModel()),
         ChangeNotifierProvider(create: (_) => OfficeDummyDataViewModels()),
         ChangeNotifierProvider(create: (_) => LoginViewmodels()),
+        ChangeNotifierProvider(create: (_) => RegisterViewmodel()),
         ChangeNotifierProvider(create: (_) => MenuViewModel()),
         ChangeNotifierProvider(create: (_) => OnboardingViewModel()),
         ChangeNotifierProvider(create: (_) => SearchSpacesViewModel()),
