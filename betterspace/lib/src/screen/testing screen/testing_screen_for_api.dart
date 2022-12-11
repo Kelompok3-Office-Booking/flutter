@@ -45,6 +45,12 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
               },
               child: Text("get_profile"),
             ),
+            ElevatedButton(
+              onPressed: () {
+                providerClient.logoutWithTokens();
+              },
+              child: Text("logout"),
+            ),
             Text(providerClient.statusConnection),
             Expanded(
               child: Consumer<LoginViewmodels>(

@@ -28,11 +28,13 @@ class LoginViewmodels with ChangeNotifier {
         );
         if (logoutResponse.statusCode == 200) {
           destroyActiveUser(_secureStorage);
+          print(logoutResponse.statusCode.toString() + "success status");
         }
       } catch (e) {
         print("error : $e");
       }
     }
+    notifyListeners();
   }
 
   loginGetToken({required userEmail, required userPassword}) async {
@@ -126,6 +128,7 @@ class LoginViewmodels with ChangeNotifier {
     await flutterStorage.deleteAll();
     userTokens = null;
     isUserExist = false;
+    notifyListeners();
   }
 
   resetLoginConnectionState() {
