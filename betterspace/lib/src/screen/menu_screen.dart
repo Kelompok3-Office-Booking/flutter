@@ -68,15 +68,15 @@ class _MenuScreenState extends State<MenuScreen> {
             ),
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.calendar),
-              label: 'Transaksi',
+              label: 'Booking',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.bookmarks_outlined),
-              label: 'History',
+              label: 'Whistlist',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.account_circle_outlined),
-              label: 'Account',
+              label: 'Profile',
             ),
           ],
         );

@@ -3,6 +3,7 @@ import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart'
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/hex_color_convert.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/bottom_sheed_widget.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
@@ -862,7 +863,7 @@ class OfficeDetailScreen extends StatelessWidget {
           /// button open google maps widget
           buttonWidget(
             onPressed: () {
-              context.read<NavigasiViewModel>().navigasiOpenGoogleMaps(context);
+              context.read<GetLocationViewModel>().permissionLocationGMap(context);
             },
             sizeheight: AdaptSize.screenHeight * .044,
             sizeWidth: double.infinity,

@@ -46,6 +46,12 @@ Widget textFormFields({
         ),
         borderRadius: BorderRadius.circular(10),
       ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: MyColor.redColor,
+        ),
+        borderRadius: BorderRadius.circular(10),
+      ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
           color: MyColor.grayLightColor,

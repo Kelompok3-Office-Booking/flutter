@@ -12,26 +12,40 @@ class LoginViewmodels with ChangeNotifier {
   UserToken? userTokens;
   bool isUserExist = false;
   String statusConnection = "-";
+  String logoutStatusCode = "-";
   stateOfConnections apiLoginState = stateOfConnections.isDoingNothing;
   stateOfConnections apiProfileState = stateOfConnections.isDoingNothing;
+  stateOfConnections apiLogoutState = stateOfConnections.isDoingNothing;
   var _dio = Dio();
 
   logoutWithTokens() async {
     final _secureStorage = FlutterSecureStorage();
     String? _accessTokens = await _secureStorage.read(key: "access_tokens_bs");
+    apiLogoutState = stateOfConnections.isStart;
+    notifyListeners();
     if (_accessTokens != null) {
       try {
+        apiLogoutState = stateOfConnections.isLoading;
+        notifyListeners();
         Response logoutResponse = await _dio.post(
           constantValue().userLogoutWithToken,
           options:
               Options(headers: {"Authorization": "Bearer " + _accessTokens}),
         );
+        apiLogoutState = stateOfConnections.isReady;
+        notifyListeners();
         if (logoutResponse.statusCode == 200) {
+          logoutStatusCode = logoutResponse.statusCode.toString();
+          notifyListeners();
           destroyActiveUser(_secureStorage);
           print(logoutResponse.statusCode.toString() + "success status");
         }
       } catch (e) {
         print("error : $e");
+        logoutStatusCode = e.toString();
+
+        apiLogoutState = stateOfConnections.isFailed;
+        notifyListeners();
       }
     }
     notifyListeners();

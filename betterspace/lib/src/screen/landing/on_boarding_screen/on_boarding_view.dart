@@ -5,6 +5,7 @@ import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/onboarding_view_model.dart';
+import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/text_button_widget.dart';
 import 'package:flutter/material.dart';
@@ -20,12 +21,29 @@ class OnBoardinView extends StatefulWidget {
 
 class _OnBoardinViewState extends State<OnBoardinView> {
   final PageController _pageController = PageController();
-  
+  String text1 = 'Allow ';
+  String text2 = 'Better Space App ';
+  String text3 =
+      'requires permission to access your phone\'s location, used to Calculate the distance of the office from your current position';
+
   @override
   initState() {
     super.initState();
-    Provider.of<GetLocationViewModel>(context, listen: false)
-        .checkAndGetPosition();
+    Future.delayed(Duration.zero, () {
+      CustomDialog.singleActionDialogWithoutImage(
+          context: context,
+          title: 'text permission',
+          text1: text1,
+          text2: text2,
+          text3: text3,
+          withTextRich: true,
+          onPressed: () async {
+            Provider.of<GetLocationViewModel>(context, listen: false)
+                .checkAndGetPosition();
+            await Provider.of<NavigasiViewModel>(context, listen: false)
+                .navigasiBackCheckPermission(context);
+          });
+    });
   }
 
   @override

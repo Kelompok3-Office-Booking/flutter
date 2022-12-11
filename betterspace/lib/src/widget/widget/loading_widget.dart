@@ -8,4 +8,9 @@ class LoadingWidget {
     color: MyColor.whiteColor,
     size: 45,
   );
+
+  static Widget darkBlueButtonLoading = SpinKitSpinningLines(
+    color: MyColor.secondary400,
+    size: 50,
+  );
 }

@@ -202,4 +202,9 @@ class NavigasiViewModel with ChangeNotifier {
       ),
     );
   }
+
+  /// navigasi back check permission
+  Future navigasiBackCheckPermission(BuildContext context) async {
+    Navigator.pop(context);
+  }
 }
