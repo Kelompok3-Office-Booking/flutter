@@ -8,15 +8,18 @@ PreferredSizeWidget defaultAppbarWidget({
   required BuildContext contexts,
   List<Widget>? actionWidget,
   Function? leadIconFunction,
+  Widget? appbarBottomWidget,
+  double? bottomHeight,
 }) {
   AdaptSize.size(context: contexts);
   return AppBar(
     bottom: PreferredSize(
-      preferredSize: const Size.fromHeight(2.0),
-      child: Container(
-        color: MyColor.neutral800,
-        height: 2.0,
-      ),
+      preferredSize: Size.fromHeight(bottomHeight ?? 2),
+      child: appbarBottomWidget ??
+          Container(
+            color: MyColor.neutral800,
+            height: 2.0,
+          ),
     ),
     backgroundColor: MyColor.neutral900,
     elevation: 0,

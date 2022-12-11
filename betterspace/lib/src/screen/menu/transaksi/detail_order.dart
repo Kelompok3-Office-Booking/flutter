@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
@@ -9,8 +7,6 @@ import 'package:betterspace/src/widget/widget/icon_with_label.dart';
 import 'package:betterspace/src/widget/widget/item_card.dart';
 import 'package:betterspace/src/widget/widget/transaction_status_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class DetailOrderScreens extends StatefulWidget {
   const DetailOrderScreens({super.key});
