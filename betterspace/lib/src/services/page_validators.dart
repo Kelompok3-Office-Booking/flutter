@@ -49,8 +49,9 @@ isRegisterSuccess({
   } else {
     dynamic snackbar;
     if (registerStatus == "400") {
-      snackbar =
-          SnackBar(content: Text("register gagal, user telah digunakan"));
+      snackbar = SnackBar(
+          content: Text(
+              "register gagal, user telah digunakan atau email anda tidak valid"));
     } else {
       snackbar = SnackBar(
           content: Text("register gagal, kesalahan yang tidak diketahui"));
