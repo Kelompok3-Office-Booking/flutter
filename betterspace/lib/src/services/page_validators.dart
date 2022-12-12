@@ -16,6 +16,28 @@ nextScreen(bool isUserExist, BuildContext context) {
   }
 }
 
+isLogoutSuccess({
+  required BuildContext context,
+  required String logoutStatusCode,
+  required stateOfConnections logoutConnectionState,
+}) {
+  if (logoutConnectionState != stateOfConnections.isFailed ||
+      logoutStatusCode == "200") {
+    Provider.of<NavigasiViewModel>(context, listen: false)
+        .navigasiLogout(context);
+  } else {
+    dynamic snackbar;
+    if (logoutStatusCode == "400") {
+      snackbar =
+          SnackBar(content: Text("logout error, sesi anda telah berakhir"));
+    } else {
+      snackbar = SnackBar(
+          content: Text("logout error, kesalahan yang tidak diketahui"));
+    }
+    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+  }
+}
+
 isRegisterSuccess({
   required stateOfConnections stateOfRegister,
   required BuildContext context,
