@@ -45,8 +45,11 @@ class RegisterViewmodel with ChangeNotifier {
         retrievedResponses = responses;
         notifyListeners();
       }
+      connectionsState = stateOfConnections.isReady;
+      notifyListeners();
     } catch (e) {
       connectionsState = stateOfConnections.isFailed;
+      statusCodeRegister = 400;
       print('Error creating user: $e');
       notifyListeners();
     }
