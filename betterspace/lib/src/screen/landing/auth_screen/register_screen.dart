@@ -260,6 +260,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (is_valid == false) {
                             return;
                           } else {
+                            print(radGenderVal.value.toString());
                             await registerProvider.createUser(
                               userInfo: UserModelForRegist(
                                 full_name: _fullnameController.text,
@@ -270,10 +271,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     _confirmPasswordController.text,
                               ),
                             );
+                            print("status : " +
+                                regValue.statusCodeRegister.toString());
+                            print("state : " +
+                                regValue.connectionsState.toString());
                             isRegisterSuccess(
                                 stateOfRegister: regValue.connectionsState,
                                 context: context,
-                                registerStatus: regValue.statusRegister);
+                                registerStatus:
+                                    regValue.statusCodeRegister.toString());
                           }
                         },
                         child: regValue.connectionsState ==

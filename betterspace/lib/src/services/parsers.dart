@@ -3,7 +3,7 @@ import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/utils/enums.dart';
 
 String genderEnumParsers(GenderEnum enumGenders) {
-  return GenderEnum.values == GenderEnum.male ? "male" : "female";
+  return enumGenders == GenderEnum.male ? "male" : "female";
 }
 
 UserModel userModelParser(

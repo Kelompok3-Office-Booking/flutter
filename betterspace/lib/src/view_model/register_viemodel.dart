@@ -6,7 +6,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 class RegisterViewmodel with ChangeNotifier {
-  String statusRegister = "-";
+  int statusCodeRegister = 0;
   Response? retrievedResponses;
   stateOfConnections connectionsState = stateOfConnections.isDoingNothing;
 
@@ -27,22 +27,26 @@ class RegisterViewmodel with ChangeNotifier {
         },
       );
 
-      if (responses.statusCode == 200) {
-        statusRegister = responses.statusCode.toString();
+      if (responses.statusCode == 200 || responses.statusCode == 201) {
+        statusCodeRegister = responses.statusCode!;
         ;
         print('User created: ${responses.data}');
         retrievedResponses = responses;
         connectionsState = stateOfConnections.isReady;
         notifyListeners();
+      } else if (responses.statusCode == 400) {
+        connectionsState = stateOfConnections.isFailed;
+        statusCodeRegister = 400;
+        retrievedResponses = responses;
+        notifyListeners();
       } else {
         connectionsState = stateOfConnections.isFailed;
-        statusRegister = responses.statusCode.toString();
+        statusCodeRegister = responses.statusCode!;
         retrievedResponses = responses;
         notifyListeners();
       }
     } catch (e) {
       connectionsState = stateOfConnections.isFailed;
-      statusRegister = e.toString();
       print('Error creating user: $e');
       notifyListeners();
     }
