@@ -43,8 +43,7 @@ isRegisterSuccess({
   required BuildContext context,
   required String registerStatus,
 }) {
-  if (stateOfRegister != stateOfConnections.isFailed ||
-      stateOfRegister != stateOfConnections.isDoingNothing) {
+  if (stateOfRegister != stateOfConnections.isFailed) {
     Provider.of<NavigasiViewModel>(context, listen: false)
         .navigasiToLoginScreen(context);
   } else {
