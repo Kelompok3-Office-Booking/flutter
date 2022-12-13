@@ -11,6 +11,12 @@ class UserService {
   UserService() {
     _dio.interceptors
         .add(InterceptorsWrapper(onRequest: (options, handler) async {
+      const secureStorage = FlutterSecureStorage();
+      String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+      if (accessTokens != null) {
+        options.headers.addAll({"Authorization": "Bearer " + accessTokens});
+      }
+
       return handler.next(options); //continue
     }, onResponse: (response, handler) {
       // Do something with response data
