@@ -83,6 +83,10 @@ class OfficeViewModels with ChangeNotifier {
         print("error : $e");
         notifyListeners();
       }
+    } else {
+      connectionState = stateOfConnections.isFailed;
+      isUserExist = false;
+      notifyListeners();
     }
   }
 
@@ -98,6 +102,7 @@ class OfficeViewModels with ChangeNotifier {
       isUserExist = false;
       notifyListeners();
       _listOfAllOfficeModels = [];
+      _officeModelById = null;
       notifyListeners();
     }
   }

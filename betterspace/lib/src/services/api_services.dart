@@ -95,7 +95,7 @@ class UserService {
   Future<Response> fetchOfficeById(
       {required String officeId, required String accessToken}) async {
     return _dio.get(
-      constantValue().getOfficeBaseUrl,
+      constantValue().getOfficeBaseUrl + officeId,
       options: Options(headers: {"Authorization": "Bearer " + accessToken}),
     );
   }
