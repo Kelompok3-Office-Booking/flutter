@@ -7,10 +7,19 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class OfficeViewModels with ChangeNotifier {
+  //when isUserExist true OfficeViewModels can contain data, when false all office model data will be destroyed
   bool isUserExist = true;
+
+  //stateOfConnection used for letting loading UI know when it should display loading animation, when to stops
   stateOfConnections connectionState = stateOfConnections.isDoingNothing;
+
+  //List of All ofice models
   List<OfficeModels> _listOfAllOfficeModels = [];
   List<OfficeModels> get listOfAllOfficeModels => _listOfAllOfficeModels;
+
+  //office models result from fetchOfficeById
+  OfficeModels? _officeModelById;
+  OfficeModels? get officeModelById => _officeModelById;
 
   fetchAllOffice() async {
     connectionState = stateOfConnections.isStart;
@@ -21,7 +30,8 @@ class OfficeViewModels with ChangeNotifier {
       connectionState = stateOfConnections.isLoading;
       notifyListeners();
       try {
-        Response getResponse = await UserService().fetchAllOffice(accessTokens);
+        Response getResponse =
+            await UserService().fetchAllOffice(accessToken: accessTokens);
 
         if (getResponse.statusCode == 200) {
           print(getResponse.statusCode);
@@ -38,7 +48,41 @@ class OfficeViewModels with ChangeNotifier {
         notifyListeners();
       }
     } else {
+      connectionState = stateOfConnections.isFailed;
       isUserExist = false;
+      notifyListeners();
+    }
+  }
+
+  fetchOfficeById({required String officeId}) async {
+    connectionState = stateOfConnections.isStart;
+    notifyListeners();
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+
+    //start fetching
+    if (accessTokens != null) {
+      connectionState = stateOfConnections.isLoading;
+      notifyListeners();
+      try {
+        Response getResponse = await UserService()
+            .fetchOfficeById(officeId: officeId, accessToken: accessTokens);
+
+        if (getResponse.statusCode == 200) {
+          print(getResponse.statusCode);
+          print(getResponse.data["data"]);
+          _officeModelById = singleOfficeModelParser(getResponse.data["data"]);
+          notifyListeners();
+          isUserExist = true;
+          notifyListeners();
+          connectionState = stateOfConnections.isReady;
+          notifyListeners();
+        }
+      } catch (e) {
+        connectionState = stateOfConnections.isFailed;
+        print("error : $e");
+        notifyListeners();
+      }
     }
   }
 
