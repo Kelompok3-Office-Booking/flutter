@@ -70,7 +70,7 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                 ElevatedButton(
                   onPressed: () {
                     //fetchOfficeAll hanya bisa digunakan ketika user sudah login
-                    providerOffice.fetchOfficeById(officeId: 2.toString());
+                    providerOffice.fetchOfficeById(officeId: "1");
                   },
                   child: Text("get office by id"),
                 ),
@@ -143,7 +143,12 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                   if (providerOfficeListen.isUserExist != false &&
                       providerOfficeListen.officeModelById != null) {
                     final modelContain = providerOfficeListen.officeModelById;
-                    return Text(modelContain!.officeID.toString());
+                    return Column(
+                      children: [
+                        Text(modelContain!.officeID.toString()),
+                        Text(providerOfficeListen.connectionState.toString())
+                      ],
+                    );
                   } else {
                     return Text("no data");
                   }

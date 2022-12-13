@@ -13,5 +13,7 @@ class constantValue {
   String getAllOffice =
       "https://api-better-space-staging.herokuapp.com/api/v1/offices/all";
   String getOfficeBaseUrl =
-      "https://api-better-space-staging.herokuapp.com/api/v1/offices/1";
+      "https://api-better-space-staging.herokuapp.com/api/v1/offices/";
+  String getCoworkingSpaceOffice =
+      "https://api-better-space-staging.herokuapp.com/api/v1/offices/type/coworking-space";
 }
