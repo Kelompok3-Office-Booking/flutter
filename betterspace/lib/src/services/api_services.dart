@@ -85,10 +85,18 @@ class UserService {
         options: options);
   }
 
-  Future<Response> fetchAllOffice(String accessTokens) async {
+  Future<Response> fetchAllOffice({required String accessToken}) async {
     return _dio.get(
       constantValue().getAllOffice,
-      options: Options(headers: {"Authorization": "Bearer " + accessTokens}),
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> fetchOfficeById(
+      {required String officeId, required String accessToken}) async {
+    return _dio.get(
+      constantValue().getOfficeBaseUrl,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
     );
   }
 }

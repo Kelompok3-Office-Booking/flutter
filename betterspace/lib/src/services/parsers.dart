@@ -36,17 +36,14 @@ OfficePricing officePricingParsers(
 }
 
 List<OfficeFacilitiesModels> officeFacilitiesModelsParsers(
-    {required List facilitiesID,
-    required List facilitiesDesc,
-    required List facilitiesSlug}) {
+    {required List facilitiesModel}) {
   List<OfficeFacilitiesModels> listOfFacilities = [];
 
-  facilitiesID.forEach((element) {
+  facilitiesModel.forEach((element) {
     listOfFacilities.add(
       OfficeFacilitiesModels(
-        facilitiesIconSlug: facilitiesSlug[(int.parse(element) - 1)],
-        facilitiesTitle: facilitiesDesc[(int.parse(element) - 1)],
-      ),
+          facilitiesTitle: element["facilities_desc"],
+          facilitiesIconSlug: element["facilities_slug"]),
     );
   });
 
@@ -143,9 +140,7 @@ List<OfficeModels> officeModelParsers(List<dynamic> listOfficeJson) {
               capMeetingRoom: jsonResponse["meeting_room"],
               capPrivate_room: jsonResponse["private_room"]),
           listOfOfficeFacilitiesModels: officeFacilitiesModelsParsers(
-              facilitiesID: jsonResponse["facilities_id"],
-              facilitiesDesc: jsonResponse["facilities_desc"],
-              facilitiesSlug: jsonResponse["facilities_slug"]),
+              facilitiesModel: jsonResponse["FacilityModel"]),
           listOfOfficeReviewModels: [
             OfficeReviewModels(
                 reviewerUserImage: Image.network(
@@ -163,4 +158,68 @@ List<OfficeModels> officeModelParsers(List<dynamic> listOfficeJson) {
   });
 
   return listOfOffice;
+}
+
+OfficeModels singleOfficeModelParser(Map<String, dynamic> jsonResponse) {
+  var fakerInstance = new Faker();
+  DateTime currDate = DateTime.now();
+  String year = currDate.year.toString();
+  String month = currDate.month.toString();
+  String days = currDate.day.toString();
+  return OfficeModels(
+    officeID: jsonResponse["id"].toString(),
+    officeName: jsonResponse["title"],
+    officeType: jsonResponse["office_type"],
+    officeLeadImage: jsonResponse["images"][1],
+    officeGridImage: jsonResponse["images"],
+    officeStarRating: jsonResponse["rate"].round(),
+    officeDescription: jsonResponse["description"],
+    officeApproxDistance: jsonResponse["distance"].toDouble(),
+    officeArea: jsonResponse["office_length"].toDouble(),
+    officePersonCapacity: jsonResponse["accommodate"].toDouble(),
+    officeOpenTime: DateTime.parse(year +
+        "-" +
+        month +
+        "-" +
+        days +
+        " " +
+        jsonResponse["open_hour"] +
+        ":00"),
+    officeCloseTime: DateTime.parse(year +
+        "-" +
+        month +
+        "-" +
+        days +
+        " " +
+        jsonResponse["close_hour"] +
+        ":00"),
+    officeLocation: OfficeLocation(
+        city: jsonResponse["city"],
+        district: jsonResponse["district"],
+        officeLatitude: jsonResponse["lat"],
+        officeLongitude: jsonResponse["lng"]),
+    officePricing: officePricingParsers(
+        officeType: jsonResponse["office_type"],
+        officePrice: jsonResponse["price"].toDouble()),
+    listOfOfficeCapcityModels: officeCapacityParser(
+        capAccomodate: jsonResponse["accommodate"],
+        capWorkingDesk: jsonResponse["working_desk"],
+        capMeetingRoom: jsonResponse["meeting_room"],
+        capPrivate_room: jsonResponse["private_room"]),
+    listOfOfficeFacilitiesModels: officeFacilitiesModelsParsers(
+        facilitiesModel: jsonResponse["FacilityModel"]),
+    listOfOfficeReviewModels: [
+      OfficeReviewModels(
+          reviewerUserImage: Image.network(
+            fakerInstance.image.image(
+              keywords: ["people"],
+            ),
+          ),
+          reviewerUserName: fakerInstance.person.name(),
+          reviewText: fakerInstance.lorem.sentence(),
+          reviewDate: currDate,
+          reviewStarsCount: 5,
+          reviewHelpRateCount: 99 + 1 * 2),
+    ],
+  );
 }

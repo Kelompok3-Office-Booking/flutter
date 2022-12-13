@@ -38,21 +38,43 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
       body: Container(
         child: Column(
           children: [
-            ElevatedButton(
-              onPressed: () {
-                //login panggil method loginGetToken dan masukan parameter
-                providerClient.loginGetToken(
-                    userEmail: "abimanyutest23@gmail.com",
-                    userPassword: "testtest2");
-              },
-              child: Text("login"),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //login panggil method loginGetToken dan masukan parameter
+                    providerClient.loginGetToken(
+                        userEmail: "abimanyutest23@gmail.com",
+                        userPassword: "testtest2");
+                  },
+                  child: Text("login"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    //get profile hanya bisa dipakai ketika user sudah login
+                    providerClient.getProfile();
+                  },
+                  child: Text("get_profile"),
+                ),
+              ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                //get profile hanya bisa dipakai ketika user sudah login
-                providerClient.getProfile();
-              },
-              child: Text("get_profile"),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOffice.fetchAllOffice();
+                  },
+                  child: Text("get office"),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOffice.fetchOfficeById(officeId: 2.toString());
+                  },
+                  child: Text("get office by id"),
+                ),
+              ],
             ),
             ElevatedButton(
               onPressed: () async {
@@ -63,13 +85,6 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                 await providerOffice.destroyDataWhenlogout();
               },
               child: Text("logout"),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                //fetchOfficeAll hanya bisa digunakan ketika user sudah login
-                providerOffice.fetchAllOffice();
-              },
-              child: Text("get office"),
             ),
             Text(providerClient.statusConnection),
             Expanded(
@@ -116,6 +131,19 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                               providerOfficeListen.listOfAllOfficeModels[index];
                           return Text(dataChunks.officeName);
                         }));
+                  } else {
+                    return Text("no data");
+                  }
+                }),
+              ),
+            ),
+            Expanded(
+              child: Consumer<OfficeViewModels>(
+                builder: ((context, value, child) {
+                  if (providerOfficeListen.isUserExist != false &&
+                      providerOfficeListen.officeModelById != null) {
+                    final modelContain = providerOfficeListen.officeModelById;
+                    return Text(modelContain!.officeID.toString());
                   } else {
                     return Text("no data");
                   }
