@@ -5,8 +5,26 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MenuScreen extends StatelessWidget {
-  const MenuScreen({Key? key}) : super(key: key);
+class MenuScreen extends StatefulWidget {
+  final int currentIndex;
+
+  const MenuScreen({
+    Key? key,
+    this.currentIndex = 0,
+  }) : super(key: key);
+
+  @override
+  State<MenuScreen> createState() => _MenuScreenState();
+}
+
+class _MenuScreenState extends State<MenuScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      context.read<MenuViewModel>().backToMenu(index: widget.currentIndex);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +50,7 @@ class MenuScreen extends StatelessWidget {
         right: AdaptSize.screenHeight * .01,
         bottom: AdaptSize.screenHeight * .015,
       ),
-      height: AdaptSize.screenHeight * .075,
+      height: AdaptSize.screenWidth / 1000 * 180,
       width: double.infinity,
       decoration: BoxDecoration(
         color: MyColor.primary300,
@@ -48,12 +66,11 @@ class MenuScreen extends StatelessWidget {
           type: BottomNavigationBarType.fixed,
           selectedItemColor: MyColor.primary900,
           unselectedItemColor: MyColor.primary700,
-          selectedIconTheme: IconThemeData(size: AdaptSize.screenHeight * .028),
-          selectedLabelStyle:
-              TextStyle(fontSize: AdaptSize.screenHeight * .013),
-          unselectedFontSize: AdaptSize.screenHeight * .011,
+          selectedIconTheme: IconThemeData(size: AdaptSize.pixel22),
+          selectedLabelStyle: TextStyle(fontSize: AdaptSize.pixel12),
+          unselectedFontSize: AdaptSize.pixel10,
           onTap: (index) {
-            value.onTappeed = index;
+            value.onTaped = index;
           },
           currentIndex: value.currentPage,
           items: const <BottomNavigationBarItem>[

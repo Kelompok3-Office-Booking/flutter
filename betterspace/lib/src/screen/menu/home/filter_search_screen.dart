@@ -1,8 +1,14 @@
+import 'dart:math';
+import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
+import 'package:betterspace/src/widget/home_widget/home_screen_widget/recomended_space_widget.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -36,6 +42,10 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final dummyDataProviders =
+        Provider.of<OfficeDummyDataViewModels>(context, listen: false);
+    dummyDataProviders.addRecord(15);
+    final listOfDummyOffice = dummyDataProviders.listOfOfficeModels;
     return Scaffold(
       body: Consumer<SearchSpacesViewModel>(builder: (context, values, child) {
         return Padding(
@@ -87,32 +97,51 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                                   .read<NavigasiViewModel>()
                                   .navigasiToDetailSpace(
                                     context: context,
-                                    officeId: int.parse(
-                                        values.foundPlace[index].officeId),
+                                    officeId: index,
                                   );
                             },
                             splashColor: MyColor.neutral900,
                             borderRadius: BorderRadius.circular(16),
                             child: Card(
                               key: ValueKey(values.foundPlace[index].name),
-                              color: MyColor.neutral800,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              elevation: 4,
+                              color: MyColor.neutral900,
+                              elevation: 0,
                               margin: const EdgeInsets.symmetric(vertical: 6),
-                              child: searchContent(
-                                image: values.foundPlace[index].officeImage,
-                                name: values.foundPlace[index].name,
-                                location: values.foundPlace[index].areaLocation,
-                                buildingArea:
-                                    values.foundPlace[index].officeBuildingArea,
-                                category:
-                                    values.foundPlace[index].officeCategory,
-                                totalBooking:
-                                    values.foundPlace[index].totalBooking,
-                                officeRanting:
-                                    values.foundPlace[index].officeRanting,
+                              child: CachedNetworkImage(
+                                imageUrl:
+                                    listOfDummyOffice[index].officeLeadImage,
+                                imageBuilder: (context, imageProvider) =>
+                                    recomenSpaces(
+                                  context: context,
+                                  onTap: () {
+                                    context
+                                        .read<NavigasiViewModel>()
+                                        .navigasiToDetailSpace(
+                                          context: context,
+                                          officeId: index,
+                                        );
+                                  },
+                                  officeImage: imageProvider,
+                                  officeName: values.foundPlace[index].name,
+                                  officeLocation:
+                                      values.foundPlace[index].areaLocation,
+                                  officeStarRanting: values
+                                      .foundPlace[index].officeRanting
+                                      .toString(),
+                                  officeApproxDistance: '100',
+                                  officePersonCapacity: '100',
+                                  officeArea: values
+                                      .foundPlace[index].officeBuildingArea,
+                                  hours: '/Hours',
+                                  officePricing: Random().nextDouble() * 300000,
+                                ),
+                                placeholder: (context, url) => shimmerLoading(
+                                  child: CardShimmerHomeLoading
+                                      .horizontalLoadShimmerHome,
+                                ),
+                                errorWidget: (context, url, error) =>
+                                    CardShimmerHomeLoading
+                                        .horizontalFailedShimmerHome,
                               ),
                             ),
                           ),
@@ -125,8 +154,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .headline6!
-                              .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .016),
+                              .copyWith(fontSize: AdaptSize.pixel16),
                         ),
                       ),
               ),
@@ -147,7 +175,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
     required double officeRanting,
   }) {
     return SizedBox(
-      height: AdaptSize.screenHeight * .13,
+      height: AdaptSize.screenWidth / 2800 * 2000,
       width: double.infinity,
       child: Padding(
         padding: const EdgeInsets.all(5.0),
@@ -222,7 +250,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .headline6!
-                        .copyWith(fontSize: AdaptSize.screenHeight * .017),
+                        .copyWith(fontSize: AdaptSize.pixel16),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -238,7 +266,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                     style: Theme.of(context)
                         .textTheme
                         .bodyText1!
-                        .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                        .copyWith(fontSize: AdaptSize.pixel14),
                   ),
 
                   /// jarak bawah
@@ -253,7 +281,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                         /// icon lokasi
                         Icon(
                           Icons.location_on_outlined,
-                          size: AdaptSize.screenHeight * .018,
+                          size: AdaptSize.pixel22,
                         ),
 
                         const SizedBox(

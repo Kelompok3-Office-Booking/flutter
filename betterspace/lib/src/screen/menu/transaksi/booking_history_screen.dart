@@ -1,6 +1,9 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class BookingHistoryScreen extends StatefulWidget {
   const BookingHistoryScreen({super.key});
@@ -14,24 +17,22 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: Center(
-          child: Text(
-            "Booking History",
-            style: Theme.of(context)
-                .textTheme
-                .headline5!
-                .copyWith(fontSize: AdaptSize.screenHeight / 1000 * 24),
-          ),
-        ),
+      /// 13/12/22 mengganti appbar
+      appBar: defaultAppbarWidget(
+        contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        centerTitle: true,
+        isCenterTitle: true,
+        titles: 'Booking History',
       ),
       body: Padding(
         padding: EdgeInsets.only(
           //top: AdaptSize.paddingTop + AdaptSize.screenHeight / 19,
-          left: AdaptSize.screenWidth / 22.5,
-          right: AdaptSize.screenWidth / 22.5,
+          /// 13/12/22 ubah size padding
+          left: AdaptSize.screenWidth * .016,
+          right: AdaptSize.screenWidth * .016,
         ),
         child: SizedBox(
           height: AdaptSize.screenHeight,

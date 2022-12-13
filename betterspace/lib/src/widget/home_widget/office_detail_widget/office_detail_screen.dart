@@ -68,7 +68,7 @@ class OfficeDetailScreen extends StatelessWidget {
                               },
                               icon: Icon(
                                 Icons.arrow_back_ios,
-                                size: AdaptSize.screenHeight * .024,
+                                size: AdaptSize.pixel22,
                                 color: MyColor.neutral900,
                               ),
                             ),
@@ -79,7 +79,7 @@ class OfficeDetailScreen extends StatelessWidget {
                               onPressed: () {},
                               icon: Icon(
                                 Icons.bookmark_outline,
-                                size: AdaptSize.screenHeight * .024,
+                                size: AdaptSize.pixel22,
                                 color: MyColor.neutral900,
                               ),
                             ),
@@ -145,54 +145,50 @@ class OfficeDetailScreen extends StatelessWidget {
                     children: [
                       Text(
                         listOfDummyOffice[officeID].officeName,
-                        style: Theme.of(context).textTheme.headline6,
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6!
+                            .copyWith(fontSize: AdaptSize.pixel22),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      Container(
-                        width: AdaptSize.screenWidth / 7.2,
-                        height: AdaptSize.screenWidth / 15,
-                        decoration: BoxDecoration(
-                          color: MyColor.neutral300,
-                          border:
-                              Border.all(width: 1, color: MyColor.neutral300),
-                          borderRadius: BorderRadius.circular(42),
-                        ),
-                        child: Stack(
-                          children: [
-                            /// penilaian
-                            Positioned(
-                              top: AdaptSize.pixel4,
-                              bottom: AdaptSize.pixel4,
-                              right: AdaptSize.pixel8,
-                              left: AdaptSize.pixel6,
-                              child: SizedBox(
-                                height: AdaptSize.pixel16,
-                                width: AdaptSize.pixel34,
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Icon(
-                                      Icons.star_rounded,
-                                      color: MyColor.starYellow,
-                                      size: AdaptSize.pixel16,
-                                    ),
-                                    Text(
-                                      "${listOfDummyOffice[officeID].officeStarRating}",
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodySmall!
-                                          .copyWith(
-                                              color: MyColor.neutral900,
-                                              fontSize: 11),
-                                    ),
-                                  ],
-                                ),
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: Container(
+                          width: AdaptSize.screenWidth / 7.2,
+                          height: AdaptSize.screenWidth / 15,
+                          decoration: BoxDecoration(
+                            color: MyColor.neutral300,
+                            border:
+                                Border.all(width: 1, color: MyColor.neutral300),
+                            borderRadius: BorderRadius.circular(42),
+                          ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Icon(
+                                Icons.star_rounded,
+                                color: MyColor.starYellow,
+                                size: AdaptSize.pixel16,
                               ),
-                            ),
-                          ],
+                              Text(
+                                "${listOfDummyOffice[officeID].officeStarRating}",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodySmall!
+                                    .copyWith(
+                                        color: MyColor.neutral900,
+                                        fontSize: AdaptSize.pixel14),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ],
+                  ),
+
+                  SizedBox(
+                    height: AdaptSize.pixel8,
                   ),
 
                   /// keterangan lokasi
@@ -201,7 +197,7 @@ class OfficeDetailScreen extends StatelessWidget {
                       Icon(
                         Icons.domain,
                         color: MyColor.neutral100,
-                        size: AdaptSize.screenHeight * .024,
+                        size: AdaptSize.pixel20,
                       ),
                       SizedBox(
                         width: AdaptSize.screenWidth * .005,
@@ -212,7 +208,7 @@ class OfficeDetailScreen extends StatelessWidget {
                           style:
                               Theme.of(context).textTheme.subtitle1!.copyWith(
                                     color: MyColor.neutral100,
-                                    fontSize: AdaptSize.screenHeight * .014,
+                                    fontSize: AdaptSize.pixel14,
                                   ),
                           overflow: TextOverflow.ellipsis,
                           maxLines: 2,
@@ -267,20 +263,18 @@ class OfficeDetailScreen extends StatelessWidget {
                   /// deskripsi
                   Text(
                     "Description",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: MyColor.neutral100,
-                        fontSize: AdaptSize.dynamicBodyTextMedium,
-                        fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                        color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
                   ),
                   SizedBox(
                     height: AdaptSize.pixel8,
                   ),
                   Text(
                     listOfDummyOffice[officeID].officeDescription,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: MyColor.neutral200),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: MyColor.neutral200,
+                          fontSize: AdaptSize.pixel14,
+                        ),
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.justify,
                   ),
@@ -291,10 +285,10 @@ class OfficeDetailScreen extends StatelessWidget {
 
                   Text(
                     "Capacity",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: MyColor.neutral100,
-                        fontSize: AdaptSize.dynamicBodyTextMedium,
-                        fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          color: MyColor.neutral100,
+                          fontSize: AdaptSize.pixel16,
+                        ),
                   ),
 
                   /// list capacity
@@ -321,7 +315,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                     CupertinoIcons
                                         .rectangle_arrow_up_right_arrow_down_left,
                                     color: MyColor.secondary400,
-                                    size: AdaptSize.screenHeight * .024,
+                                    size: AdaptSize.pixel22,
                                   ),
                                 ),
 
@@ -376,9 +370,9 @@ class OfficeDetailScreen extends StatelessWidget {
 
                   Text(
                     "Facilities",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
                         color: MyColor.neutral100,
-                        fontSize: AdaptSize.dynamicBodyTextMedium,
+                        fontSize: AdaptSize.pixel16,
                         fontWeight: FontWeight.bold),
                   ),
 
@@ -392,10 +386,10 @@ class OfficeDetailScreen extends StatelessWidget {
 
                   Text(
                     "Address",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: MyColor.neutral100,
-                        fontSize: AdaptSize.dynamicBodyTextMedium,
-                        fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          color: MyColor.neutral100,
+                          fontSize: AdaptSize.pixel16,
+                        ),
                   ),
 
                   SizedBox(
@@ -405,10 +399,10 @@ class OfficeDetailScreen extends StatelessWidget {
                   /// alamat
                   Text(
                     '${listOfDummyOffice[officeID].officeLocation.city}, ${listOfDummyOffice[officeID].officeLocation.district}',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyMedium!
-                        .copyWith(color: MyColor.neutral200),
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          color: MyColor.neutral200,
+                          fontSize: AdaptSize.pixel14,
+                        ),
                   ),
 
                   /// fitur google maps
@@ -422,7 +416,8 @@ class OfficeDetailScreen extends StatelessWidget {
                               context
                                   .read<GetLocationViewModel>()
                                   .permissionLocationGMap(
-                                    context, officeID,
+                                    context,
+                                    officeID,
                                   );
                             }),
                       );
@@ -455,10 +450,10 @@ class OfficeDetailScreen extends StatelessWidget {
 
                   Text(
                     "Review",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: MyColor.neutral100,
-                        fontSize: AdaptSize.dynamicBodyTextMedium,
-                        fontWeight: FontWeight.bold),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          color: MyColor.neutral100,
+                          fontSize: AdaptSize.pixel16,
+                        ),
                   ),
 
                   /// card review
@@ -467,7 +462,7 @@ class OfficeDetailScreen extends StatelessWidget {
                   ),
 
                   SizedBox(
-                    height: AdaptSize.screenHeight * .09,
+                    height: AdaptSize.screenWidth / 1000 * 150,
                   ),
                 ],
               ),
@@ -633,7 +628,7 @@ class OfficeDetailScreen extends StatelessWidget {
     Function()? buttonHelpfull,
   }) {
     return SizedBox(
-      height: AdaptSize.screenHeight * .182,
+      height: AdaptSize.screenWidth / 1000 * 470,
       width: double.infinity,
       child: ListView.builder(
           padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .01),
@@ -643,8 +638,7 @@ class OfficeDetailScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             /// canvas
             return Container(
-              height: AdaptSize.screenHeight * .162,
-              width: AdaptSize.screenWidth * .75,
+              width: AdaptSize.screenWidth / 1000 * 840,
               padding: EdgeInsets.all(AdaptSize.screenHeight * .01),
               margin: index == 1
                   ? EdgeInsets.only(
@@ -698,9 +692,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                 style: Theme.of(context)
                                     .textTheme
                                     .headline6!
-                                    .copyWith(
-                                        fontSize:
-                                            AdaptSize.screenHeight * .014),
+                                    .copyWith(fontSize: AdaptSize.pixel14),
                               ),
 
                               Icon(
@@ -716,7 +708,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                     .textTheme
                                     .bodyText1!
                                     .copyWith(
-                                      fontSize: AdaptSize.screenHeight * .014,
+                                      fontSize: AdaptSize.pixel14,
                                       color: MyColor.neutral600,
                                     ),
                               ),
@@ -727,7 +719,7 @@ class OfficeDetailScreen extends StatelessWidget {
                           Icon(
                             Icons.star,
                             color: HexColor('E5D11A'),
-                            size: AdaptSize.screenHeight * .02,
+                            size: AdaptSize.pixel22,
                           )
                         ],
                       )
@@ -740,19 +732,19 @@ class OfficeDetailScreen extends StatelessWidget {
 
                   /// description
                   Text(
-                    'Hmm, apayah, gua juga gatau nih',
+                    'Hmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nih',
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontSize: AdaptSize.screenHeight * .014,
+                          fontSize: AdaptSize.pixel14,
                         ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
                   ),
 
-                  SizedBox(
-                    height: AdaptSize.pixel10,
-                  ),
+                  Spacer(),
 
                   /// helpfull button
                   Container(
-                    width: AdaptSize.screenHeight * .128,
+                    width: AdaptSize.screenHeight / 1000 * 150,
                     padding: EdgeInsets.all(AdaptSize.screenHeight * .008),
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
@@ -768,7 +760,7 @@ class OfficeDetailScreen extends StatelessWidget {
                           onTap: buttonHelpfull,
                           child: Icon(
                             Icons.thumb_up_alt_outlined,
-                            size: AdaptSize.screenHeight * .02,
+                            size: AdaptSize.pixel14,
                           ),
                         ),
 
@@ -782,8 +774,7 @@ class OfficeDetailScreen extends StatelessWidget {
                           style: Theme.of(context)
                               .textTheme
                               .subtitle2!
-                              .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .014),
+                              .copyWith(fontSize: AdaptSize.pixel10),
                         )
                       ],
                     ),
@@ -832,14 +823,20 @@ class OfficeDetailScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('Start From'),
+              Text(
+                'Start From',
+                style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                      color: MyColor.darkBlueColor,
+                      fontSize: AdaptSize.pixel16,
+                    ),
+              ),
               Text(
                 NumberFormat.currency(
                         locale: 'id', symbol: 'Rp ', decimalDigits: 0)
                     .format(Random().nextDouble() * 400000),
                 style: Theme.of(context).textTheme.headline6!.copyWith(
                       color: MyColor.darkBlueColor,
-                      fontSize: AdaptSize.screenHeight * .016,
+                      fontSize: AdaptSize.pixel14,
                     ),
               ),
             ],
@@ -852,7 +849,7 @@ class OfficeDetailScreen extends StatelessWidget {
             child: Text(
               'Book Now',
               style: Theme.of(context).textTheme.button!.copyWith(
-                    fontSize: AdaptSize.screenHeight * .014,
+                    fontSize: AdaptSize.pixel14,
                     color: MyColor.neutral900,
                   ),
             ),

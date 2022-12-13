@@ -104,7 +104,7 @@ class _OnBoardinViewState extends State<OnBoardinView> {
                   onPressed: () {
                     context
                         .read<NavigasiViewModel>()
-                        .navigasiToRegisterScreen(context);
+                        .navigasiToLoginScreen(context);
                   },
                 ),
 
@@ -117,7 +117,7 @@ class _OnBoardinViewState extends State<OnBoardinView> {
                           onPressed: () {
                             context
                                 .read<NavigasiViewModel>()
-                                .navigasiToRegisterScreen(context);
+                                .navigasiToLoginScreen(context);
                           },
                           sizeWidth: AdaptSize.screenWidth * .3,
                           sizeheight: AdaptSize.screenHeight * .06,

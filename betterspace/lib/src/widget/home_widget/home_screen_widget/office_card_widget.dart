@@ -26,9 +26,9 @@ Widget popularSpaceWidget({
         right: 5,
         bottom: 10,
       ),
-      width: AdaptSize.screenWidth * .45,
+      width: AdaptSize.screenWidth * .5,
       decoration: BoxDecoration(
-        color: MyColor.whiteColor,
+        color: MyColor.neutral900,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
@@ -72,14 +72,14 @@ Widget popularSpaceWidget({
                           Icon(
                             Icons.star,
                             color: Colors.amber,
-                            size: AdaptSize.screenHeight * 0.025,
+                            size: AdaptSize.pixel20,
                           ),
                           Text(
                             officeStarRanting,
                             style:
                                 Theme.of(context).textTheme.bodyText2!.copyWith(
                                       color: MyColor.whiteColor,
-                                      fontSize: AdaptSize.screenHeight * 0.017,
+                                      fontSize: AdaptSize.pixel14,
                                     ),
                           ),
                         ],
@@ -90,6 +90,8 @@ Widget popularSpaceWidget({
               ),
             ],
           ),
+          
+          /// keterangan
           Flexible(
             fit: FlexFit.tight,
             child: Padding(
@@ -104,8 +106,8 @@ Widget popularSpaceWidget({
                     style: Theme.of(context)
                         .textTheme
                         .headline6!
-                        .copyWith(fontSize: AdaptSize.screenHeight * .017),
-                    maxLines: 2,
+                        .copyWith(fontSize: AdaptSize.pixel16),
+                    maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const Spacer(),
@@ -116,7 +118,7 @@ Widget popularSpaceWidget({
                     style: Theme.of(context)
                         .textTheme
                         .bodyText2!
-                        .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                        .copyWith(fontSize: AdaptSize.pixel14),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -129,7 +131,7 @@ Widget popularSpaceWidget({
                     children: [
                       /// icon lokasi
                       Icon(Icons.location_on_outlined,
-                          size: AdaptSize.screenHeight * .023),
+                          size: AdaptSize.pixel18),
 
                       /// keterangan lokasi
                       Text(
@@ -137,7 +139,7 @@ Widget popularSpaceWidget({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(fontSize: AdaptSize.screenHeight * .012),
+                            .copyWith(fontSize: AdaptSize.pixel12),
                       ),
 
                       SizedBox(
@@ -146,7 +148,7 @@ Widget popularSpaceWidget({
 
                       /// keterangan available
                       SvgPicture.asset('assets/svg_assets/available.svg',
-                          height: AdaptSize.screenHeight * .023),
+                          height: AdaptSize.pixel18),
                       const SizedBox(
                         width: 1,
                       ),
@@ -155,7 +157,7 @@ Widget popularSpaceWidget({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(fontSize: AdaptSize.screenHeight * .012),
+                            .copyWith(fontSize: AdaptSize.pixel12),
                       ),
 
                       SizedBox(
@@ -165,7 +167,7 @@ Widget popularSpaceWidget({
                       /// keteranganan jarak
                       SvgPicture.asset(
                         'assets/svg_assets/ruler.svg',
-                        height: AdaptSize.screenHeight * .023,
+                        height: AdaptSize.pixel18,
                       ),
                       const SizedBox(
                         width: 1,
@@ -178,7 +180,7 @@ Widget popularSpaceWidget({
                               .textTheme
                               .bodyText1!
                               .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .012),
+                                  fontSize: AdaptSize.pixel12),
                         ),
                       ),
                     ],
@@ -198,13 +200,13 @@ Widget popularSpaceWidget({
                                 ),
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               color: MyColor.darkBlueColor,
-                              fontSize: AdaptSize.screenHeight * .016,
+                              fontSize: AdaptSize.pixel14,
                             ),
                       ),
                       Text(
                         hours,
                         style: Theme.of(context).textTheme.bodyText2!.copyWith(
-                              fontSize: AdaptSize.screenHeight * .011,
+                              fontSize: AdaptSize.pixel10,
                             ),
                       ),
                     ],

@@ -1,5 +1,6 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/frame_image_items.dart';
@@ -7,6 +8,7 @@ import 'package:betterspace/src/widget/widget/icon_with_label.dart';
 import 'package:betterspace/src/widget/widget/item_card.dart';
 import 'package:betterspace/src/widget/widget/transaction_status_widget.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class DetailOrderScreens extends StatefulWidget {
   const DetailOrderScreens({super.key});
@@ -21,9 +23,14 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
     AdaptSize.size(context: context);
     return Scaffold(
       resizeToAvoidBottomInset: true,
+      /// mengganti appbar
       appBar: defaultAppbarWidget(
-        titles: "Detail Order",
         contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        isCenterTitle: false,
+        titles: 'Detail Order',
       ),
       body: SizedBox(
         height: AdaptSize.screenHeight,
@@ -60,7 +67,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                         fontSize:
                                             AdaptSize.screenHeight / 1000 * 18),
                               ),
-                              Spacer(),
+                              const Spacer(),
                               transactionStatusWidget(
                                   contexts: context,
                                   statusText: "Accepted",
@@ -85,7 +92,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                   itemHeight:
                                       AdaptSize.screenWidth / 2.72727273,
                                   itemWidth: AdaptSize.screenWidth / 2.72727273,
-                                  Images: Image(
+                                  Images: const Image(
                                     image: AssetImage(
                                         "assets/image_assets/space_image/space1.png"),
                                     fit: BoxFit.cover,
@@ -126,7 +133,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                                           18,
                                                   fontWeight: FontWeight.bold),
                                         ),
-                                        Expanded(child: SizedBox()),
+                                        const Expanded(child: SizedBox()),
                                         Padding(
                                           padding: EdgeInsets.only(
                                               bottom: AdaptSize.pixel6),
@@ -328,7 +335,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                                   1000 *
                                                   16),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       "/placeholder/",
                                       style: Theme.of(context)
@@ -364,7 +371,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                                   1000 *
                                                   16),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       "Rp. 243.000.00",
                                       style: Theme.of(context)
@@ -399,7 +406,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                                   1000 *
                                                   16),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       "Rp. 35.000.00",
                                       style: Theme.of(context)
@@ -434,7 +441,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                                   1000 *
                                                   16),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       "x6 Hour",
                                       style: Theme.of(context)
@@ -469,7 +476,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                                   1000 *
                                                   16),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       "Rp. 10.000.00",
                                       style: Theme.of(context)
@@ -516,7 +523,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                                   1000 *
                                                   16),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       "Rp. 220.000.00",
                                       style: Theme.of(context)
@@ -551,7 +558,7 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                                   1000 *
                                                   16),
                                     ),
-                                    Spacer(),
+                                    const Spacer(),
                                     Text(
                                       "Rp. 23.000.00",
                                       style: Theme.of(context)
@@ -593,6 +600,8 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                             height: AdaptSize.pixel40,
                             child: ElevatedButton(
                               onPressed: () {},
+                              style: ElevatedButton.styleFrom(
+                                  backgroundColor: MyColor.neutral600),
                               child: Text(
                                 "Checkin Now",
                                 style: Theme.of(context)
@@ -600,8 +609,6 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                                     .bodyMedium!
                                     .copyWith(color: MyColor.neutral700),
                               ),
-                              style: ElevatedButton.styleFrom(
-                                  backgroundColor: MyColor.neutral600),
                             ),
                           ),
                         ),
@@ -609,24 +616,28 @@ class _DetailOrderScreensState extends State<DetailOrderScreens> {
                           width: AdaptSize.screenWidth / 1.097561,
                           height: AdaptSize.pixel40,
                           child: ElevatedButton(
-                            onPressed: () {},
-                            child: Text(
-                              "Booking Historys",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(color: MyColor.secondary400),
-                            ),
+                            onPressed: () {
+                              context
+                                  .read<NavigasiViewModel>()
+                                  .navigasiBackToBookingHistory(context);
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: MyColor.neutral900,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.all(
+                                borderRadius: const BorderRadius.all(
                                   Radius.circular(8),
                                 ),
                                 side: BorderSide(
                                     color: MyColor.secondary400,
                                     width: AdaptSize.pixel2),
                               ),
+                            ),
+                            child: Text(
+                              "Booking Historys",
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(color: MyColor.secondary400),
                             ),
                           ),
                         ),

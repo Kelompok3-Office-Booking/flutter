@@ -6,6 +6,7 @@ import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/home_widget/search_screen_widget/amount_guest_widget.dart';
 import 'package:betterspace/src/widget/home_widget/search_screen_widget/search_map_widget.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/read_only_form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -32,49 +33,28 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: defaultAppbarWidget(
+        contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        isCenterTitle: false,
+        titles: 'Search',
+      ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.only(
             left: AdaptSize.screenWidth * .016,
             right: AdaptSize.screenWidth * .016,
-            top: AdaptSize.paddingTop,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              /// text header
-              Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      context.read<NavigasiViewModel>().navigasiPop(context);
-                    },
-                    icon: Icon(
-                      Icons.arrow_back_ios,
-                      size: AdaptSize.screenHeight * .022,
-                    ),
-                  ),
-                  SizedBox(
-                    width: AdaptSize.screenWidth * .01,
-                  ),
-                  Text(
-                    'Search',
-                    style: Theme.of(context)
-                        .textTheme
-                        .headline6!
-                        .copyWith(fontSize: AdaptSize.screenHeight * .022),
-                  ),
-                ],
-              ),
-
-              SizedBox(
-                height: AdaptSize.screenHeight * .016,
-              ),
-
               Card(
                 shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),),
+                  borderRadius: BorderRadius.circular(16),
+                ),
                 elevation: 2.5,
                 color: MyColor.neutral900,
                 shadowColor: MyColor.grayLightColor.withOpacity(.4),
@@ -90,10 +70,9 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                     children: [
                       Text(
                         'With whom did you come here ?',
-                        style: Theme.of(context)
-                            .textTheme
-                            .headline6!
-                            .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                              fontSize: AdaptSize.pixel16,
+                            ),
                       ),
 
                       /// text field
@@ -111,7 +90,9 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                           color: MyColor.darkColor.withOpacity(.8),
                         ),
                         onTap: () {
-                          context.read<NavigasiViewModel>().navigasiToFilterSearch(context);
+                          context
+                              .read<NavigasiViewModel>()
+                              .navigasiToFilterSearch(context);
                         },
                         readOnly: true,
                       ),
@@ -129,7 +110,7 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
 
               /// date picker
               Container(
-                height: AdaptSize.screenHeight * 0.127,
+                height: AdaptSize.screenWidth / 1000 * 260,
                 width: double.infinity,
                 padding: EdgeInsets.all(AdaptSize.screenHeight * .01),
                 decoration: BoxDecoration(
@@ -151,7 +132,7 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                       style: Theme.of(context)
                           .textTheme
                           .headline6!
-                          .copyWith(fontSize: AdaptSize.screenHeight * 0.016),
+                          .copyWith(fontSize: AdaptSize.pixel16),
                     ),
 
                     SizedBox(
@@ -177,6 +158,7 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                         suffixIcon: Icon(
                           CupertinoIcons.calendar,
                           color: MyColor.grayLightColor,
+                          size: AdaptSize.pixel24,
                         ),
                       ),
                     ),
@@ -198,7 +180,7 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
-                      .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                      .copyWith(fontSize: AdaptSize.pixel16),
                 ),
               ),
 

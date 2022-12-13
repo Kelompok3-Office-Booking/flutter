@@ -16,10 +16,11 @@ Widget textTableContent({
 }) {
   return Padding(
     padding: EdgeInsets.fromLTRB(
-        AdaptSize.screenWidth * .022,
-        withDivider! ? AdaptSize.screenHeight * .005 : 0,
-        AdaptSize.screenWidth * .022,
-        0),
+      AdaptSize.pixel20,
+      withDivider! ? AdaptSize.screenHeight * .005 : 0,
+      AdaptSize.pixel20,
+      0,
+    ),
     child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -152,7 +153,7 @@ Widget textTableContent({
 
         withDivider
             ? SizedBox(
-                height: AdaptSize.screenHeight * 0.15,
+                height: AdaptSize.pixel14,
               )
             : const SizedBox(),
       ],

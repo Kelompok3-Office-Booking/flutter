@@ -45,19 +45,19 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi register ke login screen
-  void navigasiToLoginScreen(BuildContext context) {
+  void navigasiToRegisterScreen(BuildContext context) {
     Navigator.of(context).push(
       CupertinoPageRoute(
-        builder: (context) => const LoginScreen(),
+        builder: (context) => const RegisterScreen(),
       ),
     );
   }
 
   /// navigasi onboarding ke register screen
-  void navigasiToRegisterScreen(BuildContext context) {
+  void navigasiToLoginScreen(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
-          builder: (context) => const RegisterScreen(),
+          builder: (context) => const LoginScreen(),
         ),
         (route) => false);
   }
@@ -164,7 +164,7 @@ class NavigasiViewModel with ChangeNotifier {
         CupertinoPageRoute(
           //change the target widget here
 
-          builder: (context) => TestingScreenAPI(),
+          builder: (context) => const TestingScreenAPI(),
         ),
         (route) => false);
   }
@@ -250,9 +250,10 @@ class NavigasiViewModel with ChangeNotifier {
   /// navigasi back dari succes payment screen
   Future<bool> navigasiBackToMenu(BuildContext context) async {
     Navigator.pushReplacement(
-        context,
-        CupertinoDialogRoute(
-            builder: (context) => const MenuScreen(), context: context));
+      context,
+      CupertinoDialogRoute(
+          builder: (context) => const MenuScreen(), context: context),
+    );
     notifyListeners();
     return Future(() => true);
   }
@@ -276,5 +277,24 @@ class NavigasiViewModel with ChangeNotifier {
         builder: (context) => const CheckoutScreen(),
       ),
     );
+  }
+
+  /// navigasi dari sukses screen
+  void navigasiBackToBookingHistory(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondAnimation) =>
+              const MenuScreen(
+            currentIndex: 1,
+          ),
+          transitionsBuilder: (context, animation, secondAnimation, child) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        ),
+        (route) => false);
+
+    notifyListeners();
   }
 }

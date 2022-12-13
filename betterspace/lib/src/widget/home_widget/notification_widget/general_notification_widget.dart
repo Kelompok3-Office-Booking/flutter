@@ -25,13 +25,13 @@ Widget generalWidget(BuildContext context) {
               children: [
                 /// image
                 SizedBox(
-                  height: AdaptSize.screenHeight * .07,
-                  width: AdaptSize.screenHeight * .08,
+                  height: AdaptSize.screenWidth / 1000 * 180,
+                  width: AdaptSize.screenWidth / 1000 * 180,
                   child: Stack(
                     children: [
                       Container(
-                        height: AdaptSize.screenHeight * .065,
-                        width: AdaptSize.screenHeight * .065,
+                        height: AdaptSize.screenWidth / 1000 * 170,
+                        width: AdaptSize.screenWidth / 1000 * 170,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
@@ -46,8 +46,8 @@ Widget generalWidget(BuildContext context) {
                         bottom: 0,
                         right: 0,
                         child: Container(
-                          height: AdaptSize.screenHeight * .035,
-                          width: AdaptSize.screenHeight * .035,
+                          height: AdaptSize.screenWidth / 1000 *  85,
+                          width: AdaptSize.screenWidth / 1000 *  85,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -72,7 +72,7 @@ Widget generalWidget(BuildContext context) {
                       Text(
                         generalNotifications.title,
                         style: Theme.of(context).textTheme.headline6!.copyWith(
-                              fontSize: AdaptSize.screenHeight * 0.016,
+                              fontSize: AdaptSize.pixel16,
                             ),
                       ),
 
@@ -85,13 +85,13 @@ Widget generalWidget(BuildContext context) {
                         text1: generalNotifications.description,
                         textStyle1:
                             Theme.of(context).textTheme.bodyText1!.copyWith(
-                                  fontSize: AdaptSize.screenHeight * 0.014,
+                                  fontSize: AdaptSize.pixel14,
                                 ),
                         text2: generalNotifications.descriptionkey,
                         textStyle2: Theme.of(context)
                             .textTheme
                             .headline6!
-                            .copyWith(fontSize: AdaptSize.screenHeight * 0.014),
+                            .copyWith(fontSize: AdaptSize.pixel14),
                       ),
 
                       SizedBox(
@@ -101,7 +101,7 @@ Widget generalWidget(BuildContext context) {
                       Text(
                         generalNotifications.day,
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                              fontSize: AdaptSize.screenHeight * 0.014,
+                              fontSize: AdaptSize.pixel14,
                               color: MyColor.neutral600,
                             ),
                       ),

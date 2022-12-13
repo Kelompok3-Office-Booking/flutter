@@ -1,5 +1,6 @@
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TransactionViewModel with ChangeNotifier {
   /// virtual transfer metod
@@ -53,5 +54,16 @@ class TransactionViewModel with ChangeNotifier {
   void isDropDown() {
     _dropDown1 = !_dropDown1;
     notifyListeners();
+  }
+
+  /// button need help in payment detail
+  /// launch whatsapp external (aida)
+  Future<void> launchWA() async {
+    if (!await launchUrl(
+      Uri.parse('https://wa.me/082215126377'),
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch';
+    }
   }
 }

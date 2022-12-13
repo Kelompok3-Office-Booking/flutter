@@ -23,32 +23,32 @@ class CommonDataNotification {
   static Icon bookingAccepted = Icon(
     Icons.done,
     color: MyColor.neutral900,
-    size: AdaptSize.screenHeight * .014,
+    size: AdaptSize.pixel14,
   );
   static Icon failed = Icon(
     Icons.close,
     color: MyColor.neutral900,
-    size: AdaptSize.screenHeight * .014,
+    size: AdaptSize.pixel14,
   );
   static Icon waiting = Icon(
     Icons.access_time,
     color: MyColor.neutral900,
-    size: AdaptSize.screenHeight * .014,
+    size: AdaptSize.pixel14,
   );
   static Icon verified = Icon(
     Icons.wallet,
     color: MyColor.neutral900,
-    size: AdaptSize.screenHeight * .014,
+    size: AdaptSize.pixel14,
   );
   static Icon percent = Icon(
     Icons.percent,
     color: MyColor.neutral900,
-    size: AdaptSize.screenHeight * .014,
+    size: AdaptSize.pixel14,
   );
   static Icon newBuilding = Icon(
     CupertinoIcons.building_2_fill,
     color: MyColor.neutral900,
-    size: AdaptSize.screenHeight * .014,
+    size: AdaptSize.pixel14,
   );
 
   static Color successColor = MyColor.success300;

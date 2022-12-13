@@ -1,7 +1,7 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,25 +11,13 @@ class EmailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: transparentAppbarWidget(
-        context: context,
-        titles: Text(
-          'Email',
-          style: Theme.of(context).textTheme.headline6!.copyWith(
-                fontSize: AdaptSize.pixel16,
-              ),
-        ),
-        titleSpacer: AdaptSize.pixel16,
-        leadingIcon: IconButton(
-          onPressed: () {
-            context.read<NavigasiViewModel>().navigasiPop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: MyColor.darkColor,
-            size: AdaptSize.pixel16,
-          ),
-        ),
+      appBar: defaultAppbarWidget(
+        contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        isCenterTitle: false,
+        titles: 'Email',
       ),
       body: Padding(
         padding: EdgeInsets.only(
@@ -53,7 +41,10 @@ class EmailScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Icon(Icons.email_outlined),
+                          Icon(
+                            Icons.email_outlined,
+                            size: AdaptSize.pixel24,
+                          ),
                           SizedBox(
                             height: AdaptSize.pixel8,
                           ),
@@ -61,7 +52,7 @@ class EmailScreen extends StatelessWidget {
                             'ErickCahya@gmail.com',
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
-                                      fontSize: AdaptSize.screenHeight * .016,
+                                      fontSize: AdaptSize.pixel16,
                                     ),
                           ),
                           SizedBox(
@@ -71,7 +62,7 @@ class EmailScreen extends StatelessWidget {
                             'All your transaction & account security information will be sent to this email.',
                             style:
                                 Theme.of(context).textTheme.bodyText1!.copyWith(
-                                      fontSize: AdaptSize.screenHeight * .014,
+                                      fontSize: AdaptSize.pixel14,
                                     ),
                           ),
                         ],

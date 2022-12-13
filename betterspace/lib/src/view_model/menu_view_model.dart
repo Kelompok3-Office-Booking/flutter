@@ -19,7 +19,15 @@ class MenuViewModel with ChangeNotifier {
 
   get pages => _pages[_currentPage];
 
-  set onTappeed(int index) {
+  set onTaped(int index) {
+    _currentPage = index;
+    notifyListeners();
+  }
+
+  /// access menu index
+  void backToMenu({
+    required int index,
+  }) {
     _currentPage = index;
     notifyListeners();
   }

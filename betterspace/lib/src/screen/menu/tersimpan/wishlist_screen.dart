@@ -1,13 +1,13 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/frame_image_items.dart';
 import 'package:betterspace/src/widget/widget/icon_with_label.dart';
 import 'package:betterspace/src/widget/widget/item_card.dart';
 import 'package:betterspace/src/widget/widget/rating_stars_widget..dart';
-import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
 
 class WishlistScreen extends StatefulWidget {
   const WishlistScreen({super.key});
@@ -22,33 +22,22 @@ class _WishlistScreenState extends State<WishlistScreen> {
     AdaptSize.size(context: context);
     return Scaffold(
       backgroundColor: MyColor.neutral900,
-      appBar: transparentAppbarWidget(
-        context: context,
-        leadingIcon: IconButton(
-          onPressed: () {},
-          icon: Padding(
-            padding: EdgeInsets.only(left: AdaptSize.pixel20),
-            child: Icon(
-              Icons.arrow_back,
-              color: MyColor.neutral200,
-              size: AdaptSize.pixel26,
-            ),
-          ),
-        ),
-        titleSpacer: AdaptSize.pixel24,
-        titles: Text(
-          "Wishlist",
-          style: Theme.of(context)
-              .textTheme
-              .headline6!
-              .copyWith(color: MyColor.neutral200),
-        ),
+      appBar: defaultAppbarWidget(
+        contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        centerTitle: true,
+        isCenterTitle: true,
+        titles: 'Wishlist',
       ),
       body: Padding(
         padding: EdgeInsets.only(
-            top: AdaptSize.pixel8,
-            left: AdaptSize.pixel16,
-            right: AdaptSize.pixel16),
+          top: AdaptSize.pixel8,
+          /// 13/12/22 ubah ukuran padding
+          left: AdaptSize.screenWidth * .016,
+          right: AdaptSize.screenWidth * .016,
+        ),
         child: ListView(
           children: [
             SizedBox(
@@ -70,7 +59,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                             ),
                             itemHeight: AdaptSize.screenWidth / 3.6,
                             itemWidth: AdaptSize.screenWidth / 3.6,
-                            Images: Image(
+                            Images: const Image(
                               image: AssetImage(
                                   "assets/image_assets/space_image/space1.png"),
                               fit: BoxFit.cover,
@@ -178,7 +167,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                             ),
                             itemHeight: AdaptSize.screenWidth / 3.6,
                             itemWidth: AdaptSize.screenWidth / 3.6,
-                            Images: Image(
+                            Images: const Image(
                               image: AssetImage(
                                   "assets/image_assets/space_image/space1.png"),
                               fit: BoxFit.cover,
@@ -286,7 +275,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                             ),
                             itemHeight: AdaptSize.screenWidth / 3.6,
                             itemWidth: AdaptSize.screenWidth / 3.6,
-                            Images: Image(
+                            Images: const Image(
                               image: AssetImage(
                                   "assets/image_assets/space_image/space1.png"),
                               fit: BoxFit.cover,
@@ -394,7 +383,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                             ),
                             itemHeight: AdaptSize.screenWidth / 3.6,
                             itemWidth: AdaptSize.screenWidth / 3.6,
-                            Images: Image(
+                            Images: const Image(
                               image: AssetImage(
                                   "assets/image_assets/space_image/space1.png"),
                               fit: BoxFit.cover,
@@ -526,7 +515,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                   height: AdaptSize.screenWidth / 9,
                                   child: ElevatedButton(
                                     style: ElevatedButton.styleFrom(
-                                        shape: RoundedRectangleBorder(
+                                        shape: const RoundedRectangleBorder(
                                           borderRadius: BorderRadius.all(
                                             Radius.circular(8),
                                           ),
@@ -550,7 +539,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                 height: AdaptSize.screenWidth / 9,
                                 child: ElevatedButton(
                                   style: ElevatedButton.styleFrom(
-                                      shape: RoundedRectangleBorder(
+                                      shape: const RoundedRectangleBorder(
                                         borderRadius: BorderRadius.all(
                                           Radius.circular(8),
                                         ),

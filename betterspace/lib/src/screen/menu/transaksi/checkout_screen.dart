@@ -1,5 +1,6 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_metod_screen.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
@@ -56,7 +57,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     child: ElevatedButton(
                       onPressed: () {
                         /// blm dipindah
-                        Navigator.push(context, CupertinoPageRoute(builder: (context)=>const PaymentMetodScreen()));
+                        Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                                builder: (context) =>
+                                    const PaymentMetodScreen()));
                       },
                       style: ElevatedButton.styleFrom(
                           backgroundColor: MyColor.neutral600),
@@ -104,8 +109,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             cardTopLeftRadius: 8,
             cardTopRightRadius: 8),
       ),
+      /// 13/12/22 mengganti app bar
       appBar: defaultAppbarWidget(
-          contexts: context, titles: "Checkout", leadIconFunction: () {}),
+          contexts: context,
+          leadIconFunction: () {
+            context.read<NavigasiViewModel>().navigasiPop(context);
+          },
+          isCenterTitle: false,
+          titles: 'Checkout'),
       body: Padding(
         padding: const EdgeInsets.only(),
         child: SizedBox(
