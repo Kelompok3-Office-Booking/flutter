@@ -1,6 +1,7 @@
 import 'package:betterspace/src/services/api_services.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -26,6 +27,12 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
     final providerClient = Provider.of<LoginViewmodels>(context, listen: false);
     final providerClientListen =
         Provider.of<LoginViewmodels>(context, listen: true);
+
+    final providerOffice =
+        Provider.of<OfficeViewModels>(context, listen: false);
+    final providerOfficeListen =
+        Provider.of<OfficeViewModels>(context, listen: true);
+
     return Scaffold(
       appBar: AppBar(),
       body: Container(
@@ -33,6 +40,7 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
           children: [
             ElevatedButton(
               onPressed: () {
+                //login panggil method loginGetToken dan masukan parameter
                 providerClient.loginGetToken(
                     userEmail: "abimanyutest23@gmail.com",
                     userPassword: "testtest2");
@@ -41,15 +49,27 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
             ),
             ElevatedButton(
               onPressed: () {
+                //get profile hanya bisa dipakai ketika user sudah login
                 providerClient.getProfile();
               },
               child: Text("get_profile"),
             ),
             ElevatedButton(
-              onPressed: () {
-                providerClient.logoutWithTokens();
+              onPressed: () async {
+                //logout hanya bisa digunakan ketika user sudah login
+                await providerClient.logoutWithTokens();
+
+                //destroy data office hanya bisa digunakan ketika user sudah logout
+                await providerOffice.destroyDataWhenlogout();
               },
               child: Text("logout"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                providerOffice.fetchAllOffice();
+              },
+              child: Text("get office"),
             ),
             Text(providerClient.statusConnection),
             Expanded(
@@ -78,6 +98,24 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                               " user exist"
                           : "-");
                     }
+                  } else {
+                    return Text("no data");
+                  }
+                }),
+              ),
+            ),
+            Expanded(
+              child: Consumer<OfficeViewModels>(
+                builder: ((context, value, child) {
+                  if (providerOfficeListen.isUserExist != false) {
+                    return ListView.builder(
+                        itemCount:
+                            providerOfficeListen.listOfAllOfficeModels.length,
+                        itemBuilder: ((context, index) {
+                          final dataChunks =
+                              providerOfficeListen.listOfAllOfficeModels[index];
+                          return Text(dataChunks.officeName);
+                        }));
                   } else {
                     return Text("no data");
                   }

@@ -10,4 +10,6 @@ class constantValue {
       "https://api-better-space-staging.herokuapp.com/api/v1/refresh";
   String userLogoutWithToken =
       "https://api-better-space-staging.herokuapp.com/api/v1/logout";
+  String getAllOffice =
+      "https://api-better-space-staging.herokuapp.com/api/v1/offices/all";
 }
