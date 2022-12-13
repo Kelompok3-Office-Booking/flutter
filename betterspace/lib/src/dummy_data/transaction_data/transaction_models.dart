@@ -1,4 +1,4 @@
-import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart';
+import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
 
 class PaymentMethod {

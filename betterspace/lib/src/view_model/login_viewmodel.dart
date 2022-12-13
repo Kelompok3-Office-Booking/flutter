@@ -116,21 +116,7 @@ class LoginViewmodels with ChangeNotifier {
     const secureStorage = FlutterSecureStorage();
     String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
     if (refreshToken != null) {
-      Response responses =
-          await UserService().refreshExpiredTokens(refreshTokens: refreshToken);
-      if (responses.statusCode == 200) {
-        await secureStorage.write(
-            key: "access_tokens_bs",
-            value: responses.data["data"]["access_token"]);
-        await secureStorage.write(
-            key: "refresh_token_bs",
-            value: responses.data["data"]["refresh_token"]);
-      } else if (responses.statusCode == 401 || responses.statusCode == 403) {
-        destroyActiveUser(secureStorage);
-      } else {
-        statusConnection = responses.statusCode.toString() +
-            responses.statusMessage.toString();
-      }
+      await UserService().refreshExpiredTokens();
     } else {
       print("no active user");
     }
@@ -141,6 +127,7 @@ class LoginViewmodels with ChangeNotifier {
     await flutterStorage.deleteAll();
     userTokens = null;
     isUserExist = false;
+    userModels = null;
     notifyListeners();
   }
 
@@ -152,19 +139,5 @@ class LoginViewmodels with ChangeNotifier {
   resetProfileFetchConnectionState() {
     apiProfileState = stateOfConnections.isDoingNothing;
     notifyListeners();
-  }
-
-  Future<Response<dynamic>> _retryRequest(
-      {required RequestOptions requestOptions,
-      required String newAcessTokens,
-      required Dio dio}) async {
-    final options = Options(
-      method: requestOptions.method,
-      headers: {"Authorization": "Bearer $newAcessTokens"},
-    );
-    return dio.request<dynamic>(requestOptions.path,
-        data: requestOptions.data,
-        queryParameters: requestOptions.queryParameters,
-        options: options);
   }
 }
