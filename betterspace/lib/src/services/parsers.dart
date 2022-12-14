@@ -17,10 +17,16 @@ String positionRequestFormatter(
 //list iterator and filter
 //office list iterator
 OfficeModels? officeModelFilterByOfficeId(
-    List<OfficeModels> listOfModels, String requestedOfficeId) {
+    {required List<OfficeModels> listOfModels,
+    required String requestedOfficeId}) {
   OfficeModels? tempModels;
+  print("coba parse");
   listOfModels.forEach((element) {
     if (element.officeID == requestedOfficeId) {
+      print("parse berhasil");
+      print("requested id = " + requestedOfficeId);
+      print("get target id " + element.officeID);
+      print(element.officeLocation.city);
       tempModels = element;
     }
   });

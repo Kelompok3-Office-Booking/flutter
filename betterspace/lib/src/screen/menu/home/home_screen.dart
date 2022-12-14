@@ -181,7 +181,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<NavigasiViewModel>()
                                   .navigasiToDetailSpace(
                                     context: context,
-                                    officeId: value.listOfOfficeRoom[index].officeID,
+                                    officeId: value
+                                        .listOfCoworkingSpace[index].officeID,
                                   );
                             },
                             officeImage: value
@@ -336,7 +337,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<NavigasiViewModel>()
                                   .navigasiToDetailSpace(
                                     context: context,
-                                    officeId: value.listOfOfficeRoom[index].officeID,
+                                    officeId:
+                                        value.listOfMeetingRoom[index].officeID,
                                   );
                             },
                             officeImage:
@@ -423,7 +425,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<NavigasiViewModel>()
                                   .navigasiToDetailSpace(
                                     context: context,
-                                    officeId: value.listOfOfficeRoom[index].officeID,
+                                    officeId: value
+                                        .listOfOfficeByRecommendation[index]
+                                        .officeID,
                                   );
                             },
                             officeImage: value
