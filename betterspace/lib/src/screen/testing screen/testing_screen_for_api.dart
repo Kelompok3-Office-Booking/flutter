@@ -397,7 +397,9 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                               itemBuilder: ((context, index) {
                                 final dataChunks = providerOfficeListen
                                     .listOfOfficeByNearestPosition[index];
-                                return Text(dataChunks.officeLocation.city,
+                                return Text(
+                                    dataChunks.officeLocation.officeLatitude
+                                        .toString(),
                                     style: TextStyle(fontSize: 10));
                               }));
                         } else {

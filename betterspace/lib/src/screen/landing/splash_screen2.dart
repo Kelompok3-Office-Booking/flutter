@@ -17,6 +17,7 @@ class _SplashScreenTwoState extends State<SplashScreenTwo> {
     super.initState();
     final providerClient = Provider.of<LoginViewmodels>(context, listen: false);
     if (providerClient.isUserExist == true) {
+      providerClient.getProfile();
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
         Provider.of<NavigasiViewModel>(context, listen: false)
             .navigasiToMenuScreen(context);
