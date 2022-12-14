@@ -10,7 +10,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PaymentMetodScreen extends StatelessWidget {
-  const PaymentMetodScreen({Key? key}) : super(key: key);
+  final int officeId;
+
+  const PaymentMetodScreen({Key? key, required this.officeId})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -141,14 +144,15 @@ class PaymentMetodScreen extends StatelessWidget {
                         height: AdaptSize.screenWidth / 1000 * 800,
                         width: double.infinity,
                         child: ListView.builder(
-                          physics: const NeverScrollableScrollPhysics(),
+                            physics: const NeverScrollableScrollPhysics(),
                             itemCount: transactionsMetod.itemTransaction.length,
                             itemBuilder: (context, index) {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Row(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Image.asset(
@@ -167,8 +171,7 @@ class PaymentMetodScreen extends StatelessWidget {
                                             .textTheme
                                             .bodyText2!
                                             .copyWith(
-                                              fontSize:
-                                                  AdaptSize.pixel14,
+                                              fontSize: AdaptSize.pixel14,
                                               color: MyColor.neutral100,
                                             ),
                                       ),
@@ -203,11 +206,16 @@ class PaymentMetodScreen extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(height: AdaptSize.pixel30,),
+              SizedBox(
+                height: AdaptSize.pixel30,
+              ),
 
               buttonWidget(
                 onPressed: () {
-                  context.read<NavigasiViewModel>().navigasiToPaymentDetail(context);
+                  context.read<NavigasiViewModel>().navigasiToPaymentDetail(
+                        context,
+                        officeId,
+                      );
                 },
                 sizeWidth: double.infinity,
                 sizeheight: AdaptSize.screenHeight / 14,

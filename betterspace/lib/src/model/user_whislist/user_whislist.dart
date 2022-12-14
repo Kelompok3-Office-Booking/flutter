@@ -1,6 +1,6 @@
 class UserWhislistModel {
   late int? officeId;
-  late int? officeRanting;
+  late double? officeRanting;
   late String? officeImage;
   late String? officeType;
   late String? officeName;

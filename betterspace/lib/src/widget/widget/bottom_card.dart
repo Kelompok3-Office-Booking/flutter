@@ -13,9 +13,6 @@ Widget partialRoundedCard({
   double? elevations,
 }) {
   return Container(
-    height: AdaptSize.screenHeight * .09,
-
-    /// update 13 11 22 menambah ukuran
     decoration: BoxDecoration(
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(cardTopLeftRadius ?? 0),
