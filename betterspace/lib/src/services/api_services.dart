@@ -99,4 +99,66 @@ class UserService {
       options: Options(headers: {"Authorization": "Bearer " + accessToken}),
     );
   }
+
+  Future<Response> fetchCoworkingSpace({required String accessToken}) async {
+    return _dio.get(
+      constantValue().getCoworkingSpaceOffice,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> fetchMeetingRoom({required String accessToken}) async {
+    return _dio.get(
+      constantValue().getMeetingRoomOffice,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> fetchOfficeRoom({required String accessToken}) async {
+    return _dio.get(
+      constantValue().getOfficeRoom,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> fetchOfficeByRecommendation(
+      {required String accessToken}) async {
+    return _dio.get(
+      constantValue().getOfficeDataByRecommendation,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> fetchOfficeByCity(
+      {required String accessToken, required String cityName}) async {
+    return _dio.get(
+      constantValue().getOfficeDataByCityBaseUrl + cityName,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> fetchOfficeByRate(
+      {required String accessToken, required String officeRate}) async {
+    return _dio.get(
+      constantValue().getOfficeByRatingBaseUrl + officeRate,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> fetchOfficeByTitle(
+      {required String accessToken, required String officeTitle}) async {
+    return _dio.get(
+      constantValue().getOfficeByTitleBaseUrl + officeTitle,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> fetchNearestOffice(
+      {required String accessToken,
+      required String formattedLocationRequest}) async {
+    return _dio.get(
+      constantValue().getNearestOfficeBaseUrl + formattedLocationRequest,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
 }
