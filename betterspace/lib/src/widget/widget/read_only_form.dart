@@ -12,6 +12,7 @@ Widget readOnlyWidget({
   Function()? onTap,
   Widget? label,
   TextStyle? textStyle,
+  FormFieldValidator<String?>? validator,
   TextInputAction? textInputAction,
 }) {
   return TextFormField(
@@ -19,6 +20,7 @@ Widget readOnlyWidget({
     controller: controller,
     readOnly: true,
     onTap: onTap,
+    validator: validator,
     decoration: InputDecoration(
       label: label,
       hintText: hint,
@@ -31,6 +33,12 @@ Widget readOnlyWidget({
           color: MyColor.redColor,
         ),
         borderRadius: BorderRadius.circular(errBorderRadius!),
+      ),
+      focusedErrorBorder: OutlineInputBorder(
+        borderSide: BorderSide(
+          color: MyColor.redColor,
+        ),
+        borderRadius: BorderRadius.circular(errBorderRadius),
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(

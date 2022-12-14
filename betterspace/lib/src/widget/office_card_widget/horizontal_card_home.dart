@@ -1,13 +1,16 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-Widget recomenSpaces({
+Widget horizontalCardHome({
   context,
   required Function() onTap,
-  required ImageProvider<Object> officeImage,
+  required String officeImage,
   required String officeName,
   required String officeLocation,
   required String officeStarRanting,
@@ -20,7 +23,7 @@ Widget recomenSpaces({
   return InkWell(
     onTap: onTap,
     child: Container(
-      height: AdaptSize.screenHeight * .16,
+      height: AdaptSize.screenWidth / 1000 * 360,
       width: double.infinity,
       margin: EdgeInsets.only(
         bottom: AdaptSize.screenHeight * .008,
@@ -40,65 +43,69 @@ Widget recomenSpaces({
       child: Row(
         children: [
           /// space image
-          Flexible(
-            fit: FlexFit.loose,
-            child: Stack(
-              children: [
-                Container(
+          Stack(
+            children: [
+              CachedNetworkImage(
+                imageUrl: officeImage,
+                imageBuilder: (context, imageProvider) => Container(
                   width: AdaptSize.screenWidth * .36,
                   decoration: BoxDecoration(
-                    color: Colors.green,
                     borderRadius: BorderRadius.circular(16),
                     image: DecorationImage(
                       fit: BoxFit.cover,
-                      image: officeImage,
+                      image: imageProvider,
                     ),
                   ),
                 ),
-                Positioned(
-                  left: 10,
-                  top: 8,
-                  child: Stack(
-                    children: [
-                      /// ranting
-                      Container(
-                        height: AdaptSize.screenHeight * .035,
-                        width: AdaptSize.screenHeight * .068,
-                        alignment: Alignment.center,
-                        padding: EdgeInsets.only(
-                            left: AdaptSize.screenHeight * .005,
-                            right: AdaptSize.screenHeight * .005),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(40),
-                          color: MyColor.grayLightColor.withOpacity(.6),
-                        ),
-                        child: Row(
-                          mainAxisAlignment:
-                          MainAxisAlignment.spaceEvenly,
-                          children: [
-                            Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                              size: AdaptSize.screenHeight * 0.025,
-                            ),
-                            Text(
-                              officeStarRanting,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText2!
-                                  .copyWith(
-                                  color: MyColor.whiteColor,
-                                  fontSize: AdaptSize.screenHeight *
-                                      0.017),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
+                placeholder: (context, url) => shimmerLoading(
+                  child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
                 ),
-              ],
-            ),
+                errorWidget: (context, url, error) =>
+                    CardShimmerHomeLoading.horizontalFailedShimmerHome,
+              ),
+              Positioned(
+                left: 10,
+                top: 8,
+                child: Stack(
+                  children: [
+                    /// ranting
+                    Container(
+                      height: AdaptSize.screenWidth / 1000 * 70,
+                      width: AdaptSize.screenWidth / 1000 * 150,
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(
+                          left: AdaptSize.screenHeight * .005,
+                          right: AdaptSize.screenHeight * .005),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(40),
+                        color: MyColor.grayLightColor.withOpacity(.6),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Icon(
+                            Icons.star,
+                            color: Colors.amber,
+                            size: AdaptSize.pixel18,
+                          ),
+                          Text(
+                            officeStarRanting,
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText2!
+                                .copyWith(
+                                    color: MyColor.whiteColor,
+                                    fontSize: AdaptSize.pixel14),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           ),
 
           /// jarak samping
@@ -108,7 +115,7 @@ Widget recomenSpaces({
 
           /// keterangan
           Flexible(
-            fit: FlexFit.tight,
+            fit: FlexFit.loose,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -117,9 +124,8 @@ Widget recomenSpaces({
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
-                      .copyWith(
-                      fontSize: AdaptSize.screenHeight * .017),
-                  maxLines: 2,
+                      .copyWith(fontSize: AdaptSize.pixel16),
+                  maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
 
@@ -134,8 +140,9 @@ Widget recomenSpaces({
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2!
-                      .copyWith(
-                      fontSize: AdaptSize.screenHeight * .014),
+                      .copyWith(fontSize: AdaptSize.pixel14),
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                 ),
 
                 /// jarak bawah
@@ -150,7 +157,7 @@ Widget recomenSpaces({
                       /// icon lokasi
                       Icon(
                         Icons.location_on_outlined,
-                        size: AdaptSize.screenHeight * .025,
+                        size: AdaptSize.pixel18,
                       ),
 
                       /// keterangan lokasi
@@ -159,9 +166,7 @@ Widget recomenSpaces({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(
-                            fontSize:
-                            AdaptSize.screenHeight * .014),
+                            .copyWith(fontSize: AdaptSize.pixel12),
                       ),
 
                       SizedBox(
@@ -171,7 +176,7 @@ Widget recomenSpaces({
                       /// total person asset
                       SvgPicture.asset(
                         'assets/svg_assets/available.svg',
-                        height: AdaptSize.screenHeight * .025,
+                        height: AdaptSize.pixel18,
                       ),
 
                       const SizedBox(
@@ -184,9 +189,7 @@ Widget recomenSpaces({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(
-                            fontSize:
-                            AdaptSize.screenHeight * .014),
+                            .copyWith(fontSize: AdaptSize.pixel12),
                       ),
 
                       SizedBox(
@@ -196,7 +199,7 @@ Widget recomenSpaces({
                       /// icon penggaris
                       SvgPicture.asset(
                         'assets/svg_assets/ruler.svg',
-                        height: AdaptSize.screenHeight * .025,
+                        height: AdaptSize.pixel18,
                       ),
 
                       const SizedBox(
@@ -209,9 +212,7 @@ Widget recomenSpaces({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(
-                            fontSize:
-                            AdaptSize.screenHeight * .014),
+                            .copyWith(fontSize: AdaptSize.pixel12),
                       ),
                     ],
                   ),
@@ -223,25 +224,19 @@ Widget recomenSpaces({
                   children: [
                     Text(
                       NumberFormat.currency(
-                          locale: 'id',
-                          symbol: 'Rp ',
-                          decimalDigits: 0)
+                              locale: 'id', symbol: 'Rp ', decimalDigits: 0)
                           .format(officePricing),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(
-                        color: MyColor.darkBlueColor,
-                        fontSize: AdaptSize.screenHeight * .016,
-                      ),
+                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                            color: MyColor.darkBlueColor,
+                            fontSize: AdaptSize.pixel15,
+                          ),
                     ),
                     Text(
                       hours,
                       style: Theme.of(context)
                           .textTheme
                           .bodyText2!
-                          .copyWith(
-                          fontSize: AdaptSize.screenHeight * .011),
+                          .copyWith(fontSize: AdaptSize.pixel10),
                     ),
                   ],
                 ),

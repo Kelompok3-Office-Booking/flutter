@@ -39,7 +39,7 @@ class SuccessPaymentScreen extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .headline6!
-                    .copyWith(fontSize: AdaptSize.screenHeight * .02),
+                    .copyWith(fontSize: AdaptSize.pixel20),
               ),
 
               SizedBox(
@@ -53,8 +53,8 @@ class SuccessPaymentScreen extends StatelessWidget {
                 ),
                 child: Text(
                   'Open the Booking history to see details of the transaction status',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                        fontSize: AdaptSize.screenHeight * .014,
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        fontSize: AdaptSize.pixel14,
                         color: MyColor.neutral200,
                       ),
                 ),
@@ -76,8 +76,7 @@ class SuccessPaymentScreen extends StatelessWidget {
                 child: Text(
                   'See Detail Order',
                   style: Theme.of(context).textTheme.button!.copyWith(
-                      color: MyColor.neutral900,
-                      fontSize: AdaptSize.screenHeight * .014),
+                      color: MyColor.neutral900, fontSize: AdaptSize.pixel14),
                 ),
               ),
 
@@ -87,7 +86,11 @@ class SuccessPaymentScreen extends StatelessWidget {
 
               /// button booking history
               buttonWidget(
-                onPressed: () {},
+                onPressed: () {
+                  context
+                      .read<NavigasiViewModel>()
+                      .navigasiBackToBookingHistory(context);
+                },
                 sizeheight: AdaptSize.screenHeight / 14,
                 sizeWidth: double.infinity,
                 backgroundColor: MyColor.neutral900,
@@ -99,7 +102,7 @@ class SuccessPaymentScreen extends StatelessWidget {
                   'Booking History',
                   style: Theme.of(context).textTheme.button!.copyWith(
                         color: MyColor.secondary400,
-                        fontSize: AdaptSize.screenHeight * .014,
+                        fontSize: AdaptSize.pixel14,
                       ),
                 ),
               ),

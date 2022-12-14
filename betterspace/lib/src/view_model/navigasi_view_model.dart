@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
-import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
+import 'package:betterspace/src/screen/menu/account/setting_item_screen/term_condition_screen.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/payment_metod_screen.dart';
 import 'package:betterspace/src/screen/menu/home/filter_search_screen.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
@@ -10,9 +11,9 @@ import 'package:betterspace/src/screen/menu/transaksi/checkout_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_detail_screen.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/success_payment_screen.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/office_detail_screen.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/payment_detail_screen.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/success_payment_screen.dart';
 import 'package:betterspace/src/widget/widget/google_maps.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -45,19 +46,19 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi register ke login screen
-  void navigasiToLoginScreen(BuildContext context) {
+  void navigasiToRegisterScreen(BuildContext context) {
     Navigator.of(context).push(
       CupertinoPageRoute(
-        builder: (context) => const LoginScreen(),
+        builder: (context) => const RegisterScreen(),
       ),
     );
   }
 
   /// navigasi onboarding ke register screen
-  void navigasiToRegisterScreen(BuildContext context) {
+  void navigasiToLoginScreen(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
         CupertinoPageRoute(
-          builder: (context) => const RegisterScreen(),
+          builder: (context) => const LoginScreen(),
         ),
         (route) => false);
   }
@@ -67,7 +68,7 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondAnimation) =>
-            const TermsAndConditionViews(),
+            const TermConditionScreen(),
         transitionDuration: const Duration(milliseconds: 1200),
         transitionsBuilder: (context, animation, secondAnimation, child) {
           const begin = Offset(0.0, 1.0);
@@ -147,7 +148,7 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.of(context).pushAndRemoveUntil(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondAnimation) =>
-              const RegisterScreen(),
+              const LoginScreen(),
           transitionsBuilder: (context, animation, secondAnimation, child) =>
               FadeTransition(
             opacity: animation,
@@ -164,7 +165,7 @@ class NavigasiViewModel with ChangeNotifier {
         CupertinoPageRoute(
           //change the target widget here
 
-          builder: (context) => TestingScreenAPI(),
+          builder: (context) => const TestingScreenAPI(),
         ),
         (route) => false);
   }
@@ -185,11 +186,13 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi open google maps
-  void navigasiToPaymentDetail(context) {
+  void navigasiToPaymentDetail(context, int officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => const PaymentDetailScreen(),
+        builder: (context) => PaymentDetailScreen(
+          officeId: officeId,
+        ),
       ),
     );
   }
@@ -250,9 +253,10 @@ class NavigasiViewModel with ChangeNotifier {
   /// navigasi back dari succes payment screen
   Future<bool> navigasiBackToMenu(BuildContext context) async {
     Navigator.pushReplacement(
-        context,
-        CupertinoDialogRoute(
-            builder: (context) => const MenuScreen(), context: context));
+      context,
+      CupertinoDialogRoute(
+          builder: (context) => const MenuScreen(), context: context),
+    );
     notifyListeners();
     return Future(() => true);
   }
@@ -269,11 +273,44 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi to checkout screen
-  void navigasiToCheckOut(BuildContext context) {
+  void navigasiToCheckOut(BuildContext context, int officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => const CheckoutScreen(),
+        builder: (context) => CheckoutScreen(
+          officeId: officeId,
+        ),
+      ),
+    );
+  }
+
+  /// navigasi dari sukses screen
+  void navigasiBackToBookingHistory(BuildContext context) {
+    Navigator.of(context).pushAndRemoveUntil(
+        PageRouteBuilder(
+          pageBuilder: (context, animation, secondAnimation) =>
+              const MenuScreen(
+            currentIndex: 1,
+          ),
+          transitionsBuilder: (context, animation, secondAnimation, child) =>
+              FadeTransition(
+            opacity: animation,
+            child: child,
+          ),
+        ),
+        (route) => false);
+
+    notifyListeners();
+  }
+
+  /// navigasi to payment method
+  void navigasiToPaymentMetod(BuildContext context, int officeId) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => PaymentMetodScreen(
+          officeId: officeId,
+        ),
       ),
     );
   }

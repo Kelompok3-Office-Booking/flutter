@@ -3,8 +3,8 @@ import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
-import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -15,29 +15,18 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final settingProvider =
         Provider.of<AccountViewModel>(context, listen: false);
-    final navigasiProvider = Provider.of<NavigasiViewModel>(context,listen: false);
+    final navigasiProvider =
+        Provider.of<NavigasiViewModel>(context, listen: false);
 
     AdaptSize.size(context: context);
     return Scaffold(
-      appBar: transparentAppbarWidget(
-        context: context,
-        titles: Text(
-          'Setting',
-          style: Theme.of(context).textTheme.headline6!.copyWith(
-                fontSize: AdaptSize.pixel16,
-              ),
-        ),
-        titleSpacer: AdaptSize.pixel16,
-        leadingIcon: IconButton(
-          onPressed: () {
-            navigasiProvider.navigasiPop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: MyColor.darkColor,
-            size: AdaptSize.pixel16,
-          ),
-        ),
+      appBar: defaultAppbarWidget(
+        contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        isCenterTitle: false,
+        titles: 'Setting',
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -63,14 +52,14 @@ class SettingScreen extends StatelessWidget {
                     itemCount: settingProvider.itemSetting1.length,
                     itemBuilder: (context, item) {
                       return itemSettings(
-                        context: context,
+                          context: context,
                           onTap: () {
                             if (settingProvider.itemSetting1[item][2] == 3) {
                               CustomDialog.doubleActionDialog(
                                 context: context,
-                                title: 'Are you sure want to delete your account ?',
-                                imageAsset:
-                                'assets/svg_assets/delete.svg',
+                                title:
+                                    'Are you sure want to delete your account ?',
+                                imageAsset: 'assets/svg_assets/delete.svg',
                                 onTap1: () {
                                   navigasiProvider.navigasiLogout(context);
                                 },
@@ -93,6 +82,10 @@ class SettingScreen extends StatelessWidget {
               ),
             ),
 
+            SizedBox(
+              height: AdaptSize.pixel10,
+            ),
+
             /// setting item 2
             itemContainer(
               child: MediaQuery.removePadding(
@@ -105,7 +98,7 @@ class SettingScreen extends StatelessWidget {
                     itemCount: settingProvider.itemSetting2.length,
                     itemBuilder: (context, item) {
                       return itemSettings(
-                        context: context,
+                          context: context,
                           onTap: () {
                             context
                                 .read<NavigasiViewModel>()
@@ -165,14 +158,14 @@ class SettingScreen extends StatelessWidget {
           onTap: onTap,
           child: Row(
             children: [
-              Icon(icon, size: AdaptSize.screenHeight * .024),
+              Icon(icon, size: AdaptSize.pixel22),
               SizedBox(
                 width: AdaptSize.screenWidth * .016,
               ),
               Text(
                 text,
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      fontSize: AdaptSize.screenHeight * .014,
+                      fontSize: AdaptSize.pixel14,
                     ),
               ),
               const Spacer(),

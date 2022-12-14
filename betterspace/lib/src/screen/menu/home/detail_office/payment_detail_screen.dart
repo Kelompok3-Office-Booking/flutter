@@ -1,21 +1,28 @@
 import 'package:barcode_widget/barcode_widget.dart';
+import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/transaction_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/voucer_promo_widget/text_table_content.dart';
+import 'package:betterspace/src/widget/office_card_widget/office_type_card.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/line_dash_widget.dart';
-import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class PaymentDetailScreen extends StatefulWidget {
-  const PaymentDetailScreen({Key? key}) : super(key: key);
+  final int officeId;
+
+  const PaymentDetailScreen({Key? key, required this.officeId})
+      : super(key: key);
 
   @override
   State<PaymentDetailScreen> createState() => _PaymentDetailScreenState();
@@ -34,14 +41,17 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   Widget build(BuildContext context) {
     final transactionProvider =
         Provider.of<TransactionViewModel>(context, listen: false);
+    final dummyDataProviders =
+        Provider.of<OfficeDummyDataViewModels>(context, listen: false);
+    final listOfDummyOffice = dummyDataProviders.listOfOfficeModels;
     return Scaffold(
-      appBar: transparentAppbarWidget(
-        context: context,
-        titles: Text(
-          'Payment Detail',
-          style: Theme.of(context).textTheme.headline6,
-        ),
-      ),
+      appBar: defaultAppbarWidget(
+          contexts: context,
+          leadIconFunction: () {
+            context.read<NavigasiViewModel>().navigasiPop(context);
+          },
+          isCenterTitle: false,
+          titles: 'Payment Detail'),
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
         padding: EdgeInsets.only(
@@ -61,7 +71,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
-                      .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                      .copyWith(fontSize: AdaptSize.pixel16),
                 ),
                 const Spacer(),
 
@@ -91,7 +101,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                               .bodyText1!
                               .copyWith(
                                   color: MyColor.danger300,
-                                  fontSize: AdaptSize.screenHeight * .016),
+                                  fontSize: AdaptSize.pixel16),
                         ),
                       );
                     }),
@@ -102,8 +112,35 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
               height: AdaptSize.screenHeight * .016,
             ),
 
-            /// header content
-            headerContent(),
+            // /// header content
+            // headerContent(),
+            CachedNetworkImage(
+              imageUrl: listOfDummyOffice[widget.officeId].officeLeadImage,
+              imageBuilder: (context, imageProvider) => officeTypeItemCards(
+                context: context,
+                officeImage: imageProvider,
+                officeName: listOfDummyOffice[widget.officeId].officeName,
+                officeLocation:
+                    '${listOfDummyOffice[widget.officeId].officeLocation.city}, ${listOfDummyOffice[widget.officeId].officeLocation.district}',
+                officeStarRanting: listOfDummyOffice[widget.officeId]
+                    .officeStarRating
+                    .toString(),
+                officeApproxDistance: listOfDummyOffice[widget.officeId]
+                    .officeApproxDistance
+                    .toString(),
+                officePersonCapacity: listOfDummyOffice[widget.officeId]
+                    .officePersonCapacity
+                    .toString(),
+                officeArea:
+                    listOfDummyOffice[widget.officeId].officeArea.toString(),
+                officeType: listOfDummyOffice[widget.officeId].officeType,
+              ),
+              placeholder: (context, url) => shimmerLoading(
+                child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
+              ),
+              errorWidget: (context, url, error) =>
+                  CardShimmerHomeLoading.horizontalFailedShimmerHome,
+            ),
 
             SizedBox(
               height: AdaptSize.screenHeight * .016,
@@ -127,7 +164,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
-                      .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                      .copyWith(fontSize: AdaptSize.pixel14),
                 ),
               ],
             ),
@@ -135,8 +172,8 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
             /// payment / qr code
             Center(
               child: Container(
-                height: AdaptSize.screenHeight * .2,
-                width: AdaptSize.screenHeight * .2,
+                height: AdaptSize.screenWidth / 500 * 200,
+                width: AdaptSize.screenWidth / 500 * 200,
                 margin: EdgeInsets.only(
                   top: AdaptSize.screenHeight * .016,
                   bottom: AdaptSize.screenHeight * .016,
@@ -177,7 +214,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                   style: Theme.of(context)
                       .textTheme
                       .subtitle1!
-                      .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                      .copyWith(fontSize: AdaptSize.pixel14),
                 ),
                 Text(
                   NumberFormat.currency(
@@ -185,7 +222,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                       .format(100000),
                   style: Theme.of(context).textTheme.headline6!.copyWith(
                         color: MyColor.darkBlueColor,
-                        fontSize: AdaptSize.screenHeight * .016,
+                        fontSize: AdaptSize.pixel14,
                       ),
                 ),
               ],
@@ -209,7 +246,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
             /// list reservation detail
             SizedBox(
-              height: AdaptSize.screenHeight * .11,
+              height: AdaptSize.screenWidth / 1000 * 280,
               width: double.infinity,
               child: ListView.builder(
                   shrinkWrap: true,
@@ -223,7 +260,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                         children: [
                           Icon(
                             Icons.account_circle,
-                            size: AdaptSize.screenHeight * .024,
+                            size: AdaptSize.pixel22,
                           ),
                           SizedBox(
                             width: AdaptSize.screenWidth * .016,
@@ -233,8 +270,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyText1!
-                                .copyWith(
-                                    fontSize: AdaptSize.screenHeight * .016),
+                                .copyWith(fontSize: AdaptSize.pixel14),
                           ),
                         ],
                       ),
@@ -258,14 +294,19 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text('Total Price'),
+                Text(
+                  'Total Price',
+                  style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                        color: MyColor.darkBlueColor,
+                        fontSize: AdaptSize.pixel14,
+                      ),
+                ),
                 Text(
                   NumberFormat.currency(
                           locale: 'id', symbol: 'Rp ', decimalDigits: 0)
                       .format(100000),
                   style: Theme.of(context).textTheme.headline6!.copyWith(
-                        color: MyColor.darkBlueColor,
-                        fontSize: AdaptSize.screenHeight * .016,
+                        fontSize: AdaptSize.pixel14,
                       ),
                 ),
               ],
@@ -293,7 +334,13 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Total Price'),
+                          Text(
+                            'Total Price',
+                            style:
+                                Theme.of(context).textTheme.bodyText1!.copyWith(
+                                      fontSize: AdaptSize.pixel14,
+                                    ),
+                          ),
                           Text(
                             NumberFormat.currency(
                                     locale: 'id',
@@ -303,7 +350,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.darkBlueColor,
-                                      fontSize: AdaptSize.screenHeight * .016,
+                                      fontSize: AdaptSize.pixel14,
                                     ),
                           ),
                         ],
@@ -328,7 +375,13 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text('Total Price'),
+                          Text(
+                            'Total Price',
+                            style:
+                                Theme.of(context).textTheme.bodyText1!.copyWith(
+                                      fontSize: AdaptSize.pixel14,
+                                    ),
+                          ),
                           Text(
                             NumberFormat.currency(
                                     locale: 'id',
@@ -338,7 +391,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.darkBlueColor,
-                                      fontSize: AdaptSize.screenHeight * .016,
+                                      fontSize: AdaptSize.pixel14,
                                     ),
                           ),
                         ],
@@ -392,6 +445,10 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                       text4: 'Input Your PIN',
                       text5: 'Done',
                       t5: true,
+                      contentTextStyle:
+                          Theme.of(context).textTheme.bodyText1!.copyWith(
+                                fontSize: AdaptSize.pixel14,
+                              ),
                       withDivider: false,
                       bottomDivider: true,
                     );
@@ -404,7 +461,9 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
             /// button have already payment
             buttonWidget(
               onPressed: () {
-                context.read<NavigasiViewModel>().navigasiSuccessPayment(context);
+                context
+                    .read<NavigasiViewModel>()
+                    .navigasiSuccessPayment(context);
               },
               backgroundColor: MyColor.secondary400,
               sizeheight: AdaptSize.screenHeight / 14,
@@ -412,10 +471,8 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
               sizeWidth: double.infinity,
               child: Text(
                 'I have already paid',
-                style: Theme.of(context)
-                    .textTheme
-                    .button!
-                    .copyWith(color: MyColor.neutral900),
+                style: Theme.of(context).textTheme.button!.copyWith(
+                    color: MyColor.neutral900, fontSize: AdaptSize.pixel14),
               ),
             ),
 
@@ -426,13 +483,13 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
             /// button need help
             Center(
               child: GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  context.read<TransactionViewModel>().launchWA();
+                },
                 child: Text(
                   'Need Help ?',
-                  style: Theme.of(context)
-                      .textTheme
-                      .button!
-                      .copyWith(color: MyColor.neutral500),
+                  style: Theme.of(context).textTheme.button!.copyWith(
+                      color: MyColor.neutral500, fontSize: AdaptSize.pixel14),
                 ),
               ),
             ),
@@ -446,173 +503,6 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
     );
   }
 
-  /// split header content
-  Widget headerContent() {
-    return Container(
-      height: AdaptSize.screenHeight * .16,
-      width: double.infinity,
-      margin: EdgeInsets.only(
-        bottom: AdaptSize.screenHeight * .008,
-      ),
-      padding: const EdgeInsets.all(6),
-      decoration: BoxDecoration(
-        color: MyColor.whiteColor,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            offset: const Offset(1, 3),
-            color: MyColor.grayLightColor.withOpacity(.4),
-            blurRadius: 3,
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          /// space image
-          Flexible(
-            fit: FlexFit.loose,
-            child: Container(
-              width: AdaptSize.screenWidth * .36,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                image: const DecorationImage(
-                  fit: BoxFit.cover,
-                  image: AssetImage(
-                    'assets/image_assets/space_image/space1.png',
-                  ),
-                ),
-              ),
-            ),
-          ),
-
-          /// jarak samping
-          SizedBox(
-            width: AdaptSize.screenWidth * .008,
-          ),
-
-          /// keterangan
-          Flexible(
-            fit: FlexFit.tight,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Working Space Johar',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6!
-                      .copyWith(fontSize: AdaptSize.screenHeight * .017),
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                ),
-
-                /// jarak bawah
-                SizedBox(
-                  height: AdaptSize.screenHeight * .008,
-                ),
-
-                /// lokasi
-                const Text('Tebet, South Jakarta'),
-
-                /// jarak bawah
-                SizedBox(
-                  height: AdaptSize.screenHeight * .008,
-                ),
-
-                /// icon keterangan
-                Flexible(
-                  child: Row(
-                    children: [
-                      /// icon lokasi
-                      Icon(
-                        Icons.location_on_outlined,
-                        size: AdaptSize.screenHeight * .025,
-                      ),
-
-                      /// keterangan lokasi
-                      Text(
-                        '50m',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: AdaptSize.screenHeight * .014),
-                      ),
-
-                      SizedBox(
-                        width: AdaptSize.screenHeight * .012,
-                      ),
-
-                      /// total person asset
-                      SvgPicture.asset(
-                        'assets/svg_assets/available.svg',
-                        height: AdaptSize.screenHeight * .025,
-                      ),
-
-                      const SizedBox(
-                        width: 2,
-                      ),
-
-                      /// total person
-                      Text(
-                        '160',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: AdaptSize.screenHeight * .014),
-                      ),
-
-                      SizedBox(
-                        width: AdaptSize.screenHeight * .012,
-                      ),
-
-                      /// icon penggaris
-                      SvgPicture.asset(
-                        'assets/svg_assets/ruler.svg',
-                        height: AdaptSize.screenHeight * .025,
-                      ),
-
-                      const SizedBox(
-                        width: 2,
-                      ),
-
-                      /// jarak lokasi
-                      Text(
-                        '10m2',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: AdaptSize.screenHeight * .014),
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(),
-
-                Card(
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
-                    side: BorderSide(
-                      color: MyColor.primary700,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(2.5),
-                    child: Text(
-                      'Kategori',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          color: MyColor.primary700,
-                          fontSize: AdaptSize.screenHeight * .014),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   /// content title
   Widget headlineTitle(String title) {
     return Text(
@@ -620,7 +510,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
       style: Theme.of(context)
           .textTheme
           .headline6!
-          .copyWith(fontSize: AdaptSize.screenHeight * .016),
+          .copyWith(fontSize: AdaptSize.pixel16),
     );
   }
 }

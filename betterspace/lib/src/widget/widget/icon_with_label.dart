@@ -1,8 +1,6 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 
 class IconWithLabel {
   Row asrow({
@@ -23,7 +21,7 @@ class IconWithLabel {
           padding: EdgeInsets.only(right: spacer ?? 2),
           child: Icon(
             usedIcon,
-            size: iconSize ?? AdaptSize.screenHeight * .024,
+            size: iconSize ?? AdaptSize.pixel20,
             color: iconColor ?? MyColor.primary700,
           ),
         ),
@@ -32,7 +30,7 @@ class IconWithLabel {
           style: textStyles ??
               (Theme.of(contexts).textTheme.bodyMedium!.copyWith(
                     color: fontColor ?? MyColor.neutral100,
-                    fontSize: fontSizes ?? AdaptSize.screenHeight / 1000 * 14,
+                    fontSize: fontSizes ?? AdaptSize.pixel14,
                   )),
         ),
       ],

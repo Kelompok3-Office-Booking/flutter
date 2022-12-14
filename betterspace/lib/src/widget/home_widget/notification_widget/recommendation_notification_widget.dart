@@ -24,13 +24,13 @@ Widget recommendationNotificationWidget(BuildContext context) {
               children: [
                 /// image
                 SizedBox(
-                  height: AdaptSize.screenHeight * .07,
-                  width: AdaptSize.screenHeight * .08,
+                  height: AdaptSize.screenWidth / 1000 * 180,
+                  width: AdaptSize.screenWidth / 1000 * 180,
                   child: Stack(
                     children: [
                       Container(
-                        height: AdaptSize.screenHeight * .065,
-                        width: AdaptSize.screenHeight * .065,
+                        height: AdaptSize.screenWidth / 1000 * 170,
+                        width: AdaptSize.screenWidth / 1000 * 170,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
                           image: DecorationImage(
@@ -45,8 +45,8 @@ Widget recommendationNotificationWidget(BuildContext context) {
                         bottom: 0,
                         right: 0,
                         child: Container(
-                          height: AdaptSize.screenHeight * .035,
-                          width: AdaptSize.screenHeight * .035,
+                          height: AdaptSize.screenWidth / 1000 * 85,
+                          width: AdaptSize.screenWidth / 1000 * 85,
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
@@ -71,7 +71,7 @@ Widget recommendationNotificationWidget(BuildContext context) {
                       Text(
                         recomendationNotification.title,
                         style: Theme.of(context).textTheme.headline6!.copyWith(
-                          fontSize: AdaptSize.screenHeight * 0.016,
+                          fontSize: AdaptSize.pixel16,
                         ),
                       ),
 
@@ -84,13 +84,13 @@ Widget recommendationNotificationWidget(BuildContext context) {
                         text1: recomendationNotification.description,
                         textStyle1:
                         Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontSize: AdaptSize.screenHeight * 0.014,
+                          fontSize: AdaptSize.pixel14,
                         ),
                         text2: recomendationNotification.descriptionkey,
                         textStyle2: Theme.of(context)
                             .textTheme
                             .headline6!
-                            .copyWith(fontSize: AdaptSize.screenHeight * 0.014),
+                            .copyWith(fontSize: AdaptSize.pixel14),
                       ),
 
                       SizedBox(
@@ -100,7 +100,7 @@ Widget recommendationNotificationWidget(BuildContext context) {
                       Text(
                         recomendationNotification.day,
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          fontSize: AdaptSize.screenHeight * 0.014,
+                          fontSize: AdaptSize.pixel14,
                           color: MyColor.neutral600,
                         ),
                       ),

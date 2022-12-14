@@ -1,7 +1,6 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
-import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,31 +10,20 @@ class PrivacyPolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: transparentAppbarWidget(
-        context: context,
-        titles: Text(
-          'Privacy Policy',
-          style: Theme.of(context).textTheme.headline6!.copyWith(
-                fontSize: AdaptSize.pixel16,
-              ),
-        ),
-        titleSpacer: AdaptSize.pixel16,
-        leadingIcon: IconButton(
-          onPressed: () {
-            context.read<NavigasiViewModel>().navigasiPop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: MyColor.darkColor,
-            size: AdaptSize.pixel16,
-          ),
-        ),
+      appBar: defaultAppbarWidget(
+        contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        isCenterTitle: false,
+        titles: 'Privacy Policy',
       ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
           left: AdaptSize.pixel16,
           right: AdaptSize.pixel16,
+          top: AdaptSize.pixel16,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +45,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
             ),
             SizedBox(
               height: AdaptSize.pixel10,
@@ -67,7 +55,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -75,7 +63,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
 
@@ -89,14 +77,14 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
             ),
             Text(
               'Depending on the nature of your interactions with us, some examples of personal data we may collect from you include your name, email address, phone number, gender, biometric data such as your profile picture.',
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
 
@@ -110,14 +98,14 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
             ),
             Text(
               'We generally do not collect your personal data unless (a) the data is voluntarily provided to us by you directly or through a third party who has been authorized by you to disclose your personal data to us (“your authorized representative”) after (i) You (or your authorized representative) have been informed of the purposes for which the data is collected, and (ii) you (or your authorized representative) have given written consent for the collection and use of your personal data for such purposes, or (b) the collection and use of personal data without approval permitted or required by PDPA or other laws. We will ask for your consent before collecting any additional personal data and before using your personal data for purposes that have not been notified to you (unless permitted or permitted by law).',
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
 
@@ -127,14 +115,14 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
             ),
             Text(
               'We may collect and use your personal data for any or all of the following purposes:',
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -142,7 +130,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -150,7 +138,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -158,7 +146,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -166,7 +154,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -174,7 +162,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -182,7 +170,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -190,7 +178,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -198,7 +186,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -206,7 +194,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -214,7 +202,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -222,7 +210,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -230,7 +218,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -238,7 +226,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
 
@@ -252,14 +240,14 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
             ),
             Text(
               '(a) if the disclosure is necessary to perform an obligation during or in connection with providing our Services to you;',
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -267,7 +255,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
             Text(
@@ -275,7 +263,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
 
@@ -288,7 +276,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .bodyText2!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
               textAlign: TextAlign.justify,
             ),
 
@@ -301,7 +289,7 @@ class PrivacyPolicyScreen extends StatelessWidget {
               style: Theme.of(context)
                   .textTheme
                   .headline6!
-                  .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                  .copyWith(fontSize: AdaptSize.pixel14),
             ),
 
             SizedBox(
