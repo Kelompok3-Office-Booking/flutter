@@ -1,6 +1,7 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/enums.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/all_populer.dart';
@@ -36,6 +37,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final userAccountProvider =
+        Provider.of<LoginViewmodels>(context, listen: false);
+    final userAccountProviderListen =
+        Provider.of<LoginViewmodels>(context, listen: true);
+    if (userAccountProviderListen.userModels == null) {
+      userAccountProvider.getProfile();
+    }
     return Scaffold(
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
@@ -59,7 +67,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hi Jhony',
+                          userAccountProviderListen.userModels != null &&
+                                  userAccountProviderListen
+                                          .userModels?.userProfileDetails !=
+                                      null
+                              ? "Hi " +
+                                  userAccountProviderListen
+                                      .userModels!.userProfileDetails.userName
+                              : 'Hi User',
                           style: Theme.of(context)
                               .textTheme
                               .headline6!

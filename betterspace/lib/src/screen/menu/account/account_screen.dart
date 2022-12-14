@@ -23,7 +23,7 @@ class AccountScreen extends StatelessWidget {
         Provider.of<LoginViewmodels>(context, listen: false);
     final userAccountProviderListen =
         Provider.of<LoginViewmodels>(context, listen: true);
-    if (userAccountProvider.userModels == null) {
+    if (userAccountProviderListen.userModels == null) {
       userAccountProvider.getProfile();
     }
 
@@ -66,8 +66,9 @@ class AccountScreen extends StatelessWidget {
                           image: DecorationImage(
                             fit: BoxFit.cover,
                             image: value.userModels?.userProfileDetails
-                                        .userProfilePicture !=
-                                    ""
+                                            .userProfilePicture !=
+                                        "" &&
+                                    value.userModels != null
                                 ? NetworkImage(value
                                     .userModels!
                                     .userProfileDetails
@@ -120,7 +121,8 @@ class AccountScreen extends StatelessWidget {
 
               /// username
               Text(
-                userAccountProviderListen.userModels?.userEmail ??
+                userAccountProviderListen
+                        .userModels?.userProfileDetails.userName ??
                     'Erick Cahya',
                 style: Theme.of(context).textTheme.headline6!.copyWith(
                       fontSize: AdaptSize.pixel16,

@@ -1,48 +1,45 @@
 //do api service here
 import 'package:betterspace/src/model/user_data/user_models.dart';
+import 'package:betterspace/src/model/user_models/user_models_for_regist.dart';
 import 'package:betterspace/src/services/constant.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UserService {
+  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final _dio = Dio();
 
   UserService() {
     _dio.interceptors
         .add(InterceptorsWrapper(onRequest: (options, handler) async {
+      const secureStorage = FlutterSecureStorage();
+      String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+      if (accessTokens != null) {
+        options.headers = {"Authorization": "Bearer " + accessTokens};
+      }
       return handler.next(options); //continue
     }, onResponse: (response, handler) {
       // Do something with response data
       return handler.next(response); // continue
     }, onError: (DioError e, handler) async {
       if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
-        await refreshExpiredTokens();
+        await refreshTokenLoopSafety();
+
         return handler.resolve(await _retry(e.requestOptions));
       }
+
       return handler.next(e);
     }));
   }
 
-  Future<Response> loginUser(
-      {required String userEmail, required String userPassword, tempo}) async {
-    late Response apiResponse;
-
-    try {
-      // get token
-      Response tokenResponse = await _dio.post(
-        constantValue().userLoginEndpoint,
-        data: {
-          "email": userEmail,
-          "password": userPassword,
-        },
-      );
-      print('Auth Success: ${tokenResponse.data}');
-      apiResponse = tokenResponse;
-    } catch (e) {
-      print("error" + '$e');
-    }
-    return apiResponse;
+  Future<Response> logoutWithTokensServices(
+      {required String accessTokens}) async {
+    return _dio.post(
+      constantValue().userLogoutWithToken,
+      options: Options(headers: {"Authorization": "Bearer $accessTokens"}),
+    );
   }
 
   Future<Response> fetchProfile({required String accessTokens}) async {
@@ -52,20 +49,46 @@ class UserService {
 
   Future<void> destroyUserSession() async {
     const secureStorage = FlutterSecureStorage();
+    print("destroying this sessions");
     await secureStorage.deleteAll();
+    navigatorKey.currentState!
+        .pushNamedAndRemoveUntil('/firstPage', (route) => false);
+  }
+
+  Future<void> refreshTokenLoopSafety() async {
+    const secureStorage = FlutterSecureStorage();
+    String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
+    if (refreshToken != null) {
+      Response responses = await Dio().post(
+        constantValue().userRefreshToken,
+        options: Options(headers: {"Authorization": "Bearer " + refreshToken}),
+      );
+      if (responses.statusCode == 200 || responses.statusCode == 201) {
+        print("refreshed");
+        await secureStorage.write(
+            key: "access_tokens_bs", value: responses.data["access_token"]);
+        await secureStorage.write(
+            key: "refresh_token_bs", value: responses.data["refresh_token"]);
+      } else {
+        destroyUserSession();
+      }
+    }
   }
 
   Future<void> refreshExpiredTokens() async {
     const secureStorage = FlutterSecureStorage();
     String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
+    print("refreshtoken : " + refreshToken.toString());
+
     if (refreshToken != null) {
       try {
+        print("try refreshing");
         Response responses = await _dio.post(
           constantValue().userRefreshToken,
           options:
               Options(headers: {"Authorization": "Bearer " + refreshToken}),
         );
-        print("response");
+        print("retry");
         if (responses.statusCode == 200 || responses.statusCode == 201) {
           print("refreshed");
           await secureStorage.write(
@@ -74,31 +97,23 @@ class UserService {
               key: "refresh_token_bs", value: responses.data["refresh_token"]);
         }
       } catch (e) {
+        print("fail to refresh");
         print(e.toString());
         destroyUserSession();
       }
+    } else {
+      print("gagal refresh, session destroyed");
+      destroyUserSession();
     }
   }
 
   Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
-    const secureStorage = FlutterSecureStorage();
-    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
-    if (accessTokens != null) {
-      final options = new Options(
-          method: requestOptions.method,
-          headers: {"Authorization": "Bearer " + accessTokens});
-      return this._dio.request<dynamic>(requestOptions.path,
-          data: requestOptions.data,
-          queryParameters: requestOptions.queryParameters,
-          options: options);
-    } else {
-      final options = new Options(
-          method: requestOptions.method, headers: requestOptions.headers);
-      return this._dio.request<dynamic>(requestOptions.path,
-          data: requestOptions.data,
-          queryParameters: requestOptions.queryParameters,
-          options: options);
-    }
+    final options = new Options(
+        method: requestOptions.method, headers: requestOptions.headers);
+    return this._dio.request<dynamic>(requestOptions.path,
+        data: requestOptions.data,
+        queryParameters: requestOptions.queryParameters,
+        options: options);
   }
 
   Future<Response> fetchAllOffice({required String accessToken}) async {
@@ -175,6 +190,33 @@ class UserService {
     return _dio.get(
       constantValue().getNearestOfficeBaseUrl + formattedLocationRequest,
       options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+}
+
+class SignService {
+  Dio dioClient = Dio();
+  Future<Response> loginUser(
+      {required String userEmail, required String userPassword, tempo}) async {
+    return dioClient.post(
+      constantValue().userLoginEndpoint,
+      data: {
+        "email": userEmail,
+        "password": userPassword,
+      },
+    );
+  }
+
+  Future<Response> registerUser({required UserModelForRegist userInfo}) async {
+    return dioClient.post(
+      constantValue().userRegisterEndpoint,
+      data: {
+        "full_name": userInfo.full_name,
+        "gender": userInfo.gender,
+        "email": userInfo.email,
+        "password": userInfo.password,
+        "confirmation_password": userInfo.confirmation_password
+      },
     );
   }
 }

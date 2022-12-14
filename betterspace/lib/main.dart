@@ -30,6 +30,7 @@ class BetterSpaceApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => NavigasiViewModel()),
@@ -48,6 +49,7 @@ class BetterSpaceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => WhislistViewModel()),
       ],
       child: MaterialApp(
+        navigatorKey: navigatorKey,
         home: const SplashScreenOne(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
@@ -59,6 +61,7 @@ class BetterSpaceApp extends StatelessWidget {
         ),
         routes: {
           VoucerPromoScreen.routeName: (_) => const VoucerPromoScreen(),
+          "/firstPage": ((context) => SplashScreenOne())
         },
       ),
     );
