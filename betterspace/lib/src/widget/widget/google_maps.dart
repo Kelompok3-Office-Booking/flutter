@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
@@ -11,9 +9,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
 
 class GoogleMapsWidget extends StatefulWidget {
-  final int officeId;
+  final OfficeModels officeData;
 
-  const GoogleMapsWidget({super.key, required this.officeId});
+  const GoogleMapsWidget({super.key, required this.officeData});
 
   @override
   State<GoogleMapsWidget> createState() => _GoogleMapsWidgetState();
@@ -22,37 +20,26 @@ class GoogleMapsWidget extends StatefulWidget {
 class _GoogleMapsWidgetState extends State<GoogleMapsWidget> {
   final Completer<GoogleMapController> controllerMaps = Completer();
 
-  late String ass;
-
   @override
   void initState() {
     super.initState();
-    final dummyDataProviders =
-        Provider.of<OfficeDummyDataViewModels>(context, listen: false);
-    List<OfficeModels> listOfDummyOffice =
-        dummyDataProviders.listOfOfficeModels;
     final mapsProviders =
         Provider.of<GetLocationViewModel>(context, listen: false);
     Future.delayed(Duration.zero, () {
       /// polylines
       mapsProviders.createPolylines(
-        destinationCoordinates: const LatLng(
-          // listOfDummyOffice[widget.officeId].officeLocation.officeLatitude,
-          // listOfDummyOffice[widget.officeId].officeLocation.officeLongitude,
-          /// latlng testing
-          -6.990638,
-          110.423667,
+        destinationCoordinates: LatLng(
+          widget.officeData.officeLocation.officeLatitude,
+          widget.officeData.officeLocation.officeLongitude,
         ),
       );
 
       /// marker
       mapsProviders.addMarker(
-        // destinationLat: listOfDummyOffice[widget.officeId].officeLocation.officeLatitude,
-        // destinationLng: listOfDummyOffice[widget.officeId].officeLocation.officeLongitude,
         /// latlng testing
-        destinationLat: -6.990638,
-        destinationLng: 110.423667,
-        id: listOfDummyOffice[widget.officeId].officeName,
+        destinationLat: widget.officeData.officeLocation.officeLatitude,
+        destinationLng: widget.officeData.officeLocation.officeLongitude,
+        id: widget.officeData.officeID,
         descriptor:
             BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueCyan),
       );
@@ -61,10 +48,6 @@ class _GoogleMapsWidgetState extends State<GoogleMapsWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final dummyDataProviders =
-        Provider.of<OfficeDummyDataViewModels>(context, listen: false);
-    List<OfficeModels> listOfDummyOffice =
-        dummyDataProviders.listOfOfficeModels;
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.only(top: AdaptSize.paddingTop),
@@ -102,12 +85,16 @@ class _GoogleMapsWidgetState extends State<GoogleMapsWidget> {
                         context: context,
                         userAddress: value.address,
                         officeAddress:
-                            '${listOfDummyOffice[widget.officeId].officeLocation.city}, ${listOfDummyOffice[widget.officeId].officeLocation.district}',
-                        distance:
-                            value.calculateDistances(-6.990638, 110.423667),
+                            '${widget.officeData.officeLocation.city}, ${widget.officeData.officeLocation.district}',
+                        distance: value.calculateDistances(
+                            widget.officeData.officeLocation.officeLatitude,
+                            widget.officeData.officeLocation.officeLongitude),
                         onPressed: () {
                           value.launchGMap(
-                              posLat: -6.990638, posLng: 110.423667);
+                              posLat: widget
+                                  .officeData.officeLocation.officeLatitude,
+                              posLng: widget
+                                  .officeData.officeLocation.officeLongitude);
                         }),
                     Text(
                       'show detail',
