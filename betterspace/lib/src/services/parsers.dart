@@ -14,6 +14,19 @@ String positionRequestFormatter(
   return "lat=" + latitude + "&long=" + longitude;
 }
 
+//list iterator and filter
+//office list iterator
+OfficeModels? officeModelFilterByOfficeId(
+    List<OfficeModels> listOfModels, String requestedOfficeId) {
+  OfficeModels? tempModels;
+  listOfModels.forEach((element) {
+    if (element.officeID == requestedOfficeId) {
+      tempModels = element;
+    }
+  });
+  return tempModels;
+}
+
 //gender enums to string parser
 String genderEnumParsers(GenderEnum enumGenders) {
   return enumGenders == GenderEnum.male ? "male" : "female";
