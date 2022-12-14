@@ -84,15 +84,16 @@ class OfficeDetailScreen extends StatelessWidget {
                                     final addNewWhislist = UserWhislistModel(
                                       officeId:
                                           DateTime.now().millisecondsSinceEpoch,
-                                      officeName:
-                                          listOfDummyOffice[officeID].officeName,
-                                      officeRanting: listOfDummyOffice[officeID].officeStarRating,
+                                      officeName: listOfDummyOffice[officeID]
+                                          .officeName,
+                                      officeRanting: listOfDummyOffice[officeID]
+                                          .officeStarRating,
                                       officeImage: listOfDummyOffice[officeID]
                                           .officeLeadImage,
                                       officeLocation:
                                           '${listOfDummyOffice[officeID].officeLocation.city}, ${listOfDummyOffice[officeID].officeLocation.district}',
-                                      officeType:
-                                          listOfDummyOffice[officeID].officeType,
+                                      officeType: listOfDummyOffice[officeID]
+                                          .officeType,
                                     );
 
                                     value.addWhistlistOffice(addNewWhislist);
@@ -184,8 +185,8 @@ class OfficeDetailScreen extends StatelessWidget {
                             height: AdaptSize.screenWidth / 15,
                             decoration: BoxDecoration(
                               color: MyColor.neutral300,
-                              border:
-                                  Border.all(width: 1, color: MyColor.neutral300),
+                              border: Border.all(
+                                  width: 1, color: MyColor.neutral300),
                               borderRadius: BorderRadius.circular(42),
                             ),
                             child: Row(
@@ -259,8 +260,9 @@ class OfficeDetailScreen extends StatelessWidget {
                         IconWithLabel().asrow(
                             contexts: context,
                             usedIcon: Icons.location_on_outlined,
-                            labelText:
-                                listOfDummyOffice[officeID].officeArea.toString(),
+                            labelText: listOfDummyOffice[officeID]
+                                .officeArea
+                                .toString(),
                             spacer: AdaptSize.pixel4),
 
                         /// location 3
@@ -289,7 +291,8 @@ class OfficeDetailScreen extends StatelessWidget {
                     Text(
                       "Description",
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
+                          color: MyColor.neutral100,
+                          fontSize: AdaptSize.pixel16),
                     ),
                     SizedBox(
                       height: AdaptSize.pixel8,
@@ -334,8 +337,8 @@ class OfficeDetailScreen extends StatelessWidget {
                                 children: [
                                   /// icon
                                   Padding(
-                                    padding:
-                                        EdgeInsets.only(right: AdaptSize.pixel8),
+                                    padding: EdgeInsets.only(
+                                        right: AdaptSize.pixel8),
                                     child: Icon(
                                       CupertinoIcons
                                           .rectangle_arrow_up_right_arrow_down_left,
@@ -382,7 +385,8 @@ class OfficeDetailScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              dividerWdiget(width: double.infinity, opacity: .1),
+                              dividerWdiget(
+                                  width: double.infinity, opacity: .1),
                             ],
                           );
                         },
@@ -463,7 +467,8 @@ class OfficeDetailScreen extends StatelessWidget {
                           ],
                           image: const DecorationImage(
                             fit: BoxFit.cover,
-                            image: AssetImage('assets/image_assets/mapimage.jpg'),
+                            image:
+                                AssetImage('assets/image_assets/mapimage.jpg'),
                           ),
                         ),
                       ),
