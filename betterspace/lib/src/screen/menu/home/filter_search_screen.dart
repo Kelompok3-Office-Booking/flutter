@@ -94,12 +94,12 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                           itemCount: values.foundPlace.length,
                           itemBuilder: (context, index) => InkWell(
                             onTap: () {
-                              context
-                                  .read<NavigasiViewModel>()
-                                  .navigasiToDetailSpace(
-                                    context: context,
-                                    officeId: index,
-                                  );
+                              // context
+                              //     .read<NavigasiViewModel>()
+                              //     .navigasiToDetailSpace(
+                              //       context: context,
+                              //       officeId: index,
+                              //     );
                             },
                             splashColor: MyColor.neutral900,
                             borderRadius: BorderRadius.circular(16),
@@ -115,12 +115,12 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                                     officeTypeItemCards(
                                   context: context,
                                   onTap: () {
-                                    context
-                                        .read<NavigasiViewModel>()
-                                        .navigasiToDetailSpace(
-                                          context: context,
-                                          officeId: index,
-                                        );
+                                    // context
+                                    //     .read<NavigasiViewModel>()
+                                    //     .navigasiToDetailSpace(
+                                    //       context: context,
+                                    //       officeId: index,
+                                    //     );
                                   },
                                   officeImage: imageProvider,
                                   officeName: values.foundPlace[index].name,

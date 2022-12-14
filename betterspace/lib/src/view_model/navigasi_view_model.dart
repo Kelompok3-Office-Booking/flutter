@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
@@ -173,13 +174,13 @@ class NavigasiViewModel with ChangeNotifier {
   /// navigasi open google maps
   void navigasiOpenGoogleMaps({
     context,
-    required int officeId,
+    required OfficeModels officeId,
   }) {
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (context) => GoogleMapsWidget(
-          officeId: officeId,
+         officeData: officeId,
         ),
       ),
     );
@@ -238,7 +239,7 @@ class NavigasiViewModel with ChangeNotifier {
   /// navigasi to detail office
   void navigasiToDetailSpace({
     context,
-    required int officeId,
+    required String officeId,
   }) {
     Navigator.push(
       context,

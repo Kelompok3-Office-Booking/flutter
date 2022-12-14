@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
@@ -53,7 +54,7 @@ class GetLocationViewModel with ChangeNotifier {
   }
 
   /// permission lokasi chekker
-  Future permissionLocationGMap(context, int officeId) async {
+  Future permissionLocationGMap(context, OfficeModels officeId) async {
     bool serviceEnabled;
     LocationPermission permission;
 
