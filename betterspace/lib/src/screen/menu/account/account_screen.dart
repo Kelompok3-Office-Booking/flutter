@@ -80,7 +80,7 @@ class AccountScreen extends StatelessWidget {
                             image: value.userModels?.userProfileDetails
                                         .userProfilePicture !=
                                     ""
-                                ? Image.network(value
+                                ? NetworkImage(value
                                     .userModels!
                                     .userProfileDetails
                                     .userProfilePicture) as ImageProvider
