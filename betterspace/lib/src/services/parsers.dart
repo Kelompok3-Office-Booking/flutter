@@ -7,9 +7,19 @@ import 'package:betterspace/src/utils/enums.dart';
 import 'package:faker/faker.dart';
 import 'package:flutter/cupertino.dart';
 
+//helper & formatter parsers
+//position to request string formatter
+String positionRequestFormatter(
+    {required String latitude, required String longitude}) {
+  return "lat=" + latitude + "&long=" + longitude;
+}
+
+//gender enums to string parser
 String genderEnumParsers(GenderEnum enumGenders) {
   return enumGenders == GenderEnum.male ? "male" : "female";
 }
+
+//api data parsers
 
 UserModel userModelParser(
     Map<String, dynamic> profResponse, UserToken userTokens) {
@@ -105,7 +115,7 @@ List<OfficeModels> officeModelParsers(List<dynamic> listOfficeJson) {
           officeType: jsonResponse["office_type"],
           officeLeadImage: jsonResponse["images"][1],
           officeGridImage: jsonResponse["images"],
-          officeStarRating: jsonResponse["rate"].round(),
+          officeStarRating: jsonResponse["rate"].toDouble(),
           officeDescription: jsonResponse["description"],
           officeApproxDistance: jsonResponse["distance"].toDouble(),
           officeArea: jsonResponse["office_length"].toDouble(),
@@ -140,7 +150,7 @@ List<OfficeModels> officeModelParsers(List<dynamic> listOfficeJson) {
               capMeetingRoom: jsonResponse["meeting_room"],
               capPrivate_room: jsonResponse["private_room"]),
           listOfOfficeFacilitiesModels: officeFacilitiesModelsParsers(
-              facilitiesModel: jsonResponse["FacilityModel"]),
+              facilitiesModel: jsonResponse["facility_model"]),
           listOfOfficeReviewModels: [
             OfficeReviewModels(
                 reviewerUserImage: Image.network(
@@ -172,7 +182,7 @@ OfficeModels singleOfficeModelParser(Map<String, dynamic> jsonResponse) {
     officeType: jsonResponse["office_type"],
     officeLeadImage: jsonResponse["images"][1],
     officeGridImage: jsonResponse["images"],
-    officeStarRating: jsonResponse["rate"].round(),
+    officeStarRating: jsonResponse["rate"].toDouble(),
     officeDescription: jsonResponse["description"],
     officeApproxDistance: jsonResponse["distance"].toDouble(),
     officeArea: jsonResponse["office_length"].toDouble(),
@@ -207,7 +217,7 @@ OfficeModels singleOfficeModelParser(Map<String, dynamic> jsonResponse) {
         capMeetingRoom: jsonResponse["meeting_room"],
         capPrivate_room: jsonResponse["private_room"]),
     listOfOfficeFacilitiesModels: officeFacilitiesModelsParsers(
-        facilitiesModel: jsonResponse["FacilityModel"]),
+        facilitiesModel: jsonResponse["facility_model"]),
     listOfOfficeReviewModels: [
       OfficeReviewModels(
           reviewerUserImage: Image.network(

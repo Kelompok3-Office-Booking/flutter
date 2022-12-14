@@ -29,7 +29,7 @@ class OfficeReviewModels {
   late String reviewerUserName;
   late String reviewText;
   late DateTime reviewDate;
-  late int reviewStarsCount;
+  late double reviewStarsCount;
   late int reviewHelpRateCount;
   OfficeReviewModels(
       {required this.reviewerUserImage,
@@ -67,7 +67,7 @@ class OfficeModels {
   late String officeName;
   late String officeType;
   late String officeLeadImage;
-  late int officeStarRating;
+  late double officeStarRating;
   late String officeDescription;
   late double officeApproxDistance;
   late double officeArea;
