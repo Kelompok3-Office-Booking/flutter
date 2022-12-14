@@ -1,3 +1,4 @@
+import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +10,10 @@ Future showExitDialog(BuildContext context) {
         return CupertinoAlertDialog(
           content: Text(
             'Are you sure want to exit ?',
-            style: Theme.of(context).textTheme.bodyText1,
+            style: Theme.of(context)
+                .textTheme
+                .bodyText1!
+                .copyWith(fontSize: AdaptSize.pixel14),
           ),
           actions: [
             CupertinoDialogAction(
@@ -18,10 +22,8 @@ Future showExitDialog(BuildContext context) {
               },
               child: Text(
                 'Cancel',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2!
-                    .copyWith(color: MyColor.darkBlueColor),
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    color: MyColor.darkBlueColor, fontSize: AdaptSize.pixel12),
               ),
             ),
             CupertinoDialogAction(
@@ -30,10 +32,8 @@ Future showExitDialog(BuildContext context) {
               },
               child: Text(
                 'Exit',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyText2!
-                    .copyWith(color: MyColor.redColor),
+                style: Theme.of(context).textTheme.bodyText2!.copyWith(
+                    color: MyColor.redColor, fontSize: AdaptSize.pixel12),
               ),
             ),
           ],

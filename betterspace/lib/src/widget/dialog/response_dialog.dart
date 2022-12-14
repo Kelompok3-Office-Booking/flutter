@@ -50,7 +50,7 @@ class ResponseDialog {
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1!
-                          .copyWith(fontSize: AdaptSize.pixel16),
+                          .copyWith(fontSize: AdaptSize.pixel12),
                     ),
                   ],
                 ),
@@ -114,7 +114,7 @@ class ResponseDialog {
                       style: Theme.of(context)
                           .textTheme
                           .headline6!
-                          .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                          .copyWith(fontSize: AdaptSize.screenHeight * .014),
                     ),
                     SizedBox(
                       height: AdaptSize.screenHeight * .01,
@@ -124,7 +124,7 @@ class ResponseDialog {
                       style: Theme.of(context)
                           .textTheme
                           .bodyText1!
-                          .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                          .copyWith(fontSize: AdaptSize.screenHeight * .012),
                     ),
                   ],
                 ),

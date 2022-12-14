@@ -3,6 +3,8 @@ import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+/// update 13 12 22
+/// mengubah border radius, background warna dan warna border
 dynamic horizontalTimePicker({
   required BuildContext contexts,
   required ValueNotifier<int> isSelected,
@@ -31,15 +33,15 @@ dynamic horizontalTimePicker({
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isSelected.value == hourFinal
-                      ? MyColor.secondary600
+                      ? MyColor.secondary400
                       : MyColor.neutral900,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(8),
+                        Radius.circular(16),
                       ),
                       side: BorderSide(
                           color: isSelected.value == hourFinal
-                              ? MyColor.secondary400
+                              ? MyColor.secondary600
                               : MyColor.neutral400,
                           width: AdaptSize.pixel1)),
                 ),
@@ -67,15 +69,15 @@ dynamic horizontalTimePicker({
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isSelected.value == hourFinal
-                      ? MyColor.secondary600
+                      ? MyColor.secondary400
                       : MyColor.neutral900,
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.all(
-                        Radius.circular(8),
+                        Radius.circular(16),
                       ),
                       side: BorderSide(
                           color: isSelected.value == hourFinal
-                              ? MyColor.secondary400
+                              ? MyColor.secondary600
                               : MyColor.neutral400,
                           width: AdaptSize.pixel1)),
                 ),

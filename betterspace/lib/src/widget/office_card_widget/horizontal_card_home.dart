@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-Widget recomenSpaces({
+Widget horizontalCardHome({
   context,
   required Function() onTap,
   required ImageProvider<Object> officeImage,
@@ -20,7 +20,7 @@ Widget recomenSpaces({
   return InkWell(
     onTap: onTap,
     child: Container(
-      height: AdaptSize.screenWidth / 1000 * 340,
+      height: AdaptSize.screenWidth / 1000 * 360,
       width: double.infinity,
       margin: EdgeInsets.only(
         bottom: AdaptSize.screenHeight * .008,
@@ -149,7 +149,7 @@ Widget recomenSpaces({
                       /// icon lokasi
                       Icon(
                         Icons.location_on_outlined,
-                        size: AdaptSize.pixel22,
+                        size: AdaptSize.pixel18,
                       ),
 
                       /// keterangan lokasi
@@ -160,7 +160,7 @@ Widget recomenSpaces({
                             .bodyText1!
                             .copyWith(
                             fontSize:
-                            AdaptSize.pixel14),
+                            AdaptSize.pixel12),
                       ),
 
                       SizedBox(
@@ -170,7 +170,7 @@ Widget recomenSpaces({
                       /// total person asset
                       SvgPicture.asset(
                         'assets/svg_assets/available.svg',
-                        height: AdaptSize.pixel22,
+                        height: AdaptSize.pixel18,
                       ),
 
                       const SizedBox(
@@ -185,7 +185,7 @@ Widget recomenSpaces({
                             .bodyText1!
                             .copyWith(
                             fontSize:
-                            AdaptSize.pixel14),
+                            AdaptSize.pixel12),
                       ),
 
                       SizedBox(
@@ -195,7 +195,7 @@ Widget recomenSpaces({
                       /// icon penggaris
                       SvgPicture.asset(
                         'assets/svg_assets/ruler.svg',
-                        height: AdaptSize.pixel22,
+                        height: AdaptSize.pixel18,
                       ),
 
                       const SizedBox(
@@ -210,7 +210,7 @@ Widget recomenSpaces({
                             .bodyText1!
                             .copyWith(
                             fontSize:
-                            AdaptSize.pixel14),
+                            AdaptSize.pixel12),
                       ),
                     ],
                   ),
@@ -231,7 +231,7 @@ Widget recomenSpaces({
                           .headline6!
                           .copyWith(
                         color: MyColor.darkBlueColor,
-                        fontSize: AdaptSize.pixel16,
+                        fontSize: AdaptSize.pixel15,
                       ),
                     ),
                     Text(

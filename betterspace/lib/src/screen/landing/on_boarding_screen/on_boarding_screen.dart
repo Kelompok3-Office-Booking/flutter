@@ -31,18 +31,19 @@ class OnBoardingScreen extends StatelessWidget {
             Center(
               child: Image.asset(
                 image,
-                height: AdaptSize.screenHeight * .3,
+                height: AdaptSize.screenHeight * .4,
                 width: AdaptSize.screenWidth * .9767,
               ),
             ),
             SizedBox(
-              height: AdaptSize.screenHeight * .1,
+              height: AdaptSize.screenHeight * .06,
             ),
+
             Text(
               title,
               style: Theme.of(context).textTheme.headline6!.copyWith(
                     color: MyColor.darkColor,
-                    fontSize: AdaptSize.screenHeight * .025,
+                    fontSize: AdaptSize.pixel24,
                   ),
               maxLines: 1,
             ),
@@ -51,7 +52,10 @@ class OnBoardingScreen extends StatelessWidget {
             ),
             Text(
               description,
-              style: Theme.of(context).textTheme.bodyText1,
+              style: Theme.of(context)
+                  .textTheme
+                  .bodyText1!
+                  .copyWith(fontSize: AdaptSize.pixel16),
               maxLines: 3,
               overflow: TextOverflow.ellipsis,
             ),

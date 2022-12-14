@@ -320,7 +320,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 /// button to login screen
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom: AdaptSize.screenHeight * 0.048,
+                    bottom: AdaptSize.screenHeight * .05,
                     top: AdaptSize.screenHeight * 0.1,
                   ),
                   child: Align(

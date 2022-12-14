@@ -81,7 +81,7 @@ class _OnBoardinViewState extends State<OnBoardinView> {
 
           /// animasi smooth indicator
           Positioned(
-            top: AdaptSize.screenHeight * .48,
+            top: AdaptSize.screenHeight * .56,
             left: AdaptSize.screenWidth * .4,
             right: AdaptSize.screenWidth * .4,
             child: _buildIndicator(),
@@ -100,6 +100,7 @@ class _OnBoardinViewState extends State<OnBoardinView> {
                   text: 'Skip',
                   textStyle: Theme.of(context).textTheme.button!.copyWith(
                         color: MyColor.grayLightColor,
+                        fontSize: AdaptSize.pixel14,
                       ),
                   onPressed: () {
                     context
@@ -119,19 +120,16 @@ class _OnBoardinViewState extends State<OnBoardinView> {
                                 .read<NavigasiViewModel>()
                                 .navigasiToLoginScreen(context);
                           },
-                          sizeWidth: AdaptSize.screenWidth * .3,
+                          sizeWidth: AdaptSize.screenWidth * .4,
                           sizeheight: AdaptSize.screenHeight * .06,
                           backgroundColor: MyColor.darkBlueColor,
                           borderRadius: BorderRadius.circular(10),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              'Get Started',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .button!
-                                  .copyWith(color: MyColor.whiteColor),
-                            ),
+                          child: Text(
+                            'Get Started',
+                            style: Theme.of(context).textTheme.button!.copyWith(
+                                  color: MyColor.whiteColor,
+                                  fontSize: AdaptSize.pixel14,
+                                ),
                           ),
                         )
                       : buttonWidget(
@@ -145,15 +143,12 @@ class _OnBoardinViewState extends State<OnBoardinView> {
                           sizeheight: AdaptSize.screenHeight * .06,
                           backgroundColor: MyColor.darkBlueColor,
                           borderRadius: BorderRadius.circular(10),
-                          child: FittedBox(
-                            fit: BoxFit.contain,
-                            child: Text(
-                              'Next',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .button!
-                                  .copyWith(color: MyColor.whiteColor),
-                            ),
+                          child: Text(
+                            'Next',
+                            style: Theme.of(context).textTheme.button!.copyWith(
+                                  color: MyColor.whiteColor,
+                                  fontSize: AdaptSize.pixel14,
+                                ),
                           ),
                         );
                 })

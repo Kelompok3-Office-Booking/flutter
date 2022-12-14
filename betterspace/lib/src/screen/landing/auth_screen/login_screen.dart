@@ -178,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Padding(
                 padding: EdgeInsets.only(
-                  bottom: AdaptSize.screenHeight * 0.088,
+                  bottom: AdaptSize.screenHeight * .05,
                 ),
                 child: Align(
                   alignment: Alignment.bottomCenter,

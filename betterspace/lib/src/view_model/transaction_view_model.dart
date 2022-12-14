@@ -60,7 +60,7 @@ class TransactionViewModel with ChangeNotifier {
   /// launch whatsapp external (aida)
   Future<void> launchWA() async {
     if (!await launchUrl(
-      Uri.parse('https://wa.me/082215126377'),
+      Uri.parse('https://wa.me/6282215126377'),
       mode: LaunchMode.externalApplication,
     )) {
       throw 'Could not launch';

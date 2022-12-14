@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
 
 class OfficeCapacityModels {
-  late Icon capacityIcon;
+  Icon? capacityIcon;
+  String? capacityIconSlug;
   late String capacityTitle;
   late double capacityValue;
   late String capacityUnits;
   OfficeCapacityModels(
-      {required this.capacityIcon,
+      {this.capacityIcon,
+      this.capacityIconSlug,
       required this.capacityTitle,
       required this.capacityValue,
       required this.capacityUnits});
 }
 
 class OfficeFacilitiesModels {
-  late Icon facilitiesIcon;
+  Icon? facilitiesIcon;
+  String? facilitiesIconSlug;
   late String facilitiesTitle;
   OfficeFacilitiesModels(
-      {required this.facilitiesIcon, required this.facilitiesTitle});
+      {this.facilitiesIcon,
+      required this.facilitiesTitle,
+      this.facilitiesIconSlug});
 }
 
 class OfficeReviewModels {
@@ -71,7 +76,7 @@ class OfficeModels {
   late DateTime officeCloseTime;
   late OfficeLocation officeLocation;
   late OfficePricing officePricing;
-  List<String> officeGridImage = [];
+  List officeGridImage = [];
   List<OfficeCapacityModels> listOfOfficeCapcityModels = [];
   List<OfficeFacilitiesModels> listOfOfficeFacilitiesModels = [];
   List<OfficeReviewModels> listOfOfficeReviewModels = [];

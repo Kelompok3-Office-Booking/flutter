@@ -1,8 +1,9 @@
 import 'dart:async';
 import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
-import 'package:betterspace/src/screen/landing/auth_screen/terms_condition.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
+import 'package:betterspace/src/screen/menu/account/setting_item_screen/term_condition_screen.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/payment_metod_screen.dart';
 import 'package:betterspace/src/screen/menu/home/filter_search_screen.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
@@ -10,9 +11,9 @@ import 'package:betterspace/src/screen/menu/transaksi/checkout_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/payment_detail_screen.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/success_payment_screen.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/office_detail_screen.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/payment_detail_screen.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/success_payment_screen.dart';
 import 'package:betterspace/src/widget/widget/google_maps.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -67,7 +68,7 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.of(context).push(
       PageRouteBuilder(
         pageBuilder: (context, animation, secondAnimation) =>
-            const TermsAndConditionViews(),
+            const TermConditionScreen(),
         transitionDuration: const Duration(milliseconds: 1200),
         transitionsBuilder: (context, animation, secondAnimation, child) {
           const begin = Offset(0.0, 1.0);
@@ -270,11 +271,11 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi to checkout screen
-  void navigasiToCheckOut(BuildContext context) {
+  void navigasiToCheckOut(BuildContext context, int officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => const CheckoutScreen(),
+        builder: (context) => CheckoutScreen(officeID: officeId,),
       ),
     );
   }
@@ -296,5 +297,16 @@ class NavigasiViewModel with ChangeNotifier {
         (route) => false);
 
     notifyListeners();
+  }
+
+  /// navigasi to payment method
+  void navigasiToPaymentMetod(BuildContext context){
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) =>
+        const PaymentMetodScreen(),
+      ),
+    );
   }
 }

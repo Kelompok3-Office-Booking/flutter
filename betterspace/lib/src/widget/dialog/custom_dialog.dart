@@ -1,5 +1,6 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,7 @@ class CustomDialog {
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!
-                      .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                      .copyWith(fontSize: AdaptSize.pixel14),
                 ),
                 SizedBox(
                   height: AdaptSize.screenHeight * .016,
@@ -54,7 +55,7 @@ class CustomDialog {
                 ),
 
                 SizedBox(
-                  height: AdaptSize.screenHeight * .008,
+                  height: AdaptSize.pixel5,
                 ),
 
                 /// button batal keluar
@@ -96,7 +97,7 @@ class CustomDialog {
                   style: Theme.of(context)
                       .textTheme
                       .bodyText1!
-                      .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                      .copyWith(fontSize: AdaptSize.pixel14),
                 ),
                 SizedBox(
                   height: AdaptSize.screenHeight * .022,
@@ -118,8 +119,7 @@ class CustomDialog {
                   child: Text(
                     'Oke',
                     style: Theme.of(context).textTheme.button!.copyWith(
-                        color: MyColor.neutral900,
-                        fontSize: AdaptSize.screenHeight * .016),
+                        color: MyColor.neutral900, fontSize: AdaptSize.pixel12),
                   ),
                 ),
               ],
@@ -151,28 +151,24 @@ class CustomDialog {
                           textStyle1: Theme.of(context)
                               .textTheme
                               .subtitle1!
-                              .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .016),
+                              .copyWith(fontSize: AdaptSize.pixel12),
                           text2: text2,
                           textStyle2: Theme.of(context)
                               .textTheme
                               .headline6!
-                              .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .016),
+                              .copyWith(fontSize: AdaptSize.pixel12),
                           text3: text3,
                           textStyle3: Theme.of(context)
                               .textTheme
                               .subtitle1!
-                              .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .016),
+                              .copyWith(fontSize: AdaptSize.pixel12),
                         )
                       : Text(
                           title,
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!
-                              .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .016),
+                              .copyWith(fontSize: AdaptSize.pixel14),
                         ),
                   SizedBox(
                     height: AdaptSize.screenHeight * .022,
@@ -195,7 +191,7 @@ class CustomDialog {
                       'Oke',
                       style: Theme.of(context).textTheme.button!.copyWith(
                           color: MyColor.neutral900,
-                          fontSize: AdaptSize.screenHeight * .016),
+                          fontSize: AdaptSize.pixel12),
                     ),
                   ),
                 ],
@@ -226,8 +222,94 @@ class CustomDialog {
       ),
       child: Text(
         text,
-        style: Theme.of(context).textTheme.button!.copyWith(
-            color: textColor, fontSize: AdaptSize.screenHeight * .016),
+        style: Theme.of(context)
+            .textTheme
+            .button!
+            .copyWith(color: textColor, fontSize: AdaptSize.pixel12),
+      ),
+    );
+  }
+
+  /// dialog remove whitlist item
+  static Widget dialogRemoveWhislist({
+    context,
+    Function()? onPressed1,
+    Function()? onPressed2,
+  }) {
+    return Center(
+      child: Container(
+        height: 120,
+        width: double.infinity,
+        margin: EdgeInsets.all(AdaptSize.pixel10),
+        decoration: BoxDecoration(
+          color: MyColor.neutral900,
+          borderRadius: BorderRadius.circular(16),
+        ),
+        child: Column(
+          children: [
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: AdaptSize.pixel6,
+                  top: AdaptSize.pixel6,
+                  left: AdaptSize.pixel8),
+              child: SizedBox(
+                width: AdaptSize.screenWidth / 1.15384615385,
+                child: Text(
+                  "Are You Sure To Remove This Item From The Wishlist",
+                  style: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontSize: AdaptSize.pixel14),
+                ),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(
+                  bottom: AdaptSize.pixel6, right: AdaptSize.pixel8),
+              child: SizedBox(
+                width: AdaptSize.screenWidth / 1.15385,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    buttonWidget(
+                      onPressed: onPressed1,
+                      sizeheight: AdaptSize.screenWidth / 9,
+                      backgroundColor: MyColor.danger400,
+                      borderRadius: BorderRadius.circular(8),
+                      child: Text(
+                        'Cancel',
+                        style: Theme.of(context).textTheme.button!.copyWith(
+                              fontSize: AdaptSize.pixel12,
+                              color: MyColor.neutral900,
+                            ),
+                      ),
+                    ),
+                    SizedBox(
+                      width: AdaptSize.pixel8,
+                    ),
+                    buttonWidget(
+                      onPressed: onPressed2,
+                      sizeheight: AdaptSize.screenWidth / 9,
+                      backgroundColor: MyColor.neutral900,
+                      borderSide: BorderSide(
+                        color: MyColor.neutral400,
+                        width: 1,
+                      ),
+                      borderRadius: BorderRadius.circular(8),
+                      child: Text(
+                        'Delete',
+                        style: Theme.of(context).textTheme.button!.copyWith(
+                              fontSize: AdaptSize.pixel12,
+                              color: MyColor.neutral400,
+                            ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

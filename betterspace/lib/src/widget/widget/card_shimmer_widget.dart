@@ -14,7 +14,7 @@ class CardShimmerHomeLoading {
     padding: EdgeInsets.all(
       AdaptSize.screenHeight * .01,
     ),
-    width: AdaptSize.screenWidth * .45,
+    width: AdaptSize.screenWidth * .5,
     decoration: BoxDecoration(
       boxShadow: [
         BoxShadow(
@@ -38,7 +38,7 @@ class CardShimmerHomeLoading {
     padding: EdgeInsets.all(
       AdaptSize.screenHeight * .01,
     ),
-    width: AdaptSize.screenWidth * .45,
+    width: AdaptSize.screenWidth * .5,
     decoration: BoxDecoration(
       boxShadow: [
         BoxShadow(
@@ -76,7 +76,7 @@ class CardShimmerHomeLoading {
 
   /// shimmer card horizontal load only home screen
   static Widget horizontalLoadShimmerHome = Container(
-    height: AdaptSize.screenHeight * .16,
+    height: AdaptSize.screenWidth / 1000 * 340,
     width: double.infinity,
     margin: EdgeInsets.only(
       bottom: AdaptSize.screenHeight * .008,
@@ -99,7 +99,7 @@ class CardShimmerHomeLoading {
 
   /// shimmer card horizontal load failed only home screen
   static Widget horizontalFailedShimmerHome = Container(
-    height: AdaptSize.screenHeight * .16,
+    height: AdaptSize.screenWidth / 1000 * 340,
     width: double.infinity,
     margin: EdgeInsets.only(
       bottom: AdaptSize.screenHeight * .008,

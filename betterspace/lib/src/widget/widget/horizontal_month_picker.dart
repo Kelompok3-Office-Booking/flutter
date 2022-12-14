@@ -3,6 +3,8 @@ import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+/// update 13 12 22
+/// mengubah border radius, background warna dan warna border
 Widget horizontalMonthPicker({
   required BuildContext contexts,
   required ValueNotifier<int> isSelected,
@@ -28,15 +30,15 @@ Widget horizontalMonthPicker({
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: isSelected.value == monthIndex
-                      ? MyColor.secondary600
+                      ? MyColor.secondary400
                       : MyColor.neutral900,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(16),
                       ),
                       side: BorderSide(
                           color: isSelected.value == monthIndex
-                              ? MyColor.secondary400
+                              ? MyColor.secondary600
                               : MyColor.neutral400,
                           width: AdaptSize.pixel1)),
                 ),
@@ -65,16 +67,16 @@ Widget horizontalMonthPicker({
                 style: ElevatedButton.styleFrom(
                   backgroundColor:
                       isSelected.value == ((monthIndex - 12) + 1) * 12
-                          ? MyColor.secondary600
+                          ? MyColor.secondary400
                           : MyColor.neutral900,
                   shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(8),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(16),
                       ),
                       side: BorderSide(
                           color:
                               isSelected.value == ((monthIndex - 12) + 1) * 12
-                                  ? MyColor.secondary400
+                                  ? MyColor.secondary600
                                   : MyColor.neutral400,
                           width: AdaptSize.pixel1)),
                 ),

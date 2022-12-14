@@ -1,13 +1,13 @@
 import 'dart:math';
-import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
+import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/all_populer.dart';
 import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/carousel_widget.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/office_card_widget.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/recomended_space_widget.dart';
+import 'package:betterspace/src/widget/office_card_widget/vertical_card_home.dart';
+import 'package:betterspace/src/widget/office_card_widget/horizontal_card_home.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
@@ -140,7 +140,7 @@ class HomeScreen extends StatelessWidget {
                       return CachedNetworkImage(
                         imageUrl: listOfDummyOffice[index].officeLeadImage,
                         imageBuilder: (context, imageProvider) =>
-                            popularSpaceWidget(
+                            verticalCardHome(
                           context: context,
                           onTap: () {
                             context
@@ -196,7 +196,7 @@ class HomeScreen extends StatelessWidget {
                       return CachedNetworkImage(
                         imageUrl: listOfDummyOffice[index].officeLeadImage,
                         imageBuilder: (context, imageProvider) =>
-                            popularSpaceWidget(
+                            verticalCardHome(
                           context: context,
                           onTap: () {
                             context
@@ -252,7 +252,7 @@ class HomeScreen extends StatelessWidget {
                       return CachedNetworkImage(
                         imageUrl: listOfDummyOffice[index].officeLeadImage,
                         imageBuilder: (context, imageProvider) =>
-                            popularSpaceWidget(
+                            verticalCardHome(
                           context: context,
                           onTap: () {
                             context
@@ -321,7 +321,7 @@ class HomeScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return CachedNetworkImage(
                         imageUrl: listOfDummyOffice[index].officeLeadImage,
-                        imageBuilder: (context, imageProvider) => recomenSpaces(
+                        imageBuilder: (context, imageProvider) => horizontalCardHome(
                           context: context,
                           onTap: () {
                             context

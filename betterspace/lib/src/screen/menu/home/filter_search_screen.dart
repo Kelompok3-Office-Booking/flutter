@@ -1,11 +1,10 @@
-import 'dart:math';
-import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
+import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/recomended_space_widget.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
+import 'package:betterspace/src/widget/office_card_widget/office_type_card.dart';
 import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
 import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -74,11 +73,13 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                   icon: Icon(
                     Icons.arrow_back,
                     color: MyColor.darkColor.withOpacity(.8),
+                    size: AdaptSize.pixel22,
                   ),
                 ),
                 suffixIcon: Icon(
                   Icons.search,
                   color: MyColor.neutral600,
+                  size: AdaptSize.pixel22,
                 ),
                 readOnly: false,
               ),
@@ -111,7 +112,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                                 imageUrl:
                                     listOfDummyOffice[index].officeLeadImage,
                                 imageBuilder: (context, imageProvider) =>
-                                    recomenSpaces(
+                                    officeTypeItemCards(
                                   context: context,
                                   onTap: () {
                                     context
@@ -132,8 +133,7 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                                   officePersonCapacity: '100',
                                   officeArea: values
                                       .foundPlace[index].officeBuildingArea,
-                                  hours: '/Hours',
-                                  officePricing: Random().nextDouble() * 300000,
+                                  officeType: values.foundPlace[index].officeCategory,
                                 ),
                                 placeholder: (context, url) => shimmerLoading(
                                   child: CardShimmerHomeLoading
