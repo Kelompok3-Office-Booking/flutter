@@ -23,9 +23,9 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  final int officeID;
+  final int officeId;
 
-  const CheckoutScreen({super.key, required this.officeID});
+  const CheckoutScreen({super.key, required this.officeId});
 
   @override
   State<CheckoutScreen> createState() => _CheckoutScreenState();
@@ -62,9 +62,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 /// update 13 11 22 menyamakan dengan detail screen
                 Padding(
                   padding: EdgeInsets.only(
-                    top: AdaptSize.pixel15,
+                    top: AdaptSize.pixel16,
                     left: AdaptSize.pixel16,
                     right: AdaptSize.pixel16,
+                    bottom: AdaptSize.pixel6,
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -100,7 +101,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           if (_formKey.currentState!.validate()) {
                             context
                                 .read<NavigasiViewModel>()
-                                .navigasiToPaymentMetod(context);
+                                .navigasiToPaymentMetod(
+                                  context,
+                                  widget.officeId,
+                                );
                           }
                         },
                         borderRadius: BorderRadius.circular(8),
@@ -152,26 +156,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               Padding(
                 padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
                 child: CachedNetworkImage(
-                  imageUrl: listOfDummyOffice[widget.officeID].officeLeadImage,
+                  imageUrl: listOfDummyOffice[widget.officeId].officeLeadImage,
                   imageBuilder: (context, imageProvider) => officeTypeItemCards(
                     context: context,
                     officeImage: imageProvider,
-                    officeName: listOfDummyOffice[widget.officeID].officeName,
+                    officeName: listOfDummyOffice[widget.officeId].officeName,
                     officeLocation:
-                        '${listOfDummyOffice[widget.officeID].officeLocation.city}, ${listOfDummyOffice[widget.officeID].officeLocation.district}',
-                    officeStarRanting: listOfDummyOffice[widget.officeID]
+                        '${listOfDummyOffice[widget.officeId].officeLocation.city}, ${listOfDummyOffice[widget.officeId].officeLocation.district}',
+                    officeStarRanting: listOfDummyOffice[widget.officeId]
                         .officeStarRating
                         .toString(),
-                    officeApproxDistance: listOfDummyOffice[widget.officeID]
+                    officeApproxDistance: listOfDummyOffice[widget.officeId]
                         .officeApproxDistance
                         .toString(),
-                    officePersonCapacity: listOfDummyOffice[widget.officeID]
+                    officePersonCapacity: listOfDummyOffice[widget.officeId]
                         .officePersonCapacity
                         .toString(),
-                    officeArea: listOfDummyOffice[widget.officeID]
+                    officeArea: listOfDummyOffice[widget.officeId]
                         .officeArea
                         .toString(),
-                    officeType: listOfDummyOffice[widget.officeID].officeType,
+                    officeType: listOfDummyOffice[widget.officeId].officeType,
                   ),
                   placeholder: (context, url) => shimmerLoading(
                     child: CardShimmerHomeLoading.horizontalLoadShimmerHome,

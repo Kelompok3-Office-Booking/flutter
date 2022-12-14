@@ -148,7 +148,7 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.of(context).pushAndRemoveUntil(
         PageRouteBuilder(
           pageBuilder: (context, animation, secondAnimation) =>
-              const RegisterScreen(),
+              const LoginScreen(),
           transitionsBuilder: (context, animation, secondAnimation, child) =>
               FadeTransition(
             opacity: animation,
@@ -186,11 +186,13 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi open google maps
-  void navigasiToPaymentDetail(context) {
+  void navigasiToPaymentDetail(context, int officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => const PaymentDetailScreen(),
+        builder: (context) => PaymentDetailScreen(
+          officeId: officeId,
+        ),
       ),
     );
   }
@@ -275,7 +277,9 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => CheckoutScreen(officeID: officeId,),
+        builder: (context) => CheckoutScreen(
+          officeId: officeId,
+        ),
       ),
     );
   }
@@ -300,12 +304,13 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi to payment method
-  void navigasiToPaymentMetod(BuildContext context){
+  void navigasiToPaymentMetod(BuildContext context, int officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) =>
-        const PaymentMetodScreen(),
+        builder: (context) => PaymentMetodScreen(
+          officeId: officeId,
+        ),
       ),
     );
   }

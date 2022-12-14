@@ -1,5 +1,8 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +10,7 @@ import 'package:intl/intl.dart';
 Widget verticalCardHome({
   context,
   required Function() onTap,
-  required ImageProvider<Object> officeImage,
+  required String officeImage,
   required String officeName,
   required String officeLocation,
   required String officeStarRanting,
@@ -42,13 +45,28 @@ Widget verticalCardHome({
         children: [
           Stack(
             children: [
-              /// image space
-              ClipRRect(
-                borderRadius: BorderRadius.circular(16),
-                child: Image(
-                  image: officeImage,
+              CachedNetworkImage(
+                imageUrl: officeImage,
+                imageBuilder: (context, imageProvider) => Container(
+                  height: AdaptSize.screenWidth / 3,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: imageProvider,
+                    ),
+                  ),
                 ),
+                placeholder: (context, url) => shimmerLoading(
+                  child: CardShimmerHomeLoading.verticalShimmerHome,
+                ),
+                errorWidget: (context, url, error) =>
+                    CardShimmerHomeLoading.verticalFailedLoadShimmer,
               ),
+
+              /// image space
+
               Positioned(
                 right: 10,
                 top: 8,
@@ -90,7 +108,7 @@ Widget verticalCardHome({
               ),
             ],
           ),
-          
+
           /// keterangan
           Flexible(
             fit: FlexFit.tight,
@@ -130,8 +148,7 @@ Widget verticalCardHome({
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       /// icon lokasi
-                      Icon(Icons.location_on_outlined,
-                          size: AdaptSize.pixel18),
+                      Icon(Icons.location_on_outlined, size: AdaptSize.pixel18),
 
                       /// keterangan lokasi
                       Text(
@@ -179,8 +196,7 @@ Widget verticalCardHome({
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!
-                              .copyWith(
-                                  fontSize: AdaptSize.pixel12),
+                              .copyWith(fontSize: AdaptSize.pixel12),
                         ),
                       ),
                     ],

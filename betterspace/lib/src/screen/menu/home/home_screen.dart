@@ -1,8 +1,8 @@
-import 'dart:math';
-import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/all_populer.dart';
 import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/carousel_widget.dart';
@@ -11,19 +11,31 @@ import 'package:betterspace/src/widget/office_card_widget/horizontal_card_home.d
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
 
   @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      final getOffice = Provider.of<OfficeViewModels>(context, listen: false);
+      await getOffice.fetchCoworkingSpace();
+      await getOffice.fetchMeetingRoom();
+      await getOffice.fetchOfficeRoom();
+      await getOffice.fetchOfficeByRecommendation();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final dummyDataProviders =
-        Provider.of<OfficeDummyDataViewModels>(context, listen: false);
-    dummyDataProviders.addRecord(5);
-    final listOfDummyOffice = dummyDataProviders.listOfOfficeModels;
     return Scaffold(
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
@@ -128,53 +140,76 @@ class HomeScreen extends StatelessWidget {
                 height: AdaptSize.screenHeight * .016,
               ),
 
-              /// coworking space
+              ///  coworking space
+              Consumer<OfficeViewModels>(builder: (context, value, child) {
+                if (value.connectionState == stateOfConnections.isLoading) {
+                  return shimmerLoading(
+                    child: commonShimmerLoadWidget(
+                      sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                      sizeWidth: double.infinity,
+                    ),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isReady) {
+                  return SizedBox(
+                    height: AdaptSize.screenWidth / 2800 * 2000,
+                    width: double.infinity,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: value.listOfCoworkingSpace.length,
+                        itemBuilder: (context, index) {
+                          return verticalCardHome(
+                            context: context,
+                            onTap: () {
+                              context
+                                  .read<NavigasiViewModel>()
+                                  .navigasiToDetailSpace(
+                                    context: context,
+                                    officeId: index,
+                                  );
+                            },
+                            officeImage: value
+                                .listOfCoworkingSpace[index].officeLeadImage,
+                            officeName:
+                                value.listOfCoworkingSpace[index].officeName,
+                            officeLocation:
+                                '${value.listOfCoworkingSpace[index].officeLocation.city}, ${value.listOfCoworkingSpace[index].officeLocation.district}',
+                            officeStarRanting: value
+                                .listOfCoworkingSpace[index].officeStarRating
+                                .toString(),
+                            officeApproxDistance: value
+                                .listOfCoworkingSpace[index]
+                                .officeApproxDistance
+                                .toString(),
+                            officePersonCapacity: value
+                                .listOfCoworkingSpace[index]
+                                .officePersonCapacity
+                                .toString(),
+                            officeArea: value
+                                .listOfCoworkingSpace[index].officeArea
+                                .toString(),
+                            hours: '/Hours',
+                            officePricing: value.listOfCoworkingSpace[index]
+                                .officePricing.officePrice,
+                          );
+                        }),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isFailed) {
+                  return commonShimmerFailedLoadWidget(
+                    sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                    sizeWidth: double.infinity,
+                  );
+                }
+                return SizedBox(
+                  height: AdaptSize.screenWidth / 2800 * 2000,
+                  width: double.infinity,
+                );
+              }),
+
               SizedBox(
-                height: AdaptSize.screenWidth / 2800 * 2000,
-                width: double.infinity,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: listOfDummyOffice.length,
-                    itemBuilder: (context, index) {
-                      return CachedNetworkImage(
-                        imageUrl: listOfDummyOffice[index].officeLeadImage,
-                        imageBuilder: (context, imageProvider) =>
-                            verticalCardHome(
-                          context: context,
-                          onTap: () {
-                            context
-                                .read<NavigasiViewModel>()
-                                .navigasiToDetailSpace(
-                                  context: context,
-                                  officeId: index,
-                                );
-                          },
-                          officeImage: imageProvider,
-                          officeName: listOfDummyOffice[index].officeName,
-                          officeLocation:
-                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
-                          officeStarRanting: listOfDummyOffice[index]
-                              .officeStarRating
-                              .toString(),
-                          officeApproxDistance: listOfDummyOffice[index]
-                              .officeApproxDistance
-                              .toString(),
-                          officePersonCapacity: listOfDummyOffice[index]
-                              .officePersonCapacity
-                              .toString(),
-                          officeArea:
-                              listOfDummyOffice[index].officeArea.toString(),
-                          hours: '/Hours',
-                          officePricing: Random().nextDouble() * 100000,
-                        ),
-                        placeholder: (context, url) => shimmerLoading(
-                          child: CardShimmerHomeLoading.verticalShimmerHome,
-                        ),
-                        errorWidget: (context, url, error) =>
-                            CardShimmerHomeLoading.verticalFailedLoadShimmer,
-                      );
-                    }),
+                height: AdaptSize.screenHeight * .008,
               ),
 
               /// all office rent text
@@ -185,52 +220,72 @@ class HomeScreen extends StatelessWidget {
               ),
 
               /// office rent space
+              Consumer<OfficeViewModels>(builder: (context, value, child) {
+                if (value.connectionState == stateOfConnections.isLoading) {
+                  return shimmerLoading(
+                    child: commonShimmerLoadWidget(
+                      sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                      sizeWidth: double.infinity,
+                    ),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isReady) {
+                  return SizedBox(
+                    height: AdaptSize.screenWidth / 2800 * 2000,
+                    width: double.infinity,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: value.listOfOfficeRoom.length,
+                        itemBuilder: (context, index) {
+                          return verticalCardHome(
+                            context: context,
+                            onTap: () {
+                              context
+                                  .read<NavigasiViewModel>()
+                                  .navigasiToDetailSpace(
+                                    context: context,
+                                    officeId: index,
+                                  );
+                            },
+                            officeImage:
+                                value.listOfOfficeRoom[index].officeLeadImage,
+                            officeName:
+                                value.listOfOfficeRoom[index].officeName,
+                            officeLocation:
+                                '${value.listOfOfficeRoom[index].officeLocation.city}, ${value.listOfOfficeRoom[index].officeLocation.district}',
+                            officeStarRanting: value
+                                .listOfOfficeRoom[index].officeStarRating
+                                .toString(),
+                            officeApproxDistance: value
+                                .listOfOfficeRoom[index].officeApproxDistance
+                                .toString(),
+                            officePersonCapacity: value
+                                .listOfOfficeRoom[index].officePersonCapacity
+                                .toString(),
+                            officeArea: value.listOfOfficeRoom[index].officeArea
+                                .toString(),
+                            hours: '/Month',
+                            officePricing: value.listOfOfficeRoom[index]
+                                .officePricing.officePrice,
+                          );
+                        }),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isFailed) {
+                  return commonShimmerFailedLoadWidget(
+                    sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                    sizeWidth: double.infinity,
+                  );
+                }
+                return SizedBox(
+                  height: AdaptSize.screenWidth / 2800 * 2000,
+                  width: double.infinity,
+                );
+              }),
+
               SizedBox(
-                height: AdaptSize.screenWidth / 2800 * 2000,
-                width: double.infinity,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: listOfDummyOffice.length,
-                    itemBuilder: (context, index) {
-                      return CachedNetworkImage(
-                        imageUrl: listOfDummyOffice[index].officeLeadImage,
-                        imageBuilder: (context, imageProvider) =>
-                            verticalCardHome(
-                          context: context,
-                          onTap: () {
-                            context
-                                .read<NavigasiViewModel>()
-                                .navigasiToDetailSpace(
-                                  context: context,
-                                  officeId: index,
-                                );
-                          },
-                          officeImage: imageProvider,
-                          officeName: listOfDummyOffice[index].officeName,
-                          officeLocation:
-                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
-                          officeStarRanting: listOfDummyOffice[index]
-                              .officeStarRating
-                              .toString(),
-                          officeApproxDistance: listOfDummyOffice[index]
-                              .officeApproxDistance
-                              .toString(),
-                          officePersonCapacity: listOfDummyOffice[index]
-                              .officePersonCapacity
-                              .toString(),
-                          officeArea:
-                              listOfDummyOffice[index].officeArea.toString(),
-                          hours: '/Month',
-                          officePricing: Random().nextDouble() * 1000000,
-                        ),
-                        placeholder: (context, url) => shimmerLoading(
-                          child: CardShimmerHomeLoading.verticalShimmerHome,
-                        ),
-                        errorWidget: (context, url, error) =>
-                            CardShimmerHomeLoading.verticalFailedLoadShimmer,
-                      );
-                    }),
+                height: AdaptSize.screenHeight * .008,
               ),
 
               /// all meeting room text
@@ -241,53 +296,69 @@ class HomeScreen extends StatelessWidget {
               ),
 
               /// meeting space
-              SizedBox(
-                height: AdaptSize.screenWidth / 2800 * 2000,
-                width: double.infinity,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: listOfDummyOffice.length,
-                    itemBuilder: (context, index) {
-                      return CachedNetworkImage(
-                        imageUrl: listOfDummyOffice[index].officeLeadImage,
-                        imageBuilder: (context, imageProvider) =>
-                            verticalCardHome(
-                          context: context,
-                          onTap: () {
-                            context
-                                .read<NavigasiViewModel>()
-                                .navigasiToDetailSpace(
-                                  context: context,
-                                  officeId: index,
-                                );
-                          },
-                          officeImage: imageProvider,
-                          officeName: listOfDummyOffice[index].officeName,
-                          officeLocation:
-                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
-                          officeStarRanting: listOfDummyOffice[index]
-                              .officeStarRating
-                              .toString(),
-                          officeApproxDistance: listOfDummyOffice[index]
-                              .officeApproxDistance
-                              .toString(),
-                          officePersonCapacity: listOfDummyOffice[index]
-                              .officePersonCapacity
-                              .toString(),
-                          officeArea:
-                              listOfDummyOffice[index].officeArea.toString(),
-                          hours: '/Hours',
-                          officePricing: Random().nextDouble() * 500000,
-                        ),
-                        placeholder: (context, url) => shimmerLoading(
-                          child: CardShimmerHomeLoading.verticalShimmerHome,
-                        ),
-                        errorWidget: (context, url, error) =>
-                            CardShimmerHomeLoading.verticalFailedLoadShimmer,
-                      );
-                    }),
-              ),
+              Consumer<OfficeViewModels>(builder: (context, value, child) {
+                if (value.connectionState == stateOfConnections.isLoading) {
+                  return shimmerLoading(
+                    child: commonShimmerLoadWidget(
+                        sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                        sizeWidth: double.infinity),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isReady) {
+                  return SizedBox(
+                    height: AdaptSize.screenWidth / 2800 * 2000,
+                    width: double.infinity,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: value.listOfMeetingRoom.length,
+                        itemBuilder: (context, index) {
+                          return verticalCardHome(
+                            context: context,
+                            onTap: () {
+                              context
+                                  .read<NavigasiViewModel>()
+                                  .navigasiToDetailSpace(
+                                    context: context,
+                                    officeId: index,
+                                  );
+                            },
+                            officeImage:
+                                value.listOfMeetingRoom[index].officeLeadImage,
+                            officeName:
+                                value.listOfMeetingRoom[index].officeName,
+                            officeLocation:
+                                '${value.listOfMeetingRoom[index].officeLocation.city}, ${value.listOfMeetingRoom[index].officeLocation.district}',
+                            officeStarRanting: value
+                                .listOfMeetingRoom[index].officeStarRating
+                                .toString(),
+                            officeApproxDistance: value
+                                .listOfMeetingRoom[index].officeApproxDistance
+                                .toString(),
+                            officePersonCapacity: value
+                                .listOfMeetingRoom[index].officePersonCapacity
+                                .toString(),
+                            officeArea: value
+                                .listOfMeetingRoom[index].officeArea
+                                .toString(),
+                            hours: '/Hours',
+                            officePricing: value.listOfMeetingRoom[index]
+                                .officePricing.officePrice,
+                          );
+                        }),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isFailed) {
+                  return commonShimmerFailedLoadWidget(
+                    sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                    sizeWidth: double.infinity,
+                  );
+                }
+                return SizedBox(
+                  height: AdaptSize.screenWidth / 2800 * 2000,
+                  width: double.infinity,
+                );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .008,
@@ -311,55 +382,73 @@ class HomeScreen extends StatelessWidget {
               ),
 
               /// recomended spaces
-              MediaQuery.removePadding(
-                removeTop: true,
-                context: context,
-                child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
-                    shrinkWrap: true,
-                    itemCount: listOfDummyOffice.length,
-                    itemBuilder: (context, index) {
-                      return CachedNetworkImage(
-                        imageUrl: listOfDummyOffice[index].officeLeadImage,
-                        imageBuilder: (context, imageProvider) => horizontalCardHome(
-                          context: context,
-                          onTap: () {
-                            context
-                                .read<NavigasiViewModel>()
-                                .navigasiToDetailSpace(
-                                  context: context,
-                                  officeId: index,
-                                );
-                          },
-                          officeImage: imageProvider,
-                          officeName: listOfDummyOffice[index].officeName,
-                          officeLocation:
-                              '${listOfDummyOffice[index].officeLocation.city}, ${listOfDummyOffice[index].officeLocation.district}',
-                          officeStarRanting: listOfDummyOffice[index]
-                              .officeStarRating
-                              .toString(),
-                          officeApproxDistance: listOfDummyOffice[index]
-                              .officeApproxDistance
-                              .toString(),
-                          officePersonCapacity: listOfDummyOffice[index]
-                              .officePersonCapacity
-                              .toString(),
-                          officeArea:
-                              listOfDummyOffice[index].officeArea.toString(),
-                          hours: '/Hours',
-                          officePricing: Random().nextDouble() * 300000,
-                        ),
-                        placeholder: (context, url) => shimmerLoading(
-                          child:
-                              CardShimmerHomeLoading.horizontalLoadShimmerHome,
-                        ),
-                        errorWidget: (context, url, error) =>
-                            CardShimmerHomeLoading.horizontalFailedShimmerHome,
-                      );
-
-                      //
-                    }),
-              ),
+              Consumer<OfficeViewModels>(builder: (context, value, child) {
+                if (value.connectionState == stateOfConnections.isLoading) {
+                  return shimmerLoading(
+                    child: commonShimmerLoadWidget(
+                      sizeHeight: AdaptSize.screenWidth / 1000 * 360,
+                      sizeWidth: double.infinity,
+                    ),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isReady) {
+                  return MediaQuery.removePadding(
+                    removeTop: true,
+                    context: context,
+                    child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount: value.listOfOfficeByRecommendation.length,
+                        itemBuilder: (context, index) {
+                          return horizontalCardHome(
+                            context: context,
+                            onTap: () {
+                              context
+                                  .read<NavigasiViewModel>()
+                                  .navigasiToDetailSpace(
+                                    context: context,
+                                    officeId: index,
+                                  );
+                            },
+                            officeImage: value
+                                .listOfOfficeByRecommendation[index]
+                                .officeLeadImage,
+                            officeName: value
+                                .listOfOfficeByRecommendation[index].officeName,
+                            officeLocation:
+                                '${value.listOfOfficeByRecommendation[index].officeLocation.city}, ${value.listOfOfficeByRecommendation[index].officeLocation.district}',
+                            officeStarRanting: value
+                                .listOfOfficeByRecommendation[index]
+                                .officeStarRating
+                                .toString(),
+                            officeApproxDistance: value
+                                .listOfOfficeByRecommendation[index]
+                                .officeApproxDistance
+                                .toString(),
+                            officePersonCapacity: value
+                                .listOfOfficeByRecommendation[index]
+                                .officePersonCapacity
+                                .toString(),
+                            officeArea: value
+                                .listOfOfficeByRecommendation[index].officeArea
+                                .toString(),
+                            hours: '/Hours',
+                            officePricing: value
+                                .listOfOfficeByRecommendation[index]
+                                .officePricing
+                                .officePrice,
+                          );
+                        }),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isFailed) {
+                  return commonShimmerFailedLoadWidget(
+                    sizeHeight: AdaptSize.screenWidth / 1000 * 360,
+                    sizeWidth: double.infinity,
+                  );
+                }
+                return const SizedBox();
+              }),
             ],
           ),
         ),

@@ -6,15 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 class CardShimmerHomeLoading {
   /// shimmer card widget only home screen
   static Widget verticalShimmerHome = Container(
-    margin: const EdgeInsets.only(
-      left: 5,
-      right: 5,
-      bottom: 10,
-    ),
-    padding: EdgeInsets.all(
-      AdaptSize.screenHeight * .01,
-    ),
-    width: AdaptSize.screenWidth * .5,
+    height: AdaptSize.screenWidth / 3,
+    width: double.infinity,
     decoration: BoxDecoration(
       boxShadow: [
         BoxShadow(
@@ -30,15 +23,8 @@ class CardShimmerHomeLoading {
 
   /// shimmer card load failed only home screen
   static Widget verticalFailedLoadShimmer = Container(
-    margin: const EdgeInsets.only(
-      left: 5,
-      right: 5,
-      bottom: 10,
-    ),
-    padding: EdgeInsets.all(
-      AdaptSize.screenHeight * .01,
-    ),
-    width: AdaptSize.screenWidth * .5,
+    height: AdaptSize.screenWidth / 3,
+    width: double.infinity,
     decoration: BoxDecoration(
       boxShadow: [
         BoxShadow(
@@ -76,8 +62,8 @@ class CardShimmerHomeLoading {
 
   /// shimmer card horizontal load only home screen
   static Widget horizontalLoadShimmerHome = Container(
-    height: AdaptSize.screenWidth / 1000 * 340,
-    width: double.infinity,
+    height: AdaptSize.screenWidth / 1000 * 354,
+    width: AdaptSize.screenWidth * .36,
     margin: EdgeInsets.only(
       bottom: AdaptSize.screenHeight * .008,
     ),
@@ -99,8 +85,8 @@ class CardShimmerHomeLoading {
 
   /// shimmer card horizontal load failed only home screen
   static Widget horizontalFailedShimmerHome = Container(
-    height: AdaptSize.screenWidth / 1000 * 340,
-    width: double.infinity,
+    height: AdaptSize.screenWidth / 1000 * 354,
+    width: AdaptSize.screenWidth * .36,
     margin: EdgeInsets.only(
       bottom: AdaptSize.screenHeight * .008,
     ),
@@ -149,6 +135,11 @@ Widget commonShimmerLoadWidget({
   return Container(
     height: sizeHeight,
     width: sizeWidth,
+    margin: const EdgeInsets.only(
+      left: 5,
+      right: 5,
+      bottom: 10,
+    ),
     padding: const EdgeInsets.all(8),
     decoration: BoxDecoration(
       boxShadow: [
@@ -193,7 +184,7 @@ Widget commonShimmerFailedLoadWidget({
           Icon(
             Icons.heart_broken_outlined,
             color: MyColor.danger400,
-            size: AdaptSize.screenHeight * .1,
+            size: AdaptSize.screenWidth / 1000 * 200,
           ),
           SizedBox(
             height: AdaptSize.screenHeight * .016,
@@ -201,8 +192,8 @@ Widget commonShimmerFailedLoadWidget({
           Text(
             'sorry an error occurred',
             style: TextStyle(
-              fontSize: 15,
-              color: MyColor.neutral600,
+              fontSize: AdaptSize.pixel14,
+              color: MyColor.danger400,
             ),
           ),
         ],

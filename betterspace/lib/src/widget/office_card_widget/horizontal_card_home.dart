@@ -1,5 +1,8 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -7,7 +10,7 @@ import 'package:intl/intl.dart';
 Widget horizontalCardHome({
   context,
   required Function() onTap,
-  required ImageProvider<Object> officeImage,
+  required String officeImage,
   required String officeName,
   required String officeLocation,
   required String officeStarRanting,
@@ -42,15 +45,23 @@ Widget horizontalCardHome({
           /// space image
           Stack(
             children: [
-              Container(
-                width: AdaptSize.screenWidth * .36,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: officeImage,
+              CachedNetworkImage(
+                imageUrl: officeImage,
+                imageBuilder: (context, imageProvider) => Container(
+                  width: AdaptSize.screenWidth * .36,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: imageProvider,
+                    ),
                   ),
                 ),
+                placeholder: (context, url) => shimmerLoading(
+                  child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
+                ),
+                errorWidget: (context, url, error) =>
+                    CardShimmerHomeLoading.horizontalFailedShimmerHome,
               ),
               Positioned(
                 left: 10,
@@ -70,8 +81,7 @@ Widget horizontalCardHome({
                         color: MyColor.grayLightColor.withOpacity(.6),
                       ),
                       child: Row(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Icon(
                             Icons.star,
@@ -84,8 +94,8 @@ Widget horizontalCardHome({
                                 .textTheme
                                 .bodyText2!
                                 .copyWith(
-                                color: MyColor.whiteColor,
-                                fontSize: AdaptSize.pixel14),
+                                    color: MyColor.whiteColor,
+                                    fontSize: AdaptSize.pixel14),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
@@ -114,8 +124,7 @@ Widget horizontalCardHome({
                   style: Theme.of(context)
                       .textTheme
                       .headline6!
-                      .copyWith(
-                      fontSize: AdaptSize.pixel16),
+                      .copyWith(fontSize: AdaptSize.pixel16),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -131,8 +140,7 @@ Widget horizontalCardHome({
                   style: Theme.of(context)
                       .textTheme
                       .bodyText2!
-                      .copyWith(
-                      fontSize: AdaptSize.pixel14),
+                      .copyWith(fontSize: AdaptSize.pixel14),
                   maxLines: 2,
                   overflow: TextOverflow.ellipsis,
                 ),
@@ -158,9 +166,7 @@ Widget horizontalCardHome({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(
-                            fontSize:
-                            AdaptSize.pixel12),
+                            .copyWith(fontSize: AdaptSize.pixel12),
                       ),
 
                       SizedBox(
@@ -183,9 +189,7 @@ Widget horizontalCardHome({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(
-                            fontSize:
-                            AdaptSize.pixel12),
+                            .copyWith(fontSize: AdaptSize.pixel12),
                       ),
 
                       SizedBox(
@@ -208,9 +212,7 @@ Widget horizontalCardHome({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(
-                            fontSize:
-                            AdaptSize.pixel12),
+                            .copyWith(fontSize: AdaptSize.pixel12),
                       ),
                     ],
                   ),
@@ -222,25 +224,19 @@ Widget horizontalCardHome({
                   children: [
                     Text(
                       NumberFormat.currency(
-                          locale: 'id',
-                          symbol: 'Rp ',
-                          decimalDigits: 0)
+                              locale: 'id', symbol: 'Rp ', decimalDigits: 0)
                           .format(officePricing),
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(
-                        color: MyColor.darkBlueColor,
-                        fontSize: AdaptSize.pixel15,
-                      ),
+                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                            color: MyColor.darkBlueColor,
+                            fontSize: AdaptSize.pixel15,
+                          ),
                     ),
                     Text(
                       hours,
                       style: Theme.of(context)
                           .textTheme
                           .bodyText2!
-                          .copyWith(
-                          fontSize: AdaptSize.pixel10),
+                          .copyWith(fontSize: AdaptSize.pixel10),
                     ),
                   ],
                 ),

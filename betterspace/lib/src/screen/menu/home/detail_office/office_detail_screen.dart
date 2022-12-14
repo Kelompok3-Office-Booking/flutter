@@ -86,8 +86,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                           DateTime.now().millisecondsSinceEpoch,
                                       officeName:
                                           listOfDummyOffice[officeID].officeName,
-                                      officeRanting: listOfDummyOffice[officeID]
-                                          .officeStarRating,
+                                      officeRanting: listOfDummyOffice[officeID].officeStarRating,
                                       officeImage: listOfDummyOffice[officeID]
                                           .officeLeadImage,
                                       officeLocation:
