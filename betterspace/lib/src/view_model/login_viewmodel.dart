@@ -20,17 +20,15 @@ class LoginViewmodels with ChangeNotifier {
 
   logoutWithTokens() async {
     final _secureStorage = FlutterSecureStorage();
-    String? _accessTokens = await _secureStorage.read(key: "access_tokens_bs");
+    String? accessTokens = await _secureStorage.read(key: "access_tokens_bs");
     apiLogoutState = stateOfConnections.isStart;
     notifyListeners();
-    if (_accessTokens != null) {
+    if (accessTokens != null) {
       try {
         apiLogoutState = stateOfConnections.isLoading;
         notifyListeners();
-        Response logoutResponse = await _dio.post(
-          constantValue().userLogoutWithToken,
-          options: Options(headers: {"Authorization": "Bearer $_accessTokens"}),
-        );
+        Response logoutResponse = await UserService()
+            .logoutWithTokensServices(accessTokens: accessTokens);
         apiLogoutState = stateOfConnections.isReady;
         notifyListeners();
         if (logoutResponse.statusCode == 200) {
@@ -57,7 +55,7 @@ class LoginViewmodels with ChangeNotifier {
     try {
       apiLoginState = stateOfConnections.isLoading;
       notifyListeners();
-      Response responses = await UserService()
+      Response responses = await SignService()
           .loginUser(userEmail: userEmail, userPassword: userPassword);
       print("success login" + "$responses");
 
@@ -82,6 +80,7 @@ class LoginViewmodels with ChangeNotifier {
     const secureStorage = FlutterSecureStorage();
     String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
     String? refreshTokens = await secureStorage.read(key: "refresh_token_bs");
+    print("check user session");
 
     if (accessTokens != null && refreshTokens != null) {
       userTokens =
@@ -90,6 +89,8 @@ class LoginViewmodels with ChangeNotifier {
       print("the user token is : $accessTokens");
       apiLoginState = stateOfConnections.isReady;
       notifyListeners();
+    } else {
+      print("no user session exist");
     }
     notifyListeners();
   }

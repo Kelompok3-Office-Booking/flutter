@@ -158,7 +158,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           userEmail: _emailController.text,
                           userPassword: _passwordController.text);
                       value.apiLoginState = stateOfConnections.isDoingNothing;
-                      if(!mounted) return; /// mengatasi build context across async gaps
+                      if (!mounted) return;
+
+                      /// mengatasi build context across async gaps
                       nextScreen(value.isUserExist, context);
                     }
                   },
@@ -191,7 +193,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           .bodyMedium!
                           .copyWith(color: MyColor.darkBlueColor),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () {
+                        ..onTap = () async {
                           NavigasiViewModel().navigasiToRegisterScreen(context);
                         }),
                 ),
