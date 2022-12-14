@@ -11,12 +11,6 @@ class UserService {
   UserService() {
     _dio.interceptors
         .add(InterceptorsWrapper(onRequest: (options, handler) async {
-      const secureStorage = FlutterSecureStorage();
-      String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
-      if (accessTokens != null) {
-        options.headers.addAll({"Authorization": "Bearer " + accessTokens});
-      }
-
       return handler.next(options); //continue
     }, onResponse: (response, handler) {
       // Do something with response data
@@ -51,38 +45,60 @@ class UserService {
     return apiResponse;
   }
 
-  Future<Response> fetchProfile({required UserToken tokens}) async {
+  Future<Response> fetchProfile({required String accessTokens}) async {
     return await _dio.get(constantValue().userGetProfileEndpoint,
-        options: Options(
-            headers: {"Authorization": "Bearer " + tokens.accessToken}));
+        options: Options(headers: {"Authorization": "Bearer " + accessTokens}));
+  }
+
+  Future<void> destroyUserSession() async {
+    const secureStorage = FlutterSecureStorage();
+    await secureStorage.deleteAll();
   }
 
   Future<void> refreshExpiredTokens() async {
     const secureStorage = FlutterSecureStorage();
     String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
-    Response responses = await _dio.post(
-      constantValue().userRefreshToken,
-      options: Options(headers: {"Authorization": "Bearer " + refreshToken!}),
-    );
-    if (responses.statusCode == 200 || responses.statusCode == 201) {
-      await secureStorage.write(
-          key: "access_tokens_bs",
-          value: responses.data["data"]["access_token"]);
-      await secureStorage.write(
-          key: "refresh_token_bs",
-          value: responses.data["data"]["refresh_token"]);
+    if (refreshToken != null) {
+      try {
+        Response responses = await _dio.post(
+          constantValue().userRefreshToken,
+          options:
+              Options(headers: {"Authorization": "Bearer " + refreshToken}),
+        );
+        print("response");
+        if (responses.statusCode == 200 || responses.statusCode == 201) {
+          print("refreshed");
+          await secureStorage.write(
+              key: "access_tokens_bs", value: responses.data["access_token"]);
+          await secureStorage.write(
+              key: "refresh_token_bs", value: responses.data["refresh_token"]);
+        }
+      } catch (e) {
+        print(e.toString());
+        destroyUserSession();
+      }
     }
   }
 
   Future<Response<dynamic>> _retry(RequestOptions requestOptions) async {
-    final options = new Options(
-      method: requestOptions.method,
-      headers: requestOptions.headers,
-    );
-    return this._dio.request<dynamic>(requestOptions.path,
-        data: requestOptions.data,
-        queryParameters: requestOptions.queryParameters,
-        options: options);
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
+      final options = new Options(
+          method: requestOptions.method,
+          headers: {"Authorization": "Bearer " + accessTokens});
+      return this._dio.request<dynamic>(requestOptions.path,
+          data: requestOptions.data,
+          queryParameters: requestOptions.queryParameters,
+          options: options);
+    } else {
+      final options = new Options(
+          method: requestOptions.method, headers: requestOptions.headers);
+      return this._dio.request<dynamic>(requestOptions.path,
+          data: requestOptions.data,
+          queryParameters: requestOptions.queryParameters,
+          options: options);
+    }
   }
 
   Future<Response> fetchAllOffice({required String accessToken}) async {

@@ -16,6 +16,8 @@ class constantValue {
       "https://api-better-space-staging.herokuapp.com/api/v1/refresh";
   String userLogoutWithToken =
       "https://api-better-space-staging.herokuapp.com/api/v1/logout";
+  String userSetProfilePhoto =
+      "https://api-better-space-staging.herokuapp.com/api/v1/profile/photo";
 
   //office endpoint
   String getAllOffice =

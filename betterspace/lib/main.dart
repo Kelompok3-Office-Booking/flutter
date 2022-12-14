@@ -48,7 +48,7 @@ class BetterSpaceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => TransactionViewModel()),
       ],
       child: MaterialApp(
-        home: const TestingScreenAPI(),
+        home: const SplashScreenOne(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: MyColor.neutral900,

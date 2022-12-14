@@ -23,6 +23,10 @@ class AccountScreen extends StatelessWidget {
         Provider.of<LoginViewmodels>(context, listen: false);
     final userAccountProviderListen =
         Provider.of<LoginViewmodels>(context, listen: true);
+    if (userAccountProvider.userModels == null) {
+      userAccountProvider.getProfile();
+    }
+
     return Scaffold(
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
@@ -62,8 +66,7 @@ class AccountScreen extends StatelessWidget {
                 child: Stack(
                   children: [
                     /// image display
-                    Consumer<AccountViewModel>(
-                        builder: (context, value, child) {
+                    Consumer<LoginViewmodels>(builder: (context, value, child) {
                       return Container(
                         decoration: BoxDecoration(
                           color: MyColor.neutral800,
@@ -74,8 +77,13 @@ class AccountScreen extends StatelessWidget {
                           ),
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: value.imageProfile != null
-                                ? FileImage(value.imageProfile)
+                            image: value.userModels?.userProfileDetails
+                                        .userProfilePicture !=
+                                    ""
+                                ? Image.network(value
+                                    .userModels!
+                                    .userProfileDetails
+                                    .userProfilePicture) as ImageProvider
                                 : const AssetImage(
                                     'assets/image_assets/default_image_profile.png',
                                   ) as ImageProvider,
@@ -123,7 +131,8 @@ class AccountScreen extends StatelessWidget {
 
               /// username
               Text(
-                'Erick Cahya',
+                userAccountProviderListen.userModels?.userEmail ??
+                    'Erick Cahya',
                 style: Theme.of(context).textTheme.headline6!.copyWith(
                       fontSize: AdaptSize.screenHeight * .016,
                       color: MyColor.neutral200,
@@ -136,7 +145,8 @@ class AccountScreen extends StatelessWidget {
 
               /// email user
               Text(
-                'Erickcahya@gmail.com',
+                userAccountProviderListen.userModels?.userEmail ??
+                    "erickcahya2@gmail.com",
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
                       fontSize: AdaptSize.screenHeight * .014,
                       color: MyColor.neutral400,

@@ -81,7 +81,11 @@ class LoginViewmodels with ChangeNotifier {
   validateTokenIsExist() async {
     const secureStorage = FlutterSecureStorage();
     String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
-    if (accessTokens != null) {
+    String? refreshTokens = await secureStorage.read(key: "refresh_token_bs");
+
+    if (accessTokens != null && refreshTokens != null) {
+      userTokens =
+          UserToken(accessToken: accessTokens, refreshToken: refreshTokens);
       isUserExist = true;
       print("the user token is : $accessTokens");
       apiLoginState = stateOfConnections.isReady;
@@ -93,14 +97,18 @@ class LoginViewmodels with ChangeNotifier {
   getProfile() async {
     const secureStorage = FlutterSecureStorage();
     String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    String? refreshTokens = await secureStorage.read(key: "refresh_token_bs");
     if (accessTokens != null) {
       try {
         Response profResponse =
-            await UserService().fetchProfile(tokens: userTokens!);
+            await UserService().fetchProfile(accessTokens: accessTokens);
         print("fetch pertama : ${profResponse.statusCode}");
 
         if (profResponse.statusCode == 200) {
-          userModels = userModelParser(profResponse.data, userTokens!);
+          userModels = userModelParser(
+              profResponse.data,
+              UserToken(
+                  accessToken: accessTokens, refreshToken: refreshTokens));
           print(profResponse.data["data"]['email'] + "fetch success");
         }
       } catch (e) {
