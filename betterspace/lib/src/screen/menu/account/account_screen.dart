@@ -68,7 +68,9 @@ class AccountScreen extends StatelessWidget {
                             image: value.userModels?.userProfileDetails
                                             .userProfilePicture !=
                                         "" &&
-                                    value.userModels != null
+                                    value.userModels?.userProfileDetails
+                                            .userProfilePicture !=
+                                        null
                                 ? NetworkImage(value
                                     .userModels!
                                     .userProfileDetails

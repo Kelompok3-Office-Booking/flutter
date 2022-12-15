@@ -37,6 +37,8 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
         Provider.of<OfficeViewModels>(context, listen: true);
     final providerOfTransaction =
         Provider.of<TransactionViewmodels>(context, listen: false);
+    final providerOfTransactionListen =
+        Provider.of<TransactionViewmodels>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(),
@@ -153,6 +155,55 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                     providerOffice.fetchOfficeByRating(requestedRating: "4");
                   },
                   child: Text("office by rate", style: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    if (providerClientListen.userModels == null) {
+                      print("no user profile exist");
+                    } else {
+                      providerOfTransaction.getTransactionByUser(
+                          userModels: providerClientListen.userModels!,
+                          ListOfAllOffice:
+                              providerOfficeListen.listOfAllOfficeModels);
+                    }
+                  },
+                  child: Text(
+                    "trans by user",
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                      providerOfTransaction.createTransactionRecords(
+                          requestedModels: CreateTransactionModels(
+                              transactionTotalPrice: 20000,
+                              transactionBookingTime: TransactionBookingTime(
+                                  checkInHour: "12:00",
+                                  checkInDate: "13/12/2022"),
+                              duration: 4,
+                              paymentMethodName: "BRI",
+                              selectedDrink: "ice tea",
+                              selectedOfficeId: 1));
+                    },
+                    child: Text("test create transaction",
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(fontSize: 10)),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOffice.fetchNearestOffice(
+                        latitudes: "-6.1981045", longitudes: "106.100777");
+                  },
+                  child: Text("nearest office", style: TextStyle(fontSize: 10)),
                 ),
               ],
             ),
@@ -423,6 +474,27 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                                 return Text(
                                     dataChunks.officeLocation.officeLatitude
                                         .toString(),
+                                    style: TextStyle(fontSize: 10));
+                              }));
+                        } else {
+                          return Text("no data");
+                        }
+                      }),
+                    ),
+                  ),
+                  Spacer(),
+                  Expanded(
+                    child: Consumer<TransactionViewmodels>(
+                      builder: ((context, value, child) {
+                        if (providerOfTransactionListen.allTransaction.length >
+                            0) {
+                          return ListView.builder(
+                              itemCount: providerOfTransactionListen
+                                  .allTransaction.length,
+                              itemBuilder: ((context, index) {
+                                final dataChunks = providerOfTransactionListen
+                                    .allTransaction[index];
+                                return Text(dataChunks.Status,
                                     style: TextStyle(fontSize: 10));
                               }));
                         } else {
