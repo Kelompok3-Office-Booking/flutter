@@ -1,6 +1,7 @@
 import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/screen/landing/splash_screen1.dart';
 import 'package:betterspace/src/screen/menu/home/voucer_promo_screen.dart';
+import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/text_theme.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
@@ -15,6 +16,7 @@ import 'package:betterspace/src/view_model/promo_view_model.dart';
 import 'package:betterspace/src/view_model/register_viemodel.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/view_model/transaction_view_model.dart';
+import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:betterspace/src/view_model/whislist_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -37,6 +39,7 @@ class BetterSpaceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => OfficeDummyDataViewModels()),
         ChangeNotifierProvider(create: (_) => LoginViewmodels()),
         ChangeNotifierProvider(create: (_) => RegisterViewmodel()),
+        ChangeNotifierProvider(create: (_) => TransactionViewmodels()),
         ChangeNotifierProvider(create: (_) => OfficeViewModels()),
         ChangeNotifierProvider(create: (_) => MenuViewModel()),
         ChangeNotifierProvider(create: (_) => OnboardingViewModel()),
@@ -50,7 +53,7 @@ class BetterSpaceApp extends StatelessWidget {
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
-        home: const SplashScreenOne(),
+        home: const TestingScreenAPI(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: MyColor.neutral900,
