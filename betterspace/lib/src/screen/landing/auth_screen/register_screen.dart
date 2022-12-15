@@ -1,13 +1,21 @@
+import 'package:betterspace/src/model/user_models/user_models_for_regist.dart';
+import 'package:betterspace/src/services/page_validators.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/enums.dart';
+import 'package:betterspace/src/services/parsers.dart';
+import 'package:betterspace/src/utils/form_validator.dart';
+import 'package:betterspace/src/view_model/login_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/register_viemodel.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({Key? key}) : super(key: key);
@@ -37,6 +45,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final registerProvider = Provider.of<RegisterViewmodel>(context);
     AdaptSize.size(context: context);
     return Scaffold(
       body: SingleChildScrollView(
@@ -147,6 +156,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 textFormFields(
                   textInputAction: TextInputAction.done,
                   obscureText: false,
+                  maxLines: 1,
+                  keyboardType: TextInputType.emailAddress,
                   hintTexts: 'example@gmail.com',
                   textStyle: Theme.of(context).textTheme.bodyText1,
                   label: 'Email',
@@ -162,48 +173,68 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 /// password field
-                textFormFields(
-                  textInputAction: TextInputAction.done,
-                  maxLines: 1,
-                  obscureText: true,
-                  textStyle: Theme.of(context).textTheme.bodyText1,
-                  label: "Password",
-                  controller: _passwordController,
-                  hintTexts: "Password",
-                  validators: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter passwords';
-                    } else if (value != null && value.length < 8 ||
-                        value.length > 25) {
-                      return 'Please enter password in range of 8 - 25 characters';
-                    }
-                    return null;
-                  },
-                ),
+                Consumer<LoginViewModel>(builder: (context, value, child) {
+                  return textFormFields(
+                    textInputAction: TextInputAction.done,
+                    maxLines: 1,
+                    obscureText: value.visiblePassword1 ? false : true,
+                    textStyle: Theme.of(context).textTheme.bodyText1,
+                    label: "Password",
+                    controller: _passwordController,
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        value.visiblePass1();
+                      },
+                      icon: value.visiblePassword1
+                          ? Icon(
+                              Icons.visibility_off,
+                              color: MyColor.darkBlueColor,
+                            )
+                          : Icon(Icons.remove_red_eye,
+                              color: MyColor.darkBlueColor),
+                    ),
+                    hintTexts: "Password",
+                    validators: (value) => FormValidator.validate(
+                      title: 'password',
+                      value1: _passwordController.text,
+                      value2: _confirmPasswordController.text,
+                    ),
+                  );
+                }),
 
                 SizedBox(
                   height: AdaptSize.screenHeight * .024,
                 ),
 
                 /// confrim password field
-                textFormFields(
-                  textInputAction: TextInputAction.done,
-                  maxLines: 1,
-                  obscureText: true,
-                  textStyle: Theme.of(context).textTheme.bodyText1,
-                  label: "Confirm Password",
-                  controller: _confirmPasswordController,
-                  hintTexts: "Confirm Password",
-                  validators: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter passwords';
-                    } else if (value != null && value.length < 8 ||
-                        value.length > 25) {
-                      return 'Please enter password in range of 8 - 25 characters';
-                    }
-                    return null;
-                  },
-                ),
+                Consumer<LoginViewModel>(builder: (context, value, child) {
+                  return textFormFields(
+                    textInputAction: TextInputAction.done,
+                    maxLines: 1,
+                    obscureText: value.visiblePassword2 ? false : true,
+                    textStyle: Theme.of(context).textTheme.bodyText1,
+                    label: "Confirm Password",
+                    controller: _confirmPasswordController,
+                    hintTexts: "Confirm Password",
+                    suffixIcon: IconButton(
+                      onPressed: () {
+                        value.visiblePass2();
+                      },
+                      icon: value.visiblePassword2
+                          ? Icon(
+                              Icons.visibility_off,
+                              color: MyColor.darkBlueColor,
+                            )
+                          : Icon(Icons.remove_red_eye,
+                              color: MyColor.darkBlueColor),
+                    ),
+                    validators: (value) => FormValidator.validate(
+                      title: 'confirm password',
+                      value1: _passwordController.text,
+                      value2: _confirmPasswordController.text,
+                    ),
+                  );
+                }),
 
                 SizedBox(
                   height: AdaptSize.screenHeight * .024,
@@ -235,30 +266,61 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 /// button register
-                buttonWidget(
-                  sizeheight: AdaptSize.screenHeight / 14,
-                  sizeWidth: double.infinity,
-                  borderRadius: BorderRadius.circular(10),
-                  backgroundColor: MyColor.darkBlueColor,
-                  onPressed: () {
-                    final is_valid = _formKey.currentState!.validate();
-                    if (is_valid == false) {
-                      return;
-                    }
-                  },
-                  child: Text(
-                    "Register",
-                    style: Theme.of(context)
-                        .textTheme
-                        .button!
-                        .copyWith(color: MyColor.whiteColor),
-                  ),
+                ValueListenableBuilder(
+                  valueListenable: radGenderVal,
+                  builder: ((context, values, child) {
+                    return Consumer<RegisterViewmodel>(
+                        builder: (context, regValue, child) {
+                      return buttonWidget(
+                        sizeheight: AdaptSize.screenHeight / 14,
+                        sizeWidth: double.infinity,
+                        borderRadius: BorderRadius.circular(10),
+                        backgroundColor: MyColor.darkBlueColor,
+                        onPressed: () async {
+                          final isValid = _formKey.currentState!.validate();
+                          if (isValid == false) {
+                            return;
+                          } else {
+                            debugPrint(radGenderVal.value.toString());
+                            await registerProvider.createUser(
+                              userInfo: UserModelForRegist(
+                                full_name: _fullnameController.text,
+                                gender: genderEnumParsers(radGenderVal.value),
+                                email: _emailController.text,
+                                password: _passwordController.text,
+                                confirmation_password:
+                                    _confirmPasswordController.text,
+                              ),
+                            );
+                            debugPrint(
+                                "status : ${regValue.statusCodeRegister}");
+                            debugPrint("state : ${regValue.connectionsState}");
+                            isRegisterSuccess(
+                                stateOfRegister: regValue.connectionsState,
+                                context: context,
+                                registerStatus:
+                                    regValue.statusCodeRegister.toString());
+                          }
+                        },
+                        child: regValue.connectionsState ==
+                                stateOfConnections.isLoading
+                            ? LoadingWidget.whiteButtonLoading
+                            : Text(
+                                "Register",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .button!
+                                    .copyWith(color: MyColor.whiteColor),
+                              ),
+                      );
+                    });
+                  }),
                 ),
 
                 /// button to login screen
                 Padding(
                   padding: EdgeInsets.only(
-                    bottom: AdaptSize.screenHeight * 0.048,
+                    bottom: AdaptSize.screenHeight * .05,
                     top: AdaptSize.screenHeight * 0.1,
                   ),
                   child: Align(
@@ -273,7 +335,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             .copyWith(color: MyColor.darkBlueColor),
                         recognizer: TapGestureRecognizer()
                           ..onTap = () {
-                            NavigasiViewModel().navigasiToLoginScreen(context);
+                            NavigasiViewModel().navigasiPop(context);
                           }),
                   ),
                 ),

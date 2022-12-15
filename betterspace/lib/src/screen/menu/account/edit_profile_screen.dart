@@ -5,9 +5,9 @@ import 'package:betterspace/src/utils/form_validator.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
-import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -36,30 +36,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: transparentAppbarWidget(
-          context: context,
-          titles: Text(
-            'Edit Profile',
-            style: Theme.of(context).textTheme.headline6!.copyWith(
-                  fontSize: AdaptSize.pixel16,
-                ),
-          ),
-          titleSpacer: AdaptSize.pixel16,
-          leadingIcon: IconButton(
-            onPressed: () {
-              context.read<NavigasiViewModel>().navigasiPop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: MyColor.neutral100,
-              size: AdaptSize.pixel16,
-            ),
-          ),
+        appBar: defaultAppbarWidget(
+          contexts: context,
+          leadIconFunction: () {
+            context.read<NavigasiViewModel>().navigasiPop(context);
+          },
+          isCenterTitle: false,
+          titles: 'Edit Profile',
         ),
         body: Padding(
           padding: EdgeInsets.only(
             left: AdaptSize.screenWidth * .016,
             right: AdaptSize.screenWidth * .016,
+            top: AdaptSize.pixel10,
           ),
           child: Form(
             key: _key,
@@ -77,7 +66,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   textStyle: Theme.of(context)
                       .textTheme
                       .bodyText1!
-                      .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                      .copyWith(fontSize: AdaptSize.pixel16),
                   validators: (value) => FormValidator.validateProfilName(
                     title: 'Name',
                     value1: _editNameController.text,
@@ -88,7 +77,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
 
                 SizedBox(
-                  height: AdaptSize.screenHeight * .018,
+                  height: AdaptSize.pixel16,
                 ),
 
                 /// gender text
@@ -151,6 +140,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       if (_key.currentState!.validate()) {
                         value.changeProfile(context,
                             'Your profile has been updated successfully!');
+                        _editNameController.clear();
                       }
                     },
                     child: value.isLoading

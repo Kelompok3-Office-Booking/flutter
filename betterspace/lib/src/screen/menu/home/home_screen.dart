@@ -1,19 +1,22 @@
-import 'package:betterspace/src/dummy_data/office_data/office_dummy_data.dart';
-import 'package:betterspace/src/dummy_data/office_data/office_dummy_models.dart';
+import 'package:betterspace/src/screen/menu/home/all_offices/all_coworking_screen.dart';
+import 'package:betterspace/src/screen/menu/home/all_offices/all_meeting_room_screen.dart';
+import 'package:betterspace/src/screen/menu/home/all_offices/all_recomendation_screen.dart';
+import 'package:betterspace/src/screen/menu/home/all_offices/all_rent_office_screen.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/all_populer.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
 import 'package:betterspace/src/widget/home_widget/home_screen_widget/carousel_widget.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/meeting_rent_widget.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/office_rent_widget.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/popular_coworking_widget.dart';
-import 'package:betterspace/src/widget/home_widget/home_screen_widget/recomended_space_widget.dart';
-import 'package:betterspace/src/widget/home_widget/office_detail_widget/office_detail_screen.dart';
+import 'package:betterspace/src/widget/office_card_widget/vertical_card_home.dart';
+import 'package:betterspace/src/widget/office_card_widget/horizontal_card_home.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -28,18 +31,31 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    final getLocationUser =
-        Provider.of<GetLocationViewModel>(context, listen: false);
-    getLocationUser.getAddressFromLongLat(
-        getLocationUser.posLatitude, getLocationUser.posLongitude);
+    final officeData = Provider.of<OfficeViewModels>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      if (officeData.listOfCoworkingSpace.isEmpty &&
+          officeData.listOfMeetingRoom.isEmpty &&
+          officeData.listOfOfficeRoom.isEmpty &&
+          officeData.listOfOfficeByRecommendation.isEmpty) {
+        officeData.fetchCoworkingSpace();
+        officeData.fetchOfficeRoom();
+        officeData.fetchMeetingRoom();
+        officeData.fetchOfficeByRecommendation();
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    AdaptSize.size(context: context);
-    final OfficeDataDummy dataDummyForOfficeModels = OfficeDataDummy();
-    final List<OfficeModels> listOfOffice =
-        dataDummyForOfficeModels.listOfOfficeModels;
+    final locationProvider =
+        Provider.of<GetLocationViewModel>(context, listen: false);
+    final userAccountProvider =
+        Provider.of<LoginViewmodels>(context, listen: false);
+    final userAccountProviderListen =
+        Provider.of<LoginViewmodels>(context, listen: true);
+    if (userAccountProviderListen.userModels == null) {
+      userAccountProvider.getProfile();
+    }
     return Scaffold(
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),
@@ -63,22 +79,25 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hi Jhony',
+                          userAccountProviderListen.userModels != null &&
+                                  userAccountProviderListen
+                                          .userModels?.userProfileDetails !=
+                                      null
+                              ? "Hi ${userAccountProviderListen.userModels!.userProfileDetails.userName}"
+                              : 'Hi User',
                           style: Theme.of(context)
                               .textTheme
                               .headline6!
-                              .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .022),
+                              .copyWith(fontSize: AdaptSize.pixel22),
                         ),
                         Text(
                           'Find your best workspace!',
                           style: Theme.of(context)
                               .textTheme
                               .headline6!
-                              .copyWith(
-                                  fontSize: AdaptSize.screenHeight * .022),
+                              .copyWith(fontSize: AdaptSize.pixel20),
                           overflow: TextOverflow.ellipsis,
-                          maxLines: 3,
+                          maxLines: 2,
                         ),
                       ],
                     ),
@@ -105,7 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
               searchPlace(
                 /// search field
                 context: context,
-                hintText: 'Mau kerja dimana hari ini ?',
+                hintText: 'Where do you want to work today?',
                 onTap: () {
                   context
                       .read<NavigasiViewModel>()
@@ -139,40 +158,278 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: AdaptSize.screenHeight * .008,
               ),
 
-              /// all popular text
-              allSpaces(context, 'Popular Coworking Space', () {}),
+              /// all coworking text
+              allSpaces(context, 'Popular Coworking Space', () {
+                context.read<NavigasiViewModel>().navigasiAllOffice(
+                      context,
+                      const AllCoworkingScreen(),
+                    );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
               ),
 
-              /// popular space
-              popularSpaceWidget(context),
+              ///  coworking space
+              Consumer<OfficeViewModels>(builder: (context, value, child) {
+                if (value.connectionState == stateOfConnections.isLoading) {
+                  return shimmerLoading(
+                    child: commonShimmerLoadWidget(
+                      sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                      sizeWidth: double.infinity,
+                    ),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isReady) {
+                  return SizedBox(
+                    height: AdaptSize.screenWidth / 2800 * 2000,
+                    width: double.infinity,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: value.listOfCoworkingSpace.length >= 5
+                            ? 5
+                            : value.listOfCoworkingSpace.length,
+                        itemBuilder: (context, index) {
+                          return verticalCardHome(
+                            context: context,
+                            onTap: () {
+                              context
+                                  .read<NavigasiViewModel>()
+                                  .navigasiToDetailSpace(
+                                    context: context,
+                                    officeId: value
+                                        .listOfCoworkingSpace[index].officeID,
+                                  );
+                            },
+                            officeImage: value
+                                .listOfCoworkingSpace[index].officeLeadImage,
+                            officeName:
+                                value.listOfCoworkingSpace[index].officeName,
+                            officeLocation:
+                                '${value.listOfCoworkingSpace[index].officeLocation.district}, ${value.listOfCoworkingSpace[index].officeLocation.city}',
+                            officeStarRanting: value
+                                .listOfCoworkingSpace[index].officeStarRating
+                                .toString(),
+                            officeApproxDistance: locationProvider.posisi !=
+                                    null
+                                ? locationProvider.homeScreenCalculateDistances(
+                                    locationProvider.lat,
+                                    locationProvider.lng,
+                                    value.listOfCoworkingSpace[index]
+                                        .officeLocation.officeLatitude,
+                                    value.listOfCoworkingSpace[index]
+                                        .officeLocation.officeLongitude,
+                                  )
+                                : '-',
+                            officePersonCapacity: value
+                                .listOfCoworkingSpace[index]
+                                .officePersonCapacity
+                                .toString(),
+                            officeArea: value
+                                .listOfCoworkingSpace[index].officeArea
+                                .toString(),
+                            hours: '/Hours',
+                            officePricing: value.listOfCoworkingSpace[index]
+                                .officePricing.officePrice,
+                          );
+                        }),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isFailed) {
+                  return commonShimmerFailedLoadWidget(
+                    sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                    sizeWidth: double.infinity,
+                  );
+                }
+                return SizedBox(
+                  height: AdaptSize.screenWidth / 2800 * 2000,
+                  width: double.infinity,
+                );
+              }),
+
+              SizedBox(
+                height: AdaptSize.screenHeight * .008,
+              ),
 
               /// all office rent text
-              allSpaces(context, 'Office for Rent', () {}),
+              allSpaces(context, 'Office for Rent', () {
+                context.read<NavigasiViewModel>().navigasiAllOffice(
+                      context,
+                      const AllRentOfficeScreen(),
+                    );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
               ),
 
               /// office rent space
-              officeRentWidget(() {
-                /// ini baru dibuat belum dipindah ke view model
-                /// dipindah nanti aja kalo udah selesai
+              Consumer<OfficeViewModels>(builder: (context, value, child) {
+                if (value.connectionState == stateOfConnections.isLoading) {
+                  return shimmerLoading(
+                    child: commonShimmerLoadWidget(
+                      sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                      sizeWidth: double.infinity,
+                    ),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isReady) {
+                  return SizedBox(
+                    height: AdaptSize.screenWidth / 2800 * 2000,
+                    width: double.infinity,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: value.listOfOfficeRoom.length >= 5
+                            ? 5
+                            : value.listOfOfficeRoom.length,
+                        itemBuilder: (context, index) {
+                          return verticalCardHome(
+                            context: context,
+                            onTap: () {
+                              context
+                                  .read<NavigasiViewModel>()
+                                  .navigasiToDetailSpace(
+                                    context: context,
+                                    officeId:
+                                        value.listOfOfficeRoom[index].officeID,
+                                  );
+                            },
+                            officeImage:
+                                value.listOfOfficeRoom[index].officeLeadImage,
+                            officeName:
+                                value.listOfOfficeRoom[index].officeName,
+                            officeLocation:
+                                '${value.listOfOfficeRoom[index].officeLocation.district}, ${value.listOfOfficeRoom[index].officeLocation.city}',
+                            officeStarRanting: value
+                                .listOfOfficeRoom[index].officeStarRating
+                                .toString(),
+                            officeApproxDistance: locationProvider.posisi !=
+                                    null
+                                ? locationProvider.homeScreenCalculateDistances(
+                                    locationProvider.lat,
+                                    locationProvider.lng,
+                                    value.listOfOfficeRoom[index].officeLocation
+                                        .officeLatitude,
+                                    value.listOfOfficeRoom[index].officeLocation
+                                        .officeLongitude,
+                                  )
+                                : '-',
+                            officePersonCapacity: value
+                                .listOfOfficeRoom[index].officePersonCapacity
+                                .toString(),
+                            officeArea: value.listOfOfficeRoom[index].officeArea
+                                .toString(),
+                            hours: '/Month',
+                            officePricing: value.listOfOfficeRoom[index]
+                                .officePricing.officePrice,
+                          );
+                        }),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isFailed) {
+                  return commonShimmerFailedLoadWidget(
+                    sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                    sizeWidth: double.infinity,
+                  );
+                }
+                return SizedBox(
+                  height: AdaptSize.screenWidth / 2800 * 2000,
+                  width: double.infinity,
+                );
               }),
 
-              /// all meeting room text
-              allSpaces(context, 'Meeting Rooms', () {}),
+              SizedBox(
+                height: AdaptSize.screenHeight * .008,
+              ),
+
+              /// all meeting room card
+              allSpaces(context, 'Meeting Rooms', () {
+                context.read<NavigasiViewModel>().navigasiAllOffice(
+                      context,
+                      const AllMeetingRoomScreen(),
+                    );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
               ),
 
               /// meeting space
-              meetingRoomWidget(() {
-                /// ini baru dibuat belum dipindah ke view model
-                /// dipindah nanti aja kalo udah selesai
+              Consumer<OfficeViewModels>(builder: (context, value, child) {
+                if (value.connectionState == stateOfConnections.isLoading) {
+                  return shimmerLoading(
+                    child: commonShimmerLoadWidget(
+                        sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                        sizeWidth: double.infinity),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isReady) {
+                  return SizedBox(
+                    height: AdaptSize.screenWidth / 2800 * 2000,
+                    width: double.infinity,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: value.listOfMeetingRoom.length >= 5
+                            ? 5
+                            : value.listOfMeetingRoom.length,
+                        itemBuilder: (context, index) {
+                          return verticalCardHome(
+                            context: context,
+                            onTap: () {
+                              context
+                                  .read<NavigasiViewModel>()
+                                  .navigasiToDetailSpace(
+                                    context: context,
+                                    officeId:
+                                        value.listOfMeetingRoom[index].officeID,
+                                  );
+                            },
+                            officeImage:
+                                value.listOfMeetingRoom[index].officeLeadImage,
+                            officeName:
+                                value.listOfMeetingRoom[index].officeName,
+                            officeLocation:
+                                '${value.listOfMeetingRoom[index].officeLocation.district}, ${value.listOfMeetingRoom[index].officeLocation.city}',
+                            officeStarRanting: value
+                                .listOfMeetingRoom[index].officeStarRating
+                                .toString(),
+                            officeApproxDistance: locationProvider.posisi !=
+                                    null
+                                ? locationProvider.homeScreenCalculateDistances(
+                                    locationProvider.lat,
+                                    locationProvider.lng,
+                                    value.listOfMeetingRoom[index]
+                                        .officeLocation.officeLatitude,
+                                    value.listOfMeetingRoom[index]
+                                        .officeLocation.officeLongitude,
+                                  )
+                                : '-',
+                            officePersonCapacity: value
+                                .listOfMeetingRoom[index].officePersonCapacity
+                                .toString(),
+                            officeArea: value
+                                .listOfMeetingRoom[index].officeArea
+                                .toString(),
+                            hours: '/Hours',
+                            officePricing: value.listOfMeetingRoom[index]
+                                .officePricing.officePrice,
+                          );
+                        }),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isFailed) {
+                  return commonShimmerFailedLoadWidget(
+                    sizeHeight: AdaptSize.screenWidth / 2800 * 2000,
+                    sizeWidth: double.infinity,
+                  );
+                }
+                return SizedBox(
+                  height: AdaptSize.screenWidth / 2800 * 2000,
+                  width: double.infinity,
+                );
               }),
 
               SizedBox(
@@ -190,16 +447,96 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// text recomended spaces
-              allSpaces(context, 'Recommendation', () {}),
+              allSpaces(context, 'Recommendation', () {
+                context.read<NavigasiViewModel>().navigasiAllOffice(
+                      context,
+                      const AllRecomendationOfficeScreen(),
+                    );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
               ),
 
               /// recomended spaces
-              recomenSpaces(context, () {
-                /// ini baru dibuat belum dipindah ke view model
-                /// dipindah nanti aja kalo udah selesai
+              Consumer<OfficeViewModels>(builder: (context, value, child) {
+                if (value.connectionState == stateOfConnections.isLoading) {
+                  return shimmerLoading(
+                    child: commonShimmerLoadWidget(
+                      sizeHeight: AdaptSize.screenWidth / 1000 * 360,
+                      sizeWidth: double.infinity,
+                    ),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isReady) {
+                  return MediaQuery.removePadding(
+                    removeTop: true,
+                    context: context,
+                    child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        shrinkWrap: true,
+                        itemCount:
+                            value.listOfOfficeByRecommendation.length >= 5
+                                ? 5
+                                : value.listOfOfficeByRecommendation.length,
+                        itemBuilder: (context, index) {
+                          return horizontalCardHome(
+                            context: context,
+                            onTap: () {
+                              context
+                                  .read<NavigasiViewModel>()
+                                  .navigasiToDetailSpace(
+                                    context: context,
+                                    officeId: value
+                                        .listOfOfficeByRecommendation[index]
+                                        .officeID,
+                                  );
+                            },
+                            officeImage: value
+                                .listOfOfficeByRecommendation[index]
+                                .officeLeadImage,
+                            officeName: value
+                                .listOfOfficeByRecommendation[index].officeName,
+                            officeLocation:
+                                '${value.listOfOfficeByRecommendation[index].officeLocation.district}, ${value.listOfOfficeByRecommendation[index].officeLocation.city}',
+                            officeStarRanting: value
+                                .listOfOfficeByRecommendation[index]
+                                .officeStarRating
+                                .toString(),
+                            officeApproxDistance: locationProvider.posisi !=
+                                    null
+                                ? locationProvider.homeScreenCalculateDistances(
+                                    locationProvider.lat,
+                                    locationProvider.lng,
+                                    value.listOfOfficeByRecommendation[index]
+                                        .officeLocation.officeLatitude,
+                                    value.listOfOfficeByRecommendation[index]
+                                        .officeLocation.officeLongitude,
+                                  )
+                                : '-',
+                            officePersonCapacity: value
+                                .listOfOfficeByRecommendation[index]
+                                .officePersonCapacity
+                                .toString(),
+                            officeArea: value
+                                .listOfOfficeByRecommendation[index].officeArea
+                                .toString(),
+                            hours: '/Hours',
+                            officePricing: value
+                                .listOfOfficeByRecommendation[index]
+                                .officePricing
+                                .officePrice,
+                          );
+                        }),
+                  );
+                }
+                if (value.connectionState == stateOfConnections.isFailed) {
+                  return commonShimmerFailedLoadWidget(
+                    sizeHeight: AdaptSize.screenWidth / 1000 * 360,
+                    sizeWidth: double.infinity,
+                  );
+                }
+                return const SizedBox();
               }),
             ],
           ),

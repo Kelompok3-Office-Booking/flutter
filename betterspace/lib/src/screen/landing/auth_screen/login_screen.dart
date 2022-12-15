@@ -1,7 +1,10 @@
+import 'package:betterspace/src/services/page_validators.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
-import 'package:betterspace/src/view_model/get_location_view_model.dart';
+import 'package:betterspace/src/utils/enums.dart';
+import 'package:betterspace/src/utils/form_validator.dart';
 import 'package:betterspace/src/view_model/login_view_model.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/loading_widget.dart';
@@ -39,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    AdaptSize.size(context: context);
+    final providerClient = Provider.of<LoginViewmodels>(context, listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Padding(
@@ -72,6 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 obscureText: false,
                 textStyle: Theme.of(context).textTheme.bodyText1,
                 textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.emailAddress,
                 hintTexts: 'example@gmail.com',
                 label: 'Email',
                 controller: _emailController,
@@ -87,24 +91,33 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// password field
-              textFormFields(
-                maxLines: 1,
-                obscureText: true,
-                textInputAction: TextInputAction.done,
-                textStyle: Theme.of(context).textTheme.bodyText1,
-                label: "Password",
-                controller: _passwordController,
-                hintTexts: "********",
-                validators: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter passwords';
-                  } else if (value != null && value.length < 8 ||
-                      value.length > 25) {
-                    return 'Please enter password in range of 8 - 25 characters';
-                  }
-                  return null;
-                },
-              ),
+              Consumer<LoginViewModel>(builder: (context, value, child) {
+                return textFormFields(
+                  maxLines: 1,
+                  obscureText: value.visiblePassword1 ? false : true,
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      value.visiblePass1();
+                    },
+                    icon: value.visiblePassword1
+                        ? Icon(
+                            Icons.visibility_off,
+                            color: MyColor.darkBlueColor,
+                          )
+                        : Icon(Icons.remove_red_eye,
+                            color: MyColor.darkBlueColor),
+                  ),
+                  textInputAction: TextInputAction.done,
+                  textStyle: Theme.of(context).textTheme.bodyText1,
+                  label: "Password",
+                  controller: _passwordController,
+                  hintTexts: "********",
+                  validators: (value) => FormValidator.singlePasswordValidator(
+                    title: 'password',
+                    value1: _passwordController.text,
+                  ),
+                );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .012,
@@ -130,21 +143,28 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// button login
-              Consumer<LoginViewModel>(builder: (context, value, child) {
+              Consumer<LoginViewmodels>(builder: (context, value, child) {
                 return buttonWidget(
                   sizeheight: AdaptSize.screenHeight / 14,
                   sizeWidth: double.infinity,
                   borderRadius: BorderRadius.circular(10),
                   backgroundColor: MyColor.darkBlueColor,
                   onPressed: () async {
-                    final is_valid = _formKey.currentState!.validate();
-                    if (is_valid == false) {
+                    final isValid = _formKey.currentState!.validate();
+                    if (isValid == false) {
                       return;
                     } else {
-                      value.userLogin(context);
+                      await providerClient.loginGetToken(
+                          userEmail: _emailController.text,
+                          userPassword: _passwordController.text);
+                      value.apiLoginState = stateOfConnections.isDoingNothing;
+                      if (!mounted) return;
+
+                      /// mengatasi build context across async gaps
+                      nextScreen(value.isUserExist, context);
                     }
                   },
-                  child: value.isLoading
+                  child: value.apiLoginState == stateOfConnections.isLoading
                       ? LoadingWidget.whiteButtonLoading
                       : Text(
                           "Login",
@@ -160,7 +180,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
               Padding(
                 padding: EdgeInsets.only(
-                  bottom: AdaptSize.screenHeight * 0.088,
+                  bottom: AdaptSize.screenHeight * .05,
                 ),
                 child: Align(
                   alignment: Alignment.bottomCenter,
@@ -173,8 +193,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           .bodyMedium!
                           .copyWith(color: MyColor.darkBlueColor),
                       recognizer: TapGestureRecognizer()
-                        ..onTap = () {
-                          NavigasiViewModel().navigasiPop(context);
+                        ..onTap = () async {
+                          NavigasiViewModel().navigasiToRegisterScreen(context);
                         }),
                 ),
               )

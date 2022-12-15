@@ -1,9 +1,7 @@
 import 'package:betterspace/src/screen/menu/account/account_screen.dart';
 import 'package:betterspace/src/screen/menu/home/home_screen.dart';
-import 'package:betterspace/src/screen/menu/tersimpan/tersimpan_screen.dart';
 import 'package:betterspace/src/screen/menu/tersimpan/wishlist_screen.dart';
 import 'package:betterspace/src/screen/menu/transaksi/booking_history_screen.dart';
-
 import 'package:betterspace/src/widget/dialog/exit_dialog.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -21,7 +19,15 @@ class MenuViewModel with ChangeNotifier {
 
   get pages => _pages[_currentPage];
 
-  set onTappeed(int index) {
+  set onTaped(int index) {
+    _currentPage = index;
+    notifyListeners();
+  }
+
+  /// access menu index
+  void backToMenu({
+    required int index,
+  }) {
     _currentPage = index;
     notifyListeners();
   }

@@ -1,7 +1,6 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
-import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -13,31 +12,20 @@ class TermConditionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Scaffold(
-        appBar: transparentAppbarWidget(
-          context: context,
-          titles: Text(
-            'Term & Condition',
-            style: Theme.of(context).textTheme.headline6!.copyWith(
-                  fontSize: AdaptSize.pixel16,
-                ),
-          ),
-          titleSpacer: AdaptSize.pixel16,
-          leadingIcon: IconButton(
-            onPressed: () {
-              context.read<NavigasiViewModel>().navigasiPop(context);
-            },
-            icon: Icon(
-              Icons.arrow_back_ios,
-              color: MyColor.neutral100,
-              size: AdaptSize.pixel16,
-            ),
-          ),
+        appBar: defaultAppbarWidget(
+          contexts: context,
+          leadIconFunction: () {
+            context.read<NavigasiViewModel>().navigasiPop(context);
+          },
+          isCenterTitle: false,
+          titles: 'Term & Condition',
         ),
         body: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.only(
             left: AdaptSize.pixel16,
             right: AdaptSize.pixel16,
+            top: AdaptSize.pixel16
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +45,7 @@ class TermConditionScreen extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .bodyText2!
-                    .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                    .copyWith(fontSize: AdaptSize.pixel14),
                 textAlign: TextAlign.justify,
               ),
               Text(
@@ -65,7 +53,7 @@ class TermConditionScreen extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .bodyText2!
-                    .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                    .copyWith(fontSize: AdaptSize.pixel14),
                 textAlign: TextAlign.justify,
               ),
               Text(
@@ -73,7 +61,7 @@ class TermConditionScreen extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .bodyText2!
-                    .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                    .copyWith(fontSize: AdaptSize.pixel14),
                 textAlign: TextAlign.justify,
               ),
               SizedBox(
@@ -84,7 +72,7 @@ class TermConditionScreen extends StatelessWidget {
                 style: Theme.of(context)
                     .textTheme
                     .headline6!
-                    .copyWith(fontSize: AdaptSize.screenHeight * .014),
+                    .copyWith(fontSize: AdaptSize.pixel14),
               ),
               SizedBox(
                 height: AdaptSize.pixel8,
@@ -92,7 +80,7 @@ class TermConditionScreen extends StatelessWidget {
               Center(
                 child: SvgPicture.asset(
                   'assets/svg_assets/logo.svg',
-                  height: AdaptSize.screenHeight * .08,
+                  height: AdaptSize.pixel75,
                 ),
               ),
               SizedBox(

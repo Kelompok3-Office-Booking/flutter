@@ -1,3 +1,5 @@
+import 'package:betterspace/src/utils/adapt_size.dart';
+import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -20,14 +22,16 @@ Widget partialRoundedCard({
       ),
       boxShadow: [
         BoxShadow(
-          color: Colors.grey, //New
-          blurRadius: 5.0,
-          offset: Offset(0, -2),
+          /// update 13 11 22 menyamakan dengan detail screen
+          color: MyColor.neutral300.withOpacity(.5),
+          blurRadius: 4,
+          blurStyle: BlurStyle.solid,
         ),
       ],
     ),
-    child: Card(
-      shape: RoundedRectangleBorder(
+    child: Container(
+      decoration: BoxDecoration(
+        color: MyColor.neutral900,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(cardTopLeftRadius ?? 0),
           topRight: Radius.circular(cardTopRightRadius ?? 0),
@@ -35,7 +39,6 @@ Widget partialRoundedCard({
           bottomRight: Radius.circular(cardBottomRightRadius ?? 0),
         ),
       ),
-      elevation: elevations ?? 0,
       child: childWidgets,
     ),
   );

@@ -11,34 +11,41 @@ Widget textTableContent({
   text4,
   text5,
   bool? t5,
+  bool? withDivider,
+  bool? bottomDivider,
 }) {
   return Padding(
     padding: EdgeInsets.fromLTRB(
-        AdaptSize.screenWidth * .022,
-        AdaptSize.screenHeight * .005,
-        AdaptSize.screenWidth * .022,
-        AdaptSize.screenHeight * .02),
+      AdaptSize.pixel20,
+      withDivider! ? AdaptSize.screenHeight * .005 : 0,
+      AdaptSize.pixel20,
+      0,
+    ),
     child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         /// divider
-        Center(
-          child: dividerWdiget(
-            width: AdaptSize.screenWidth * 0.1,
-            opacity: .4,
-          ),
-        ),
-
-        t5!
-            ? Text(
-                'Terms and Condition',
-                style: titleTextStyle,
+        withDivider
+            ? Center(
+                child: dividerWdiget(
+                  width: AdaptSize.screenWidth * 0.1,
+                  opacity: .4,
+                ),
               )
-            : Text(
-                'How To',
-                style: titleTextStyle,
-              ),
+            : const SizedBox(),
+
+        withDivider
+            ? t5!
+                ? Text(
+                    'Terms and Condition',
+                    style: titleTextStyle,
+                  )
+                : Text(
+                    'How To',
+                    style: titleTextStyle,
+                  )
+            : const SizedBox(),
 
         SizedBox(
           height: AdaptSize.screenHeight * 0.01,
@@ -113,7 +120,7 @@ Widget textTableContent({
                 ),
               ],
             ),
-            t5
+            t5!
                 ? TableRow(
                     children: [
                       Text(
@@ -140,9 +147,15 @@ Widget textTableContent({
           ],
         ),
 
-        SizedBox(
-          height: AdaptSize.screenHeight * 0.15,
-        ),
+        bottomDivider!
+            ? dividerWdiget(width: double.infinity, opacity: .1)
+            : const SizedBox(),
+
+        withDivider
+            ? SizedBox(
+                height: AdaptSize.pixel14,
+              )
+            : const SizedBox(),
       ],
     ),
   );

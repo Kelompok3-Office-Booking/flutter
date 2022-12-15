@@ -4,9 +4,9 @@ import 'package:betterspace/src/utils/form_validator.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
-import 'package:betterspace/src/widget/widget/transparent_appbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -34,39 +34,25 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: transparentAppbarWidget(
-        context: context,
-        titles: Text(
-          'Change Password',
-          style: Theme.of(context).textTheme.headline6!.copyWith(
-                fontSize: AdaptSize.pixel16,
-              ),
-        ),
-        titleSpacer: AdaptSize.pixel16,
-        leadingIcon: IconButton(
-          onPressed: () {
-            context.read<NavigasiViewModel>().navigasiPop(context);
-          },
-          icon: Icon(
-            Icons.arrow_back_ios,
-            color: MyColor.neutral100,
-            size: AdaptSize.pixel16,
-          ),
-        ),
+      appBar: defaultAppbarWidget(
+        contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        isCenterTitle: false,
+        titles: 'Change Password',
       ),
       body: Padding(
         padding: EdgeInsets.only(
           left: AdaptSize.screenWidth * .016,
           right: AdaptSize.screenWidth * .016,
+          top: AdaptSize.pixel16,
         ),
         child: Form(
           key: _key,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(
-                height: AdaptSize.pixel16,
-              ),
 
               /// update password
               textFormFields(
@@ -75,7 +61,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 textStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
-                    .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                    .copyWith(fontSize: AdaptSize.pixel16),
                 validators: (value) => FormValidator.validate(
                   title: 'password',
                   value1: _updatePasswordController.text,
@@ -97,7 +83,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 textStyle: Theme.of(context)
                     .textTheme
                     .bodyText1!
-                    .copyWith(fontSize: AdaptSize.screenHeight * .016),
+                    .copyWith(fontSize: AdaptSize.pixel16),
                 validators: (value) => FormValidator.validate(
                   title: 'password',
                   value1: _updatePasswordController.text,
@@ -122,6 +108,8 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   onPressed: () async {
                     if (_key.currentState!.validate()) {
                       value.changeProfile(context, 'Your password has been updated successfully!');
+                      _updatePasswordController.clear();
+                      _confirmPasswordController.clear();
                     }
                   },
                   child: value.isLoading

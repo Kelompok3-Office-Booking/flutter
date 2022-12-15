@@ -1,8 +1,11 @@
+import 'package:betterspace/src/services/page_validators.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/widget/widget/custom_dialog.dart';
+import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
+import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -16,47 +19,42 @@ class AccountScreen extends StatelessWidget {
         Provider.of<NavigasiViewModel>(context, listen: false);
     final accountProvider =
         Provider.of<AccountViewModel>(context, listen: false);
+    final userAccountProvider =
+        Provider.of<LoginViewmodels>(context, listen: false);
+    final userAccountProviderListen =
+        Provider.of<LoginViewmodels>(context, listen: true);
+    if (userAccountProviderListen.userModels == null) {
+      userAccountProvider.getProfile();
+    }
+
     return Scaffold(
+      appBar: defaultAppbarWidget(
+        contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        centerTitle: true,
+        isCenterTitle: true,
+        titles: 'Profile',
+      ),
       body: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         padding: EdgeInsets.only(
-          top: AdaptSize.paddingTop + AdaptSize.screenHeight * .017,
+          top: AdaptSize.pixel16,
           left: AdaptSize.screenWidth * .016,
           right: AdaptSize.screenWidth * .016,
         ),
         child: Center(
           child: Column(
             children: [
-              Text(
-                'Profile',
-                style: Theme.of(context)
-                    .textTheme
-                    .headline6!
-                    .copyWith(fontSize: AdaptSize.screenHeight * .022),
-              ),
-
-              SizedBox(
-                height: AdaptSize.screenHeight * .016,
-              ),
-
-              dividerWdiget(
-                width: double.infinity,
-                opacity: .1,
-              ),
-
-              SizedBox(
-                height: AdaptSize.screenHeight * .016,
-              ),
-
               /// image profile
               SizedBox(
-                height: AdaptSize.screenHeight * .16,
+                height: AdaptSize.screenWidth * .38,
                 width: AdaptSize.screenWidth * .38,
                 child: Stack(
                   children: [
                     /// image display
-                    Consumer<AccountViewModel>(
-                        builder: (context, value, child) {
+                    Consumer<LoginViewmodels>(builder: (context, value, child) {
                       return Container(
                         decoration: BoxDecoration(
                           color: MyColor.neutral800,
@@ -67,8 +65,14 @@ class AccountScreen extends StatelessWidget {
                           ),
                           image: DecorationImage(
                             fit: BoxFit.cover,
-                            image: value.imageProfile != null
-                                ? FileImage(value.imageProfile)
+                            image: value.userModels?.userProfileDetails
+                                            .userProfilePicture !=
+                                        "" &&
+                                    value.userModels != null
+                                ? NetworkImage(value
+                                    .userModels!
+                                    .userProfileDetails
+                                    .userProfilePicture) as ImageProvider
                                 : const AssetImage(
                                     'assets/image_assets/default_image_profile.png',
                                   ) as ImageProvider,
@@ -82,8 +86,8 @@ class AccountScreen extends StatelessWidget {
                       bottom: AdaptSize.screenHeight * .01,
                       right: 0,
                       child: Container(
-                        height: AdaptSize.screenHeight * .05,
-                        width: AdaptSize.screenHeight * .05,
+                        height: AdaptSize.screenWidth * .1,
+                        width: AdaptSize.screenWidth * .1,
                         alignment: Alignment.center,
                         decoration: BoxDecoration(
                           color: MyColor.neutral600,
@@ -102,6 +106,7 @@ class AccountScreen extends StatelessWidget {
                           child: Icon(
                             Icons.camera_alt_outlined,
                             color: MyColor.neutral900,
+                            size: AdaptSize.pixel18,
                           ),
                         ),
                       ),
@@ -116,9 +121,11 @@ class AccountScreen extends StatelessWidget {
 
               /// username
               Text(
-                'Erick Cahya',
+                userAccountProviderListen
+                        .userModels?.userProfileDetails.userName ??
+                    'Erick Cahya',
                 style: Theme.of(context).textTheme.headline6!.copyWith(
-                      fontSize: AdaptSize.screenHeight * .016,
+                      fontSize: AdaptSize.pixel16,
                       color: MyColor.neutral200,
                     ),
               ),
@@ -129,9 +136,10 @@ class AccountScreen extends StatelessWidget {
 
               /// email user
               Text(
-                'Erickcahya@gmail.com',
+                userAccountProviderListen.userModels?.userEmail ??
+                    "erickcahya2@gmail.com",
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      fontSize: AdaptSize.screenHeight * .014,
+                      fontSize: AdaptSize.pixel14,
                       color: MyColor.neutral400,
                     ),
               ),
@@ -156,8 +164,17 @@ class AccountScreen extends StatelessWidget {
                                   title: 'Are you sure want to Logout ?',
                                   imageAsset:
                                       'assets/svg_assets/heart_break.svg',
-                                  onTap1: () {
-                                    navigasiProvider.navigasiLogout(context);
+                                  onTap1: () async {
+                                    await userAccountProvider
+                                        .logoutWithTokens();
+                                    isLogoutSuccess(
+                                        context: context,
+                                        logoutStatusCode:
+                                            userAccountProviderListen
+                                                .logoutStatusCode,
+                                        logoutConnectionState:
+                                            userAccountProviderListen
+                                                .apiLogoutState);
                                   },
                                   onTap2: () {
                                     navigasiProvider.navigasiPop(context);
@@ -215,14 +232,14 @@ class AccountScreen extends StatelessWidget {
           onTap: onTap,
           child: Row(
             children: [
-              Icon(icon, size: AdaptSize.screenHeight * .024),
+              Icon(icon, size: AdaptSize.pixel22),
               SizedBox(
                 width: AdaptSize.screenWidth * .016,
               ),
               Text(
                 itemName,
                 style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      fontSize: AdaptSize.screenHeight * .014,
+                      fontSize: AdaptSize.pixel14,
                     ),
               ),
               const Spacer(),
@@ -231,7 +248,7 @@ class AccountScreen extends StatelessWidget {
                   : Icon(
                       Icons.arrow_forward_ios,
                       color: MyColor.neutral500,
-                      size: AdaptSize.screenHeight * .024,
+                      size: AdaptSize.pixel20,
                     ),
             ],
           ),

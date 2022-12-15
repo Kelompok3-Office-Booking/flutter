@@ -3,16 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:shimmer/shimmer.dart';
 
 Widget shimmerLoading({
-  double? height,
-  double? width,
+  required Widget child,
 }) {
   return Shimmer.fromColors(
-    baseColor: MyColor.grayLightColor.withOpacity(.4),
-    highlightColor: MyColor.whiteColor,
-    child: Container(
-      height: height,
-      width: width,
-      color: MyColor.whiteColor,
-    ),
+    baseColor: MyColor.neutral600,
+    highlightColor: MyColor.neutral900,
+    child: child,
   );
 }
