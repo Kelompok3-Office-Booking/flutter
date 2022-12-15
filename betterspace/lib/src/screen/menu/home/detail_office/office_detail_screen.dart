@@ -57,14 +57,30 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
   Widget build(BuildContext context) {
     final dummyDataProviders =
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
+    dummyDataProviders.addRecord(12);
     List<OfficeModels> listOfDummyOffice =
         dummyDataProviders.listOfOfficeModels;
 
     final officeListAlloffice =
         Provider.of<OfficeViewModels>(context, listen: true);
+    List<OfficeModels> listOfAllOfficeContainers =
+        officeListAlloffice.listOfAllOfficeModels;
 
     final officeById = officeModelFilterByOfficeId(
-        officeListAlloffice.listOfAllOfficeModels, widget.officeID);
+        listOfModels: listOfAllOfficeContainers,
+        requestedOfficeId: widget.officeID);
+
+    if (officeById == null) {
+      print("parse gagal");
+    } else {
+      print(officeById.officeName);
+      print(officeById.officeID);
+      if (listOfDummyOffice[1] == null) {
+        print("dummy data koit");
+      } else {
+        print(listOfDummyOffice[1].toString());
+      }
+    }
 
     return Scaffold(
       body: Stack(
@@ -325,9 +341,11 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                         IconWithLabel().asrow(
                             contexts: context,
                             usedIcon: Icons.access_time,
-                            labelText:
-                                '${officeById?.officeOpenTime.hour.toString()} - ${officeById?.officeCloseTime.hour.toString()}' ??
-                                    "08:00-23:00",
+                            labelText: officeById != null
+                                ? officeById.officeOpenTime.hour.toString() +
+                                    ", " +
+                                    officeById.officeCloseTime.hour.toString()
+                                : "08:00-23:00",
                             spacer: AdaptSize.pixel4),
                       ],
                     ),
@@ -650,8 +668,9 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                             width: AdaptSize.pixel8,
                           ),
                           Text(
-                            (officeFacility[index].facilitiesTitle) ??
-                                'Facilities',
+                            officeFacility != null
+                                ? officeFacility[index].facilitiesTitle
+                                : 'Facilities',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
