@@ -34,7 +34,7 @@ class PaymentMenthodModel {
 
 class PaymentModels {
   List<PaymentMenthodModel> listOfAvailablePaymentMethod = [];
-  PaymentMenthod() {
+  PaymentModels() {
     listOfAvailablePaymentMethod = [
       PaymentMenthodModel(
           paymentId: "QR",
@@ -105,12 +105,12 @@ class UserTransaction {
   late int bookingId;
   late int bookingDuration;
   late TransactionBookingTime bookingTime;
-  late OfficePricing bookingOfficePrice;
+  late int bookingOfficePrice;
   late String Drink;
   late String Status;
   late PaymentMenthodModel paymentMethod;
   late UserModel userData;
-  late OfficeModels officeData;
+  OfficeModels? officeData;
   UserTransaction({
     required this.bookingId,
     required this.bookingDuration,
@@ -120,6 +120,6 @@ class UserTransaction {
     required this.Status,
     required this.paymentMethod,
     required this.userData,
-    required this.officeData,
+    this.officeData,
   });
 }
