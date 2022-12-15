@@ -209,11 +209,7 @@ Widget verticalCardHome({
                       Text(
                         NumberFormat.currency(
                                 locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                            .format(officePricing
-                                // listOfDummyOffice[index]
-                                //     .officePricing
-                                //     .officePrice
-                                ),
+                            .format(officePricing),
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               color: MyColor.darkBlueColor,
                               fontSize: AdaptSize.pixel14,

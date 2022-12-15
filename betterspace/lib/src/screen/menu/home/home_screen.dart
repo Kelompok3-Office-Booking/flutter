@@ -1,6 +1,11 @@
+import 'package:betterspace/src/screen/menu/home/all_offices/all_coworking_screen.dart';
+import 'package:betterspace/src/screen/menu/home/all_offices/all_meeting_room_screen.dart';
+import 'package:betterspace/src/screen/menu/home/all_offices/all_recomendation_screen.dart';
+import 'package:betterspace/src/screen/menu/home/all_offices/all_rent_office_screen.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/enums.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
@@ -23,20 +28,27 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   Future.delayed(Duration.zero, () async {
-  //     final getOffice = Provider.of<OfficeViewModels>(context, listen: false);
-  //     await getOffice.fetchCoworkingSpace();
-  //     await getOffice.fetchMeetingRoom();
-  //     await getOffice.fetchOfficeRoom();
-  //     await getOffice.fetchOfficeByRecommendation();
-  //   });
-  // }
+  @override
+  void initState() {
+    super.initState();
+    final officeData = Provider.of<OfficeViewModels>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      if (officeData.listOfCoworkingSpace.isEmpty &&
+          officeData.listOfMeetingRoom.isEmpty &&
+          officeData.listOfOfficeRoom.isEmpty &&
+          officeData.listOfOfficeByRecommendation.isEmpty) {
+        officeData.fetchCoworkingSpace();
+        officeData.fetchOfficeRoom();
+        officeData.fetchMeetingRoom();
+        officeData.fetchOfficeByRecommendation();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    final locationProvider =
+        Provider.of<GetLocationViewModel>(context, listen: false);
     final userAccountProvider =
         Provider.of<LoginViewmodels>(context, listen: false);
     final userAccountProviderListen =
@@ -71,9 +83,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   userAccountProviderListen
                                           .userModels?.userProfileDetails !=
                                       null
-                              ? "Hi " +
-                                  userAccountProviderListen
-                                      .userModels!.userProfileDetails.userName
+                              ? "Hi ${userAccountProviderListen.userModels!.userProfileDetails.userName}"
                               : 'Hi User',
                           style: Theme.of(context)
                               .textTheme
@@ -149,7 +159,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// all coworking text
-              allSpaces(context, 'Popular Coworking Space', () {}),
+              allSpaces(context, 'Popular Coworking Space', () {
+                context.read<NavigasiViewModel>().navigasiAllOffice(
+                      context,
+                      const AllCoworkingScreen(),
+                    );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
@@ -172,7 +187,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: value.listOfCoworkingSpace.length,
+                        itemCount: value.listOfCoworkingSpace.length >= 5
+                            ? 5
+                            : value.listOfCoworkingSpace.length,
                         itemBuilder: (context, index) {
                           return verticalCardHome(
                             context: context,
@@ -190,14 +207,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             officeName:
                                 value.listOfCoworkingSpace[index].officeName,
                             officeLocation:
-                                '${value.listOfCoworkingSpace[index].officeLocation.city}, ${value.listOfCoworkingSpace[index].officeLocation.district}',
+                                '${value.listOfCoworkingSpace[index].officeLocation.district}, ${value.listOfCoworkingSpace[index].officeLocation.city}',
                             officeStarRanting: value
                                 .listOfCoworkingSpace[index].officeStarRating
                                 .toString(),
-                            officeApproxDistance: value
-                                .listOfCoworkingSpace[index]
-                                .officeApproxDistance
-                                .toString(),
+                            officeApproxDistance: locationProvider.posisi !=
+                                    null
+                                ? locationProvider.homeScreenCalculateDistances(
+                                    locationProvider.lat,
+                                    locationProvider.lng,
+                                    value.listOfCoworkingSpace[index]
+                                        .officeLocation.officeLatitude,
+                                    value.listOfCoworkingSpace[index]
+                                        .officeLocation.officeLongitude,
+                                  )
+                                : '-',
                             officePersonCapacity: value
                                 .listOfCoworkingSpace[index]
                                 .officePersonCapacity
@@ -229,7 +253,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// all office rent text
-              allSpaces(context, 'Office for Rent', () {}),
+              allSpaces(context, 'Office for Rent', () {
+                context.read<NavigasiViewModel>().navigasiAllOffice(
+                      context,
+                      const AllRentOfficeScreen(),
+                    );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
@@ -252,7 +281,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: value.listOfOfficeRoom.length,
+                        itemCount: value.listOfOfficeRoom.length >= 5
+                            ? 5
+                            : value.listOfOfficeRoom.length,
                         itemBuilder: (context, index) {
                           return verticalCardHome(
                             context: context,
@@ -270,13 +301,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             officeName:
                                 value.listOfOfficeRoom[index].officeName,
                             officeLocation:
-                                '${value.listOfOfficeRoom[index].officeLocation.city}, ${value.listOfOfficeRoom[index].officeLocation.district}',
+                                '${value.listOfOfficeRoom[index].officeLocation.district}, ${value.listOfOfficeRoom[index].officeLocation.city}',
                             officeStarRanting: value
                                 .listOfOfficeRoom[index].officeStarRating
                                 .toString(),
-                            officeApproxDistance: value
-                                .listOfOfficeRoom[index].officeApproxDistance
-                                .toString(),
+                            officeApproxDistance: locationProvider.posisi !=
+                                    null
+                                ? locationProvider.homeScreenCalculateDistances(
+                                    locationProvider.lat,
+                                    locationProvider.lng,
+                                    value.listOfOfficeRoom[index].officeLocation
+                                        .officeLatitude,
+                                    value.listOfOfficeRoom[index].officeLocation
+                                        .officeLongitude,
+                                  )
+                                : '-',
                             officePersonCapacity: value
                                 .listOfOfficeRoom[index].officePersonCapacity
                                 .toString(),
@@ -305,8 +344,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 height: AdaptSize.screenHeight * .008,
               ),
 
-              /// all meeting room text
-              allSpaces(context, 'Meeting Rooms', () {}),
+              /// all meeting room card
+              allSpaces(context, 'Meeting Rooms', () {
+                context.read<NavigasiViewModel>().navigasiAllOffice(
+                      context,
+                      const AllMeetingRoomScreen(),
+                    );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
@@ -328,7 +372,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemCount: value.listOfMeetingRoom.length,
+                        itemCount: value.listOfMeetingRoom.length >= 5
+                            ? 5
+                            : value.listOfMeetingRoom.length,
                         itemBuilder: (context, index) {
                           return verticalCardHome(
                             context: context,
@@ -346,13 +392,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             officeName:
                                 value.listOfMeetingRoom[index].officeName,
                             officeLocation:
-                                '${value.listOfMeetingRoom[index].officeLocation.city}, ${value.listOfMeetingRoom[index].officeLocation.district}',
+                                '${value.listOfMeetingRoom[index].officeLocation.district}, ${value.listOfMeetingRoom[index].officeLocation.city}',
                             officeStarRanting: value
                                 .listOfMeetingRoom[index].officeStarRating
                                 .toString(),
-                            officeApproxDistance: value
-                                .listOfMeetingRoom[index].officeApproxDistance
-                                .toString(),
+                            officeApproxDistance: locationProvider.posisi !=
+                                    null
+                                ? locationProvider.homeScreenCalculateDistances(
+                                    locationProvider.lat,
+                                    locationProvider.lng,
+                                    value.listOfMeetingRoom[index]
+                                        .officeLocation.officeLatitude,
+                                    value.listOfMeetingRoom[index]
+                                        .officeLocation.officeLongitude,
+                                  )
+                                : '-',
                             officePersonCapacity: value
                                 .listOfMeetingRoom[index].officePersonCapacity
                                 .toString(),
@@ -393,7 +447,12 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
 
               /// text recomended spaces
-              allSpaces(context, 'Recommendation', () {}),
+              allSpaces(context, 'Recommendation', () {
+                context.read<NavigasiViewModel>().navigasiAllOffice(
+                      context,
+                      const AllRecomendationOfficeScreen(),
+                    );
+              }),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
@@ -416,7 +475,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     child: ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
                         shrinkWrap: true,
-                        itemCount: value.listOfOfficeByRecommendation.length,
+                        itemCount:
+                            value.listOfOfficeByRecommendation.length >= 5
+                                ? 5
+                                : value.listOfOfficeByRecommendation.length,
                         itemBuilder: (context, index) {
                           return horizontalCardHome(
                             context: context,
@@ -436,15 +498,22 @@ class _HomeScreenState extends State<HomeScreen> {
                             officeName: value
                                 .listOfOfficeByRecommendation[index].officeName,
                             officeLocation:
-                                '${value.listOfOfficeByRecommendation[index].officeLocation.city}, ${value.listOfOfficeByRecommendation[index].officeLocation.district}',
+                                '${value.listOfOfficeByRecommendation[index].officeLocation.district}, ${value.listOfOfficeByRecommendation[index].officeLocation.city}',
                             officeStarRanting: value
                                 .listOfOfficeByRecommendation[index]
                                 .officeStarRating
                                 .toString(),
-                            officeApproxDistance: value
-                                .listOfOfficeByRecommendation[index]
-                                .officeApproxDistance
-                                .toString(),
+                            officeApproxDistance: locationProvider.posisi !=
+                                    null
+                                ? locationProvider.homeScreenCalculateDistances(
+                                    locationProvider.lat,
+                                    locationProvider.lng,
+                                    value.listOfOfficeByRecommendation[index]
+                                        .officeLocation.officeLatitude,
+                                    value.listOfOfficeByRecommendation[index]
+                                        .officeLocation.officeLongitude,
+                                  )
+                                : '-',
                             officePersonCapacity: value
                                 .listOfOfficeByRecommendation[index]
                                 .officePersonCapacity

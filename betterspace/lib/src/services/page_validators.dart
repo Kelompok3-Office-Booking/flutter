@@ -1,17 +1,27 @@
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/widget/dialog/response_dialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 nextScreen(bool isUserExist, BuildContext context) {
   if (isUserExist == true) {
-    return Provider.of<NavigasiViewModel>(context, listen: false)
-        .navigasiToMenuScreen(context);
+    ResponseDialog.dialogLoginSuccess(
+        context: context, title: 'Success Login', description: 'You have successfully login. Let\'s find a comfortable workplace to work');
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      Provider.of<NavigasiViewModel>(context, listen: false)
+          .navigasiToMenuScreen(context);
+    });
   } else {
-    const snackbars =
-        SnackBar(content: Text("login gagal, cek email dan password anda"));
-    ScaffoldMessenger.of(context).showSnackBar(snackbars);
+    ResponseDialog.dialogFailed(
+        context: context,
+        title: 'Invalid Login',
+        description:
+            'Please double check email and password you entered');
+    // const snackbars =
+    //     SnackBar(content: Text("login gagal, cek email dan password anda"));
+    // ScaffoldMessenger.of(context).showSnackBar(snackbars);
     return;
   }
 }
@@ -28,12 +38,21 @@ isLogoutSuccess({
   } else {
     dynamic snackbar;
     if (logoutStatusCode == "400") {
+    // return  ResponseDialog.dialogFailed(
+    //       context: context,
+    //       title: 'Logout Error',
+    //       description: 'Your session has expired');
       snackbar =
           SnackBar(content: Text("logout error, sesi anda telah berakhir"));
     } else {
+      // return ResponseDialog.dialogFailed(
+      //     context: context,
+      //     title: 'Logout Error',
+      //     description: 'Unknown error');
       snackbar = SnackBar(
           content: Text("logout error, kesalahan yang tidak diketahui"));
     }
+
     ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 }
@@ -44,19 +63,34 @@ isRegisterSuccess({
   required String registerStatus,
 }) {
   if (stateOfRegister != stateOfConnections.isFailed) {
-    Provider.of<NavigasiViewModel>(context, listen: false)
-        .navigasiToLoginScreen(context);
+    ResponseDialog.dialogRegisterSuccess(
+        context: context,
+        title: 'Success Register',
+        description:
+            'You have successfully registered. Let\'s explore Better space now');
+    Future.delayed(const Duration(milliseconds: 2500), () {
+      Provider.of<NavigasiViewModel>(context, listen: false)
+          .navigasiToLoginScreen(context);
+    });
   } else {
-    dynamic snackbar;
+    //dynamic snackbar;
     if (registerStatus == "400") {
-      snackbar = SnackBar(
-          content: Text(
-              "register gagal, user telah digunakan atau email anda tidak valid"));
+      ResponseDialog.dialogFailed(
+          context: context,
+          title: 'Invalid Register',
+          description: 'User has been used or your email is not valid');
+      // snackbar = SnackBar(
+      //     content: Text(
+      //         "register gagal, user telah digunakan atau email anda tidak valid"));
     } else {
-      snackbar = SnackBar(
-          content: Text("register gagal, kesalahan yang tidak diketahui"));
+      ResponseDialog.dialogFailed(
+          context: context,
+          title: 'Invalid Register',
+          description: 'Unknown error');
+      // snackbar = SnackBar(
+      //     content: Text("register gagal, kesalahan yang tidak diketahui"));
     }
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
-    return;
+    // ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    // return;
   }
 }

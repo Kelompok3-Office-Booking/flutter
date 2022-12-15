@@ -11,9 +11,9 @@ class CardShimmerHomeLoading {
     decoration: BoxDecoration(
       boxShadow: [
         BoxShadow(
-          offset: const Offset(1, 3),
           color: MyColor.grayLightColor.withOpacity(.4),
           blurRadius: 3,
+          blurStyle: BlurStyle.solid,
         ),
       ],
       borderRadius: BorderRadius.circular(16),
@@ -28,9 +28,9 @@ class CardShimmerHomeLoading {
     decoration: BoxDecoration(
       boxShadow: [
         BoxShadow(
-          offset: const Offset(1, 3),
           color: MyColor.grayLightColor.withOpacity(.4),
           blurRadius: 3,
+          blurStyle: BlurStyle.solid,
         ),
       ],
       borderRadius: BorderRadius.circular(16),
@@ -52,7 +52,7 @@ class CardShimmerHomeLoading {
             'sorry an error occurred',
             style: TextStyle(
               fontSize: 15,
-              color: MyColor.neutral600,
+              color: MyColor.danger400,
             ),
           ),
         ],
@@ -71,9 +71,9 @@ class CardShimmerHomeLoading {
     decoration: BoxDecoration(
       boxShadow: [
         BoxShadow(
-          offset: const Offset(1, 3),
           color: MyColor.grayLightColor.withOpacity(.4),
           blurRadius: 3,
+          blurStyle: BlurStyle.solid,
         ),
       ],
       borderRadius: BorderRadius.circular(16),
@@ -95,9 +95,9 @@ class CardShimmerHomeLoading {
       borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          offset: const Offset(1, 3),
           color: MyColor.grayLightColor.withOpacity(.4),
           blurRadius: 3,
+          blurStyle: BlurStyle.solid,
         ),
       ],
     ),
@@ -118,7 +118,7 @@ class CardShimmerHomeLoading {
             'sorry an error occurred',
             style: TextStyle(
               fontSize: 15,
-              color: MyColor.neutral600,
+              color: MyColor.danger400,
             ),
           ),
         ],
@@ -144,9 +144,9 @@ Widget commonShimmerLoadWidget({
     decoration: BoxDecoration(
       boxShadow: [
         BoxShadow(
-          offset: const Offset(1, 3),
           color: MyColor.grayLightColor.withOpacity(.4),
           blurRadius: 3,
+          blurStyle: BlurStyle.inner,
         ),
       ],
       borderRadius: BorderRadius.circular(16),
@@ -170,7 +170,6 @@ Widget commonShimmerFailedLoadWidget({
       borderRadius: BorderRadius.circular(16),
       boxShadow: [
         BoxShadow(
-          offset: const Offset(1, 3),
           color: MyColor.grayLightColor.withOpacity(.4),
           blurRadius: 3,
         ),
@@ -201,4 +200,3 @@ Widget commonShimmerFailedLoadWidget({
     ),
   );
 }
-

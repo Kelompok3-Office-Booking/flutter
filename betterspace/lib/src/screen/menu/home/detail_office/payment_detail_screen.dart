@@ -1,8 +1,12 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
+import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/transaction_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/voucer_promo_widget/text_table_content.dart';
 import 'package:betterspace/src/widget/office_card_widget/office_type_card.dart';
@@ -14,12 +18,13 @@ import 'package:betterspace/src/widget/widget/line_dash_widget.dart';
 import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 
 class PaymentDetailScreen extends StatefulWidget {
-  final int officeId;
+  final String officeId;
 
   const PaymentDetailScreen({Key? key, required this.officeId})
       : super(key: key);
@@ -39,8 +44,18 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final officeListAlloffice =
+        Provider.of<OfficeViewModels>(context, listen: true);
+    List<OfficeModels> listOfAllOfficeContainers =
+        officeListAlloffice.listOfAllOfficeModels;
+
+    final officeById = officeModelFilterByOfficeId(
+        listOfModels: listOfAllOfficeContainers,
+        requestedOfficeId: widget.officeId);
+
     final transactionProvider =
         Provider.of<TransactionViewModel>(context, listen: false);
+
     final dummyDataProviders =
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
     final listOfDummyOffice = dummyDataProviders.listOfOfficeModels;
@@ -112,35 +127,43 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
               height: AdaptSize.screenHeight * .016,
             ),
 
-            // /// header content
-            // headerContent(),
-            CachedNetworkImage(
-              imageUrl: listOfDummyOffice[widget.officeId].officeLeadImage,
-              imageBuilder: (context, imageProvider) => officeTypeItemCards(
-                context: context,
-                officeImage: imageProvider,
-                officeName: listOfDummyOffice[widget.officeId].officeName,
-                officeLocation:
-                    '${listOfDummyOffice[widget.officeId].officeLocation.city}, ${listOfDummyOffice[widget.officeId].officeLocation.district}',
-                officeStarRanting: listOfDummyOffice[widget.officeId]
-                    .officeStarRating
-                    .toString(),
-                officeApproxDistance: listOfDummyOffice[widget.officeId]
-                    .officeApproxDistance
-                    .toString(),
-                officePersonCapacity: listOfDummyOffice[widget.officeId]
-                    .officePersonCapacity
-                    .toString(),
-                officeArea:
-                    listOfDummyOffice[widget.officeId].officeArea.toString(),
-                officeType: listOfDummyOffice[widget.officeId].officeType,
-              ),
-              placeholder: (context, url) => shimmerLoading(
-                child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
-              ),
-              errorWidget: (context, url, error) =>
-                  CardShimmerHomeLoading.horizontalFailedShimmerHome,
-            ),
+            Consumer<GetLocationViewModel>(builder: (context, value, child) {
+              return CachedNetworkImage(
+                imageUrl: officeById?.officeLeadImage ??
+                    listOfDummyOffice[0].officeLeadImage,
+                imageBuilder: (context, imageProvider) => officeTypeItemCards(
+                  context: context,
+                  officeImage: imageProvider,
+                  officeName:
+                      officeById?.officeName ?? listOfDummyOffice[0].officeName,
+                  officeLocation:
+                      '${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}, ${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}',
+                  officeStarRanting: officeById?.officeStarRating.toString() ??
+                      listOfDummyOffice[0].officeStarRating.toString(),
+                  officeApproxDistance:
+                      value.locationPermission == LocationPermission.denied
+                          ? '-'
+                          : value.calculateDistances(
+                              value.lat,
+                              value.lng,
+                              officeById?.officeLocation.officeLatitude,
+                              officeById?.officeLocation.officeLongitude,
+                            ),
+                  officePersonCapacity:
+                      officeById?.officePersonCapacity.toString() ??
+                          listOfDummyOffice[0].officePersonCapacity.toString(),
+                  officeArea: officeById?.officeArea.toString() ??
+                      listOfDummyOffice[0].officeArea.toString(),
+                  officeType:
+                      officeById?.officeType ?? listOfDummyOffice[0].officeType,
+                ),
+                placeholder: (context, url) => shimmerLoading(
+                  child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
+                ),
+                errorWidget: (context, url, error) =>
+                    CardShimmerHomeLoading.horizontalFailedShimmerHome,
+              );
+            }),
 
             SizedBox(
               height: AdaptSize.screenHeight * .016,

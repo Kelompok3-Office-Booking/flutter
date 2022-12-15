@@ -17,11 +17,14 @@ class GetLocationViewModel with ChangeNotifier {
   String text2 = 'Better Space App ';
   String text3 =
       'requires permission to access your phone\'s location, used to Calculate the distance of the office from your current position';
-  Position? _posisi;
+  Position? posisi;
 
   late double? lat;
 
   late double? lng;
+
+  LocationPermission? locationPermission;
+
 
   /// permission lokasi chekker
   Future checkAndGetPosition() async {
@@ -45,11 +48,11 @@ class GetLocationViewModel with ChangeNotifier {
       return Future.error(
           'Location permissions are permanently denied, we cannot request permissions.');
     }
-    _posisi = await Geolocator.getCurrentPosition(
+    posisi = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    if (_posisi != null) {
-      lat = _posisi?.latitude;
-      lng = _posisi?.longitude;
+    if (posisi != null) {
+      lat = posisi?.latitude;
+      lng = posisi?.longitude;
     }
   }
 
@@ -108,15 +111,15 @@ class GetLocationViewModel with ChangeNotifier {
             await Geolocator.openLocationSettings();
           });
     }
-    _posisi = await Geolocator.getCurrentPosition(
+    posisi = await Geolocator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
-    if (_posisi != null) {
-      lat = _posisi?.latitude;
-      lng = _posisi?.longitude;
+    if (posisi != null) {
+      lat = posisi?.latitude;
+      lng = posisi?.longitude;
     }
 
     if (serviceEnabled) {
-      await getAddressFromLongLat(_posisi!.latitude, _posisi!.longitude);
+      await getAddressFromLongLat(posisi!.latitude, posisi!.longitude);
       Provider.of<NavigasiViewModel>(context, listen: false)
           .navigasiOpenGoogleMaps(context: context, officeId: officeId);
     }
@@ -131,7 +134,6 @@ class GetLocationViewModel with ChangeNotifier {
   final Completer<GoogleMapController> controllerMaps = Completer();
   late String address;
 
-
   /// polyline
   Future<void> createPolylines({
     required LatLng destinationCoordinates,
@@ -144,8 +146,8 @@ class GetLocationViewModel with ChangeNotifier {
         .getRouteBetweenCoordinates(
       'AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k',
       poly.PointLatLng(
-        _posisi!.latitude,
-        _posisi!.longitude,
+        posisi!.latitude,
+        posisi!.longitude,
       ),
       poly.PointLatLng(
         destinationCoordinates.latitude,
@@ -195,30 +197,45 @@ class GetLocationViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-
   /// string calculate distance
-  String calculateDistances(desLat, desLng) {
+  String calculateDistances(posLat, posLng,desLat, desLng) {
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 -
-        c((desLat - _posisi!.latitude) * p) / 2 +
-        c(_posisi!.latitude * p) *
+        c((desLat - posLat) * p) / 2 +
+        c(posLat * p) *
             c(desLat * p) *
-            (1 - c((desLng - _posisi!.longitude) * p)) /
+            (1 - c((desLng - posLng) * p)) /
             2;
     var dis = 12742 * asin(sqrt(a));
     return dis < 1
         ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
-        : "${double.parse(dis.toStringAsFixed(2))} km";
+        : "${double.parse(dis.toStringAsFixed(1))} km";
+  }
+
+  /// string calculate distance in home
+  String homeScreenCalculateDistances(posLat, posLng,desLat, desLng) {
+    var p = 0.017453292519943295;
+    var c = cos;
+    var a = 0.5 -
+        c((desLat - posLat) * p) / 2 +
+        c(posLat * p) *
+            c(desLat * p) *
+            (1 - c((desLng - posLng) * p)) /
+            2;
+    var dis = 12742 * asin(sqrt(a));
+    return dis < 1
+        ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
+        : "${double.parse(dis.toStringAsFixed(1))} km";
   }
 
   /// detail lokasi
   Future<void> getAddressFromLongLat(double posLat, double posLong) async {
     List<Placemark> placemarks =
-    await placemarkFromCoordinates(posLat, posLong);
+        await placemarkFromCoordinates(posLat, posLong);
     Placemark place = placemarks[0];
     address =
-    '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
+        '${place.street}, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country}';
     notifyListeners();
   }
 
@@ -235,5 +252,4 @@ class GetLocationViewModel with ChangeNotifier {
       throw 'Could not launch';
     }
   }
-
 }

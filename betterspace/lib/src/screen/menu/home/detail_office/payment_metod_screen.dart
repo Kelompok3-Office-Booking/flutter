@@ -10,7 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PaymentMetodScreen extends StatelessWidget {
-  final int officeId;
+  final String officeId;
 
   const PaymentMetodScreen({Key? key, required this.officeId})
       : super(key: key);

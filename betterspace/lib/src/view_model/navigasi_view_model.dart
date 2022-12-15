@@ -180,14 +180,14 @@ class NavigasiViewModel with ChangeNotifier {
       context,
       CupertinoPageRoute(
         builder: (context) => GoogleMapsWidget(
-         officeData: officeId,
+          officeData: officeId,
         ),
       ),
     );
   }
 
   /// navigasi open google maps
-  void navigasiToPaymentDetail(context, int officeId) {
+  void navigasiToPaymentDetail(context, String officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -274,7 +274,7 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi to checkout screen
-  void navigasiToCheckOut(BuildContext context, int officeId) {
+  void navigasiToCheckOut(BuildContext context, String officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -305,7 +305,7 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi to payment method
-  void navigasiToPaymentMetod(BuildContext context, int officeId) {
+  void navigasiToPaymentMetod(BuildContext context, String officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -313,6 +313,14 @@ class NavigasiViewModel with ChangeNotifier {
           officeId: officeId,
         ),
       ),
+    );
+  }
+
+  /// navigasi all office (home screen)
+  void navigasiAllOffice(BuildContext context, Widget routeOffice) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(builder: (context) => routeOffice),
     );
   }
 }

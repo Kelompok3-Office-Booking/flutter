@@ -1,7 +1,9 @@
+import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -223,7 +225,13 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
                             height: AdaptSize.pixel40,
                             width: AdaptSize.screenWidth / 1.53,
                             child: ElevatedButton(
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                    context,
+                                    CupertinoPageRoute(
+                                        builder: (context) =>
+                                            DetailOrderScreens()));
+                              },
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: MyColor.transparanColor,
                                 elevation: 0,
