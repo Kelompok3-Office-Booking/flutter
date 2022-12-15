@@ -1,4 +1,5 @@
 //do api service here
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/model/user_models/user_models_for_regist.dart';
 import 'package:betterspace/src/services/constant.dart';
@@ -24,7 +25,7 @@ class UserService {
       // Do something with response data
       return handler.next(response); // continue
     }, onError: (DioError e, handler) async {
-      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
+      if (e.response?.statusCode == 401) {
         await refreshTokenLoopSafety();
 
         return handler.resolve(await _retry(e.requestOptions));
@@ -189,6 +190,35 @@ class UserService {
       required String formattedLocationRequest}) async {
     return _dio.get(
       constantValue().getNearestOfficeBaseUrl + formattedLocationRequest,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> createTransactionRecordServices(
+      CreateTransactionModels formattedTransactionModels,
+      String accessToken) async {
+    FormData formData = FormData.fromMap({
+      "price": formattedTransactionModels.transactionTotalPrice,
+      "check_in_hour":
+          formattedTransactionModels.transactionBookingTime.checkInHour,
+      "check_in_date":
+          formattedTransactionModels.transactionBookingTime.checkInDate,
+      "duration": formattedTransactionModels.duration,
+      "payment_method": formattedTransactionModels.paymentMethodName,
+      "drink": formattedTransactionModels.selectedDrink,
+      "office_id": formattedTransactionModels.selectedOfficeId,
+    });
+    print(formData.fields);
+    return _dio.post(constantValue().createTransactionRecord,
+        options: Options(
+            contentType: 'multipart/form-data',
+            headers: {"Authorization": "Bearer " + accessToken}),
+        data: formData);
+  }
+
+  Future<Response> getUserTransactionServices({required String accessToken}) {
+    return _dio.get(
+      constantValue().getAllTransactionByUser,
       options: Options(headers: {"Authorization": "Bearer " + accessToken}),
     );
   }
