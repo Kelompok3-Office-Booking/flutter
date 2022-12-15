@@ -23,17 +23,17 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () async {
-      final getOffice = Provider.of<OfficeViewModels>(context, listen: false);
-      await getOffice.fetchCoworkingSpace();
-      await getOffice.fetchMeetingRoom();
-      await getOffice.fetchOfficeRoom();
-      await getOffice.fetchOfficeByRecommendation();
-    });
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   Future.delayed(Duration.zero, () async {
+  //     final getOffice = Provider.of<OfficeViewModels>(context, listen: false);
+  //     await getOffice.fetchCoworkingSpace();
+  //     await getOffice.fetchMeetingRoom();
+  //     await getOffice.fetchOfficeRoom();
+  //     await getOffice.fetchOfficeByRecommendation();
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -181,7 +181,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<NavigasiViewModel>()
                                   .navigasiToDetailSpace(
                                     context: context,
-                                    officeId: index,
+                                    officeId: value
+                                        .listOfCoworkingSpace[index].officeID,
                                   );
                             },
                             officeImage: value
@@ -260,7 +261,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<NavigasiViewModel>()
                                   .navigasiToDetailSpace(
                                     context: context,
-                                    officeId: index,
+                                    officeId:
+                                        value.listOfOfficeRoom[index].officeID,
                                   );
                             },
                             officeImage:
@@ -335,7 +337,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<NavigasiViewModel>()
                                   .navigasiToDetailSpace(
                                     context: context,
-                                    officeId: index,
+                                    officeId:
+                                        value.listOfMeetingRoom[index].officeID,
                                   );
                             },
                             officeImage:
@@ -422,7 +425,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   .read<NavigasiViewModel>()
                                   .navigasiToDetailSpace(
                                     context: context,
-                                    officeId: index,
+                                    officeId: value
+                                        .listOfOfficeByRecommendation[index]
+                                        .officeID,
                                   );
                             },
                             officeImage: value

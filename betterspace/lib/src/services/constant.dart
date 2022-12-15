@@ -42,4 +42,16 @@ class constantValue {
       "https://api-better-space-staging.herokuapp.com/api/v1/offices/title?search=";
   String getNearestOfficeBaseUrl =
       "https://api-better-space-staging.herokuapp.com/api/v1/offices/nearest?";
+
+  //Transaction Endpoint
+  String createTransactionRecord =
+      "https://api-better-space-staging.herokuapp.com/api/v1/transactions/details";
+  String getAllTransactionByUser =
+      "https://api-better-space-staging.herokuapp.com/api/v1/transactions";
+  String getTransactionDetails =
+      "https://api-better-space-staging.herokuapp.com/api/v1/transactions/details/";
+
+  //cancel endpoint need o be tampered with transactionId/cancel
+  String cancelTransactionByIdBaseUrl =
+      "https://api-better-space-staging.herokuapp.com/api/v1/transactions/details/";
 }

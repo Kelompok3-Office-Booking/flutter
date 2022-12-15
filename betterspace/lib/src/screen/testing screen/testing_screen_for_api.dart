@@ -1,8 +1,10 @@
 import 'package:betterspace/src/model/data/sample_data.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/services/api_services.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
+import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -33,6 +35,8 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
         Provider.of<OfficeViewModels>(context, listen: false);
     final providerOfficeListen =
         Provider.of<OfficeViewModels>(context, listen: true);
+    final providerOfTransaction =
+        Provider.of<TransactionViewmodels>(context, listen: false);
 
     return Scaffold(
       appBar: AppBar(),
@@ -165,7 +169,26 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                     style: TextStyle(fontSize: 10),
                   ),
                 ),
-                Spacer(),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                      providerOfTransaction.createTransactionRecords(
+                          requestedModels: CreateTransactionModels(
+                              transactionTotalPrice: 20000,
+                              transactionBookingTime: TransactionBookingTime(
+                                  checkInHour: "12:00",
+                                  checkInDate: "13/12/2022"),
+                              duration: 4,
+                              paymentMethodName: "BRI",
+                              selectedDrink: "ice tea",
+                              selectedOfficeId: 1));
+                    },
+                    child: Text("test create transaction",
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(fontSize: 10)),
+                  ),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     //fetchOfficeAll hanya bisa digunakan ketika user sudah login

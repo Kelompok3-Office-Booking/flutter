@@ -2,11 +2,13 @@ import 'dart:math';
 import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/model/user_whislist/user_whislist.dart';
+import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/hex_color_convert.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/whislist_view_model.dart';
 import 'package:betterspace/src/widget/widget/bottom_sheed_widget.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
@@ -20,17 +22,66 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class OfficeDetailScreen extends StatelessWidget {
-  final int officeID;
+import '../../../../utils/custom_icons.dart';
 
-  const OfficeDetailScreen({super.key, required this.officeID});
+class OfficeDetailScreen extends StatefulWidget {
+  final String officeID;
+
+  const OfficeDetailScreen({
+    super.key,
+    required this.officeID,
+  });
+
+  @override
+  State<OfficeDetailScreen> createState() => _OfficeDetailScreenState();
+}
+
+class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
+  // @override
+  // void initState() {
+  //   super.initState();
+  //
+  //   final officeListAlloffice =
+  //       Provider.of<OfficeViewModels>(context, listen: false);
+  //
+  //   final officeAllList = Provider.of<OfficeViewModels>(context, listen: false);
+  //
+  //   Future.delayed(Duration.zero, () async {
+  //     if (officeListAlloffice.listOfAllOfficeModels == null) {
+  //       await officeAllList.fetchAllOffice();
+  //     }
+  //   });
+  // }
 
   @override
   Widget build(BuildContext context) {
     final dummyDataProviders =
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
+    dummyDataProviders.addRecord(12);
     List<OfficeModels> listOfDummyOffice =
         dummyDataProviders.listOfOfficeModels;
+
+    final officeListAlloffice =
+        Provider.of<OfficeViewModels>(context, listen: true);
+    List<OfficeModels> listOfAllOfficeContainers =
+        officeListAlloffice.listOfAllOfficeModels;
+
+    final officeById = officeModelFilterByOfficeId(
+        listOfModels: listOfAllOfficeContainers,
+        requestedOfficeId: widget.officeID);
+
+    if (officeById == null) {
+      print("parse gagal");
+    } else {
+      print(officeById.officeName);
+      print(officeById.officeID);
+      if (listOfDummyOffice[1] == null) {
+        print("dummy data koit");
+      } else {
+        print(listOfDummyOffice[1].toString());
+      }
+    }
+
     return Scaffold(
       body: Stack(
         children: [
@@ -47,7 +98,11 @@ class OfficeDetailScreen extends StatelessWidget {
                   children: [
                     /// image header
                     CachedNetworkImage(
-                      imageUrl: listOfDummyOffice[officeID].officeLeadImage,
+                      imageUrl: officeById?.officeLeadImage != null &&
+                              officeById?.officeLeadImage != ''
+                          ? officeById!.officeLeadImage
+                          : listOfDummyOffice[0].officeLeadImage,
+                      // imageUrl: listOfDummyOffice[officeID].officeLeadImage,
                       imageBuilder: (context, imageProvider) => Container(
                         height: AdaptSize.screenWidth / 1.3,
                         width: double.infinity,
@@ -84,16 +139,18 @@ class OfficeDetailScreen extends StatelessWidget {
                                     final addNewWhislist = UserWhislistModel(
                                       officeId:
                                           DateTime.now().millisecondsSinceEpoch,
-                                      officeName: listOfDummyOffice[officeID]
-                                          .officeName,
-                                      officeRanting: listOfDummyOffice[officeID]
-                                          .officeStarRating,
-                                      officeImage: listOfDummyOffice[officeID]
-                                          .officeLeadImage,
+                                      officeName: officeById?.officeName ??
+                                          listOfDummyOffice[0].officeName,
+                                      officeRanting: officeById
+                                              ?.officeStarRating ??
+                                          listOfDummyOffice[0].officeStarRating,
+                                      officeImage: officeById
+                                              ?.officeLeadImage ??
+                                          listOfDummyOffice[0].officeLeadImage,
                                       officeLocation:
-                                          '${listOfDummyOffice[officeID].officeLocation.city}, ${listOfDummyOffice[officeID].officeLocation.district}',
-                                      officeType: listOfDummyOffice[officeID]
-                                          .officeType,
+                                          '${officeById?.officeLocation.city}, ${officeById?.officeLocation.district}',
+                                      officeType: officeById?.officeType ??
+                                          listOfDummyOffice[0].officeType,
                                     );
 
                                     value.addWhistlistOffice(addNewWhislist);
@@ -129,14 +186,17 @@ class OfficeDetailScreen extends StatelessWidget {
                       height: AdaptSize.screenWidth / 3.5,
                       width: double.infinity,
                       child: ListView.builder(
-                        itemCount:
-                            listOfDummyOffice[officeID].officeGridImage.length,
+                        itemCount: officeById?.officeGridImage.length ??
+                            listOfDummyOffice[0].officeGridImage.length,
                         scrollDirection: Axis.horizontal,
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return CachedNetworkImage(
-                            imageUrl: listOfDummyOffice[officeID]
-                                .officeGridImage[index],
+                            imageUrl: officeById?.officeGridImage[index] !=
+                                        null &&
+                                    officeById?.officeGridImage[index] != ''
+                                ? officeById?.officeGridImage[index]
+                                : listOfDummyOffice[0].officeGridImage[index],
                             imageBuilder: (context, imageProvider) => Padding(
                               padding: EdgeInsets.only(right: AdaptSize.pixel8),
                               child: SizedBox(
@@ -170,7 +230,8 @@ class OfficeDetailScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          listOfDummyOffice[officeID].officeName,
+                          officeById?.officeLocation.city ??
+                              listOfDummyOffice[0].officeName,
                           style: Theme.of(context)
                               .textTheme
                               .headline6!
@@ -198,7 +259,8 @@ class OfficeDetailScreen extends StatelessWidget {
                                   size: AdaptSize.pixel16,
                                 ),
                                 Text(
-                                  "${listOfDummyOffice[officeID].officeStarRating}",
+                                  officeById?.officeStarRating.toString() ??
+                                      "${listOfDummyOffice[0].officeStarRating}",
                                   style: Theme.of(context)
                                       .textTheme
                                       .bodySmall!
@@ -230,7 +292,7 @@ class OfficeDetailScreen extends StatelessWidget {
                         ),
                         Expanded(
                           child: Text(
-                            '${listOfDummyOffice[officeID].officeLocation.city}, ${listOfDummyOffice[officeID].officeLocation.district}',
+                            '${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}, ${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}',
                             style:
                                 Theme.of(context).textTheme.subtitle1!.copyWith(
                                       color: MyColor.neutral100,
@@ -251,7 +313,7 @@ class OfficeDetailScreen extends StatelessWidget {
                         IconWithLabel().asrow(
                             contexts: context,
                             usedIcon: Icons.location_on_outlined,
-                            labelText: listOfDummyOffice[officeID]
+                            labelText: listOfDummyOffice[0]
                                 .officeApproxDistance
                                 .toString(),
                             spacer: AdaptSize.pixel4),
@@ -260,25 +322,30 @@ class OfficeDetailScreen extends StatelessWidget {
                         IconWithLabel().asrow(
                             contexts: context,
                             usedIcon: Icons.location_on_outlined,
-                            labelText: listOfDummyOffice[officeID]
-                                .officeArea
-                                .toString(),
+                            labelText: officeById?.officeArea.toString() ??
+                                listOfDummyOffice[0].officeArea.toString(),
                             spacer: AdaptSize.pixel4),
 
                         /// location 3
                         IconWithLabel().asrow(
                             contexts: context,
                             usedIcon: Icons.person_outline,
-                            labelText: listOfDummyOffice[officeID]
-                                .officePersonCapacity
-                                .toString(),
+                            labelText:
+                                officeById?.officePersonCapacity.toString() ??
+                                    listOfDummyOffice[0]
+                                        .officePersonCapacity
+                                        .toString(),
                             spacer: AdaptSize.pixel4),
 
                         /// loccation 4
                         IconWithLabel().asrow(
                             contexts: context,
                             usedIcon: Icons.access_time,
-                            labelText: "08:00-23:00",
+                            labelText: officeById != null
+                                ? officeById.officeOpenTime.hour.toString() +
+                                    ", " +
+                                    officeById.officeCloseTime.hour.toString()
+                                : "08:00-23:00",
                             spacer: AdaptSize.pixel4),
                       ],
                     ),
@@ -298,7 +365,8 @@ class OfficeDetailScreen extends StatelessWidget {
                       height: AdaptSize.pixel8,
                     ),
                     Text(
-                      listOfDummyOffice[officeID].officeDescription,
+                      officeById?.officeDescription ??
+                          listOfDummyOffice[0].officeDescription,
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: MyColor.neutral200,
                             fontSize: AdaptSize.pixel14,
@@ -327,8 +395,8 @@ class OfficeDetailScreen extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         padding: EdgeInsets.only(top: AdaptSize.pixel8),
                         shrinkWrap: true,
-                        itemCount: listOfDummyOffice[officeID]
-                            .listOfOfficeCapcityModels
+                        itemCount: (officeById?.listOfOfficeCapcityModels ??
+                                listOfDummyOffice[0].listOfOfficeCapcityModels)
                             .length,
                         itemBuilder: (context, index) {
                           return Column(
@@ -339,17 +407,35 @@ class OfficeDetailScreen extends StatelessWidget {
                                   Padding(
                                     padding: EdgeInsets.only(
                                         right: AdaptSize.pixel8),
-                                    child: Icon(
-                                      CupertinoIcons
-                                          .rectangle_arrow_up_right_arrow_down_left,
-                                      color: MyColor.secondary400,
-                                      size: AdaptSize.pixel22,
-                                    ),
+                                    child: officeById
+                                                    ?.listOfOfficeCapcityModels[
+                                                        index]
+                                                    .capacityIconSlug !=
+                                                null &&
+                                            officeById
+                                                    ?.listOfOfficeCapcityModels[
+                                                        index]
+                                                    .capacityIconSlug !=
+                                                ''
+                                        ? customSVGIconParsers(
+                                            size: AdaptSize.pixel22,
+                                            iconSlug: officeById
+                                                ?.listOfOfficeCapcityModels[
+                                                    index]
+                                                .capacityIconSlug)
+                                        : Icon(
+                                            CupertinoIcons
+                                                .rectangle_arrow_up_right_arrow_down_left,
+                                            color: MyColor.secondary400,
+                                            size: AdaptSize.pixel22,
+                                          ),
                                   ),
 
                                   /// text keterangan
                                   Text(
-                                    "Can Accomodate",
+                                    officeById?.listOfOfficeCapcityModels[index]
+                                            .capacityTitle ??
+                                        "Can Accomodate",
                                     style: Theme.of(context)
                                         .textTheme
                                         .bodyMedium!
@@ -362,23 +448,34 @@ class OfficeDetailScreen extends StatelessWidget {
                                     text: TextSpan(
                                       children: [
                                         TextSpan(
-                                          text: listOfDummyOffice[officeID]
-                                              .listOfOfficeCapcityModels[index]
-                                              .capacityTitle,
+                                          text: officeById
+                                                  ?.listOfOfficeCapcityModels[
+                                                      index]
+                                                  .capacityValue
+                                                  .toString() ??
+                                              listOfDummyOffice[0]
+                                                  .listOfOfficeCapcityModels[
+                                                      index]
+                                                  .capacityTitle,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium!
                                               .copyWith(
                                                   color: MyColor.secondary400,
-                                                  fontSize: AdaptSize.pixel16),
+                                                  fontSize: AdaptSize.pixel14),
                                         ),
                                         TextSpan(
-                                          text: "person",
+                                          text: officeById
+                                                  ?.listOfOfficeCapcityModels[
+                                                      index]
+                                                  .capacityUnits ??
+                                              'Units',
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium!
                                               .copyWith(
-                                                  color: MyColor.neutral200),
+                                                  color: MyColor.neutral200,
+                                                  fontSize: AdaptSize.pixel14),
                                         ),
                                       ],
                                     ),
@@ -411,6 +508,8 @@ class OfficeDetailScreen extends StatelessWidget {
                       moreFacilitiesButton: () {
                         modalBottomSheed(context, listFacilityItem(context));
                       },
+                      officeFacility:
+                          officeById?.listOfOfficeFacilitiesModels ?? [],
                     ),
 
                     Text(
@@ -427,7 +526,7 @@ class OfficeDetailScreen extends StatelessWidget {
 
                     /// alamat
                     Text(
-                      '${listOfDummyOffice[officeID].officeLocation.city}, ${listOfDummyOffice[officeID].officeLocation.district}',
+                      '${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}, ${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}',
                       style: Theme.of(context).textTheme.bodyText1!.copyWith(
                             color: MyColor.neutral200,
                             fontSize: AdaptSize.pixel14,
@@ -446,7 +545,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                     .read<GetLocationViewModel>()
                                     .permissionLocationGMap(
                                       context,
-                                      officeID,
+                                      officeById!,
                                     );
                               }),
                         );
@@ -506,9 +605,9 @@ class OfficeDetailScreen extends StatelessWidget {
             child: footerDetail(
               context: context,
               bookingButton: () {
-                context
-                    .read<NavigasiViewModel>()
-                    .navigasiToCheckOut(context, officeID);
+                // context
+                //     .read<NavigasiViewModel>()
+                //     .navigasiToCheckOut(context, officeID);
               },
             ),
           ),
@@ -518,10 +617,11 @@ class OfficeDetailScreen extends StatelessWidget {
   }
 
   /// list of facilities widget
-  Widget listFacilities({
-    context,
-    Function()? moreFacilitiesButton,
-  }) {
+  Widget listFacilities(
+      {context,
+      Function()? moreFacilitiesButton,
+      required List<OfficeFacilitiesModels> officeFacility,
+      required}) {
     return MediaQuery.removePadding(
       removeTop: true,
       context: context,
@@ -529,11 +629,11 @@ class OfficeDetailScreen extends StatelessWidget {
           physics: const NeverScrollableScrollPhysics(),
           padding: EdgeInsets.only(top: AdaptSize.pixel8),
           shrinkWrap: true,
-          itemCount: 5,
+          itemCount: officeFacility.length,
           itemBuilder: (context, index) {
             return Column(
               children: [
-                index == 4
+                index >= 4
                     ? InkWell(
                         splashColor: MyColor.transparanColor,
                         onTap: moreFacilitiesButton,
@@ -548,7 +648,7 @@ class OfficeDetailScreen extends StatelessWidget {
                               width: AdaptSize.pixel8,
                             ),
                             Text(
-                              'See more facilities (10)',
+                              'See more facilities (${officeFacility.length.toString()})',
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
@@ -568,7 +668,9 @@ class OfficeDetailScreen extends StatelessWidget {
                             width: AdaptSize.pixel8,
                           ),
                           Text(
-                            'Facilities',
+                            officeFacility != null
+                                ? officeFacility[index].facilitiesTitle
+                                : 'Facilities',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
