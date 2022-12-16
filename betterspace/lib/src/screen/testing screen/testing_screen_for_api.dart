@@ -245,6 +245,14 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                 ),
               ],
             ),
+            ElevatedButton(
+              onPressed: () {
+                //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                providerClient.setUserProfilePicture(
+                    filePath: "", fileName: "");
+              },
+              child: Text("set profile pic", style: TextStyle(fontSize: 10)),
+            ),
             Expanded(
               child: Column(
                 children: [

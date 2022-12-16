@@ -245,6 +245,13 @@ class UserService {
             "/cancel",
         options: Options(headers: {"Authorization": "Bearer " + accessToken}));
   }
+
+  Future<Response> setProfilePicture(
+      {required String filePath, required String fileName}) async {
+    var formData = FormData.fromMap(
+        {"photo": await MultipartFile.fromFile(fileName, filename: fileName)});
+    return _dio.put(constantValue().userSetProfilePhoto, data: formData);
+  }
 }
 
 class SignService {

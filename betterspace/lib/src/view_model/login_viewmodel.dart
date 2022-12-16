@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/services/api_services.dart';
 import 'package:betterspace/src/services/constant.dart';
@@ -16,6 +18,8 @@ class LoginViewmodels with ChangeNotifier {
   stateOfConnections apiLoginState = stateOfConnections.isDoingNothing;
   stateOfConnections apiProfileState = stateOfConnections.isDoingNothing;
   stateOfConnections apiLogoutState = stateOfConnections.isDoingNothing;
+  stateOfConnections profileSetterConnectionState =
+      stateOfConnections.isDoingNothing;
   var _dio = Dio();
 
   logoutWithTokens() async {
@@ -121,15 +125,20 @@ class LoginViewmodels with ChangeNotifier {
     notifyListeners();
   }
 
-  refreshToken() async {
-    const secureStorage = FlutterSecureStorage();
-    String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
-    if (refreshToken != null) {
-      await UserService().refreshExpiredTokens();
-    } else {
-      print("no active user");
-    }
+  setUserProfilePicture(
+      {required String filePath, required String fileName}) async {
+    profileSetterConnectionState = stateOfConnections.isStart;
     notifyListeners();
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
+      print("user exist : $accessTokens");
+      profileSetterConnectionState = stateOfConnections.isLoading;
+      notifyListeners();
+
+      Response response = await UserService()
+          .setProfilePicture(filePath: filePath, fileName: fileName);
+    }
   }
 
   destroyActiveUser(FlutterSecureStorage flutterStorage) async {
