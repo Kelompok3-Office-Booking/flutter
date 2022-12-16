@@ -1,13 +1,17 @@
 import 'dart:math';
 import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
+import 'package:betterspace/src/view_model/promo_view_model.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
+import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
+import 'package:betterspace/src/widget/home_widget/horizontal_duration_picker/horizontal_duration_hours.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/custom_radio_button.dart';
@@ -19,6 +23,7 @@ import 'package:betterspace/src/widget/widget/read_only_form.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +39,7 @@ class CheckoutScreen extends StatefulWidget {
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
   ValueNotifier<int> selectedHour = ValueNotifier<int>(8);
+  ValueNotifier<int> selectedHourDuration = ValueNotifier<int>(1);
   ValueNotifier<int> selectedMonth = ValueNotifier<int>(1);
   ValueNotifier<int> selectedBeverageId = ValueNotifier<int>(1);
   TextEditingController discountFormController = TextEditingController();
@@ -49,6 +55,11 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final promoData = Provider.of<PromoViewModel>(context, listen: false);
+
+    final transactionProvider =
+        Provider.of<TransactionViewmodels>(context, listen: false);
+
     final dummyDataProviders =
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
     List<OfficeModels> listOfDummyOffice =
@@ -109,28 +120,58 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                         ],
                       ),
-                      buttonWidget(
-                        onPressed: () {
-                          if (_formKey.currentState!.validate()) {
-                            context
-                                .read<NavigasiViewModel>()
-                                .navigasiToPaymentMetod(
-                                  context,
-                                  widget.officeId,
+
+                      /// button to check out
+                      ValueListenableBuilder(
+                          valueListenable: selectedMonth,
+                          builder: (BuildContext context, valueMonth,
+                              Widget? child) {
+                            return ValueListenableBuilder(
+                              valueListenable: selectedHour,
+                              builder: (BuildContext context, valueHours,
+                                  Widget? child) {
+                                return buttonWidget(
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate()) {
+                                      // await transactionProvider
+                                      //     .createTransactionRecords(
+                                      //         requestedModels:
+                                      //             CreateTransactionModels(
+                                      //   transactionTotalPrice:
+                                      //       calculateTotalPrice(basePrice: officeById!.officePricing.officePrice, duration: officeById.officeType == "Office"
+                                      //           ? valueMonth : valueHours),
+                                      //   transactionBookingTime:
+                                      //   TransactionBookingTime(checkInHour: valueHours.toString(), checkInDate: _dateController.text,
+                                      //   duration: duration,
+                                      //   paymentMethodName: paymentMethodName,
+                                      //   selectedDrink: selectedDrink,
+                                      //   selectedOfficeId: selectedOfficeId,
+                                      // ));
+                                      context
+                                          .read<NavigasiViewModel>()
+                                          .navigasiToPaymentMetod(
+                                            context,
+                                            widget.officeId,
+                                          );
+                                    }
+                                  },
+                                  borderRadius: BorderRadius.circular(8),
+                                  backgroundColor: MyColor.secondary400,
+                                  foregroundColor: MyColor.secondary400,
+                                  child: Text(
+                                    'Book Now',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .button!
+                                        .copyWith(
+                                          fontSize: AdaptSize.pixel14,
+                                          color: MyColor.neutral900,
+                                        ),
+                                  ),
                                 );
-                          }
-                        },
-                        borderRadius: BorderRadius.circular(8),
-                        backgroundColor: MyColor.secondary400,
-                        foregroundColor: MyColor.secondary400,
-                        child: Text(
-                          'Book Now',
-                          style: Theme.of(context).textTheme.button!.copyWith(
-                                fontSize: AdaptSize.pixel14,
-                                color: MyColor.neutral900,
-                              ),
-                        ),
-                      ),
+                              },
+                            );
+                          }),
                     ],
                   ),
                 ),
@@ -264,8 +305,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                 child: SizedBox(
                   height: AdaptSize.pixel28,
-                  child: horizontalMonthPicker(
-                      contexts: context, isSelected: selectedMonth),
+                  child:
+                      // officeById
+                      officeById?.officeType == "Office"
+                          ? horizontalMonthPicker(
+                              contexts: context, isSelected: selectedMonth)
+                          : horizontalHoursPicker(
+                              contexts: context,
+                              isSelected: selectedHourDuration),
                 ),
               ),
               SizedBox(
@@ -369,18 +416,19 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                 child: SizedBox(
                   height: AdaptSize.screenWidth / 6.4285714,
-                  child: textFormFields(
-                      prefixIcons: Icon(
-                        Icons.percent_outlined,
-                        color: MyColor.primary700,
-                      ),
-                      suffixIcon: Icon(
-                        Icons.percent,
-                        color: MyColor.primary700,
-                      ),
-                      label: "discount code",
-                      hintTexts: "AXRRR#2",
-                      controller: discountFormController),
+                  child: Consumer<PromoViewModel>(
+                      builder: (context, value, child) {
+                    return textFormFields(
+                        prefixIcons:
+                            SvgPicture.asset('assets/svg_assets/discount.svg'),
+                        suffixIcon: Icon(
+                          Icons.percent,
+                          color: MyColor.primary700,
+                        ),
+                        label: "discount code",
+                        hintTexts: "AXRRR#2",
+                        controller: discountFormController);
+                  }),
                 ),
               ),
             ],

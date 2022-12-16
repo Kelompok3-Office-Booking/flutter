@@ -64,4 +64,5 @@ class PromoViewModel with ChangeNotifier {
       ),
     ],
   ];
+
 }

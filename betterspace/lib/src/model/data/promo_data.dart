@@ -21,7 +21,8 @@ List<PromoModel> promo = [
     howToUse3:
         'Enter the payment process then, enter the voucher that you copied on the voucher page.',
     howToUse4:
-        'The order fee will automatically be deducted according to the voucher nominal.',
+        'The order fee will automatically be deducted according t, discountValue: nullo the voucher nominal.',
+    discountValue: 10,
   ),
   PromoModel(
     id: '2',
@@ -45,6 +46,7 @@ List<PromoModel> promo = [
         'Enter the payment process then, enter the voucher that you copied on the voucher page.',
     howToUse4:
         'The order fee will automatically be deducted according to the voucher nominal.',
+    discountValue: 10,
   ),
   PromoModel(
     id: '3',
@@ -67,5 +69,6 @@ List<PromoModel> promo = [
         'Enter the payment process then, enter the voucher that you copied on the voucher page.',
     howToUse4:
         'The order fee will automatically be deducted according to the voucher nominal.',
+    discountValue: 10,
   ),
 ];

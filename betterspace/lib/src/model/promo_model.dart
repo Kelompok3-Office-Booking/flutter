@@ -15,6 +15,8 @@ class PromoModel {
       howToUse3,
       howToUse4;
 
+  int discountValue;
+
   PromoModel({
     required this.id,
     required this.imagePromo,
@@ -31,5 +33,6 @@ class PromoModel {
     required this.howToUse2,
     required this.howToUse3,
     required this.howToUse4,
+    required this.discountValue,
   });
 }
