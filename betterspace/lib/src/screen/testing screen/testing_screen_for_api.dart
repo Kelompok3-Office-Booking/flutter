@@ -163,17 +163,11 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                 ElevatedButton(
                   onPressed: () {
                     //fetchOfficeAll hanya bisa digunakan ketika user sudah login
-                    if (providerClientListen.userModels == null) {
-                      print("no user profile exist");
-                    } else {
-                      providerOfTransaction.getTransactionByUser(
-                          userModels: providerClientListen.userModels!,
-                          ListOfAllOffice:
-                              providerOfficeListen.listOfAllOfficeModels);
-                    }
+                    providerOffice.fetchOfficeByOfficeTitle(
+                        requestedOfficeTitle: "Update Suropati Space");
                   },
                   child: Text(
-                    "trans by user",
+                    "office by title",
                     style: TextStyle(fontSize: 10),
                   ),
                 ),
@@ -212,11 +206,17 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                 ElevatedButton(
                   onPressed: () {
                     //fetchOfficeAll hanya bisa digunakan ketika user sudah login
-                    providerOffice.fetchOfficeByOfficeTitle(
-                        requestedOfficeTitle: "Update Suropati Space");
+                    if (providerClientListen.userModels == null) {
+                      print("no user profile exist");
+                    } else {
+                      providerOfTransaction.getTransactionByUser(
+                          userModels: providerClientListen.userModels!,
+                          ListOfAllOffice:
+                              providerOfficeListen.listOfAllOfficeModels);
+                    }
                   },
                   child: Text(
-                    "office by title",
+                    "trans by user",
                     style: TextStyle(fontSize: 10),
                   ),
                 ),
@@ -224,18 +224,13 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                   child: ElevatedButton(
                     onPressed: () async {
                       //fetchOfficeAll hanya bisa digunakan ketika user sudah login
-                      providerOfTransaction.createTransactionRecords(
-                          requestedModels: CreateTransactionModels(
-                              transactionTotalPrice: 20000,
-                              transactionBookingTime: TransactionBookingTime(
-                                  checkInHour: "12:00",
-                                  checkInDate: "13/12/2022"),
-                              duration: 4,
-                              paymentMethodName: "BRI",
-                              selectedDrink: "ice tea",
-                              selectedOfficeId: 1));
+                      await providerOfTransaction.getTransactionDetail(
+                          userModels: providerClientListen.userModels!,
+                          ListOfAllOffice:
+                              providerOfficeListen.listOfAllOfficeModels,
+                          requestedId: "46");
                     },
-                    child: Text("test create transaction",
+                    child: Text("trans by id",
                         overflow: TextOverflow.clip,
                         style: TextStyle(fontSize: 10)),
                   ),
