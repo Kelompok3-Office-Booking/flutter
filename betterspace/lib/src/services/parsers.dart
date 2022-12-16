@@ -16,12 +16,33 @@ String positionRequestFormatter(
   return "lat=" + latitude + "&long=" + longitude;
 }
 
+TransactionBookingTime dateTimeParsers(
+    {required int selectedHours, required DateTime selectedDate}) {
+  String hourFormatted = selectedHours < 10 && selectedHours >= 0
+      ? ("0$selectedHours:00")
+      : ("$selectedHours:00");
+  String dayFormatted = selectedDate.day < 10 && selectedDate.day >= 0
+      ? "0${selectedDate.day}"
+      : "${selectedDate.day}";
+  String monthFormatted = selectedDate.month < 10 && selectedDate.month >= 0
+      ? "0${selectedDate.month}"
+      : "${selectedDate.month}";
+  String dateFormatted = "$dayFormatted/$monthFormatted/${selectedDate.year}";
+  print("datetime parse done");
+  print(dateFormatted + hourFormatted);
+  return TransactionBookingTime(
+      checkInHour: hourFormatted, checkInDate: dateFormatted);
+}
+
 int calculateTotalPrice({
   required double basePrice,
   required int duration,
   int? discount,
 }) {
-  int totalPrice = ((basePrice * duration) - ((basePrice / 100) * (discount?? 0)) + ((basePrice/100)*11).round()).toInt();
+  int totalPrice = ((basePrice * duration) -
+          ((basePrice / 100) * (discount ?? 0)) +
+          ((basePrice / 100) * 11).round())
+      .toInt();
   return totalPrice;
 }
 
