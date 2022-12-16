@@ -16,6 +16,15 @@ String positionRequestFormatter(
   return "lat=" + latitude + "&long=" + longitude;
 }
 
+int calculateTotalPrice({
+  required double basePrice,
+  required int duration,
+  int? discount,
+}) {
+  int totalPrice = ((basePrice * duration) - ((basePrice / 100) * (discount?? 0)) + ((basePrice/100)*11).round()).toInt();
+  return totalPrice;
+}
+
 //list iterator and filter
 //office list iterator
 OfficeModels? officeModelFilterByOfficeId(
