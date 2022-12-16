@@ -136,8 +136,8 @@ class LoginViewmodels with ChangeNotifier {
       profileSetterConnectionState = stateOfConnections.isLoading;
       notifyListeners();
 
-      Response response = await UserService()
-          .setProfilePicture(filePath: filePath, fileName: fileName);
+      Response response = await UserService().setProfilePicture(
+          filePath: filePath, fileName: fileName, accessToken: accessTokens);
     }
   }
 

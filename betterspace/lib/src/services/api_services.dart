@@ -247,10 +247,24 @@ class UserService {
   }
 
   Future<Response> setProfilePicture(
-      {required String filePath, required String fileName}) async {
+      {required String filePath,
+      required String fileName,
+      required String accessToken}) async {
     var formData = FormData.fromMap(
         {"photo": await MultipartFile.fromFile(fileName, filename: fileName)});
-    return _dio.put(constantValue().userSetProfilePhoto, data: formData);
+    return _dio.put(
+      constantValue().userSetProfilePhoto,
+      data: formData,
+      options: Options(
+          contentType: 'multipart/form-data',
+          headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> deleteUserAccountServices(
+      {required String accessToken}) async {
+    return _dio.delete(constantValue().userDeleteAccount,
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
   }
 }
 
