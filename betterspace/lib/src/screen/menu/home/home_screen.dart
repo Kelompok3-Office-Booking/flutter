@@ -74,34 +74,36 @@ class _HomeScreenState extends State<HomeScreen> {
                   left: AdaptSize.screenWidth * .01,
                 ),
                 child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          userAccountProviderListen.userModels != null &&
-                                  userAccountProviderListen
-                                          .userModels?.userProfileDetails !=
-                                      null
-                              ? "Hi ${userAccountProviderListen.userModels!.userProfileDetails.userName}"
-                              : 'Hi User',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(fontSize: AdaptSize.pixel22),
-                        ),
-                        Text(
-                          'Find your best workspace!',
-                          style: Theme.of(context)
-                              .textTheme
-                              .headline6!
-                              .copyWith(fontSize: AdaptSize.pixel20),
-                          overflow: TextOverflow.ellipsis,
-                          maxLines: 2,
-                        ),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            userAccountProviderListen.userModels != null &&
+                                    userAccountProviderListen
+                                            .userModels?.userProfileDetails !=
+                                        null
+                                ? "Hi ${userAccountProviderListen.userModels!.userProfileDetails.userName}"
+                                : 'Hi User',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(fontSize: AdaptSize.pixel18),
+                          ),
+                          Text(
+                            'Find your best workspace!',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(fontSize: AdaptSize.pixel17),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                          ),
+                        ],
+                      ),
                     ),
-                    const Spacer(),
 
                     /// notification
                     IconButton(
@@ -110,7 +112,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             .read<NavigasiViewModel>()
                             .navigasiToNotification(context);
                       },
-                      icon: const Icon(Icons.notifications_none),
+                      icon: Icon(
+                        Icons.notifications_none,
+                        size: AdaptSize.pixel20,
+                      ),
                     ),
                   ],
                 ),

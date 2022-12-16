@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -228,6 +229,40 @@ class GetLocationViewModel with ChangeNotifier {
         ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
         : "${double.parse(dis.toStringAsFixed(1))} km";
   }
+
+  // late String? opis;
+  //
+  // void coba(context, int index) async {
+  //   final dataOffis = Provider.of<OfficeViewModels>(context,listen: false);
+  //   bool serviceEnabled;
+  //   LocationPermission permission;
+  //
+  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  //   if(serviceEnabled){
+  //     String dsCobs (){
+  //       var p = 0.017453292519943295;
+  //       var c = cos;
+  //       var a = 0.5 -
+  //           c((dataOffis.listOfAllOfficeModels[index].officeLocation.officeLatitude - posisi!.latitude) * p) / 2 +
+  //           c(posisi!.latitude * p) *
+  //               c(dataOffis.listOfAllOfficeModels[index].officeLocation.officeLatitude * p) *
+  //               (1 - c((dataOffis.listOfAllOfficeModels[index].officeLocation.officeLongitude - posisi!.longitude) * p)) /
+  //               2;
+  //       var dis = 12742 * asin(sqrt(a));
+  //       return dis < 1
+  //           ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
+  //           : "${double.parse(dis.toStringAsFixed(1))} km";
+  //     }
+  //     opis = dsCobs();
+  //     notifyListeners();
+  //   }
+  //   permission = await Geolocator.checkPermission();
+  //   if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever){
+  //     opis = '-';
+  //     notifyListeners();
+  //   }
+  //
+  // }
 
   /// detail lokasi
   Future<void> getAddressFromLongLat(double posLat, double posLong) async {

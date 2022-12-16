@@ -1,13 +1,15 @@
 import 'package:betterspace/src/model/data/sample_data.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
 
 class SearchSpacesViewModel with ChangeNotifier {
   DateTime _dateTime = DateTime.now();
   DateTime? _dateNow;
   String _datePicked = '';
 
- DateTime get dateTime => _dateTime;
+  DateTime get dateTime => _dateTime;
 
   String get datePicked => _datePicked;
 
@@ -28,30 +30,31 @@ class SearchSpacesViewModel with ChangeNotifier {
   /// ------------------------------------------------------------------------
   /// feature filtering
 
-  List foundPlace = [];
+  List foundOffice = [];
 
-  List listSpace = spaceSearch;
+  List officeListFilter = OfficeViewModels().listOfAllOfficeModels;
 
-  void spaceFilter(String enteredKeyword) {
+  void filterAllOffice(context, String enteredKeyword) {
+    final officeSearch = Provider.of<OfficeViewModels>(context, listen: false);
     List results = [];
     if (enteredKeyword.isEmpty) {
-      results = spaceSearch;
+      results = officeSearch.listOfAllOfficeModels;
     } else {
-      results = spaceSearch
+      results = officeSearch.listOfAllOfficeModels
           .where((place) =>
-      (place.name
-          .toLowerCase()
-          .contains(enteredKeyword.toLowerCase())) ||
-          place.areaLocation
-              .toLowerCase()
-              .contains(enteredKeyword.toLowerCase()) ||
-          place.officeCategory
-              .toLowerCase()
-              .contains(enteredKeyword.toLowerCase()))
+              (place.officeName
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase())) ||
+              place.officeLocation.city
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) ||
+              place.officeType
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()))
           .toList();
     }
 
-    foundPlace = results;
+    foundOffice = results;
     notifyListeners();
   }
 }

@@ -139,7 +139,7 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (contex) => settingItem,
+        builder: (context) => settingItem,
       ),
     );
   }

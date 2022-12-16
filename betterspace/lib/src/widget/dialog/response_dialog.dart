@@ -21,7 +21,7 @@ class ResponseDialog {
         pageBuilder: (_, __, ___) {
           return Center(
             child: Container(
-              height: AdaptSize.screenWidth / 1000 * 350,
+              height: AdaptSize.screenHeight * .4,
               width: AdaptSize.screenWidth * .45,
               margin: const EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.all(AdaptSize.pixel10),
@@ -84,7 +84,7 @@ class ResponseDialog {
         pageBuilder: (_, __, ___) {
           return Center(
             child: Container(
-              height: AdaptSize.screenHeight * .3,
+              height: AdaptSize.screenHeight * .4,
               width: AdaptSize.screenWidth * .7,
               margin: const EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.all(AdaptSize.pixel10),

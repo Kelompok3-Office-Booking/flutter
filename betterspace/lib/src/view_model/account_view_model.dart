@@ -65,7 +65,7 @@ class AccountViewModel with ChangeNotifier {
 
   final List _accountItem = [
     ['Edit Profile', Icons.edit_outlined, const EditProfileScreen()],
-    ['Booking', Icons.calendar_month_outlined, const BookingHistoryScreen()],
+    ['Booking', Icons.calendar_month_outlined, const BookingHistoryScreen(isCenterTitle: false)],
     ['Setting', Icons.settings_outlined, const SettingScreen()],
     ['Log out', Icons.logout, 3]
   ];
