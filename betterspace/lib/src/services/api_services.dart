@@ -216,9 +216,18 @@ class UserService {
         data: formData);
   }
 
-  Future<Response> getUserTransactionServices({required String accessToken}) {
+  Future<Response> getUserTransactionServices(
+      {required String accessToken}) async {
     return _dio.get(
       constantValue().getAllTransactionByUser,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> getUserTransactionDetailByIdServices(
+      {required String accessToken, required String requestedID}) async {
+    return _dio.get(
+      constantValue().getTransactionDetails + requestedID,
       options: Options(headers: {"Authorization": "Bearer " + accessToken}),
     );
   }

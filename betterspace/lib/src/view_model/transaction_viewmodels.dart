@@ -12,6 +12,7 @@ class TransactionViewmodels with ChangeNotifier {
   stateOfConnections connectionState = stateOfConnections.isDoingNothing;
   List<UserTransaction> _allTransaction = [];
   List<UserTransaction> get allTransaction => _allTransaction;
+  UserTransaction? singleUserTransaction;
 
   createTransactionRecords(
       {required CreateTransactionModels requestedModels}) async {
@@ -56,7 +57,44 @@ class TransactionViewmodels with ChangeNotifier {
             listOfOfficeModels: ListOfAllOffice);
         notifyListeners();
 
-        print(_allTransaction.length);
+        print(_allTransaction[1].bookingId);
+        connectionState = stateOfConnections.isReady;
+        notifyListeners();
+      } catch (e) {
+        connectionState = stateOfConnections.isFailed;
+        notifyListeners();
+        print("error get transaction data by user : $e");
+      }
+    } else {
+      connectionState = stateOfConnections.isFailed;
+      notifyListeners();
+    }
+  }
+
+  getTransactionDetail(
+      {required UserModel userModels,
+      required List<OfficeModels> ListOfAllOffice,
+      required String requestedId}) async {
+    connectionState = stateOfConnections.isStart;
+    notifyListeners();
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
+      print("user exist : $accessTokens");
+      connectionState = stateOfConnections.isLoading;
+      notifyListeners();
+      try {
+        Response response = await UserService()
+            .getUserTransactionDetailByIdServices(
+                accessToken: accessTokens, requestedID: requestedId);
+        print(response);
+        singleUserTransaction = userTransactionParsers(
+            jsonResponse: response.data["data"],
+            requestedUserModel: userModels,
+            listOfficeModels: ListOfAllOffice);
+        notifyListeners();
+
+        print(singleUserTransaction?.bookingId);
         connectionState = stateOfConnections.isReady;
         notifyListeners();
       } catch (e) {
