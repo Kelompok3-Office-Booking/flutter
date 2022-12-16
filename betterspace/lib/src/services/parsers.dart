@@ -1,6 +1,8 @@
 //do custom parsing here
 
+import 'package:betterspace/src/dummy_data/transaction_data/transaction_models.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/utils/custom_icons.dart';
 import 'package:betterspace/src/utils/enums.dart';
@@ -20,13 +22,11 @@ OfficeModels? officeModelFilterByOfficeId(
     {required List<OfficeModels> listOfModels,
     required String requestedOfficeId}) {
   OfficeModels? tempModels;
-  print("coba parse");
+  print("coba parse all office");
   listOfModels.forEach((element) {
     if (element.officeID == requestedOfficeId) {
       print("parse berhasil");
-      print("requested id = " + requestedOfficeId);
-      print("get target id " + element.officeID);
-      print(element.officeLocation.city);
+
       tempModels = element;
     }
   });
@@ -251,4 +251,52 @@ OfficeModels singleOfficeModelParser(Map<String, dynamic> jsonResponse) {
           reviewHelpRateCount: 99 + 1 * 2),
     ],
   );
+}
+
+//transaction parser
+PaymentMenthodModel? paymentMenthodModelFilter(
+    {required String paymentMethodName}) {
+  PaymentMenthodModel? PaymentMenthodModelFinalize;
+  PaymentModels().listOfAvailablePaymentMethod.forEach((element) {
+    if (element.paymentMethodName == paymentMethodName) {
+      PaymentMenthodModelFinalize = element;
+    }
+  });
+  return PaymentMenthodModelFinalize;
+}
+
+UserTransaction userTransactionParsers(
+    {required Map<String, dynamic> jsonResponse,
+    required UserModel requestedUserModel,
+    required List<OfficeModels> listOfficeModels}) {
+  return UserTransaction(
+      bookingId: jsonResponse["id"],
+      bookingDuration: jsonResponse["duration"],
+      bookingTime: TransactionBookingTime(
+          checkInHour: jsonResponse["check_in"]["time"],
+          checkInDate: jsonResponse["check_in"]["date"]),
+      bookingOfficePrice: jsonResponse["price"],
+      Drink: jsonResponse["drink"],
+      Status: jsonResponse["status"],
+      paymentMethod: paymentMenthodModelFilter(
+              paymentMethodName: jsonResponse["payment_method"]) ??
+          PaymentModels().listOfAvailablePaymentMethod.last,
+      userData: requestedUserModel,
+      officeData: officeModelFilterByOfficeId(
+          listOfModels: listOfficeModels,
+          requestedOfficeId: (jsonResponse["office"]["office_id"]).toString()));
+}
+
+List<UserTransaction> listedUserTransactionParser(
+    {required List requestedResponses,
+    required UserModel requestedUserModel,
+    required List<OfficeModels> listOfOfficeModels}) {
+  List<UserTransaction> finalizeParser = [];
+  requestedResponses.forEach((element) {
+    finalizeParser.add(userTransactionParsers(
+        jsonResponse: element,
+        requestedUserModel: requestedUserModel,
+        listOfficeModels: listOfOfficeModels));
+  });
+  return finalizeParser;
 }

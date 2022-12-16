@@ -64,13 +64,17 @@ class UserService {
         constantValue().userRefreshToken,
         options: Options(headers: {"Authorization": "Bearer " + refreshToken}),
       );
-      if (responses.statusCode == 200 || responses.statusCode == 201) {
-        print("refreshed");
-        await secureStorage.write(
-            key: "access_tokens_bs", value: responses.data["access_token"]);
-        await secureStorage.write(
-            key: "refresh_token_bs", value: responses.data["refresh_token"]);
-      } else {
+      try {
+        if (responses.statusCode == 200 || responses.statusCode == 201) {
+          print("refreshed");
+          await secureStorage.write(
+              key: "access_tokens_bs", value: responses.data["access_token"]);
+          await secureStorage.write(
+              key: "refresh_token_bs", value: responses.data["refresh_token"]);
+        } else {
+          destroyUserSession();
+        }
+      } catch (e) {
         destroyUserSession();
       }
     }
@@ -216,11 +220,65 @@ class UserService {
         data: formData);
   }
 
-  Future<Response> getUserTransactionServices({required String accessToken}) {
+  Future<Response> getUserTransactionServices(
+      {required String accessToken}) async {
     return _dio.get(
       constantValue().getAllTransactionByUser,
       options: Options(headers: {"Authorization": "Bearer " + accessToken}),
     );
+  }
+
+  Future<Response> getUserTransactionDetailByIdServices(
+      {required String accessToken, required String requestedID}) async {
+    return _dio.get(
+      constantValue().getTransactionDetails + requestedID,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> cancelTransaction(
+      {required String accessToken,
+      required String requestedTransactionId}) async {
+    return _dio.put(
+        constantValue().cancelTransactionByIdBaseUrl +
+            requestedTransactionId +
+            "/cancel",
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
+  }
+
+  Future<Response> changeProfileData(
+      {required String newName,
+      required String newEmail,
+      required String newGenders,
+      required String accessToken}) async {
+    return _dio.put(constantValue().userChangeProfileData,
+        data: {
+          "full_name": newName,
+          "email": newEmail,
+          "gender": newGenders,
+        },
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
+  }
+
+  Future<Response> setProfilePicture(
+      {required String filePath,
+      required String fileName,
+      required String accessToken}) async {
+    var formData = FormData.fromMap(
+        {"photo": await MultipartFile.fromFile(fileName, filename: fileName)});
+    return _dio.put(
+      constantValue().userSetProfilePhoto,
+      data: formData,
+      options: Options(
+          contentType: 'multipart/form-data',
+          headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> deleteUserAccountServices(
+      {required String accessToken}) async {
+    return _dio.delete(constantValue().userDeleteAccount,
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
   }
 }
 

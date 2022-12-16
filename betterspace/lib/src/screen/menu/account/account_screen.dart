@@ -68,7 +68,9 @@ class AccountScreen extends StatelessWidget {
                             image: value.userModels?.userProfileDetails
                                             .userProfilePicture !=
                                         "" &&
-                                    value.userModels != null
+                                    value.userModels?.userProfileDetails
+                                            .userProfilePicture !=
+                                        null
                                 ? NetworkImage(value
                                     .userModels!
                                     .userProfileDetails
@@ -98,8 +100,8 @@ class AccountScreen extends StatelessWidget {
                           ),
                         ),
                         child: InkWell(
-                          onTap: () {
-                            context.read<AccountViewModel>().pickImageProfile(
+                          onTap: () async {
+                            await context.read<AccountViewModel>().pickImageProfile(
                                 context,
                                 'Your profile has been updated successfully !');
                           },

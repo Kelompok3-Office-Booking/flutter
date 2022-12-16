@@ -37,6 +37,8 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
         Provider.of<OfficeViewModels>(context, listen: true);
     final providerOfTransaction =
         Provider.of<TransactionViewmodels>(context, listen: false);
+    final providerOfTransactionListen =
+        Provider.of<TransactionViewmodels>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(),
@@ -196,6 +198,83 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                         latitudes: "-6.1981045", longitudes: "106.100777");
                   },
                   child: Text("nearest office", style: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    if (providerClientListen.userModels == null) {
+                      print("no user profile exist");
+                    } else {
+                      providerOfTransaction.getTransactionByUser(
+                          userModels: providerClientListen.userModels!,
+                          ListOfAllOffice:
+                              providerOfficeListen.listOfAllOfficeModels);
+                    }
+                  },
+                  child: Text(
+                    "trans by user",
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                      await providerOfTransaction.getTransactionDetail(
+                          userModels: providerClientListen.userModels!,
+                          ListOfAllOffice:
+                              providerOfficeListen.listOfAllOfficeModels,
+                          requestedId: "46");
+                    },
+                    child: Text("trans by id",
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(fontSize: 10)),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOfTransaction.cancelUserTransactions(
+                        TransactionID: "46");
+                  },
+                  child: Text("cancel trans", style: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerClient.setUserProfilePicture(
+                        filePath: "", fileName: "");
+                  },
+                  child:
+                      Text("set profile pic", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    if (providerClientListen.userModels != null) {
+                      providerClient.updateProfileData(
+                          currentUserModels: providerClientListen.userModels!,
+                          newName: "hehe aja ga sih");
+                    }
+                  },
+                  child: Text("edit user", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerClient.deleteUserAccount();
+                  },
+                  child: Text("delete user", style: TextStyle(fontSize: 10)),
                 ),
               ],
             ),
@@ -423,6 +502,27 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                                 return Text(
                                     dataChunks.officeLocation.officeLatitude
                                         .toString(),
+                                    style: TextStyle(fontSize: 10));
+                              }));
+                        } else {
+                          return Text("no data");
+                        }
+                      }),
+                    ),
+                  ),
+                  Spacer(),
+                  Expanded(
+                    child: Consumer<TransactionViewmodels>(
+                      builder: ((context, value, child) {
+                        if (providerOfTransactionListen.allTransaction.length >
+                            0) {
+                          return ListView.builder(
+                              itemCount: providerOfTransactionListen
+                                  .allTransaction.length,
+                              itemBuilder: ((context, index) {
+                                final dataChunks = providerOfTransactionListen
+                                    .allTransaction[index];
+                                return Text(dataChunks.Status,
                                     style: TextStyle(fontSize: 10));
                               }));
                         } else {
