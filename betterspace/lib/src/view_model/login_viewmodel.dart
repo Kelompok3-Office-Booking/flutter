@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/services/api_services.dart';
 import 'package:betterspace/src/services/constant.dart';
@@ -100,16 +98,22 @@ class LoginViewmodels with ChangeNotifier {
   }
 
   getProfile() async {
+    apiProfileState = stateOfConnections.isStart;
+    notifyListeners();
     const secureStorage = FlutterSecureStorage();
     String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
     String? refreshTokens = await secureStorage.read(key: "refresh_token_bs");
     if (accessTokens != null) {
+      apiProfileState = stateOfConnections.isLoading;
+      notifyListeners();
       try {
         Response profResponse =
             await UserService().fetchProfile(accessTokens: accessTokens);
         print("fetch pertama : ${profResponse.statusCode}");
 
         if (profResponse.statusCode == 200) {
+          apiProfileState = stateOfConnections.isReady;
+          notifyListeners();
           userModels = userModelParser(
               profResponse.data,
               UserToken(
@@ -117,9 +121,13 @@ class LoginViewmodels with ChangeNotifier {
           print(profResponse.data["data"]['email'] + "fetch success");
         }
       } catch (e) {
+        apiProfileState = stateOfConnections.isFailed;
+        notifyListeners();
         print("error: $e");
       }
     } else {
+      apiProfileState = stateOfConnections.isFailed;
+      notifyListeners();
       print("no active user");
     }
     notifyListeners();
@@ -138,6 +146,68 @@ class LoginViewmodels with ChangeNotifier {
 
       Response response = await UserService().setProfilePicture(
           filePath: filePath, fileName: fileName, accessToken: accessTokens);
+    }
+  }
+
+  deleteUserAccount() async {
+    apiProfileState = stateOfConnections.isStart;
+    notifyListeners();
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
+      print("user exist : $accessTokens");
+      apiProfileState = stateOfConnections.isLoading;
+      notifyListeners();
+      try {
+        Response response = await UserService()
+            .deleteUserAccountServices(accessToken: accessTokens);
+        print(response);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          destroyActiveUser(secureStorage);
+          apiProfileState = stateOfConnections.isReady;
+        }
+      } on DioError catch (e) {
+        print("error : " + e.toString());
+      }
+    } else {
+      apiProfileState = stateOfConnections.isFailed;
+      notifyListeners();
+      print("no active user");
+    }
+  }
+
+  updateProfileData(
+      {String? newName,
+      String? newEmail,
+      String? newGenders,
+      required UserModel currentUserModels}) async {
+    profileSetterConnectionState = stateOfConnections.isStart;
+    notifyListeners();
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
+      print("user exist : $accessTokens");
+      profileSetterConnectionState = stateOfConnections.isLoading;
+      notifyListeners();
+      try {
+        Response response = await UserService().changeProfileData(
+            newName: newName ?? currentUserModels.userProfileDetails.userName,
+            newEmail: newEmail ?? currentUserModels.userEmail,
+            newGenders:
+                newGenders ?? currentUserModels.userProfileDetails.userGender,
+            accessToken: accessTokens);
+        print(response);
+        profileSetterConnectionState = stateOfConnections.isReady;
+        notifyListeners();
+      } catch (e) {
+        profileSetterConnectionState = stateOfConnections.isFailed;
+        notifyListeners();
+        print("eror update data use : $e");
+      }
+    } else {
+      profileSetterConnectionState = stateOfConnections.isFailed;
+      notifyListeners();
+      print("no active user");
     }
   }
 

@@ -245,13 +245,38 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                 ),
               ],
             ),
-            ElevatedButton(
-              onPressed: () {
-                //fetchOfficeAll hanya bisa digunakan ketika user sudah login
-                providerClient.setUserProfilePicture(
-                    filePath: "", fileName: "");
-              },
-              child: Text("set profile pic", style: TextStyle(fontSize: 10)),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerClient.setUserProfilePicture(
+                        filePath: "", fileName: "");
+                  },
+                  child:
+                      Text("set profile pic", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    if (providerClientListen.userModels != null) {
+                      providerClient.updateProfileData(
+                          currentUserModels: providerClientListen.userModels!,
+                          newName: "hehe aja ga sih");
+                    }
+                  },
+                  child: Text("edit user", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerClient.deleteUserAccount();
+                  },
+                  child: Text("delete user", style: TextStyle(fontSize: 10)),
+                ),
+              ],
             ),
             Expanded(
               child: Column(

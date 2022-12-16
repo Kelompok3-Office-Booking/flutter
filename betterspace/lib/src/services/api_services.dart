@@ -246,6 +246,20 @@ class UserService {
         options: Options(headers: {"Authorization": "Bearer " + accessToken}));
   }
 
+  Future<Response> changeProfileData(
+      {required String newName,
+      required String newEmail,
+      required String newGenders,
+      required String accessToken}) async {
+    return _dio.put(constantValue().userChangeProfileData,
+        data: {
+          "full_name": newName,
+          "email": newEmail,
+          "gender": newGenders,
+        },
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
+  }
+
   Future<Response> setProfilePicture(
       {required String filePath,
       required String fileName,
