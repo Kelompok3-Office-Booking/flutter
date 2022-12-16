@@ -1,13 +1,9 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/office_card_widget/office_type_card.dart';
-import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
-import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -41,8 +37,6 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final allOfficeProvider =
-        Provider.of<OfficeViewModels>(context, listen: false);
     return Scaffold(
       body: Consumer<SearchSpacesViewModel>(builder: (context, values, child) {
         return Padding(
@@ -95,45 +89,33 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                             color: MyColor.neutral900,
                             elevation: 0,
                             margin: const EdgeInsets.symmetric(vertical: 6),
-                            child: CachedNetworkImage(
-                              imageUrl: allOfficeProvider
-                                  .listOfAllOfficeModels[index].officeLeadImage,
-                              imageBuilder: (context, imageProvider) =>
-                                  officeTypeItemCards(
-                                context: context,
-                                onTap: () {
-                                  context
-                                      .read<NavigasiViewModel>()
-                                      .navigasiToDetailSpace(
-                                        context: context,
-                                        officeId:
-                                            values.foundOffice[index].officeID,
-                                      );
-                                },
-                                officeImage: imageProvider,
-                                officeName:
-                                    values.foundOffice[index].officeName,
-                                officeLocation:
-                                    '${values.foundOffice[index].officeLocation.district}, ${values.foundOffice[index].officeLocation.city}',
-                                officeStarRanting: values
-                                    .foundOffice[index].officeStarRating
-                                    .toString(),
-                                officeApproxDistance: '100',
-                                officePersonCapacity: values
-                                    .foundOffice[index].officePersonCapacity
-                                    .toString(),
-                                officeArea: values.foundOffice[index].officeArea
-                                    .toString(),
-                                officeType:
-                                    values.foundOffice[index].officeType,
-                              ),
-                              placeholder: (context, url) => shimmerLoading(
-                                child: CardShimmerHomeLoading
-                                    .horizontalLoadShimmerHome,
-                              ),
-                              errorWidget: (context, url, error) =>
-                                  CardShimmerHomeLoading
-                                      .horizontalFailedShimmerHome,
+                            child: officeTypeItemCards(
+                              context: context,
+                              onTap: () {
+                                context
+                                    .read<NavigasiViewModel>()
+                                    .navigasiToDetailSpace(
+                                  context: context,
+                                  officeId:
+                                  values.foundOffice[index].officeID,
+                                );
+                              },
+                              officeImage: values.foundOffice[index].officeLeadImage,
+                              officeName:
+                              values.foundOffice[index].officeName,
+                              officeLocation:
+                              '${values.foundOffice[index].officeLocation.district}, ${values.foundOffice[index].officeLocation.city}',
+                              officeStarRanting: values
+                                  .foundOffice[index].officeStarRating
+                                  .toString(),
+                              officeApproxDistance: '100',
+                              officePersonCapacity: values
+                                  .foundOffice[index].officePersonCapacity
+                                  .toString(),
+                              officeArea: values.foundOffice[index].officeArea
+                                  .toString(),
+                              officeType:
+                              values.foundOffice[index].officeType,
                             ),
                           ),
                         ),

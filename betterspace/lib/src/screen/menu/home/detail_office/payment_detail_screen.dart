@@ -11,12 +11,9 @@ import 'package:betterspace/src/view_model/transaction_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/voucer_promo_widget/text_table_content.dart';
 import 'package:betterspace/src/widget/office_card_widget/office_type_card.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
-import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/line_dash_widget.dart';
-import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
@@ -128,40 +125,32 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
             ),
 
             Consumer<GetLocationViewModel>(builder: (context, value, child) {
-              return CachedNetworkImage(
-                imageUrl: officeById?.officeLeadImage ??
+              return officeTypeItemCards(
+                context: context,
+                officeImage: officeById?.officeLeadImage ??
                     listOfDummyOffice[0].officeLeadImage,
-                imageBuilder: (context, imageProvider) => officeTypeItemCards(
-                  context: context,
-                  officeImage: imageProvider,
-                  officeName:
-                      officeById?.officeName ?? listOfDummyOffice[0].officeName,
-                  officeLocation:
-                      '${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}, ${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}',
-                  officeStarRanting: officeById?.officeStarRating.toString() ??
-                      listOfDummyOffice[0].officeStarRating.toString(),
-                  officeApproxDistance:
-                      value.locationPermission == LocationPermission.denied
-                          ? '-'
-                          : value.calculateDistances(
-                              value.lat,
-                              value.lng,
-                              officeById?.officeLocation.officeLatitude,
-                              officeById?.officeLocation.officeLongitude,
-                            ),
-                  officePersonCapacity:
-                      officeById?.officePersonCapacity.toString() ??
-                          listOfDummyOffice[0].officePersonCapacity.toString(),
-                  officeArea: officeById?.officeArea.toString() ??
-                      listOfDummyOffice[0].officeArea.toString(),
-                  officeType:
-                      officeById?.officeType ?? listOfDummyOffice[0].officeType,
+                officeName:
+                officeById?.officeName ?? listOfDummyOffice[0].officeName,
+                officeLocation:
+                '${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}, ${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}',
+                officeStarRanting: officeById?.officeStarRating.toString() ??
+                    listOfDummyOffice[0].officeStarRating.toString(),
+                officeApproxDistance:
+                value.locationPermission == LocationPermission.denied
+                    ? '-'
+                    : value.calculateDistances(
+                  value.lat,
+                  value.lng,
+                  officeById?.officeLocation.officeLatitude,
+                  officeById?.officeLocation.officeLongitude,
                 ),
-                placeholder: (context, url) => shimmerLoading(
-                  child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
-                ),
-                errorWidget: (context, url, error) =>
-                    CardShimmerHomeLoading.horizontalFailedShimmerHome,
+                officePersonCapacity:
+                officeById?.officePersonCapacity.toString() ??
+                    listOfDummyOffice[0].officePersonCapacity.toString(),
+                officeArea: officeById?.officeArea.toString() ??
+                    listOfDummyOffice[0].officeArea.toString(),
+                officeType:
+                officeById?.officeType ?? listOfDummyOffice[0].officeType,
               );
             }),
 

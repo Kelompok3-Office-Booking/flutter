@@ -8,11 +8,14 @@ class BookingButtonWidget {
   static avaliableButton({
     context,
     Function()? onPressed,
+    required String buttonText,
+    required double paddingTop,
+    required double paddingBottom,
   }) {
     return Padding(
       padding: EdgeInsets.only(
-        top: AdaptSize.pixel16,
-        bottom: AdaptSize.pixel8,
+        top: paddingTop,
+        bottom: paddingBottom,
         right: AdaptSize.screenWidth / 48,
         left: AdaptSize.screenWidth / 48,
       ),
@@ -28,7 +31,7 @@ class BookingButtonWidget {
         elevation: 0,
         backgroundColor: MyColor.neutral900,
         child: Text(
-          "Check-in Now",
+          buttonText,
           style: Theme.of(context).textTheme.button!.copyWith(
                 color: MyColor.secondary400,
                 fontSize: AdaptSize.pixel12,
@@ -39,11 +42,14 @@ class BookingButtonWidget {
   }
 
   /// button disable status on process / cancelled
-  static disableButton(context) {
+  static disableButton({
+    context,
+    required double paddingBottom,
+}) {
     return Padding(
       padding: EdgeInsets.only(
         top: AdaptSize.pixel16,
-        bottom: AdaptSize.pixel8,
+        bottom: paddingBottom,
         right: AdaptSize.screenWidth / 48,
         left: AdaptSize.screenWidth / 48,
       ),
@@ -69,11 +75,14 @@ class BookingButtonWidget {
   static checkinDetailOrderButton({
     context,
     Function()? onPressed,
+    required String buttonText,
+    required double paddingTop,
+    required double paddingBottom,
   }) {
     return Padding(
       padding: EdgeInsets.only(
-        top: AdaptSize.pixel16,
-        bottom: AdaptSize.pixel8,
+        top: paddingTop,
+        bottom: paddingBottom,
         right: AdaptSize.screenWidth / 48,
         left: AdaptSize.screenWidth / 48,
       ),
@@ -85,7 +94,7 @@ class BookingButtonWidget {
         elevation: 0,
         backgroundColor: MyColor.secondary400,
         child: Text(
-          "Check-in Now",
+          buttonText,
           style: Theme.of(context).textTheme.button!.copyWith(
                 color: MyColor.neutral900,
                 fontSize: AdaptSize.pixel12,

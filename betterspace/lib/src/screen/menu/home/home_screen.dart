@@ -31,6 +31,14 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    final userAccountProvider =
+        Provider.of<LoginViewmodels>(context, listen: false);
+    if (userAccountProvider.userModels == null) {
+      Future.delayed(Duration.zero, () {
+        userAccountProvider.getProfile();
+      });
+    }
+
     final officeData = Provider.of<OfficeViewModels>(context, listen: false);
     Future.delayed(Duration.zero, () {
       if (officeData.listOfCoworkingSpace.isEmpty &&
@@ -49,13 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     final locationProvider =
         Provider.of<GetLocationViewModel>(context, listen: false);
-    final userAccountProvider =
-        Provider.of<LoginViewmodels>(context, listen: false);
+
     final userAccountProviderListen =
         Provider.of<LoginViewmodels>(context, listen: true);
-    if (userAccountProviderListen.userModels == null) {
-      userAccountProvider.getProfile();
-    }
+
     return Scaffold(
       body: SingleChildScrollView(
         physics: const ScrollPhysics(),

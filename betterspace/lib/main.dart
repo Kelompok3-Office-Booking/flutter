@@ -1,7 +1,6 @@
 import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/screen/landing/splash_screen1.dart';
 import 'package:betterspace/src/screen/menu/home/voucer_promo_screen.dart';
-import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/text_theme.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
@@ -64,7 +63,7 @@ class BetterSpaceApp extends StatelessWidget {
         ),
         routes: {
           VoucerPromoScreen.routeName: (_) => const VoucerPromoScreen(),
-          "/firstPage": ((context) => SplashScreenOne())
+          "/firstPage": ((context) => const SplashScreenOne())
         },
       ),
     );
