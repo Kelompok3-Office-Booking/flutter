@@ -238,10 +238,10 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                 ElevatedButton(
                   onPressed: () {
                     //fetchOfficeAll hanya bisa digunakan ketika user sudah login
-                    providerOffice.fetchNearestOffice(
-                        latitudes: "-6.1981045", longitudes: "106.100777");
+                    providerOfTransaction.cancelUserTransactions(
+                        TransactionID: "46");
                   },
-                  child: Text("nearest office", style: TextStyle(fontSize: 10)),
+                  child: Text("cancel trans", style: TextStyle(fontSize: 10)),
                 ),
               ],
             ),

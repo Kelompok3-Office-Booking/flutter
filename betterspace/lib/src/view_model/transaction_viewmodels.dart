@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class TransactionViewmodels with ChangeNotifier {
+  String connectionStatus = "nothing";
   stateOfConnections connectionState = stateOfConnections.isDoingNothing;
   List<UserTransaction> _allTransaction = [];
   List<UserTransaction> get allTransaction => _allTransaction;
@@ -57,7 +58,8 @@ class TransactionViewmodels with ChangeNotifier {
             listOfOfficeModels: ListOfAllOffice);
         notifyListeners();
 
-        print(_allTransaction[1].bookingId);
+        print(_allTransaction[1].bookingId.toString() +
+            _allTransaction[1].Status);
         connectionState = stateOfConnections.isReady;
         notifyListeners();
       } catch (e) {
@@ -101,6 +103,33 @@ class TransactionViewmodels with ChangeNotifier {
         connectionState = stateOfConnections.isFailed;
         notifyListeners();
         print("error get transaction data by user : $e");
+      }
+    } else {
+      connectionState = stateOfConnections.isFailed;
+      notifyListeners();
+    }
+  }
+
+  cancelUserTransactions({required String TransactionID}) async {
+    connectionState = stateOfConnections.isStart;
+    notifyListeners();
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
+      print("user exist : $accessTokens");
+      connectionState = stateOfConnections.isLoading;
+      notifyListeners();
+      try {
+        Response response = await UserService().cancelTransaction(
+            accessToken: accessTokens, requestedTransactionId: TransactionID);
+        print("canceled" + response.toString());
+        notifyListeners();
+        connectionState = stateOfConnections.isReady;
+        notifyListeners();
+      } on DioError catch (e) {
+        connectionState = stateOfConnections.isFailed;
+        notifyListeners();
+        print("error cancel transaction data by user : $e");
       }
     } else {
       connectionState = stateOfConnections.isFailed;
