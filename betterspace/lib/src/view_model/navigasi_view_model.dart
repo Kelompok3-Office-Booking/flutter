@@ -8,13 +8,15 @@ import 'package:betterspace/src/screen/menu/home/detail_office/payment_metod_scr
 import 'package:betterspace/src/screen/menu/home/filter_search_screen.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
-import 'package:betterspace/src/screen/menu/transaksi/checkout_screen.dart';
-import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/checkout_screen.dart';
+import 'package:betterspace/src/screen/menu/transaksi/detail_order/process_detail_order.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/office_detail_screen.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/payment_detail_screen.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/success_payment_screen.dart';
+import 'package:betterspace/src/widget/booking_widget/booking_status_widget.dart';
+import 'package:betterspace/src/widget/booking_widget/info_onprocessed_widget.dart';
 import 'package:betterspace/src/widget/widget/google_maps.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -139,7 +141,7 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (contex) => settingItem,
+        builder: (context) => settingItem,
       ),
     );
   }
@@ -180,14 +182,14 @@ class NavigasiViewModel with ChangeNotifier {
       context,
       CupertinoPageRoute(
         builder: (context) => GoogleMapsWidget(
-         officeData: officeId,
+          officeData: officeId,
         ),
       ),
     );
   }
 
   /// navigasi open google maps
-  void navigasiToPaymentDetail(context, int officeId) {
+  void navigasiToPaymentDetail(context, String officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -267,14 +269,17 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => const DetailOrderScreens(),
+        builder: (context) => ProcessDetailOrderScreens(
+          statusTransaction: BookingStatusWidget.statusOnProcess(context),
+          infoOnProcessed: infoOnProcess(context),
+        ),
       ),
     );
     notifyListeners();
   }
 
   /// navigasi to checkout screen
-  void navigasiToCheckOut(BuildContext context, int officeId) {
+  void navigasiToCheckOut(BuildContext context, String officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -305,7 +310,7 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi to payment method
-  void navigasiToPaymentMetod(BuildContext context, int officeId) {
+  void navigasiToPaymentMetod(BuildContext context, String officeId) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -313,6 +318,14 @@ class NavigasiViewModel with ChangeNotifier {
           officeId: officeId,
         ),
       ),
+    );
+  }
+
+  /// navigasi all office (home screen)
+  void navigasiAllOffice(BuildContext context, Widget routeOffice) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(builder: (context) => routeOffice),
     );
   }
 }

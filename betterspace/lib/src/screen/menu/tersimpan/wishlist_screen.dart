@@ -96,14 +96,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
         }
         return Center(
             child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(
-              height: AdaptSize.screenHeight * .3,
-            ),
             Image.asset(
-              'assets/image_assets/close_up.png',
-              height: AdaptSize.screenWidth / 1000 * 300,
-              width: AdaptSize.screenWidth / 1000 * 300,
+              'assets/image_assets/search_empty.png',
+              height: AdaptSize.screenWidth / 1000 * 500,
+              width: AdaptSize.screenWidth / 1000 * 500,
             ),
             SizedBox(
               height: AdaptSize.pixel10,

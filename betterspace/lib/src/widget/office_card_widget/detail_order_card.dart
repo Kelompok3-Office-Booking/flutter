@@ -6,13 +6,12 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-Widget officeTypeItemCards({
+Widget detailOrderCard({
   context,
   Function()? onTap,
   required String officeImage,
   required String officeName,
   required String officeLocation,
-  required String officeStarRanting,
   required String officeApproxDistance,
   required String officePersonCapacity,
   required String officeArea,
@@ -41,74 +40,28 @@ Widget officeTypeItemCards({
       child: Row(
         children: [
           /// space image
-          Stack(
-            children: [
-              CachedNetworkImage(
-                imageUrl: officeImage,
-                imageBuilder: (context, imageProvider) => Container(
-                  width: AdaptSize.screenWidth * .36,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: imageProvider,
-                    ),
-                  ),
+          CachedNetworkImage(
+            imageUrl: officeImage,
+            imageBuilder: (context, imageProvider) => Container(
+              width: AdaptSize.screenWidth * .36,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: imageProvider,
                 ),
-                placeholder: (context, url) => shimmerLoading(
-                  child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
-                ),
-                errorWidget: (context, url, error) =>
+              ),
+            ),
+            placeholder: (context, url) => shimmerLoading(
+              child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
+            ),
+            errorWidget: (context, url, error) =>
                 CardShimmerHomeLoading.horizontalFailedShimmerHome,
-              ),
-              Positioned(
-                left: 10,
-                top: 8,
-                child: Stack(
-                  children: [
-                    /// ranting
-                    Container(
-                      height: AdaptSize.screenWidth / 1000 * 70,
-                      width: AdaptSize.screenWidth / 1000 * 150,
-                      alignment: Alignment.center,
-                      padding: EdgeInsets.only(
-                          left: AdaptSize.screenHeight * .005,
-                          right: AdaptSize.screenHeight * .005),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(40),
-                        color: MyColor.grayLightColor.withOpacity(.6),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Icon(
-                            Icons.star,
-                            color: Colors.amber,
-                            size: AdaptSize.pixel18,
-                          ),
-                          Text(
-                            officeStarRanting,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText2!
-                                .copyWith(
-                                    color: MyColor.whiteColor,
-                                    fontSize: AdaptSize.pixel14),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
           ),
 
           /// jarak samping
           SizedBox(
-            width: AdaptSize.screenWidth * .01,
+            width: AdaptSize.screenWidth * .008,
           ),
 
           /// keterangan
@@ -145,7 +98,7 @@ Widget officeTypeItemCards({
 
                 /// jarak bawah
                 SizedBox(
-                  height: AdaptSize.screenHeight * .008,
+                  height: AdaptSize.screenHeight * .01,
                 ),
 
                 /// icon keterangan

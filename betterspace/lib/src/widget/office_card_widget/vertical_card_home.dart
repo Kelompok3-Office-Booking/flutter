@@ -29,7 +29,7 @@ Widget verticalCardHome({
         right: 5,
         bottom: 10,
       ),
-      width: AdaptSize.screenWidth * .5,
+      width: AdaptSize.screenWidth * .54,
       decoration: BoxDecoration(
         color: MyColor.neutral900,
         borderRadius: BorderRadius.circular(16),
@@ -74,8 +74,8 @@ Widget verticalCardHome({
                   children: [
                     /// ranting
                     Container(
-                      height: AdaptSize.screenHeight * .035,
-                      width: AdaptSize.screenHeight * .068,
+                      height: AdaptSize.screenWidth / 1000 * 80,
+                      width: AdaptSize.screenWidth / 1000 * 180,
                       alignment: Alignment.center,
                       padding: EdgeInsets.only(
                           left: AdaptSize.screenHeight * .005,
@@ -124,7 +124,7 @@ Widget verticalCardHome({
                     style: Theme.of(context)
                         .textTheme
                         .headline6!
-                        .copyWith(fontSize: AdaptSize.pixel16),
+                        .copyWith(fontSize: AdaptSize.pixel15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -156,7 +156,7 @@ Widget verticalCardHome({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(fontSize: AdaptSize.pixel12),
+                            .copyWith(fontSize: AdaptSize.pixel10),
                       ),
 
                       SizedBox(
@@ -174,7 +174,7 @@ Widget verticalCardHome({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(fontSize: AdaptSize.pixel12),
+                            .copyWith(fontSize: AdaptSize.pixel10),
                       ),
 
                       SizedBox(
@@ -196,7 +196,7 @@ Widget verticalCardHome({
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!
-                              .copyWith(fontSize: AdaptSize.pixel12),
+                              .copyWith(fontSize: AdaptSize.pixel10),
                         ),
                       ),
                     ],
@@ -209,11 +209,7 @@ Widget verticalCardHome({
                       Text(
                         NumberFormat.currency(
                                 locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                            .format(officePricing
-                                // listOfDummyOffice[index]
-                                //     .officePricing
-                                //     .officePrice
-                                ),
+                            .format(officePricing),
                         style: Theme.of(context).textTheme.headline6!.copyWith(
                               color: MyColor.darkBlueColor,
                               fontSize: AdaptSize.pixel14,

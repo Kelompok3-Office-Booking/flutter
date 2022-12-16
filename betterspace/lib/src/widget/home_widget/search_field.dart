@@ -34,7 +34,7 @@ Widget searchPlace({
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-            color: MyColor.neutral500, fontSize: AdaptSize.pixel16),
+            color: MyColor.neutral500, fontSize: AdaptSize.pixel14),
         filled: true,
         fillColor: MyColor.netralColor,
         prefixIcon: prefixIcon,

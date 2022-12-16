@@ -1,4 +1,5 @@
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
@@ -16,6 +17,7 @@ class _SplashScreenTwoState extends State<SplashScreenTwo> {
   @override
   void initState() {
     super.initState();
+    final locationProvider = Provider.of<GetLocationViewModel>(context, listen: false);
     final providerOffice =
         Provider.of<OfficeViewModels>(context, listen: false);
     final providerClient = Provider.of<LoginViewmodels>(context, listen: false);
@@ -27,6 +29,7 @@ class _SplashScreenTwoState extends State<SplashScreenTwo> {
         providerOffice.fetchMeetingRoom();
         providerOffice.fetchOfficeRoom();
         providerOffice.fetchOfficeByRecommendation();
+        locationProvider.checkAndGetPosition();
       });
       WidgetsBinding.instance.addPostFrameCallback((timeStamp) async {
         Provider.of<NavigasiViewModel>(context, listen: false)

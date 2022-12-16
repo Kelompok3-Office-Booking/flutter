@@ -1,6 +1,7 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/home_widget/search_screen_widget/amount_guest_widget.dart';
@@ -22,6 +23,15 @@ class SearchSpaceScreen extends StatefulWidget {
 class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    final officeProvider = Provider.of<OfficeViewModels>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      officeProvider.fetchAllOffice();
+    });
+  }
 
   @override
   void dispose() {

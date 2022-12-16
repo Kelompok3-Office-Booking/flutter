@@ -1,29 +1,30 @@
 import 'dart:math';
 import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
-import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
 import 'package:betterspace/src/widget/widget/custom_radio_button.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/horizontal_month_picker.dart';
 import 'package:betterspace/src/widget/widget/horizontal_timepicker.dart';
 import 'package:betterspace/src/widget/office_card_widget/office_type_card.dart';
 import 'package:betterspace/src/widget/widget/read_only_form.dart';
-import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
-  final int officeId;
+  final String officeId;
 
   const CheckoutScreen({super.key, required this.officeId});
 
@@ -52,6 +53,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
     List<OfficeModels> listOfDummyOffice =
         dummyDataProviders.listOfOfficeModels;
+
+    final officeListAlloffice =
+        Provider.of<OfficeViewModels>(context, listen: true);
+    List<OfficeModels> listOfAllOfficeContainers =
+        officeListAlloffice.listOfAllOfficeModels;
+
+    final officeById = officeModelFilterByOfficeId(
+        listOfModels: listOfAllOfficeContainers,
+        requestedOfficeId: widget.officeId);
     return Scaffold(
       bottomNavigationBar: SizedBox(
         width: AdaptSize.screenWidth,
@@ -87,7 +97,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     locale: 'id',
                                     symbol: 'Rp ',
                                     decimalDigits: 0)
-                                .format(Random().nextDouble() * 400000),
+                                .format(
+                              officeById?.officePricing.officePrice ??
+                                  Random().nextDouble() * 400000,
+                            ),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.darkBlueColor,
@@ -155,50 +168,50 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
               /// update 13 12 22 meenyesuaikan card overflow
               Padding(
                 padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
-                child: CachedNetworkImage(
-                  imageUrl: listOfDummyOffice[widget.officeId].officeLeadImage,
-                  imageBuilder: (context, imageProvider) => officeTypeItemCards(
+                child: Consumer<GetLocationViewModel>(
+                    builder: (context, value, child) {
+                  return officeTypeItemCards(
                     context: context,
-                    officeImage: imageProvider,
-                    officeName: listOfDummyOffice[widget.officeId].officeName,
+                    officeImage: officeById?.officeLeadImage ??
+                        listOfDummyOffice[0].officeLeadImage,
+                    officeName: officeById?.officeName ??
+                        listOfDummyOffice[0].officeName,
                     officeLocation:
-                        '${listOfDummyOffice[widget.officeId].officeLocation.city}, ${listOfDummyOffice[widget.officeId].officeLocation.district}',
-                    officeStarRanting: listOfDummyOffice[widget.officeId]
-                        .officeStarRating
-                        .toString(),
-                    officeApproxDistance: listOfDummyOffice[widget.officeId]
-                        .officeApproxDistance
-                        .toString(),
-                    officePersonCapacity: listOfDummyOffice[widget.officeId]
-                        .officePersonCapacity
-                        .toString(),
-                    officeArea: listOfDummyOffice[widget.officeId]
-                        .officeArea
-                        .toString(),
-                    officeType: listOfDummyOffice[widget.officeId].officeType,
-                  ),
-                  placeholder: (context, url) => shimmerLoading(
-                    child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
-                  ),
-                  errorWidget: (context, url, error) =>
-                      CardShimmerHomeLoading.horizontalFailedShimmerHome,
-                ),
+                        '${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}, ${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}',
+                    officeStarRanting:
+                        officeById?.officeStarRating.toString() ??
+                            listOfDummyOffice[0].officeStarRating.toString(),
+                    officeApproxDistance:
+                        value.locationPermission == LocationPermission.denied
+                            ? '-'
+                            : value.calculateDistances(
+                                value.lat,
+                                value.lng,
+                                officeById?.officeLocation.officeLatitude,
+                                officeById?.officeLocation.officeLongitude),
+                    officePersonCapacity: officeById?.officePersonCapacity
+                            .toString() ??
+                        listOfDummyOffice[0].officePersonCapacity.toString(),
+                    officeArea: officeById?.officeArea.toString() ??
+                        listOfDummyOffice[0].officeArea.toString(),
+                    officeType: officeById?.officeType ??
+                        listOfDummyOffice[0].officeType,
+                  );
+                }),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
+                padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                 child: SizedBox(
                   height: AdaptSize.pixel22,
                   child: Text(
                     "When You Come?",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: MyColor.neutral100,
-                        fontWeight: FontWeight.bold,
-                        fontSize: AdaptSize.screenHeight / 1000 * 18),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                        color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
                   ),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
+                padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                 child: readOnlyWidget(
                   controller: _dateController,
                   enblBorderRadius: 16,
@@ -224,40 +237,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
-                child: SizedBox(
-                  height: AdaptSize.pixel22,
-                  child: Text(
-                    "Select Time To Checkin",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: MyColor.neutral100,
-                        fontWeight: FontWeight.bold,
-                        fontSize: AdaptSize.screenHeight / 1000 * 18),
-                  ),
+                padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                child: Text(
+                  "Select Time To Checkin",
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
+                padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                 child: SizedBox(
-                  height: AdaptSize.pixel26,
+                  height: AdaptSize.pixel28,
                   child: horizontalTimePicker(
                       contexts: context, isSelected: selectedHour),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
+                padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                 child: Text(
                   "For How Long?",
-                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                      color: MyColor.neutral100,
-                      fontWeight: FontWeight.bold,
-                      fontSize: AdaptSize.screenHeight / 1000 * 18),
+                  style: Theme.of(context).textTheme.headline6!.copyWith(
+                      color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
+                padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                 child: SizedBox(
-                  height: AdaptSize.pixel26,
+                  height: AdaptSize.pixel28,
                   child: horizontalMonthPicker(
                       contexts: context, isSelected: selectedMonth),
                 ),
@@ -270,15 +276,15 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
+                padding: EdgeInsets.only(
+                    bottom: AdaptSize.screenHeight * .016,
+                    top: AdaptSize.screenHeight * .016),
                 child: SizedBox(
                   width: AdaptSize.screenWidth / 1.097561,
                   child: Text(
                     "Select Free Welcome Drink",
-                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
-                        color: MyColor.neutral100,
-                        fontWeight: FontWeight.bold,
-                        fontSize: AdaptSize.screenHeight / 1000 * 18),
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                        color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
                   ),
                 ),
               ),
@@ -328,10 +334,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             .copyWith(
                                                 color: MyColor.neutral100,
                                                 fontWeight: FontWeight.bold,
-                                                fontSize:
-                                                    AdaptSize.screenHeight /
-                                                        1000 *
-                                                        16),
+                                                fontSize: AdaptSize.pixel14),
                                       ),
                                       const Spacer(),
                                       Text(
@@ -341,10 +344,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                             .bodyMedium!
                                             .copyWith(
                                                 color: MyColor.neutral100,
-                                                fontSize:
-                                                    AdaptSize.screenHeight /
-                                                        1000 *
-                                                        16),
+                                                fontSize: AdaptSize.pixel14),
                                       ),
                                     ],
                                   ),
@@ -366,12 +366,18 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
+                padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                 child: SizedBox(
                   height: AdaptSize.screenWidth / 6.4285714,
                   child: textFormFields(
-                      prefixIcons: const Icon(Icons.percent_outlined),
-                      suffixIcon: const Icon(Icons.percent),
+                      prefixIcons: Icon(
+                        Icons.percent_outlined,
+                        color: MyColor.primary700,
+                      ),
+                      suffixIcon: Icon(
+                        Icons.percent,
+                        color: MyColor.primary700,
+                      ),
                       label: "discount code",
                       hintTexts: "AXRRR#2",
                       controller: discountFormController),
