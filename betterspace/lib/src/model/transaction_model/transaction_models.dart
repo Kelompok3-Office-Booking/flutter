@@ -1,6 +1,6 @@
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/model/promo_model.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
-import 'package:betterspace/src/utils/enums.dart';
 
 class TransactionBookingTime {
   late String checkInHour;
@@ -21,12 +21,14 @@ class TransactionBookingTime {
 class PaymentMenthodModel {
   late String paymentId;
   late String paymentMethodName;
+  late String paymentMethodImageSlug;
   String? paymentVirtualAccount;
   String? qrGenerateable;
   double? paymentFees;
   PaymentMenthodModel(
       {required this.paymentId,
       required this.paymentMethodName,
+      required this.paymentMethodImageSlug,
       this.paymentVirtualAccount,
       this.qrGenerateable,
       this.paymentFees});
@@ -40,31 +42,37 @@ class PaymentModels {
           paymentId: "QR",
           paymentMethodName: "QRIS",
           qrGenerateable: "mock%payment%string%for%generated%qr",
+          paymentMethodImageSlug: 'assets/image_assets/qris_payment.png',
           paymentFees: 0),
       PaymentMenthodModel(
           paymentId: "BNI_VA",
           paymentMethodName: "BNI",
           paymentVirtualAccount: "0000199911111",
+          paymentMethodImageSlug: 'assets/image_assets/bni_payment.png',
           paymentFees: 2500),
       PaymentMenthodModel(
           paymentId: "BRI_VA",
           paymentMethodName: "BRI",
           paymentVirtualAccount: "0120199911111",
+          paymentMethodImageSlug: 'assets/image_assets/bri_payment.png',
           paymentFees: 2500),
       PaymentMenthodModel(
           paymentId: "BCA_VA",
           paymentMethodName: "BCA",
           paymentVirtualAccount: "4500199911111",
+          paymentMethodImageSlug: 'assets/image_assets/bca_payment.png',
           paymentFees: 2500),
       PaymentMenthodModel(
           paymentId: "MANDIRI_VA",
           paymentMethodName: "MANDIRI",
           paymentVirtualAccount: "6650199911111",
+          paymentMethodImageSlug: 'assets/image_assets/mandiri_payment.png',
           paymentFees: 2500),
       PaymentMenthodModel(
           paymentId: "OTHER_VA",
           paymentMethodName: "OTHER",
           paymentVirtualAccount: "3350199911111",
+          paymentMethodImageSlug: 'assets/image_assets/other_payment.png',
           paymentFees: 5000),
     ];
   }
@@ -82,6 +90,22 @@ class PaymentModels {
     });
     return filteredPaymentModel;
   }
+}
+
+class TransactionFormModels {
+  late int transactionTotalPrice;
+  late TransactionBookingTime transactionBookingTime;
+  late int duration;
+  late String selectedDrink;
+  late int selectedOfficeId;
+  PromoModel? usedPromo;
+  TransactionFormModels(
+      {required this.transactionTotalPrice,
+      required this.transactionBookingTime,
+      required this.duration,
+      required this.selectedDrink,
+      required this.selectedOfficeId,
+      required this.usedPromo});
 }
 
 class CreateTransactionModels {

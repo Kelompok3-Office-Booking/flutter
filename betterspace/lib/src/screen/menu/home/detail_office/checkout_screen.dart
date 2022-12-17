@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:betterspace/src/model/beverage%20model/beverage_models.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
@@ -42,8 +43,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   ValueNotifier<int> selectedHourDuration = ValueNotifier<int>(1);
   ValueNotifier<int> selectedMonth = ValueNotifier<int>(1);
   ValueNotifier<int> selectedBeverageId = ValueNotifier<int>(1);
+  ValueNotifier<DateTime?> selectedDate = ValueNotifier<DateTime?>(null);
   TextEditingController discountFormController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -132,27 +135,41 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   Widget? child) {
                                 return buttonWidget(
                                   onPressed: () async {
-                                    if (_formKey.currentState!.validate()) {
-                                      // await transactionProvider
-                                      //     .createTransactionRecords(
-                                      //         requestedModels:
-                                      //             CreateTransactionModels(
-                                      //   transactionTotalPrice:
-                                      //       calculateTotalPrice(basePrice: officeById!.officePricing.officePrice, duration: officeById.officeType == "Office"
-                                      //           ? valueMonth : valueHours),
-                                      //   transactionBookingTime:
-                                      //   TransactionBookingTime(checkInHour: valueHours.toString(), checkInDate: _dateController.text,
-                                      //   duration: duration,
-                                      //   paymentMethodName: paymentMethodName,
-                                      //   selectedDrink: selectedDrink,
-                                      //   selectedOfficeId: selectedOfficeId,
-                                      // ));
-                                      context
-                                          .read<NavigasiViewModel>()
-                                          .navigasiToPaymentMetod(
-                                            context,
-                                            widget.officeId,
-                                          );
+                                    if (_formKey.currentState!.validate() &&
+                                        officeById != null) {
+                                      print("base price : " +
+                                          officeById.officePricing.officePrice
+                                              .toString());
+                                      context.read<NavigasiViewModel>().navigasiToPaymentMetod(
+                                          context,
+                                          widget.officeId,
+                                          TransactionFormModels(
+                                              transactionTotalPrice: calculateTotalPrice(
+                                                  basePrice: officeById
+                                                      .officePricing
+                                                      .officePrice,
+                                                  duration: officeById.officeType ==
+                                                          "Office"
+                                                      ? selectedMonth.value
+                                                      : selectedHourDuration
+                                                          .value),
+                                              transactionBookingTime:
+                                                  dateTimeParsers(
+                                                      selectedHours:
+                                                          selectedHour.value,
+                                                      selectedDate:
+                                                          selectedDate.value ??
+                                                              DateTime.now()),
+                                              duration:
+                                                  selectedHourDuration.value,
+                                              selectedDrink:
+                                                  listOfBeverages()[selectedBeverageId.value - 1]
+                                                      .drinkName,
+                                              selectedOfficeId:
+                                                  int.parse(widget.officeId),
+                                              usedPromo: filterPromoByCode(
+                                                  promoCode:
+                                                      discountFormController.text)));
                                     }
                                   },
                                   borderRadius: BorderRadius.circular(8),
@@ -269,7 +286,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         color: MyColor.grayLightColor,
                       ),
                   onTap: () {
-                    pickedDate(context);
+                    pickedDate(context, selectedDate);
                   },
                   suffixIcon: Icon(
                     CupertinoIcons.calendar,
@@ -343,9 +360,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   builder: ((context, value, child) {
                     return ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
-                      itemCount: 3,
+                      itemCount: listOfBeverages().length,
                       itemBuilder: ((context, index) {
-                        int controlledIndex = index + 1;
+                        BeverageModels currentModel = listOfBeverages()[index];
                         return Padding(
                           padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
                           child: SizedBox(
@@ -359,9 +376,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   child: SizedBox(
                                     width: AdaptSize.screenWidth / 6.428571428,
                                     height: AdaptSize.screenWidth / 6.428571428,
-                                    child: const Image(
-                                      image: AssetImage(
-                                          "assets/image_assets/beverages_image/beverage1.png"),
+                                    child: Image(
+                                      image: AssetImage(currentModel.imagePath),
                                       fit: BoxFit.cover,
                                     ),
                                   ),
@@ -374,7 +390,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Hot Chocolate ${selectedBeverageId.value}",
+                                        currentModel.drinkName,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium!
@@ -385,13 +401,13 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       ),
                                       const Spacer(),
                                       Text(
-                                        "Hot chocolate can warm the body from cold air",
+                                        currentModel.drinkDescription,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyMedium!
                                             .copyWith(
                                                 color: MyColor.neutral100,
-                                                fontSize: AdaptSize.pixel14),
+                                                fontSize: AdaptSize.pixel10),
                                       ),
                                     ],
                                   ),
@@ -402,7 +418,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                 customRadioButton(
                                     context: context,
                                     customRadioController: selectedBeverageId,
-                                    controlledIdValue: controlledIndex),
+                                    controlledIdValue: currentModel.drinkId),
                               ],
                             ),
                           ),
@@ -419,8 +435,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   child: Consumer<PromoViewModel>(
                       builder: (context, value, child) {
                     return textFormFields(
-                        prefixIcons:
-                            SvgPicture.asset('assets/svg_assets/discount.svg'),
+                        prefixIcons: Padding(
+                          padding: EdgeInsets.only(
+                              right: AdaptSize.pixel14,
+                              left: AdaptSize.pixel14),
+                          child: SizedBox(
+                            height: AdaptSize.pixel18,
+                            width: AdaptSize.pixel18,
+                            child: SvgPicture.asset(
+                                'assets/svg_assets/discount.svg'),
+                          ),
+                        ),
                         suffixIcon: Icon(
                           Icons.percent,
                           color: MyColor.primary700,
@@ -438,7 +463,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Future pickedDate(BuildContext context) async {
+  Future pickedDate(
+      BuildContext context, ValueNotifier<DateTime?> dateController) async {
     final dateProvider =
         Provider.of<SearchSpacesViewModel>(context, listen: false);
 
@@ -476,5 +502,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     dateProvider.pickdate();
     _dateController.text = dateProvider.datePicked;
+    dateController.value = dateProvider.dateTime;
   }
 }

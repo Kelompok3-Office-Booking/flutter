@@ -52,31 +52,36 @@ class UserService {
     const secureStorage = FlutterSecureStorage();
     print("destroying this sessions");
     await secureStorage.deleteAll();
-    navigatorKey.currentState!
-        .pushNamedAndRemoveUntil('/firstPage', (route) => false);
+
+    if (navigatorKey.currentState != null) {
+      navigatorKey.currentState!
+          .pushNamedAndRemoveUntil('/firstPage', (route) => false);
+    }
   }
 
   Future<void> refreshTokenLoopSafety() async {
     const secureStorage = FlutterSecureStorage();
     String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
     if (refreshToken != null) {
-      Response responses = await Dio().post(
-        constantValue().userRefreshToken,
-        options: Options(headers: {"Authorization": "Bearer " + refreshToken}),
-      );
       try {
+        Response responses = await Dio().post(
+          constantValue().userRefreshToken,
+          options:
+              Options(headers: {"Authorization": "Bearer " + refreshToken}),
+        );
         if (responses.statusCode == 200 || responses.statusCode == 201) {
           print("refreshed");
           await secureStorage.write(
               key: "access_tokens_bs", value: responses.data["access_token"]);
           await secureStorage.write(
               key: "refresh_token_bs", value: responses.data["refresh_token"]);
-        } else {
-          destroyUserSession();
         }
       } catch (e) {
+        print("gagal refresh");
         destroyUserSession();
       }
+    } else {
+      destroyUserSession();
     }
   }
 
