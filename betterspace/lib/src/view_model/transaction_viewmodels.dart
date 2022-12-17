@@ -22,6 +22,8 @@ class TransactionViewmodels with ChangeNotifier {
     const secureStorage = FlutterSecureStorage();
     String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
     if (accessTokens != null) {
+      connectionState = stateOfConnections.isLoading;
+      notifyListeners();
       print("user exist : $accessTokens");
       try {
         Response createResponse = await UserService()
@@ -29,11 +31,17 @@ class TransactionViewmodels with ChangeNotifier {
         if (createResponse.statusCode == 200 ||
             createResponse.statusCode == 201) {
           print(createResponse.toString());
+          connectionState = stateOfConnections.isReady;
+          notifyListeners();
         }
       } catch (e) {
+        connectionState = stateOfConnections.isFailed;
+        notifyListeners();
         print("fail to make record : $e");
       }
     } else {
+      connectionState = stateOfConnections.isDoingNothing;
+      notifyListeners();
       print("no session exist");
     }
   }

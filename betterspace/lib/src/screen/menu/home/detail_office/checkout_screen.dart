@@ -1,6 +1,8 @@
 import 'dart:math';
+import 'package:betterspace/src/model/beverage%20model/beverage_models.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/services/parsers.dart';
@@ -11,7 +13,6 @@ import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/promo_view_model.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
-import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:betterspace/src/widget/home_widget/horizontal_duration_picker/horizontal_duration_hours.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
@@ -42,6 +43,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
   ValueNotifier<int> selectedHourDuration = ValueNotifier<int>(1);
   ValueNotifier<int> selectedMonth = ValueNotifier<int>(1);
   ValueNotifier<int> selectedBeverageId = ValueNotifier<int>(1);
+  ValueNotifier<DateTime?> selectedDate = ValueNotifier<DateTime?>(null);
   TextEditingController discountFormController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
@@ -55,11 +57,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final promoData = Provider.of<PromoViewModel>(context, listen: false);
-
-    final transactionProvider =
-        Provider.of<TransactionViewmodels>(context, listen: false);
-
     final dummyDataProviders =
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
     List<OfficeModels> listOfDummyOffice =
@@ -73,133 +70,158 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     final officeById = officeModelFilterByOfficeId(
         listOfModels: listOfAllOfficeContainers,
         requestedOfficeId: widget.officeId);
-    return NetworkAware(
-      offlineChild: const NoConnectionScreen(),
-      onlineChild: Scaffold(
-        bottomNavigationBar: SizedBox(
-          width: AdaptSize.screenWidth,
-          child: partialRoundedCard(
-              childWidgets: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  /// update 13 11 22 menyamakan dengan detail screen
-                  Padding(
-                    padding: EdgeInsets.only(
-                      top: AdaptSize.pixel16,
-                      left: AdaptSize.pixel16,
-                      right: AdaptSize.pixel16,
-                      bottom: AdaptSize.pixel6,
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Start From',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(
-                                    color: MyColor.darkBlueColor,
-                                    fontSize: AdaptSize.pixel16,
-                                  ),
+    return Scaffold(
+      bottomNavigationBar: SizedBox(
+        width: AdaptSize.screenWidth,
+        child: partialRoundedCard(
+            childWidgets: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                /// update 13 11 22 menyamakan dengan detail screen
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: AdaptSize.pixel16,
+                    left: AdaptSize.pixel16,
+                    right: AdaptSize.pixel16,
+                    bottom: AdaptSize.pixel6,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Start From',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyText1!
+                                .copyWith(
+                              color: MyColor.darkBlueColor,
+                              fontSize: AdaptSize.pixel16,
                             ),
-                            Text(
-                              NumberFormat.currency(
-                                      locale: 'id',
-                                      symbol: 'Rp ',
-                                      decimalDigits: 0)
-                                  .format(
-                                officeById?.officePricing.officePrice ??
-                                    Random().nextDouble() * 400000,
-                              ),
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .copyWith(
-                                    color: MyColor.darkBlueColor,
-                                    fontSize: AdaptSize.pixel14,
-                                  ),
+                          ),
+                          Text(
+                            NumberFormat.currency(
+                                locale: 'id',
+                                symbol: 'Rp ',
+                                decimalDigits: 0)
+                                .format(
+                              officeById?.officePricing.officePrice ??
+                                  Random().nextDouble() * 400000,
                             ),
-                          ],
-                        ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(
+                              color: MyColor.darkBlueColor,
+                              fontSize: AdaptSize.pixel14,
+                            ),
+                          ),
+                        ],
+                      ),
 
-                        /// button to check out
-                        ValueListenableBuilder(
-                            valueListenable: selectedMonth,
-                            builder: (BuildContext context, valueMonth,
-                                Widget? child) {
-                              return ValueListenableBuilder(
-                                valueListenable: selectedHour,
-                                builder: (BuildContext context, valueHours,
-                                    Widget? child) {
-                                  return buttonWidget(
-                                    onPressed: () async {
-                                      if (_formKey.currentState!.validate()) {
-                                        // await transactionProvider
-                                        //     .createTransactionRecords(
-                                        //         requestedModels:
-                                        //             CreateTransactionModels(
-                                        //   transactionTotalPrice:
-                                        //       calculateTotalPrice(basePrice: officeById!.officePricing.officePrice, duration: officeById.officeType == "Office"
-                                        //           ? valueMonth : valueHours),
-                                        //   transactionBookingTime:
-                                        //   TransactionBookingTime(checkInHour: valueHours.toString(), checkInDate: _dateController.text,
-                                        //   duration: duration,
-                                        //   paymentMethodName: paymentMethodName,
-                                        //   selectedDrink: selectedDrink,
-                                        //   selectedOfficeId: selectedOfficeId,
-                                        // ));
-                                        context
-                                            .read<NavigasiViewModel>()
-                                            .navigasiToPaymentMetod(
-                                              context,
-                                              widget.officeId,
-                                            );
-                                      }
-                                    },
-                                    borderRadius: BorderRadius.circular(8),
-                                    backgroundColor: MyColor.secondary400,
-                                    foregroundColor: MyColor.secondary400,
-                                    child: Text(
-                                      'Book Now',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .button!
-                                          .copyWith(
-                                            fontSize: AdaptSize.pixel14,
-                                            color: MyColor.neutral900,
-                                          ),
+                      /// button to check out
+                      ValueListenableBuilder(
+                          valueListenable: selectedMonth,
+                          builder: (BuildContext context, valueMonth,
+                              Widget? child) {
+                            return ValueListenableBuilder(
+                              valueListenable: selectedHour,
+                              builder: (BuildContext context, valueHours,
+                                  Widget? child) {
+                                return buttonWidget(
+                                  onPressed: () async {
+                                    if (_formKey.currentState!.validate() &&
+                                        officeById != null) {
+                                      debugPrint(
+                                          "base price : ${officeById.officePricing.officePrice}");
+                                      context
+                                          .read<NavigasiViewModel>()
+                                          .navigasiToPaymentMetod(
+                                        context,
+                                        widget.officeId,
+                                        TransactionFormModels(
+                                          transactionTotalPrice:
+                                          calculateTotalPrice(
+                                              basePrice: officeById
+                                                  .officePricing
+                                                  .officePrice,
+                                              duration: officeById
+                                                  .officeType ==
+                                                  "Office"
+                                                  ? selectedMonth
+                                                  .value
+                                                  : selectedHourDuration
+                                                  .value),
+                                          transactionBookingTime:
+                                          dateTimeParsers(
+                                              selectedHours:
+                                              selectedHour.value,
+                                              selectedDate:
+                                              selectedDate
+                                                  .value ??
+                                                  DateTime.now()),
+                                          duration:
+                                          selectedHourDuration.value,
+                                          selectedDrink:
+                                          listOfBeverages()[
+                                          selectedBeverageId
+                                              .value -
+                                              1]
+                                              .drinkName,
+                                          selectedOfficeId:
+                                          int.parse(widget.officeId),
+                                          usedPromo: filterPromoByCode(
+                                              promoCode:
+                                              discountFormController
+                                                  .text),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  borderRadius: BorderRadius.circular(8),
+                                  backgroundColor: MyColor.secondary400,
+                                  foregroundColor: MyColor.secondary400,
+                                  child: Text(
+                                    'Book Now',
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .button!
+                                        .copyWith(
+                                      fontSize: AdaptSize.pixel14,
+                                      color: MyColor.neutral900,
                                     ),
-                                  );
-                                },
-                              );
-                            }),
-                      ],
-                    ),
+                                  ),
+                                );
+                              },
+                            );
+                          }),
+                    ],
                   ),
-                  SizedBox(
-                    height: AdaptSize.screenHeight * .012,
-                  ),
-                ],
-              ),
-              cardBottomPadding: 0,
-              cardTopLeftRadius: 16,
-              cardTopRightRadius: 16),
-        ),
+                ),
+                SizedBox(
+                  height: AdaptSize.screenHeight * .012,
+                ),
+              ],
+            ),
+            cardBottomPadding: 0,
+            cardTopLeftRadius: 16,
+            cardTopRightRadius: 16),
+      ),
 
-        /// 13/12/22 mengganti app bar
-        appBar: defaultAppbarWidget(
-            contexts: context,
-            leadIconFunction: () {
-              context.read<NavigasiViewModel>().navigasiPop(context);
-            },
-            isCenterTitle: false,
-            titles: 'Checkout'),
-        body: Padding(
+      /// 13/12/22 mengganti app bar
+      appBar: defaultAppbarWidget(
+          contexts: context,
+          leadIconFunction: () {
+            context.read<NavigasiViewModel>().navigasiPop(context);
+          },
+          isCenterTitle: false,
+          titles: 'Checkout'),
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: Padding(
           /// update 13 12 22 menghapus widget yang bertumpukan
           padding: EdgeInsets.only(
             top: AdaptSize.screenHeight * .016,
@@ -217,37 +239,36 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
                   child: Consumer<GetLocationViewModel>(
                       builder: (context, value, child) {
-                    return officeTypeItemCards(
-                      context: context,
-                      officeImage: officeById?.officeLeadImage ??
-                          listOfDummyOffice[0].officeLeadImage,
-                      officeName: officeById?.officeName ??
-                          listOfDummyOffice[0].officeName,
-                      officeLocation:
+                        return officeTypeItemCards(
+                          context: context,
+                          officeImage: officeById?.officeLeadImage ??
+                              listOfDummyOffice[0].officeLeadImage,
+                          officeName: officeById?.officeName ??
+                              listOfDummyOffice[0].officeName,
+                          officeLocation:
                           '${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}, ${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}',
-                      officeStarRanting:
+                          officeStarRanting:
                           officeById?.officeStarRating.toString() ??
                               listOfDummyOffice[0].officeStarRating.toString(),
-                      officeApproxDistance: value.posisi != null
-                          ? value.calculateDistances(
+                          officeApproxDistance:
+                          value.posisi != null ? value.calculateDistances(
                               value.lat,
                               value.lng,
                               officeById?.officeLocation.officeLatitude,
-                              officeById?.officeLocation.officeLongitude)!
-                          : '-',
-                      officePersonCapacity: officeById?.officePersonCapacity
+                              officeById?.officeLocation.officeLongitude) : '-',
+                          officePersonCapacity: officeById?.officePersonCapacity
                               .toString() ??
-                          listOfDummyOffice[0].officePersonCapacity.toString(),
-                      officeArea: officeById?.officeArea.toString() ??
-                          listOfDummyOffice[0].officeArea.toString(),
-                      officeType: officeById?.officeType ??
-                          listOfDummyOffice[0].officeType,
-                    );
-                  }),
+                              listOfDummyOffice[0].officePersonCapacity.toString(),
+                          officeArea: officeById?.officeArea.toString() ??
+                              listOfDummyOffice[0].officeArea.toString(),
+                          officeType: officeById?.officeType ??
+                              listOfDummyOffice[0].officeType,
+                        );
+                      }),
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: SizedBox(
                     height: AdaptSize.pixel22,
                     child: Text(
@@ -260,7 +281,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: readOnlyWidget(
                     controller: _dateController,
                     enblBorderRadius: 16,
@@ -274,10 +295,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     },
                     hint: 'day, date month year',
                     textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-                          color: MyColor.grayLightColor,
-                        ),
+                      color: MyColor.grayLightColor,
+                    ),
                     onTap: () {
-                      pickedDate(context);
+                      pickedDate(context, selectedDate);
                     },
                     suffixIcon: Icon(
                       CupertinoIcons.calendar,
@@ -287,7 +308,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: Text(
                     "Select Time To Checkin",
                     style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -296,7 +317,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: SizedBox(
                     height: AdaptSize.pixel28,
                     child: horizontalTimePicker(
@@ -305,7 +326,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: Text(
                     "For How Long?",
                     style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -314,17 +335,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: SizedBox(
                     height: AdaptSize.pixel28,
                     child:
-                        // officeById
-                        officeById?.officeType == "Office"
-                            ? horizontalMonthPicker(
-                                contexts: context, isSelected: selectedMonth)
-                            : horizontalHoursPicker(
-                                contexts: context,
-                                isSelected: selectedHourDuration),
+                    // officeById
+                    officeById?.officeType == "Office"
+                        ? horizontalMonthPicker(
+                        contexts: context, isSelected: selectedMonth)
+                        : horizontalHoursPicker(
+                        contexts: context,
+                        isSelected: selectedHourDuration),
                   ),
                 ),
                 SizedBox(
@@ -356,9 +377,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     builder: ((context, value, child) {
                       return ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 3,
+                        itemCount: listOfBeverages().length,
                         itemBuilder: ((context, index) {
-                          int controlledIndex = index + 1;
+                          BeverageModels currentModel =
+                          listOfBeverages()[index];
                           return Padding(
                             padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
                             child: SizedBox(
@@ -371,12 +393,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         right: AdaptSize.pixel16),
                                     child: SizedBox(
                                       width:
-                                          AdaptSize.screenWidth / 6.428571428,
+                                      AdaptSize.screenWidth / 6.428571428,
                                       height:
-                                          AdaptSize.screenWidth / 6.428571428,
-                                      child: const Image(
-                                        image: AssetImage(
-                                            "assets/image_assets/beverages_image/beverage1.png"),
+                                      AdaptSize.screenWidth / 6.428571428,
+                                      child: Image(
+                                        image:
+                                        AssetImage(currentModel.imagePath),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -386,27 +408,27 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     height: AdaptSize.screenWidth / 6.428571428,
                                     child: Column(
                                       crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          "Hot Chocolate ${selectedBeverageId.value}",
+                                          currentModel.drinkName,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium!
                                               .copyWith(
-                                                  color: MyColor.neutral100,
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: AdaptSize.pixel14),
+                                              color: MyColor.neutral100,
+                                              fontWeight: FontWeight.bold,
+                                              fontSize: AdaptSize.pixel14),
                                         ),
                                         const Spacer(),
                                         Text(
-                                          "Hot chocolate can warm the body from cold air",
+                                          currentModel.drinkDescription,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyMedium!
                                               .copyWith(
-                                                  color: MyColor.neutral100,
-                                                  fontSize: AdaptSize.pixel14),
+                                              color: MyColor.neutral100,
+                                              fontSize: AdaptSize.pixel10),
                                         ),
                                       ],
                                     ),
@@ -417,7 +439,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   customRadioButton(
                                       context: context,
                                       customRadioController: selectedBeverageId,
-                                      controlledIdValue: controlledIndex),
+                                      controlledIdValue: currentModel.drinkId),
                                 ],
                               ),
                             ),
@@ -429,22 +451,31 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: SizedBox(
                     height: AdaptSize.screenWidth / 6.4285714,
                     child: Consumer<PromoViewModel>(
                         builder: (context, value, child) {
-                      return textFormFields(
-                          prefixIcons: SvgPicture.asset(
-                              'assets/svg_assets/discount.svg'),
-                          suffixIcon: Icon(
-                            Icons.percent,
-                            color: MyColor.primary700,
-                          ),
-                          label: "discount code",
-                          hintTexts: "AXRRR#2",
-                          controller: discountFormController);
-                    }),
+                          return textFormFields(
+                              prefixIcons: Padding(
+                                padding: EdgeInsets.only(
+                                    right: AdaptSize.pixel14,
+                                    left: AdaptSize.pixel14),
+                                child: SizedBox(
+                                  height: AdaptSize.pixel18,
+                                  width: AdaptSize.pixel18,
+                                  child: SvgPicture.asset(
+                                      'assets/svg_assets/discount.svg'),
+                                ),
+                              ),
+                              suffixIcon: Icon(
+                                Icons.percent,
+                                color: MyColor.primary700,
+                              ),
+                              label: "discount code",
+                              hintTexts: "AXRRR#2",
+                              controller: discountFormController);
+                        }),
                   ),
                 ),
               ],
@@ -455,7 +486,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
     );
   }
 
-  Future pickedDate(BuildContext context) async {
+  Future pickedDate(
+      BuildContext context, ValueNotifier<DateTime?> dateController) async {
     final dateProvider =
         Provider.of<SearchSpacesViewModel>(context, listen: false);
 
@@ -493,5 +525,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
     dateProvider.pickdate();
     _dateController.text = dateProvider.datePicked;
+    dateController.value = dateProvider.dateTime;
   }
 }

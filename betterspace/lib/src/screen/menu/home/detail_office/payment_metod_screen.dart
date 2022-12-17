@@ -1,28 +1,32 @@
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/view_model/transaction_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
-import 'package:betterspace/src/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PaymentMetodScreen extends StatelessWidget {
   final String officeId;
+  final TransactionFormModels checkoutForms;
 
-  const PaymentMetodScreen({Key? key, required this.officeId})
-      : super(key: key);
+  const PaymentMetodScreen({
+    Key? key,
+    required this.officeId,
+    required this.checkoutForms,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ValueNotifier<PaymentMetodEnum> radPaymentVal =
-        ValueNotifier<PaymentMetodEnum>(PaymentMetodEnum.qris);
-    final transactionsMetod =
-        Provider.of<TransactionViewModel>(context, listen: false);
+    final listOfPaymentModels = PaymentModels().listOfAvailablePaymentMethod;
+    ValueNotifier<int> radPaymentVal = ValueNotifier<int>(0);
+    // final transactionsMethod =
+    //     Provider.of<TransactionViewModel>(context, listen: false);
+    debugPrint("calculated price : ${checkoutForms.transactionTotalPrice}");
 
     return Scaffold(
       appBar: defaultAppbarWidget(
@@ -31,7 +35,7 @@ class PaymentMetodScreen extends StatelessWidget {
             context.read<NavigasiViewModel>().navigasiPop(context);
           },
           isCenterTitle: false,
-          titles: 'Payment Metod'),
+          titles: 'Payment Method'),
       body: NetworkAware(
         offlineChild: const NoConnectionScreen(),
         onlineChild: SingleChildScrollView(
@@ -74,10 +78,11 @@ class PaymentMetodScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Scan QR Code',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                                fontSize: AdaptSize.pixel16,
-                                color: MyColor.neutral100,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    fontSize: AdaptSize.pixel16,
+                                    color: MyColor.neutral100,
+                                  ),
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
@@ -92,21 +97,23 @@ class PaymentMetodScreen extends StatelessWidget {
                             ),
                             Text(
                               'QRIS (Dana, OVO, Gopay,etc)',
-                              style:
-                                  Theme.of(context).textTheme.bodyText2!.copyWith(
-                                        fontSize: AdaptSize.pixel14,
-                                        color: MyColor.neutral100,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyText2!
+                                  .copyWith(
+                                    fontSize: AdaptSize.pixel14,
+                                    color: MyColor.neutral100,
+                                  ),
                             ),
                             const Spacer(),
 
                             /// qris value
-                            ValueListenableBuilder<PaymentMetodEnum>(
+                            ValueListenableBuilder<int>(
                               valueListenable: radPaymentVal,
                               builder: ((context, values, child) {
-                                return Radio<PaymentMetodEnum>(
+                                return Radio<int>(
                                   activeColor: Colors.deepPurple.shade600,
-                                  value: transactionsMetod.virtualAccountMetod,
+                                  value: 0,
                                   groupValue: values,
                                   onChanged: ((value) {
                                     radPaymentVal.value = value!;
@@ -139,29 +146,32 @@ class PaymentMetodScreen extends StatelessWidget {
                       children: [
                         Text(
                           'Transfer ATM / M-Banking',
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                                fontSize: AdaptSize.pixel16,
-                                color: MyColor.neutral100,
-                              ),
+                          style:
+                              Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    fontSize: AdaptSize.pixel16,
+                                    color: MyColor.neutral100,
+                                  ),
                         ),
                         SizedBox(
                           height: AdaptSize.screenWidth / 1000 * 800,
                           width: double.infinity,
                           child: ListView.builder(
                               physics: const NeverScrollableScrollPhysics(),
-                              itemCount: transactionsMetod.itemTransaction.length,
+                              itemCount: listOfPaymentModels.length - 1,
                               itemBuilder: (context, index) {
+                                int formattedIndex = index + 1;
                                 return Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Row(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.center,
-                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
                                       children: [
                                         Image.asset(
-                                          transactionsMetod.itemTransaction[index]
-                                              [0],
+                                          listOfPaymentModels[formattedIndex]
+                                              .paymentMethodImageSlug,
                                           height: AdaptSize.screenHeight * .03,
                                           width: AdaptSize.screenHeight * .05,
                                         ),
@@ -169,8 +179,8 @@ class PaymentMetodScreen extends StatelessWidget {
                                           width: AdaptSize.screenWidth * .016,
                                         ),
                                         Text(
-                                          transactionsMetod.itemTransaction[index]
-                                              [1],
+                                          listOfPaymentModels[formattedIndex]
+                                              .paymentMethodName,
                                           style: Theme.of(context)
                                               .textTheme
                                               .bodyText2!
@@ -182,14 +192,13 @@ class PaymentMetodScreen extends StatelessWidget {
                                         const Spacer(),
 
                                         ///bank transfer value
-                                        ValueListenableBuilder<PaymentMetodEnum>(
+                                        ValueListenableBuilder<int>(
                                           valueListenable: radPaymentVal,
                                           builder: ((context, values, child) {
-                                            return Radio<PaymentMetodEnum>(
+                                            return Radio<int>(
                                               activeColor:
                                                   Colors.deepPurple.shade600,
-                                              value: transactionsMetod
-                                                  .bankTransferMetod[index],
+                                              value: formattedIndex,
                                               groupValue: values,
                                               onChanged: ((value) {
                                                 radPaymentVal.value = value!;
@@ -216,9 +225,22 @@ class PaymentMetodScreen extends StatelessWidget {
 
                 buttonWidget(
                   onPressed: () {
+                    debugPrint(radPaymentVal.value.toString());
                     context.read<NavigasiViewModel>().navigasiToPaymentDetail(
-                          context,
-                          officeId,
+                          context: context,
+                          officeId: officeId,
+                          bookingForm: CreateTransactionModels(
+                              transactionTotalPrice:
+                                  checkoutForms.transactionTotalPrice,
+                              transactionBookingTime:
+                                  checkoutForms.transactionBookingTime,
+                              duration: checkoutForms.duration,
+                              paymentMethodName:
+                                  listOfPaymentModels[radPaymentVal.value]
+                                      .paymentMethodName,
+                              selectedDrink: checkoutForms.selectedDrink,
+                              selectedOfficeId: checkoutForms.selectedOfficeId),
+                          paymentMethodIndex: radPaymentVal.value,
                         );
                   },
                   sizeWidth: double.infinity,

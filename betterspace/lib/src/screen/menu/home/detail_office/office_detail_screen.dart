@@ -114,8 +114,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                       officeRanting: officeById
                                               ?.officeStarRating ??
                                           listOfDummyOffice[0].officeStarRating,
-                                      officeImage: officeById
-                                              ?.officeLeadImage ??
+                                      officeImage: officeById?.officeLeadImage ??
                                           listOfDummyOffice[0].officeLeadImage,
                                       officeLocation:
                                           '${officeById?.officeLocation.district}, ${officeById?.officeLocation.city}',
@@ -141,15 +140,14 @@ class OfficeDetailScreen extends StatelessWidget {
                         ),
                       ),
                       placeholder: (context, url) => shimmerLoading(
-                        child: commonShimmerLoadWidget(
-                            sizeHeight: AdaptSize.screenWidth / 1.3,
-                            sizeWidth: double.infinity),
+                        child: commonShimmerLoadWidget(),
                       ),
                       errorWidget: (context, url, error) =>
                           commonShimmerFailedLoadWidget(
-                              context: context,
-                              sizeHeight: AdaptSize.screenWidth / 1.3,
-                              sizeWidth: double.infinity),
+                        context: context,
+                        sizeHeight: AdaptSize.screenWidth / 1.3,
+                        sizeWidth: double.infinity,
+                      ),
                     ),
 
                     SizedBox(
@@ -167,11 +165,11 @@ class OfficeDetailScreen extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return CachedNetworkImage(
-                            imageUrl: officeById?.officeGridImage[index] !=
-                                        null &&
-                                    officeById?.officeGridImage[index] != ''
-                                ? officeById?.officeGridImage[index]
-                                : listOfDummyOffice[0].officeGridImage[index],
+                            imageUrl:
+                                officeById?.officeGridImage[index] != null &&
+                                        officeById?.officeGridImage[index] != ''
+                                    ? officeById?.officeGridImage[index]
+                                    : listOfDummyOffice[0].officeGridImage[index],
                             imageBuilder: (context, imageProvider) => Padding(
                               padding: EdgeInsets.only(right: AdaptSize.pixel8),
                               child: SizedBox(
@@ -188,15 +186,15 @@ class OfficeDetailScreen extends StatelessWidget {
                             ),
                             placeholder: (context, url) => shimmerLoading(
                               child: commonShimmerLoadWidget(
-                                sizeWidth: AdaptSize.screenWidth / 3.5,
-                                sizeHeight: AdaptSize.screenWidth / 3.5,
+                                sizeWidth: AdaptSize.screenWidth / 3.25,
+                                sizeHeight: AdaptSize.screenWidth / 3.25,
                               ),
                             ),
                             errorWidget: (context, url, error) =>
                                 commonShimmerFailedLoadWidget(
                               context: context,
-                              sizeWidth: AdaptSize.screenWidth / 3.5,
-                              sizeHeight: AdaptSize.screenWidth / 3.5,
+                              sizeWidth: AdaptSize.screenWidth / 3.25,
+                              sizeHeight: AdaptSize.screenWidth / 3.25,
                             ),
                           );
                         },
@@ -296,14 +294,12 @@ class OfficeDetailScreen extends StatelessWidget {
                           return IconWithLabel().asrow(
                               contexts: context,
                               usedIcon: Icons.location_on_outlined,
-                              labelText: value.posisi != null
-                                  ? value.homeScreenCalculateDistances(
-                                      value.lat!,
-                                      value.lng!,
-                                      officeById?.officeLocation.officeLatitude,
-                                      officeById
-                                          ?.officeLocation.officeLongitude)!
-                                  : '-',
+                              labelText: value.posisi != null ? value.calculateDistances(
+                                value.lat,
+                                value.lng,
+                                officeById?.officeLocation.officeLatitude,
+                                officeById?.officeLocation.officeLongitude,
+                              ) : '-',
                               spacer: AdaptSize.pixel4);
                         }),
 
@@ -320,12 +316,9 @@ class OfficeDetailScreen extends StatelessWidget {
                         Text(
                           officeById?.officeArea.toString() ??
                               listOfDummyOffice[0].officeArea.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color: MyColor.neutral100,
-                                  fontSize: AdaptSize.pixel14),
+                          style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                              color: MyColor.neutral100,
+                              fontSize: AdaptSize.pixel14),
                         ),
 
                         const Spacer(),
@@ -372,8 +365,7 @@ class OfficeDetailScreen extends StatelessWidget {
                     Text(
                       "Description",
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: MyColor.neutral100,
-                          fontSize: AdaptSize.pixel16),
+                          color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
                     ),
                     SizedBox(
                       height: AdaptSize.pixel8,
@@ -419,8 +411,8 @@ class OfficeDetailScreen extends StatelessWidget {
                                 children: [
                                   /// icon
                                   Padding(
-                                    padding: EdgeInsets.only(
-                                        right: AdaptSize.pixel8),
+                                    padding:
+                                        EdgeInsets.only(right: AdaptSize.pixel8),
                                     child: officeById
                                                     ?.listOfOfficeCapcityModels[
                                                         index]
@@ -434,8 +426,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                         ? customSVGIconParsers(
                                             size: AdaptSize.pixel22,
                                             iconSlug: officeById
-                                                ?.listOfOfficeCapcityModels[
-                                                    index]
+                                                ?.listOfOfficeCapcityModels[index]
                                                 .capacityIconSlug)
                                         : Icon(
                                             CupertinoIcons
@@ -496,8 +487,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              dividerWdiget(
-                                  width: double.infinity, opacity: .1),
+                              dividerWdiget(width: double.infinity, opacity: .1),
                             ],
                           );
                         },
@@ -580,8 +570,7 @@ class OfficeDetailScreen extends StatelessWidget {
                           ],
                           image: const DecorationImage(
                             fit: BoxFit.cover,
-                            image:
-                                AssetImage('assets/image_assets/mapimage.jpg'),
+                            image: AssetImage('assets/image_assets/mapimage.jpg'),
                           ),
                         ),
                       ),

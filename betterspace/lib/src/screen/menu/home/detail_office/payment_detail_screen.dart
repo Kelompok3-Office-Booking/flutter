@@ -1,21 +1,25 @@
 import 'package:barcode_widget/barcode_widget.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/transaction_view_model.dart';
+import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:betterspace/src/widget/home_widget/voucer_promo_widget/text_table_content.dart';
 import 'package:betterspace/src/widget/office_card_widget/office_type_card.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/line_dash_widget.dart';
+import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -23,8 +27,14 @@ import 'package:uuid/uuid.dart';
 
 class PaymentDetailScreen extends StatefulWidget {
   final String officeId;
+  final CreateTransactionModels bookingForms;
+  final int paymentMethodPointerIndex;
 
-  const PaymentDetailScreen({Key? key, required this.officeId})
+  const PaymentDetailScreen(
+      {Key? key,
+      required this.officeId,
+      required this.bookingForms,
+      required this.paymentMethodPointerIndex})
       : super(key: key);
 
   @override
@@ -42,6 +52,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final listOfPaymentModels = PaymentModels().listOfAvailablePaymentMethod;
     final officeListAlloffice =
         Provider.of<OfficeViewModels>(context, listen: true);
     List<OfficeModels> listOfAllOfficeContainers =
@@ -56,7 +67,13 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
     final dummyDataProviders =
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
+
     final listOfDummyOffice = dummyDataProviders.listOfOfficeModels;
+
+    final createUserTransaction =
+        Provider.of<TransactionViewmodels>(context, listen: false);
+
+    debugPrint(widget.bookingForms.paymentMethodName);
     return Scaffold(
       appBar: defaultAppbarWidget(
           contexts: context,
@@ -144,7 +161,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                           value.lng,
                           officeById?.officeLocation.officeLatitude,
                           officeById?.officeLocation.officeLongitude,
-                        )!
+                        )
                       : '-',
                   officePersonCapacity:
                       officeById?.officePersonCapacity.toString() ??
@@ -169,12 +186,17 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
               /// text scan qr code
               Row(
                 children: [
-                  Image.asset('assets/image_assets/qris_payment.png'),
+                  Image.asset(
+                      listOfPaymentModels[widget.paymentMethodPointerIndex]
+                          .paymentMethodImageSlug),
                   SizedBox(
                     height: AdaptSize.screenWidth * .016,
                   ),
                   Text(
-                    'Scan QR Code',
+                    widget.paymentMethodPointerIndex == 0
+                        ? 'Scan QR Code'
+                        : listOfPaymentModels[widget.paymentMethodPointerIndex]
+                            .paymentMethodName,
                     style: Theme.of(context)
                         .textTheme
                         .subtitle1!
@@ -185,29 +207,33 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
               /// payment / qr code
               Center(
-                child: Container(
-                  height: AdaptSize.screenWidth / 500 * 200,
-                  width: AdaptSize.screenWidth / 500 * 200,
-                  margin: EdgeInsets.only(
-                    top: AdaptSize.screenHeight * .016,
-                    bottom: AdaptSize.screenHeight * .016,
-                  ),
-                  padding: const EdgeInsets.all(12),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: MyColor.neutral900,
-                    boxShadow: [
-                      BoxShadow(
-                          offset: const Offset(1, 2),
-                          color: MyColor.primary800.withOpacity(.4),
-                          blurRadius: 5),
-                    ],
-                  ),
-                  child: BarcodeWidget(
-                    data: uuid.v4(),
-                    barcode: Barcode.qrCode(),
-                  ),
-                ),
+                child: widget.paymentMethodPointerIndex == 0
+                    ? Container(
+                        height: AdaptSize.screenWidth / 500 * 200,
+                        width: AdaptSize.screenWidth / 500 * 200,
+                        margin: EdgeInsets.only(
+                          top: AdaptSize.screenHeight * .016,
+                          bottom: AdaptSize.screenHeight * .016,
+                        ),
+                        padding: const EdgeInsets.all(12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16),
+                          color: MyColor.neutral900,
+                          boxShadow: [
+                            BoxShadow(
+                                offset: const Offset(1, 2),
+                                color: MyColor.primary800.withOpacity(.4),
+                                blurRadius: 5),
+                          ],
+                        ),
+                        child: BarcodeWidget(
+                          data: uuid.v4(),
+                          barcode: Barcode.qrCode(),
+                        ),
+                      )
+                    : Text(
+                        "Virtual Account : ${listOfPaymentModels[widget.paymentMethodPointerIndex].paymentVirtualAccount!}",
+                      ),
               ),
 
               /// icon donwload
@@ -234,7 +260,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                   Text(
                     NumberFormat.currency(
                             locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                        .format(100000),
+                        .format(widget.bookingForms.transactionTotalPrice),
                     style: Theme.of(context).textTheme.headline6!.copyWith(
                           color: MyColor.darkBlueColor,
                           fontSize: AdaptSize.pixel14,
@@ -480,24 +506,34 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
               ),
+              Consumer<TransactionViewmodels>(
+                builder: ((context, value, child) {
+                  return buttonWidget(
+                    onPressed: () async {
+                      await createUserTransaction.createTransactionRecords(
+                          requestedModels: widget.bookingForms);
+                      if (!mounted) return;
+                      context
+                          .read<NavigasiViewModel>()
+                          .navigasiSuccessPayment(context);
+                    },
+                    backgroundColor: MyColor.secondary400,
+                    sizeheight: AdaptSize.screenHeight / 14,
+                    borderRadius: BorderRadius.circular(10),
+                    sizeWidth: double.infinity,
+                    child: value.connectionState == stateOfConnections.isLoading
+                        ? LoadingWidget.whiteButtonLoading
+                        : Text(
+                            'I have already paid',
+                            style: Theme.of(context).textTheme.button!.copyWith(
+                                color: MyColor.neutral900,
+                                fontSize: AdaptSize.pixel14),
+                          ),
+                  );
+                }),
+              ),
 
               /// button have already payment
-              buttonWidget(
-                onPressed: () {
-                  context
-                      .read<NavigasiViewModel>()
-                      .navigasiSuccessPayment(context);
-                },
-                backgroundColor: MyColor.secondary400,
-                sizeheight: AdaptSize.screenHeight / 14,
-                borderRadius: BorderRadius.circular(10),
-                sizeWidth: double.infinity,
-                child: Text(
-                  'I have already paid',
-                  style: Theme.of(context).textTheme.button!.copyWith(
-                      color: MyColor.neutral900, fontSize: AdaptSize.pixel14),
-                ),
-              ),
 
               SizedBox(
                 height: AdaptSize.screenHeight * .016,
