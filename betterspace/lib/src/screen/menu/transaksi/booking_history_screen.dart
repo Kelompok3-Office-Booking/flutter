@@ -1,3 +1,5 @@
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/screen/menu/transaksi/detail_order/process_detail_order.dart';
 import 'package:betterspace/src/screen/menu/transaksi/detail_order/success_detail_order.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
@@ -45,96 +47,99 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
         isCenterTitle: widget.isCenterTitle,
         titles: 'Booking History',
       ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          //top: AdaptSize.paddingTop + AdaptSize.screenHeight / 19,
-          /// 13/12/22 ubah size padding
-          left: AdaptSize.screenWidth * .016,
-          right: AdaptSize.screenWidth * .016,
-        ),
-        child: SizedBox(
-          height: AdaptSize.screenHeight,
-          width: AdaptSize.screenWidth,
-          child: ListView(
-            children: [
-              /// sample booking success
-              cardBookingHistory(
-                context: context,
-                onTap: () {
-                  context.read<NavigasiViewModel>().navigasiAllOffice(
-                        context,
-                        const SuccessDetailOrderScreens(),
-                      );
-                },
-                bookingId: 'ID07XCFF6',
-                statusBooking: BookingStatusWidget.statusSuccess(context),
-                officeName: 'Location xxxxx',
-                officeType: 'coworking space',
-                dateCheckIn: 'Friday, 18 Nov 2022',
-                hoursCheckIn: '18.00 : 22.00',
-                buttonStatus: BookingButtonWidget.avaliableButton(
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: Padding(
+          padding: EdgeInsets.only(
+            //top: AdaptSize.paddingTop + AdaptSize.screenHeight / 19,
+            /// 13/12/22 ubah size padding
+            left: AdaptSize.screenWidth * .016,
+            right: AdaptSize.screenWidth * .016,
+          ),
+          child: SizedBox(
+            height: AdaptSize.screenHeight,
+            width: AdaptSize.screenWidth,
+            child: ListView(
+              children: [
+                /// sample booking success
+                cardBookingHistory(
                   context: context,
-                  onPressed: () {
-                    qrCodeCheckIn(
-                        context: context,
-                        title: 'QR Code',
-                        description: 'Show the QR Code to the staff');
+                  onTap: () {
+                    context.read<NavigasiViewModel>().navigasiAllOffice(
+                          context,
+                          const SuccessDetailOrderScreens(),
+                        );
                   },
-                  buttonText: 'Check-in Now',
-                  paddingTop: AdaptSize.pixel16,
-                  paddingBottom: AdaptSize.pixel8,
+                  bookingId: 'ID07XCFF6',
+                  statusBooking: BookingStatusWidget.statusSuccess(context),
+                  officeName: 'Location xxxxx',
+                  officeType: 'coworking space',
+                  dateCheckIn: 'Friday, 18 Nov 2022',
+                  hoursCheckIn: '18.00 : 22.00',
+                  buttonStatus: BookingButtonWidget.avaliableButton(
+                    context: context,
+                    onPressed: () {
+                      qrCodeCheckIn(
+                          context: context,
+                          title: 'QR Code',
+                          description: 'Show the QR Code to the staff');
+                    },
+                    buttonText: 'Check-in Now',
+                    paddingTop: AdaptSize.pixel16,
+                    paddingBottom: AdaptSize.pixel8,
+                  ),
                 ),
-              ),
 
-              /// sample booking on process
-              cardBookingHistory(
-                context: context,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => ProcessDetailOrderScreens(
-                        statusTransaction:
-                            BookingStatusWidget.statusOnProcess(context),
-                        infoOnProcessed: infoOnProcess(context),
+                /// sample booking on process
+                cardBookingHistory(
+                  context: context,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => ProcessDetailOrderScreens(
+                          statusTransaction:
+                              BookingStatusWidget.statusOnProcess(context),
+                          infoOnProcessed: infoOnProcess(context),
+                        ),
                       ),
-                    ),
-                  );
-                },
-                bookingId: 'ID07XCFF6',
-                statusBooking: BookingStatusWidget.statusOnProcess(context),
-                officeName: 'Location xxxxx',
-                officeType: 'meeting room',
-                dateCheckIn: 'Friday, 23 Nov 2022',
-                hoursCheckIn: '12.00 : 20.00',
-                buttonStatus: BookingButtonWidget.disableButton(
-                    context: context, paddingBottom: AdaptSize.pixel8),
-              ),
+                    );
+                  },
+                  bookingId: 'ID07XCFF6',
+                  statusBooking: BookingStatusWidget.statusOnProcess(context),
+                  officeName: 'Location xxxxx',
+                  officeType: 'meeting room',
+                  dateCheckIn: 'Friday, 23 Nov 2022',
+                  hoursCheckIn: '12.00 : 20.00',
+                  buttonStatus: BookingButtonWidget.disableButton(
+                      context: context, paddingBottom: AdaptSize.pixel8),
+                ),
 
-              /// sample booking cancelled
-              cardBookingHistory(
-                context: context,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    CupertinoPageRoute(
-                      builder: (context) => ProcessDetailOrderScreens(
-                        statusTransaction:
-                            BookingStatusWidget.statusCancelled(context),
+                /// sample booking cancelled
+                cardBookingHistory(
+                  context: context,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      CupertinoPageRoute(
+                        builder: (context) => ProcessDetailOrderScreens(
+                          statusTransaction:
+                              BookingStatusWidget.statusCancelled(context),
+                        ),
                       ),
-                    ),
-                  );
-                },
-                bookingId: 'ID07XCFF6',
-                statusBooking: BookingStatusWidget.statusCancelled(context),
-                officeName: 'Location xxxxx',
-                officeType: 'office',
-                dateCheckIn: 'Friday, 18 Nov 2022',
-                hoursCheckIn: '18.00 : 22.00',
-                buttonStatus: BookingButtonWidget.disableButton(
-                    context: context, paddingBottom: AdaptSize.pixel8),
-              ),
-            ],
+                    );
+                  },
+                  bookingId: 'ID07XCFF6',
+                  statusBooking: BookingStatusWidget.statusCancelled(context),
+                  officeName: 'Location xxxxx',
+                  officeType: 'office',
+                  dateCheckIn: 'Friday, 18 Nov 2022',
+                  hoursCheckIn: '18.00 : 22.00',
+                  buttonStatus: BookingButtonWidget.disableButton(
+                      context: context, paddingBottom: AdaptSize.pixel8),
+                ),
+              ],
+            ),
           ),
         ),
       ),

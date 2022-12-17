@@ -1,3 +1,5 @@
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/form_validator.dart';
@@ -42,88 +44,91 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
         isCenterTitle: false,
         titles: 'Change Password',
       ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: AdaptSize.screenWidth * .016,
-          right: AdaptSize.screenWidth * .016,
-          top: AdaptSize.pixel16,
-        ),
-        child: Form(
-          key: _key,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: Padding(
+          padding: EdgeInsets.only(
+            left: AdaptSize.screenWidth * .016,
+            right: AdaptSize.screenWidth * .016,
+            top: AdaptSize.pixel16,
+          ),
+          child: Form(
+            key: _key,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
 
-              /// update password
-              textFormFields(
-                label: 'Update Password',
-                controller: _updatePasswordController,
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(fontSize: AdaptSize.pixel16),
-                validators: (value) => FormValidator.validate(
-                  title: 'password',
-                  value1: _updatePasswordController.text,
-                  value2: _confirmPasswordController.text,
+                /// update password
+                textFormFields(
+                  label: 'Update Password',
+                  controller: _updatePasswordController,
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(fontSize: AdaptSize.pixel16),
+                  validators: (value) => FormValidator.validate(
+                    title: 'password',
+                    value1: _updatePasswordController.text,
+                    value2: _confirmPasswordController.text,
+                  ),
+                  hintTexts: '********',
+                  obscureText: false,
+                  textInputAction: TextInputAction.done,
                 ),
-                hintTexts: '********',
-                obscureText: false,
-                textInputAction: TextInputAction.done,
-              ),
 
-              SizedBox(
-                height: AdaptSize.pixel10,
-              ),
-
-              /// confirm update password
-              textFormFields(
-                label: 'Confirm Update Password',
-                controller: _confirmPasswordController,
-                textStyle: Theme.of(context)
-                    .textTheme
-                    .bodyText1!
-                    .copyWith(fontSize: AdaptSize.pixel16),
-                validators: (value) => FormValidator.validate(
-                  title: 'password',
-                  value1: _updatePasswordController.text,
-                  value2: _confirmPasswordController.text,
+                SizedBox(
+                  height: AdaptSize.pixel10,
                 ),
-                hintTexts: '********',
-                obscureText: false,
-                textInputAction: TextInputAction.done,
-              ),
 
-              SizedBox(
-                height: AdaptSize.screenHeight * .018,
-              ),
+                /// confirm update password
+                textFormFields(
+                  label: 'Confirm Update Password',
+                  controller: _confirmPasswordController,
+                  textStyle: Theme.of(context)
+                      .textTheme
+                      .bodyText1!
+                      .copyWith(fontSize: AdaptSize.pixel16),
+                  validators: (value) => FormValidator.validate(
+                    title: 'password',
+                    value1: _updatePasswordController.text,
+                    value2: _confirmPasswordController.text,
+                  ),
+                  hintTexts: '********',
+                  obscureText: false,
+                  textInputAction: TextInputAction.done,
+                ),
 
-              /// button submit
-              Consumer<AccountViewModel>(builder: (context, value, child) {
-                return buttonWidget(
-                  sizeheight: AdaptSize.screenHeight / 14,
-                  sizeWidth: double.infinity,
-                  borderRadius: BorderRadius.circular(10),
-                  backgroundColor: MyColor.darkBlueColor,
-                  onPressed: () async {
-                    if (_key.currentState!.validate()) {
-                      value.changeProfile(context, 'Your password has been updated successfully!');
-                      _updatePasswordController.clear();
-                      _confirmPasswordController.clear();
-                    }
-                  },
-                  child: value.isLoading
-                      ? LoadingWidget.whiteButtonLoading
-                      : Text(
-                          "Save Changes",
-                          style: Theme.of(context)
-                              .textTheme
-                              .button!
-                              .copyWith(color: MyColor.whiteColor),
-                        ),
-                );
-              }),
-            ],
+                SizedBox(
+                  height: AdaptSize.screenHeight * .018,
+                ),
+
+                /// button submit
+                Consumer<AccountViewModel>(builder: (context, value, child) {
+                  return buttonWidget(
+                    sizeheight: AdaptSize.screenHeight / 14,
+                    sizeWidth: double.infinity,
+                    borderRadius: BorderRadius.circular(10),
+                    backgroundColor: MyColor.darkBlueColor,
+                    onPressed: () async {
+                      if (_key.currentState!.validate()) {
+                        value.changeProfile(context, 'Your password has been updated successfully!');
+                        _updatePasswordController.clear();
+                        _confirmPasswordController.clear();
+                      }
+                    },
+                    child: value.isLoading
+                        ? LoadingWidget.whiteButtonLoading
+                        : Text(
+                            "Save Changes",
+                            style: Theme.of(context)
+                                .textTheme
+                                .button!
+                                .copyWith(color: MyColor.whiteColor),
+                          ),
+                  );
+                }),
+              ],
+            ),
           ),
         ),
       ),

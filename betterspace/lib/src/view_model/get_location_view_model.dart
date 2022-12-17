@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/services/constant.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
@@ -25,7 +26,6 @@ class GetLocationViewModel with ChangeNotifier {
   late double? lng;
 
   LocationPermission? locationPermission;
-
 
   /// permission lokasi chekker
   Future checkAndGetPosition() async {
@@ -56,6 +56,7 @@ class GetLocationViewModel with ChangeNotifier {
       lng = posisi?.longitude;
     }
   }
+
 
   /// permission lokasi chekker
   Future permissionLocationGMap(context, OfficeModels officeId) async {
@@ -145,7 +146,7 @@ class GetLocationViewModel with ChangeNotifier {
     poly.PolylinePoints polylinePoints = poly.PolylinePoints();
     poly.PolylineResult result = await polylinePoints
         .getRouteBetweenCoordinates(
-      'AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k',
+      constantValue().gmapApiKey,
       poly.PointLatLng(
         posisi!.latitude,
         posisi!.longitude,
@@ -199,15 +200,12 @@ class GetLocationViewModel with ChangeNotifier {
   }
 
   /// string calculate distance
-  String calculateDistances(posLat, posLng,desLat, desLng) {
+  String calculateDistances(posLat, posLng, desLat, desLng) {
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 -
         c((desLat - posLat) * p) / 2 +
-        c(posLat * p) *
-            c(desLat * p) *
-            (1 - c((desLng - posLng) * p)) /
-            2;
+        c(posLat * p) * c(desLat * p) * (1 - c((desLng - posLng) * p)) / 2;
     var dis = 12742 * asin(sqrt(a));
     return dis < 1
         ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
@@ -215,54 +213,17 @@ class GetLocationViewModel with ChangeNotifier {
   }
 
   /// string calculate distance in home
-  String homeScreenCalculateDistances(posLat, posLng,desLat, desLng) {
+  String? homeScreenCalculateDistances(posLat, posLng, desLat, desLng) {
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 -
         c((desLat - posLat) * p) / 2 +
-        c(posLat * p) *
-            c(desLat * p) *
-            (1 - c((desLng - posLng) * p)) /
-            2;
+        c(posLat * p) * c(desLat * p) * (1 - c((desLng - posLng) * p)) / 2;
     var dis = 12742 * asin(sqrt(a));
     return dis < 1
         ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
         : "${double.parse(dis.toStringAsFixed(1))} km";
   }
-
-  // late String? opis;
-  //
-  // void coba(context, int index) async {
-  //   final dataOffis = Provider.of<OfficeViewModels>(context,listen: false);
-  //   bool serviceEnabled;
-  //   LocationPermission permission;
-  //
-  //   serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  //   if(serviceEnabled){
-  //     String dsCobs (){
-  //       var p = 0.017453292519943295;
-  //       var c = cos;
-  //       var a = 0.5 -
-  //           c((dataOffis.listOfAllOfficeModels[index].officeLocation.officeLatitude - posisi!.latitude) * p) / 2 +
-  //           c(posisi!.latitude * p) *
-  //               c(dataOffis.listOfAllOfficeModels[index].officeLocation.officeLatitude * p) *
-  //               (1 - c((dataOffis.listOfAllOfficeModels[index].officeLocation.officeLongitude - posisi!.longitude) * p)) /
-  //               2;
-  //       var dis = 12742 * asin(sqrt(a));
-  //       return dis < 1
-  //           ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
-  //           : "${double.parse(dis.toStringAsFixed(1))} km";
-  //     }
-  //     opis = dsCobs();
-  //     notifyListeners();
-  //   }
-  //   permission = await Geolocator.checkPermission();
-  //   if(permission == LocationPermission.denied || permission == LocationPermission.deniedForever){
-  //     opis = '-';
-  //     notifyListeners();
-  //   }
-  //
-  // }
 
   /// detail lokasi
   Future<void> getAddressFromLongLat(double posLat, double posLong) async {

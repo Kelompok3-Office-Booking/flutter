@@ -1,5 +1,7 @@
 import 'package:betterspace/src/model/data/general_notification_data.dart';
 import 'package:betterspace/src/model/data/recommen_transaction_data.dart';
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -43,54 +45,57 @@ class _NotificationScreenState extends State<NotificationScreen>
         isCenterTitle: false,
         titles: 'Notification',
       ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: AdaptSize.screenWidth * .016,
-          right: AdaptSize.screenWidth * .016,
-        ),
-        child: Column(
-          children: [
-            /// tab bar
-            SizedBox(
-              height: AdaptSize.screenWidth / 800 * 80,
-              width: double.infinity,
-              child: TabBar(
-                controller: _tabBarController,
-                isScrollable: true,
-                labelStyle: Theme.of(context)
-                    .textTheme
-                    .headline6!
-                    .copyWith(fontSize: AdaptSize.pixel16),
-                indicatorColor: MyColor.primary400,
-                indicatorSize: TabBarIndicatorSize.tab,
-                labelPadding: const EdgeInsets.symmetric(horizontal: 2.0),
-                labelColor: MyColor.primary400,
-                unselectedLabelColor: MyColor.grayLightColor.withOpacity(.9),
-                tabs: [
-                  tabSized(
-                    sizeWidth: AdaptSize.screenWidth / 1000 * 300,
-                    tab1: 'General',
-                    valueTab1: generalNotification.length.toString(),
-                  ),
-                  tabSized(
-                    sizeWidth: AdaptSize.screenWidth / 2000 * 1000,
-                    tab1: 'Recommendation',
-                    valueTab1: notificationRecomen.length.toString(),
-                  ),
-                ],
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: Padding(
+          padding: EdgeInsets.only(
+            left: AdaptSize.screenWidth * .016,
+            right: AdaptSize.screenWidth * .016,
+          ),
+          child: Column(
+            children: [
+              /// tab bar
+              SizedBox(
+                height: AdaptSize.screenWidth / 800 * 80,
+                width: double.infinity,
+                child: TabBar(
+                  controller: _tabBarController,
+                  isScrollable: true,
+                  labelStyle: Theme.of(context)
+                      .textTheme
+                      .headline6!
+                      .copyWith(fontSize: AdaptSize.pixel16),
+                  indicatorColor: MyColor.primary400,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  labelPadding: const EdgeInsets.symmetric(horizontal: 2.0),
+                  labelColor: MyColor.primary400,
+                  unselectedLabelColor: MyColor.grayLightColor.withOpacity(.9),
+                  tabs: [
+                    tabSized(
+                      sizeWidth: AdaptSize.screenWidth / 1000 * 300,
+                      tab1: 'General',
+                      valueTab1: generalNotification.length.toString(),
+                    ),
+                    tabSized(
+                      sizeWidth: AdaptSize.screenWidth / 2000 * 1000,
+                      tab1: 'Recommendation',
+                      valueTab1: notificationRecomen.length.toString(),
+                    ),
+                  ],
+                ),
               ),
-            ),
 
-            Expanded(
-              child: TabBarView(
-                controller: _tabBarController,
-                children: [
-                  generalWidget(context),
-                  recommendationNotificationWidget(context),
-                ],
+              Expanded(
+                child: TabBarView(
+                  controller: _tabBarController,
+                  children: [
+                    generalWidget(context),
+                    recommendationNotificationWidget(context),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

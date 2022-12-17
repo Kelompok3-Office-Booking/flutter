@@ -1,11 +1,15 @@
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/office_card_widget/office_type_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class FilterSearchScreen extends StatefulWidget {
@@ -37,127 +41,149 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final locationProvider =
+        Provider.of<GetLocationViewModel>(context, listen: false);
     return Scaffold(
-      body: Consumer<SearchSpacesViewModel>(builder: (context, values, child) {
-        return Padding(
-          padding: EdgeInsets.only(
-            left: AdaptSize.screenWidth * .016,
-            right: AdaptSize.screenWidth * .016,
-            top: AdaptSize.paddingTop + 3,
-          ),
-          child: Column(
-            children: [
-              /// text field
-              searchPlace(
-                /// search keyword
-                context: context,
-                margin: EdgeInsets.only(
-                  bottom: AdaptSize.screenHeight * .016,
-                ),
-                hintText: 'Type keyword...',
-                controller: _searchController,
-                onChanged: (value) => values.filterAllOffice(context, value!),
-                prefixIcon: IconButton(
-                  onPressed: () {
-                    context.read<NavigasiViewModel>().navigasiPop(context);
-                  },
-                  splashColor: MyColor.neutral900,
-                  icon: Icon(
-                    Icons.arrow_back,
-                    color: MyColor.darkColor.withOpacity(.8),
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild:
+            Consumer<SearchSpacesViewModel>(builder: (context, values, child) {
+          return Padding(
+            padding: EdgeInsets.only(
+              left: AdaptSize.screenWidth * .016,
+              right: AdaptSize.screenWidth * .016,
+              top: AdaptSize.paddingTop + 3,
+            ),
+            child: Column(
+              children: [
+                /// text field
+                searchPlace(
+                  /// search keyword
+                  context: context,
+                  margin: EdgeInsets.only(
+                    bottom: AdaptSize.screenHeight * .016,
+                  ),
+                  hintText: 'Type keyword...',
+                  controller: _searchController,
+                  onChanged: (value) => values.filterAllOffice(context, value!),
+                  prefixIcon: IconButton(
+                    onPressed: () {
+                      context.read<NavigasiViewModel>().navigasiPop(context);
+                    },
+                    splashColor: MyColor.neutral900,
+                    icon: Icon(
+                      Icons.arrow_back,
+                      color: MyColor.darkColor.withOpacity(.8),
+                      size: AdaptSize.pixel22,
+                    ),
+                  ),
+                  suffixIcon: Icon(
+                    Icons.search,
+                    color: MyColor.neutral600,
                     size: AdaptSize.pixel22,
                   ),
+                  readOnly: false,
                 ),
-                suffixIcon: Icon(
-                  Icons.search,
-                  color: MyColor.neutral600,
-                  size: AdaptSize.pixel22,
-                ),
-                readOnly: false,
-              ),
 
-              /// content
-              Expanded(
-                child: values.foundOffice.isNotEmpty
-                    ? MediaQuery.removePadding(
-                        removeTop: true,
-                        context: context,
-                        child: ListView.builder(
-                          itemCount: values.foundOffice.length,
-                          itemBuilder: (context, index) => Card(
-                            key: ValueKey(values.foundOffice[index].officeName),
-                            color: MyColor.neutral900,
-                            elevation: 0,
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            child: officeTypeItemCards(
-                              context: context,
-                              onTap: () {
-                                context
-                                    .read<NavigasiViewModel>()
-                                    .navigasiToDetailSpace(
-                                  context: context,
-                                  officeId:
-                                  values.foundOffice[index].officeID,
-                                );
-                              },
-                              officeImage: values.foundOffice[index].officeLeadImage,
-                              officeName:
-                              values.foundOffice[index].officeName,
-                              officeLocation:
-                              '${values.foundOffice[index].officeLocation.district}, ${values.foundOffice[index].officeLocation.city}',
-                              officeStarRanting: values
-                                  .foundOffice[index].officeStarRating
-                                  .toString(),
-                              officeApproxDistance: '100',
-                              officePersonCapacity: values
-                                  .foundOffice[index].officePersonCapacity
-                                  .toString(),
-                              officeArea: values.foundOffice[index].officeArea
-                                  .toString(),
-                              officeType:
-                              values.foundOffice[index].officeType,
+                /// content
+                Expanded(
+                  child: values.foundOffice.isNotEmpty
+                      ? MediaQuery.removePadding(
+                          removeTop: true,
+                          context: context,
+                          child: ListView.builder(
+                            itemCount: values.foundOffice.length,
+                            itemBuilder: (context, index) => Card(
+                              key: ValueKey(
+                                  values.foundOffice[index].officeName),
+                              color: MyColor.neutral900,
+                              elevation: 0,
+                              margin: const EdgeInsets.symmetric(vertical: 6),
+                              child: officeTypeItemCards(
+                                context: context,
+                                onTap: () {
+                                  context
+                                      .read<NavigasiViewModel>()
+                                      .navigasiToDetailSpace(
+                                        context: context,
+                                        officeId:
+                                            values.foundOffice[index].officeID,
+                                      );
+                                },
+                                officeImage:
+                                    values.foundOffice[index].officeLeadImage,
+                                officeName:
+                                    values.foundOffice[index].officeName,
+                                officeLocation:
+                                    '${values.foundOffice[index].officeLocation.district}, ${values.foundOffice[index].officeLocation.city}',
+                                officeStarRanting: values
+                                    .foundOffice[index].officeStarRating
+                                    .toString(),
+                                officeApproxDistance:
+                                    locationProvider.posisi != null
+                                        ? locationProvider
+                                            .homeScreenCalculateDistances(
+                                                locationProvider.lat!,
+                                                locationProvider.lng!,
+                                                values
+                                                    .foundOffice[index]
+                                                    .officeLocation
+                                                    .officeLatitude,
+                                                values
+                                                    .foundOffice[index]
+                                                    .officeLocation
+                                                    .officeLongitude)!
+                                        : '-',
+                                officePersonCapacity: values
+                                    .foundOffice[index].officePersonCapacity
+                                    .toString(),
+                                officeArea: values.foundOffice[index].officeArea
+                                    .toString(),
+                                officeType:
+                                    values.foundOffice[index].officeType,
+                              ),
                             ),
                           ),
-                        ),
-                      )
-                    : Align(
-                        alignment: Alignment.center,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/image_assets/search_empty.png',
-                              height: AdaptSize.screenWidth / 2,
-                              width: AdaptSize.screenWidth / 2,
-                            ),
-                            SizedBox(
-                              height: AdaptSize.screenHeight * .012,
-                            ),
-                            Text(
-                              'Where do you want to work ?',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .copyWith(fontSize: AdaptSize.pixel15),
-                            ),
-                            SizedBox(
-                              height: AdaptSize.screenHeight * .01,
-                            ),
-                            Text(
-                                'You can search for keywords by name, city, and office type (Coworking, Meeting Room or    Office Building)',
-                                textAlign: TextAlign.center,
+                        )
+                      : Align(
+                          alignment: Alignment.center,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Image.asset(
+                                'assets/image_assets/search_empty.png',
+                                height: AdaptSize.screenWidth / 2,
+                                width: AdaptSize.screenWidth / 2,
+                              ),
+                              SizedBox(
+                                height: AdaptSize.screenHeight * .012,
+                              ),
+                              Text(
+                                'Where do you want to work ?',
                                 style: Theme.of(context)
                                     .textTheme
-                                    .bodyText1!
-                                    .copyWith(fontSize: AdaptSize.pixel14))
-                          ],
+                                    .headline6!
+                                    .copyWith(fontSize: AdaptSize.pixel15),
+                              ),
+                              SizedBox(
+                                height: AdaptSize.screenHeight * .01,
+                              ),
+                              Text(
+                                  'You can search for keywords by name, city, and office type (Coworking, Meeting Room or    Office Building)',
+                                  textAlign: TextAlign.center,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText1!
+                                      .copyWith(fontSize: AdaptSize.pixel14))
+                            ],
+                          ),
                         ),
-                      ),
-              ),
-            ],
-          ),
-        );
-      }),
+                ),
+              ],
+            ),
+          );
+        }),
+      ),
     );
   }
 

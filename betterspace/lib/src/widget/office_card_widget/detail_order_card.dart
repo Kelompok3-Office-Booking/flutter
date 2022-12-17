@@ -56,7 +56,7 @@ Widget detailOrderCard({
               child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
             ),
             errorWidget: (context, url, error) =>
-                CardShimmerHomeLoading.horizontalFailedShimmerHome,
+                CardShimmerHomeLoading.horizontalFailedShimmerHome(context),
           ),
 
           /// jarak samping
