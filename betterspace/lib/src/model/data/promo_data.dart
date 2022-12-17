@@ -1,5 +1,9 @@
 import 'package:betterspace/src/model/promo_model.dart';
 
+List<PromoModel> getListOfPromo() {
+  return promo;
+}
+
 List<PromoModel> promo = [
   PromoModel(
     id: '1',

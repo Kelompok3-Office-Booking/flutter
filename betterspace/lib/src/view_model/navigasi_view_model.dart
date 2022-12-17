@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
@@ -189,12 +190,18 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi open google maps
-  void navigasiToPaymentDetail(context, String officeId) {
+  void navigasiToPaymentDetail(
+      {required BuildContext context,
+      required String officeId,
+      required CreateTransactionModels bookingForm,
+      required int paymentMethodIndex}) {
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (context) => PaymentDetailScreen(
           officeId: officeId,
+          bookingForms: bookingForm,
+          paymentMethodPointerIndex: paymentMethodIndex,
         ),
       ),
     );
@@ -310,11 +317,13 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi to payment method
-  void navigasiToPaymentMetod(BuildContext context, String officeId) {
+  void navigasiToPaymentMetod(BuildContext context, String officeId,
+      TransactionFormModels checkoutForm) {
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (context) => PaymentMetodScreen(
+          checkoutForms: checkoutForm,
           officeId: officeId,
         ),
       ),

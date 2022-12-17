@@ -1,7 +1,7 @@
 //do custom parsing here
-
-import 'package:betterspace/src/dummy_data/transaction_data/transaction_models.dart';
+import 'package:betterspace/src/model/data/promo_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/model/promo_model.dart';
 import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/utils/custom_icons.dart';
@@ -39,11 +39,9 @@ int calculateTotalPrice({
   required int duration,
   int? discount,
 }) {
-  int totalPrice = ((basePrice * duration) -
-          ((basePrice / 100) * (discount ?? 0)) +
-          ((basePrice / 100) * 11).round())
-      .toInt();
-  return totalPrice;
+  int totalPrice =
+      ((basePrice * duration) - ((basePrice / 100) * (discount ?? 0))).toInt();
+  return (totalPrice + ((totalPrice / 100) * 11).round());
 }
 
 //list iterator and filter
@@ -61,6 +59,17 @@ OfficeModels? officeModelFilterByOfficeId(
     }
   });
   return tempModels;
+}
+
+PromoModel? filterPromoByCode({required String promoCode}) {
+  final listOfPromo = getListOfPromo();
+  PromoModel? filteredPromo;
+  listOfPromo.forEach((element) {
+    if (element.voucerCode == promoCode) {
+      filteredPromo = element;
+    }
+  });
+  return filteredPromo;
 }
 
 //gender enums to string parser

@@ -282,21 +282,21 @@ class OfficeDetailScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       /// location
-                      Consumer<GetLocationViewModel>(
-                          builder: (context, value, child) {
-                        return IconWithLabel().asrow(
-                            contexts: context,
-                            usedIcon: Icons.location_on_outlined,
-                            labelText: value.locationPermission == LocationPermission.denied
-                                ? '-'
-                                : value.calculateDistances(
-                              value.lat,
-                              value.lng,
-                              officeById?.officeLocation.officeLatitude,
-                              officeById?.officeLocation.officeLongitude,
-                            ),
-                            spacer: AdaptSize.pixel4);
-                      }),
+                      // Consumer<GetLocationViewModel>(
+                      //     builder: (context, value, child) {
+                      //   return IconWithLabel().asrow(
+                      //       contexts: context,
+                      //       usedIcon: Icons.location_on_outlined,
+                      //       labelText: value.locationPermission == LocationPermission.denied
+                      //           ? '-'
+                      //           : value.calculateDistances(
+                      //         value.lat,
+                      //         value.lng,
+                      //         officeById?.officeLocation.officeLatitude,
+                      //         officeById?.officeLocation.officeLongitude,
+                      //       ),
+                      //       spacer: AdaptSize.pixel4);
+                      // }),
 
                       const Spacer(),
 

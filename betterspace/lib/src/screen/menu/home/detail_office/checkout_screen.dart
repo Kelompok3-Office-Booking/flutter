@@ -135,24 +135,41 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   Widget? child) {
                                 return buttonWidget(
                                   onPressed: () async {
-                                    print(_dateController.text);
-                                    print(selectedMonth.value);
-                                    print(selectedHourDuration.value);
-                                    print(selectedHour.value.runtimeType);
-                                    print(selectedDate.value);
-                                    print("selected beverage : " +
-                                        selectedBeverageId.value.toString());
-                                    dateTimeParsers(
-                                        selectedHours: selectedHour.value,
-                                        selectedDate: selectedDate.value ??
-                                            DateTime.now());
-                                    if (_formKey.currentState!.validate()) {
-                                      // context
-                                      //     .read<NavigasiViewModel>()
-                                      //     .navigasiToPaymentMetod(
-                                      //       context,
-                                      //       widget.officeId,
-                                      //     );
+                                    if (_formKey.currentState!.validate() &&
+                                        officeById != null) {
+                                      print("base price : " +
+                                          officeById.officePricing.officePrice
+                                              .toString());
+                                      context.read<NavigasiViewModel>().navigasiToPaymentMetod(
+                                          context,
+                                          widget.officeId,
+                                          TransactionFormModels(
+                                              transactionTotalPrice: calculateTotalPrice(
+                                                  basePrice: officeById
+                                                      .officePricing
+                                                      .officePrice,
+                                                  duration: officeById.officeType ==
+                                                          "Office"
+                                                      ? selectedMonth.value
+                                                      : selectedHourDuration
+                                                          .value),
+                                              transactionBookingTime:
+                                                  dateTimeParsers(
+                                                      selectedHours:
+                                                          selectedHour.value,
+                                                      selectedDate:
+                                                          selectedDate.value ??
+                                                              DateTime.now()),
+                                              duration:
+                                                  selectedHourDuration.value,
+                                              selectedDrink:
+                                                  listOfBeverages()[selectedBeverageId.value - 1]
+                                                      .drinkName,
+                                              selectedOfficeId:
+                                                  int.parse(widget.officeId),
+                                              usedPromo: filterPromoByCode(
+                                                  promoCode:
+                                                      discountFormController.text)));
                                     }
                                   },
                                   borderRadius: BorderRadius.circular(8),
