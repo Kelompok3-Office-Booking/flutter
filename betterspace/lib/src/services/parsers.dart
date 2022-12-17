@@ -357,7 +357,7 @@ List<UserTransaction> listedUserTransactionParser(
 ReviewModels reviewModelParser(Map<String, dynamic> jsonResponse) {
   return ReviewModels(
       reviewComment: jsonResponse["comment"],
-      reviewRating: jsonResponse["score"],
+      reviewRating: jsonResponse["score"].toDouble(),
       reviewedOfficeId: jsonResponse["office"]["office_id"],
       reviewId: jsonResponse["id"],
       userId: jsonResponse["user"]["user_id"],

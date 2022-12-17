@@ -71,4 +71,6 @@ class constantValue {
       "https://api-better-space-staging.herokuapp.com/api/v1/review/details/";
   String getReviewDetailBaseUrl =
       "https://api-better-space-staging.herokuapp.com/api/v1/review/details/";
+  String getReviewsByOfficeIdBaseUrl =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review/details/office/";
 }

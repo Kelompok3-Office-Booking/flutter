@@ -308,6 +308,30 @@ class UserService {
     return _dio.get(constantValue().getAllReviewsByUser,
         options: Options(headers: {"Authorization": "Bearer " + accessToken}));
   }
+
+  Future<Response> getAllReviewByOffice(
+      {required String accessTokens, required String officeId}) {
+    return _dio.get(constantValue().getReviewsByOfficeIdBaseUrl + officeId,
+        options: Options(headers: {"Authorization": "Bearer " + accessTokens}));
+  }
+
+  Future<Response> editOfficeReview(
+      {required ReviewModels requestedReviewModel,
+      required String accessToken,
+      required int requestedReviewId}) async {
+    var formData = FormData.fromMap({
+      "comment": requestedReviewModel.reviewComment,
+      "score": requestedReviewModel.reviewRating,
+      "office_id": requestedReviewModel.reviewedOfficeId,
+    });
+    return _dio.put(
+      constantValue().editReviewsBaseUrl + "$requestedReviewId",
+      data: formData,
+      options: Options(
+          contentType: 'multipart/form-data',
+          headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
 }
 
 class SignService {

@@ -308,9 +308,24 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                 ElevatedButton(
                   onPressed: () {
                     //fetchOfficeAll hanya bisa digunakan ketika user sudah login
-                    providerClient.deleteUserAccount();
+                    providerOfReview.getReviewByOffice(officeId: "1");
                   },
-                  child: Text("delete user", style: TextStyle(fontSize: 10)),
+                  child: Text("get by ofc id", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () async {
+                    await providerOfReview.getReviewByOffice(officeId: "1");
+                    print(providerOfReviewListern.listOfReviewOffice.length);
+                    final currentReviewModel =
+                        providerOfReviewListern.listOfReviewOffice[0];
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOfReview.editOfficeReviews(
+                        newComment: "hehe aja sih",
+                        reviewId: currentReviewModel.reviewId ?? 1,
+                        currentReviewModel: currentReviewModel);
+                  },
+                  child: Text("edit", style: TextStyle(fontSize: 10)),
                 ),
               ],
             ),
