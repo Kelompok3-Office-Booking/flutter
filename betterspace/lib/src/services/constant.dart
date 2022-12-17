@@ -59,5 +59,16 @@ class constantValue {
   String cancelTransactionByIdBaseUrl =
       "https://api-better-space-staging.herokuapp.com/api/v1/transactions/details/";
 
+  //Google maps API key
   String gmapApiKey = 'AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k';
+
+  //Reviews Endpoint
+  String createReview =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review/details";
+  String getAllReviewsByUser =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review";
+  String editReviewsBaseUrl =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review/details/";
+  String getReviewDetailBaseUrl =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review/details/";
 }

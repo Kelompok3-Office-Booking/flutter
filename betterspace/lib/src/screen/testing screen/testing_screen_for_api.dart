@@ -1,9 +1,11 @@
 import 'package:betterspace/src/model/data/sample_data.dart';
 import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/services/api_services.dart';
+import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
+import 'package:betterspace/src/view_model/review_viewmodel.dart';
 import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -39,6 +41,10 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
         Provider.of<TransactionViewmodels>(context, listen: false);
     final providerOfTransactionListen =
         Provider.of<TransactionViewmodels>(context, listen: true);
+    final providerOfReview =
+        Provider.of<ReviewViewmodels>(context, listen: false);
+    final providerOfReviewListern =
+        Provider.of<ReviewViewmodels>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(),
@@ -267,6 +273,36 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                     }
                   },
                   child: Text("edit user", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerClient.deleteUserAccount();
+                  },
+                  child: Text("delete user", style: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOfReview.createOfficeReviews(
+                        reviewComment: "hehe aja sih",
+                        rating: 4.5,
+                        officeId: 1);
+                  },
+                  child: Text("cr review", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () async {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    await providerOfReview.getReviewByUser();
+                  },
+                  child: Text("get rev user", style: TextStyle(fontSize: 10)),
                 ),
                 Spacer(),
                 ElevatedButton(

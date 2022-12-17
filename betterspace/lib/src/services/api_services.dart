@@ -1,4 +1,5 @@
 //do api service here
+import 'package:betterspace/src/model/review_model/review_models.dart';
 import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/model/user_models/user_models_for_regist.dart';
@@ -283,6 +284,28 @@ class UserService {
   Future<Response> deleteUserAccountServices(
       {required String accessToken}) async {
     return _dio.delete(constantValue().userDeleteAccount,
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
+  }
+
+  Future<Response> createOfficeReview(
+      {required ReviewModels requestedReviewModel,
+      required String accessToken}) async {
+    var formData = FormData.fromMap({
+      "comment": requestedReviewModel.reviewComment,
+      "score": requestedReviewModel.reviewRating,
+      "office_id": requestedReviewModel.reviewedOfficeId,
+    });
+    return _dio.post(
+      constantValue().createReview,
+      data: formData,
+      options: Options(
+          contentType: 'multipart/form-data',
+          headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> getAllReviewByUser({required String accessToken}) async {
+    return _dio.get(constantValue().getAllReviewsByUser,
         options: Options(headers: {"Authorization": "Bearer " + accessToken}));
   }
 }

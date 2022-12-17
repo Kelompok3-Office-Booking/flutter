@@ -2,6 +2,7 @@
 import 'package:betterspace/src/model/data/promo_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/model/promo_model.dart';
+import 'package:betterspace/src/model/review_model/review_models.dart';
 import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/utils/custom_icons.dart';
@@ -14,6 +15,19 @@ import 'package:flutter/cupertino.dart';
 String positionRequestFormatter(
     {required String latitude, required String longitude}) {
   return "lat=" + latitude + "&long=" + longitude;
+}
+
+DateTime? parseApiFormatDateTime({required String apiFormattedDateTime}) {
+  if (apiFormattedDateTime.length > 3) {
+    var splittedStrings = apiFormattedDateTime.split(" ");
+    var splitedDate = splittedStrings[0].split("-");
+    String day = splitedDate[0];
+    String month = splitedDate[1];
+    String year = splitedDate[2];
+    String time = splittedStrings[1];
+    String formattedDateString = year + month + day + " " + time;
+    return DateTime.parse(formattedDateString);
+  }
 }
 
 TransactionBookingTime dateTimeParsers(
@@ -338,4 +352,23 @@ List<UserTransaction> listedUserTransactionParser(
         listOfficeModels: listOfOfficeModels));
   });
   return finalizeParser;
+}
+
+ReviewModels reviewModelParser(Map<String, dynamic> jsonResponse) {
+  return ReviewModels(
+      reviewComment: jsonResponse["comment"],
+      reviewRating: jsonResponse["score"],
+      reviewedOfficeId: jsonResponse["office"]["office_id"],
+      reviewId: jsonResponse["id"],
+      userId: jsonResponse["user"]["user_id"],
+      createdAt: parseApiFormatDateTime(
+          apiFormattedDateTime: jsonResponse["created_at"]));
+}
+
+List<ReviewModels> listOfReviewModelParser({required List listOfResponse}) {
+  List<ReviewModels> parsedList = [];
+  listOfResponse.forEach((element) {
+    parsedList.add(reviewModelParser(element));
+  });
+  return parsedList;
 }
