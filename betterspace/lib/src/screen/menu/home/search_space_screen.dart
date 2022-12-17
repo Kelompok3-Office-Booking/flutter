@@ -1,3 +1,5 @@
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -51,185 +53,188 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
         isCenterTitle: false,
         titles: 'Search',
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: AdaptSize.screenWidth * .016,
-            right: AdaptSize.screenWidth * .016,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: AdaptSize.screenWidth * .016,
+              right: AdaptSize.screenWidth * .016,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  elevation: 2.5,
+                  color: MyColor.neutral900,
+                  shadowColor: MyColor.grayLightColor.withOpacity(.4),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      left: AdaptSize.screenWidth * .008,
+                      bottom: AdaptSize.screenHeight * .022,
+                      top: AdaptSize.screenHeight * .022,
+                      right: AdaptSize.screenWidth * .008,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'With whom did you come here ?',
+                          style: Theme.of(context).textTheme.headline6!.copyWith(
+                                fontSize: AdaptSize.pixel16,
+                              ),
+                        ),
+
+                        /// text field
+                        searchPlace(
+                          /// search field
+                          context: context,
+                          margin: EdgeInsets.only(
+                            top: AdaptSize.screenHeight * 0.016,
+                            bottom: AdaptSize.screenHeight * 0.016,
+                          ),
+                          hintText: 'Mau kerja dimana hari ini ?',
+                          controller: _searchController,
+                          prefixIcon: Icon(
+                            Icons.search,
+                            color: MyColor.darkColor.withOpacity(.8),
+                          ),
+                          onTap: () {
+                            context
+                                .read<NavigasiViewModel>()
+                                .navigasiToFilterSearch(context);
+                          },
+                          readOnly: true,
+                        ),
+
+                        /// list map search
+                        searchMapWidget(),
+                      ],
+                    ),
+                  ),
                 ),
-                elevation: 2.5,
-                color: MyColor.neutral900,
-                shadowColor: MyColor.grayLightColor.withOpacity(.4),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: AdaptSize.screenWidth * .008,
-                    bottom: AdaptSize.screenHeight * .022,
-                    top: AdaptSize.screenHeight * .022,
-                    right: AdaptSize.screenWidth * .008,
+
+                SizedBox(
+                  height: AdaptSize.screenHeight * 0.034,
+                ),
+
+                /// date picker
+                Container(
+                  height: AdaptSize.screenWidth / 1000 * 260,
+                  width: double.infinity,
+                  padding: EdgeInsets.all(AdaptSize.screenHeight * .01),
+                  decoration: BoxDecoration(
+                    color: MyColor.neutral900,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        offset: const Offset(1, 2),
+                        color: MyColor.grayLightColor.withOpacity(.4),
+                        blurRadius: 3,
+                      ),
+                    ],
                   ),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'With whom did you come here ?',
-                        style: Theme.of(context).textTheme.headline6!.copyWith(
-                              fontSize: AdaptSize.pixel16,
-                            ),
+                        'When you\'r come ?',
+                        style: Theme.of(context)
+                            .textTheme
+                            .headline6!
+                            .copyWith(fontSize: AdaptSize.pixel16),
                       ),
 
-                      /// text field
-                      searchPlace(
-                        /// search field
-                        context: context,
-                        margin: EdgeInsets.only(
-                          top: AdaptSize.screenHeight * 0.016,
-                          bottom: AdaptSize.screenHeight * 0.016,
-                        ),
-                        hintText: 'Mau kerja dimana hari ini ?',
-                        controller: _searchController,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: MyColor.darkColor.withOpacity(.8),
-                        ),
-                        onTap: () {
-                          context
-                              .read<NavigasiViewModel>()
-                              .navigasiToFilterSearch(context);
-                        },
-                        readOnly: true,
+                      SizedBox(
+                        height: AdaptSize.screenHeight * 0.014,
                       ),
 
-                      /// list map search
-                      searchMapWidget(),
+                      /// date text field
+                      Flexible(
+                        fit: FlexFit.loose,
+                        child: readOnlyWidget(
+                          controller: _dateController,
+                          enblBorderRadius: 16,
+                          errBorderRadius: 16,
+                          fcsBorderRadius: 16,
+                          hint: 'day, date month year',
+                          textStyle:
+                              Theme.of(context).textTheme.bodyText1!.copyWith(
+                                    color: MyColor.grayLightColor,
+                                  ),
+                          onTap: () {
+                            pickedDate(context);
+                          },
+                          suffixIcon: Icon(
+                            CupertinoIcons.calendar,
+                            color: MyColor.grayLightColor,
+                            size: AdaptSize.pixel24,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
-              ),
 
-              SizedBox(
-                height: AdaptSize.screenHeight * 0.034,
-              ),
-
-              /// date picker
-              Container(
-                height: AdaptSize.screenWidth / 1000 * 260,
-                width: double.infinity,
-                padding: EdgeInsets.all(AdaptSize.screenHeight * .01),
-                decoration: BoxDecoration(
-                  color: MyColor.neutral900,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: const Offset(1, 2),
-                      color: MyColor.grayLightColor.withOpacity(.4),
-                      blurRadius: 3,
-                    ),
-                  ],
+                SizedBox(
+                  height: AdaptSize.screenHeight * 0.034,
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'When you\'r come ?',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(fontSize: AdaptSize.pixel16),
-                    ),
 
-                    SizedBox(
-                      height: AdaptSize.screenHeight * 0.014,
-                    ),
+                Padding(
+                  padding: EdgeInsets.only(
+                    left: AdaptSize.screenWidth * .025,
+                    bottom: AdaptSize.screenHeight * .022,
+                  ),
+                  child: Text(
+                    'With whom did you come here ?',
+                    style: Theme.of(context)
+                        .textTheme
+                        .headline6!
+                        .copyWith(fontSize: AdaptSize.pixel16),
+                  ),
+                ),
 
-                    /// date text field
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: readOnlyWidget(
-                        controller: _dateController,
-                        enblBorderRadius: 16,
-                        errBorderRadius: 16,
-                        fcsBorderRadius: 16,
-                        hint: 'day, date month year',
-                        textStyle:
-                            Theme.of(context).textTheme.bodyText1!.copyWith(
-                                  color: MyColor.grayLightColor,
-                                ),
-                        onTap: () {
-                          pickedDate(context);
-                        },
-                        suffixIcon: Icon(
-                          CupertinoIcons.calendar,
-                          color: MyColor.grayLightColor,
-                          size: AdaptSize.pixel24,
+                /// personality
+                amountGuestWidget(
+                  context,
+                  () {},
+                  'Personality',
+                  '',
+                ),
+
+                /// with friends
+                amountGuestWidget(
+                  context,
+                  () {},
+                  'Meeting Room',
+                  '10',
+                ),
+
+                /// find place button
+                buttonWidget(
+                  sizeheight: AdaptSize.screenHeight / 14,
+                  sizeWidth: double.infinity,
+                  onPressed: () {},
+                  margin: EdgeInsets.only(
+                    left: AdaptSize.screenWidth * .025,
+                    right: AdaptSize.screenWidth * .025,
+                  ),
+                  borderRadius: BorderRadius.circular(10),
+                  backgroundColor: MyColor.darkBlueColor,
+                  child: Text(
+                    'Find Place',
+                    style: Theme.of(context).textTheme.button!.copyWith(
+                          color: MyColor.whiteColor,
+                          fontSize: AdaptSize.screenHeight * 0.018,
                         ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-
-              SizedBox(
-                height: AdaptSize.screenHeight * 0.034,
-              ),
-
-              Padding(
-                padding: EdgeInsets.only(
-                  left: AdaptSize.screenWidth * .025,
-                  bottom: AdaptSize.screenHeight * .022,
-                ),
-                child: Text(
-                  'With whom did you come here ?',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6!
-                      .copyWith(fontSize: AdaptSize.pixel16),
-                ),
-              ),
-
-              /// personality
-              amountGuestWidget(
-                context,
-                () {},
-                'Personality',
-                '',
-              ),
-
-              /// with friends
-              amountGuestWidget(
-                context,
-                () {},
-                'Meeting Room',
-                '10',
-              ),
-
-              /// find place button
-              buttonWidget(
-                sizeheight: AdaptSize.screenHeight / 14,
-                sizeWidth: double.infinity,
-                onPressed: () {},
-                margin: EdgeInsets.only(
-                  left: AdaptSize.screenWidth * .025,
-                  right: AdaptSize.screenWidth * .025,
-                ),
-                borderRadius: BorderRadius.circular(10),
-                backgroundColor: MyColor.darkBlueColor,
-                child: Text(
-                  'Find Place',
-                  style: Theme.of(context).textTheme.button!.copyWith(
-                        color: MyColor.whiteColor,
-                        fontSize: AdaptSize.screenHeight * 0.018,
-                      ),
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

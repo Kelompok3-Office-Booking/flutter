@@ -61,6 +61,8 @@ dependencies:
   lottie: ^2.0.0
   geocoding: ^2.0.5
   url_launcher: ^6.1.7
+  connectivity: any
+
 
 
 dev_dependencies:

@@ -1,3 +1,5 @@
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
@@ -11,21 +13,22 @@ class TermConditionScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Scaffold(
-        appBar: defaultAppbarWidget(
-          contexts: context,
-          leadIconFunction: () {
-            context.read<NavigasiViewModel>().navigasiPop(context);
-          },
-          isCenterTitle: false,
-          titles: 'Term & Condition',
-        ),
-        body: SingleChildScrollView(
+      appBar: defaultAppbarWidget(
+        contexts: context,
+        leadIconFunction: () {
+          context.read<NavigasiViewModel>().navigasiPop(context);
+        },
+        isCenterTitle: false,
+        titles: 'Term & Condition',
+      ),
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: SingleChildScrollView(
           physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.only(
-            left: AdaptSize.pixel16,
-            right: AdaptSize.pixel16,
-            top: AdaptSize.pixel16
+              left: AdaptSize.pixel16,
+              right: AdaptSize.pixel16,
+              top: AdaptSize.pixel16
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,3 +1,5 @@
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
@@ -28,91 +30,94 @@ class SettingScreen extends StatelessWidget {
         isCenterTitle: false,
         titles: 'Setting',
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: EdgeInsets.only(
-          left: AdaptSize.screenWidth * .016,
-          right: AdaptSize.screenWidth * .016,
-        ),
-        child: Column(
-          children: [
-            SizedBox(
-              height: AdaptSize.pixel16,
-            ),
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
+          padding: EdgeInsets.only(
+            left: AdaptSize.screenWidth * .016,
+            right: AdaptSize.screenWidth * .016,
+          ),
+          child: Column(
+            children: [
+              SizedBox(
+                height: AdaptSize.pixel16,
+              ),
 
-            /// setting item 1
-            itemContainer(
-              child: MediaQuery.removePadding(
-                removeTop: true,
-                removeBottom: true,
-                context: context,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: settingProvider.itemSetting1.length,
-                    itemBuilder: (context, item) {
-                      return itemSettings(
-                          context: context,
-                          onTap: () {
-                            if (settingProvider.itemSetting1[item][2] == 3) {
-                              CustomDialog.doubleActionDialog(
-                                context: context,
-                                title:
-                                    'Are you sure want to delete your account ?',
-                                imageAsset: 'assets/svg_assets/delete.svg',
-                                onTap1: () {
-                                  navigasiProvider.navigasiLogout(context);
-                                },
-                                onTap2: () {
-                                  navigasiProvider.navigasiPop(context);
-                                },
-                              );
-                            } else {
+              /// setting item 1
+              itemContainer(
+                child: MediaQuery.removePadding(
+                  removeTop: true,
+                  removeBottom: true,
+                  context: context,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: settingProvider.itemSetting1.length,
+                      itemBuilder: (context, item) {
+                        return itemSettings(
+                            context: context,
+                            onTap: () {
+                              if (settingProvider.itemSetting1[item][2] == 3) {
+                                CustomDialog.doubleActionDialog(
+                                  context: context,
+                                  title:
+                                      'Are you sure want to delete your account ?',
+                                  imageAsset: 'assets/svg_assets/delete.svg',
+                                  onTap1: () {
+                                    navigasiProvider.navigasiLogout(context);
+                                  },
+                                  onTap2: () {
+                                    navigasiProvider.navigasiPop(context);
+                                  },
+                                );
+                              } else {
+                                context
+                                    .read<NavigasiViewModel>()
+                                    .navigasiSettingItem(context,
+                                        settingProvider.itemSetting1[item][2]);
+                              }
+                            },
+                            icon: settingProvider.itemSetting1[item][0],
+                            text: settingProvider.itemSetting1[item][1],
+                            paddingBottom:
+                                settingProvider.itemSetting1[item] == 2);
+                      }),
+                ),
+              ),
+
+              SizedBox(
+                height: AdaptSize.pixel10,
+              ),
+
+              /// setting item 2
+              itemContainer(
+                child: MediaQuery.removePadding(
+                  removeTop: true,
+                  removeBottom: true,
+                  context: context,
+                  child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const NeverScrollableScrollPhysics(),
+                      itemCount: settingProvider.itemSetting2.length,
+                      itemBuilder: (context, item) {
+                        return itemSettings(
+                            context: context,
+                            onTap: () {
                               context
                                   .read<NavigasiViewModel>()
                                   .navigasiSettingItem(context,
-                                      settingProvider.itemSetting1[item][2]);
-                            }
-                          },
-                          icon: settingProvider.itemSetting1[item][0],
-                          text: settingProvider.itemSetting1[item][1],
-                          paddingBottom:
-                              settingProvider.itemSetting1[item] == 2);
-                    }),
+                                      settingProvider.itemSetting2[item][2]);
+                            },
+                            icon: settingProvider.itemSetting2[item][0],
+                            text: settingProvider.itemSetting2[item][1],
+                            paddingBottom:
+                                settingProvider.itemSetting2[item] == 2);
+                      }),
+                ),
               ),
-            ),
-
-            SizedBox(
-              height: AdaptSize.pixel10,
-            ),
-
-            /// setting item 2
-            itemContainer(
-              child: MediaQuery.removePadding(
-                removeTop: true,
-                removeBottom: true,
-                context: context,
-                child: ListView.builder(
-                    shrinkWrap: true,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemCount: settingProvider.itemSetting2.length,
-                    itemBuilder: (context, item) {
-                      return itemSettings(
-                          context: context,
-                          onTap: () {
-                            context
-                                .read<NavigasiViewModel>()
-                                .navigasiSettingItem(context,
-                                    settingProvider.itemSetting2[item][2]);
-                          },
-                          icon: settingProvider.itemSetting2[item][0],
-                          text: settingProvider.itemSetting2[item][1],
-                          paddingBottom:
-                              settingProvider.itemSetting2[item] == 2);
-                    }),
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

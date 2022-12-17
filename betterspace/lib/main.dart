@@ -2,6 +2,7 @@ import 'package:betterspace/src/model/office_models/office_dummy_data.dart';
 import 'package:betterspace/src/screen/landing/splash_screen1.dart';
 import 'package:betterspace/src/screen/menu/home/voucer_promo_screen.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/network_status.dart';
 import 'package:betterspace/src/utils/text_theme.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
@@ -49,6 +50,11 @@ class BetterSpaceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AccountViewModel()),
         ChangeNotifierProvider(create: (_) => TransactionViewModel()),
         ChangeNotifierProvider(create: (_) => WhislistViewModel()),
+        StreamProvider<NetworkStatus>(
+          create: (context) =>
+              NetworkStatusService().networkStatusController.stream,
+          initialData: NetworkStatus.offline,
+        ),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,

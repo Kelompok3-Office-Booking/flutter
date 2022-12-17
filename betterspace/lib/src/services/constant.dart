@@ -58,4 +58,6 @@ class constantValue {
   //cancel endpoint need o be tampered with transactionId/cancel
   String cancelTransactionByIdBaseUrl =
       "https://api-better-space-staging.herokuapp.com/api/v1/transactions/details/";
+
+  String gmapApiKey = 'AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k';
 }

@@ -1,3 +1,5 @@
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -19,59 +21,62 @@ class EmailScreen extends StatelessWidget {
         isCenterTitle: false,
         titles: 'Email',
       ),
-      body: Padding(
-        padding: EdgeInsets.only(
-          left: AdaptSize.screenWidth * .016,
-          right: AdaptSize.screenWidth * .016,
-        ),
-        child: ListView.builder(
-            physics: const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return Column(
-                children: [
-                  Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    color: MyColor.neutral800,
-                    child: Padding(
-                      padding: EdgeInsets.all(AdaptSize.pixel16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            Icons.email_outlined,
-                            size: AdaptSize.pixel24,
-                          ),
-                          SizedBox(
-                            height: AdaptSize.pixel8,
-                          ),
-                          Text(
-                            'ErickCahya@gmail.com',
-                            style:
-                                Theme.of(context).textTheme.headline6!.copyWith(
-                                      fontSize: AdaptSize.pixel16,
-                                    ),
-                          ),
-                          SizedBox(
-                            height: AdaptSize.pixel8,
-                          ),
-                          Text(
-                            'All your transaction & account security information will be sent to this email.',
-                            style:
-                                Theme.of(context).textTheme.bodyText1!.copyWith(
-                                      fontSize: AdaptSize.pixel14,
-                                    ),
-                          ),
-                        ],
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: Padding(
+          padding: EdgeInsets.only(
+            left: AdaptSize.screenWidth * .016,
+            right: AdaptSize.screenWidth * .016,
+          ),
+          child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: 10,
+              itemBuilder: (context, index) {
+                return Column(
+                  children: [
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                    ),
-                  )
-                ],
-              );
-            }),
+                      color: MyColor.neutral800,
+                      child: Padding(
+                        padding: EdgeInsets.all(AdaptSize.pixel16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              Icons.email_outlined,
+                              size: AdaptSize.pixel24,
+                            ),
+                            SizedBox(
+                              height: AdaptSize.pixel8,
+                            ),
+                            Text(
+                              'ErickCahya@gmail.com',
+                              style:
+                                  Theme.of(context).textTheme.headline6!.copyWith(
+                                        fontSize: AdaptSize.pixel16,
+                                      ),
+                            ),
+                            SizedBox(
+                              height: AdaptSize.pixel8,
+                            ),
+                            Text(
+                              'All your transaction & account security information will be sent to this email.',
+                              style:
+                                  Theme.of(context).textTheme.bodyText1!.copyWith(
+                                        fontSize: AdaptSize.pixel14,
+                                      ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                );
+              }),
+        ),
       ),
     );
   }

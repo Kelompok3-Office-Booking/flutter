@@ -22,43 +22,48 @@ class CardShimmerHomeLoading {
   );
 
   /// shimmer card load failed only home screen
-  static Widget verticalFailedLoadShimmer = Container(
-    height: AdaptSize.screenWidth / 3,
-    width: double.infinity,
-    decoration: BoxDecoration(
-      boxShadow: [
-        BoxShadow(
-          color: MyColor.grayLightColor.withOpacity(.4),
-          blurRadius: 3,
-          blurStyle: BlurStyle.solid,
-        ),
-      ],
-      borderRadius: BorderRadius.circular(16),
-    ),
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.heart_broken_outlined,
-            color: MyColor.danger400,
-            size: AdaptSize.screenHeight * .1,
-          ),
-          SizedBox(
-            height: AdaptSize.screenHeight * .016,
-          ),
-          Text(
-            'sorry an error occurred',
-            style: TextStyle(
-              fontSize: 15,
-              color: MyColor.danger400,
-            ),
+  static Widget verticalFailedLoadShimmer(context) {
+    return Container(
+      height: AdaptSize.screenWidth / 3,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        boxShadow: [
+          BoxShadow(
+            color: MyColor.grayLightColor.withOpacity(.4),
+            blurRadius: 3,
+            blurStyle: BlurStyle.solid,
           ),
         ],
+        borderRadius: BorderRadius.circular(16),
       ),
-    ),
-  );
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.heart_broken_outlined,
+              color: MyColor.danger400,
+              size: AdaptSize.screenHeight * .1,
+            ),
+            SizedBox(
+              height: AdaptSize.screenHeight * .016,
+            ),
+            Text(
+              'sorry an error occurred',
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    fontSize: AdaptSize.pixel14,
+                    color: MyColor.danger400,
+                  ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 
   /// shimmer card horizontal load only home screen
   static Widget horizontalLoadShimmerHome = Container(
@@ -84,47 +89,49 @@ class CardShimmerHomeLoading {
   );
 
   /// shimmer card horizontal load failed only home screen
-  static Widget horizontalFailedShimmerHome = Container(
-    height: AdaptSize.screenWidth / 1000 * 354,
-    width: AdaptSize.screenWidth * .36,
-    margin: EdgeInsets.only(
-      bottom: AdaptSize.screenHeight * .008,
-    ),
-    padding: const EdgeInsets.all(6),
-    decoration: BoxDecoration(
-      borderRadius: BorderRadius.circular(16),
-      boxShadow: [
-        BoxShadow(
-          color: MyColor.grayLightColor.withOpacity(.4),
-          blurRadius: 3,
-          blurStyle: BlurStyle.solid,
-        ),
-      ],
-    ),
-    child: Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.heart_broken_outlined,
-            color: MyColor.danger400,
-            size: AdaptSize.screenHeight * .1,
-          ),
-          SizedBox(
-            height: AdaptSize.screenHeight * .016,
-          ),
-          Text(
-            'sorry an error occurred',
-            style: TextStyle(
-              fontSize: 15,
-              color: MyColor.danger400,
-            ),
+  static Widget horizontalFailedShimmerHome(context) {
+    return Container(
+      height: AdaptSize.screenWidth / 1000 * 354,
+      width: AdaptSize.screenWidth * .36,
+      margin: EdgeInsets.only(
+        bottom: AdaptSize.screenHeight * .008,
+      ),
+      padding: const EdgeInsets.all(6),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: MyColor.grayLightColor.withOpacity(.4),
+            blurRadius: 3,
+            blurStyle: BlurStyle.solid,
           ),
         ],
       ),
-    ),
-  );
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.heart_broken_outlined,
+              color: MyColor.danger400,
+              size: AdaptSize.screenWidth / 1000 * 110,
+            ),
+            Text(
+              'sorry an error occurred',
+              style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                    fontSize: AdaptSize.pixel12,
+                    color: MyColor.danger400,
+                  ),
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
 
 /// common shimmer load
@@ -159,6 +166,7 @@ Widget commonShimmerLoadWidget({
 
 /// common shimmer failed load
 Widget commonShimmerFailedLoadWidget({
+  required BuildContext context,
   double? sizeHeight,
   double? sizeWidth,
 }) {
@@ -190,10 +198,13 @@ Widget commonShimmerFailedLoadWidget({
           ),
           Text(
             'sorry an error occurred',
-            style: TextStyle(
-              fontSize: AdaptSize.pixel14,
-              color: MyColor.danger400,
-            ),
+            style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                  fontSize: AdaptSize.pixel14,
+                  color: MyColor.danger400,
+                ),
+            textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
           ),
         ],
       ),

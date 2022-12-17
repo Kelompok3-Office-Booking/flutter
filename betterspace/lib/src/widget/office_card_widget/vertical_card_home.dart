@@ -62,7 +62,7 @@ Widget verticalCardHome({
                   child: CardShimmerHomeLoading.verticalShimmerHome,
                 ),
                 errorWidget: (context, url, error) =>
-                    CardShimmerHomeLoading.verticalFailedLoadShimmer,
+                    CardShimmerHomeLoading.verticalFailedLoadShimmer(context),
               ),
 
               /// image space
