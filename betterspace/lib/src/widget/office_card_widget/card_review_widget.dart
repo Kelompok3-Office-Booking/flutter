@@ -12,6 +12,7 @@ Widget cardReview({
   required String userNameReview,
   required String dateReview,
   required String descriptionReview,
+  required int reviewStarLength,
   required int totalHelpful,
   Function()? buttonHelpful,
 }) {
@@ -36,6 +37,7 @@ Widget cardReview({
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
+
           /// user image
           children: [
             CachedNetworkImage(
@@ -53,8 +55,7 @@ Widget cardReview({
                   radius: 30,
                 ),
               ),
-              errorWidget: (context, url, error) =>
-              CircleAvatar(
+              errorWidget: (context, url, error) => CircleAvatar(
                 radius: 30,
                 backgroundColor: MyColor.danger400,
               ),
@@ -96,7 +97,7 @@ Widget cardReview({
 
                       /// date post
                       Text(
-                        dateReview,
+                        ' $dateReview',
                         style: Theme.of(context).textTheme.bodyText1!.copyWith(
                               fontSize: AdaptSize.pixel14,
                               color: MyColor.neutral600,
@@ -105,12 +106,20 @@ Widget cardReview({
                       ),
                     ],
                   ),
-
-                  /// star review
-                  Icon(
-                    Icons.star,
-                    color: HexColor('E5D11A'),
-                    size: AdaptSize.pixel22,
+                  SizedBox(
+                    height: AdaptSize.pixel18,
+                    child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: reviewStarLength,
+                        itemBuilder: (context, index) {
+                          return Icon(
+                            Icons.star,
+                            color: HexColor('E5D11A'),
+                            size: AdaptSize.pixel16,
+                          );
+                        }),
                   )
                 ],
               ),
@@ -174,4 +183,20 @@ Widget cardReview({
       ],
     ),
   );
+}
+
+Widget buildRatingStar(int index, double currentRating) {
+  if (index < currentRating) {
+    return Icon(
+      Icons.star,
+      color: HexColor('E5D11A'),
+      size: AdaptSize.screenWidth / 1000 * 100,
+    );
+  } else {
+    return Icon(
+      Icons.star_border_outlined,
+      color: MyColor.neutral700,
+      size: AdaptSize.screenWidth / 1000 * 100,
+    );
+  }
 }

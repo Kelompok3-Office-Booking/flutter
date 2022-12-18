@@ -7,9 +7,11 @@ import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
+import 'package:betterspace/src/view_model/review_viewmodel.dart';
 import 'package:betterspace/src/view_model/whislist_view_model.dart';
 import 'package:betterspace/src/widget/office_card_widget/card_review_widget.dart';
 import 'package:betterspace/src/widget/widget/bottom_sheed_widget.dart';
@@ -27,13 +29,37 @@ import 'package:provider/provider.dart';
 
 import '../../../../utils/custom_icons.dart';
 
-class OfficeDetailScreen extends StatelessWidget {
+class OfficeDetailScreen extends StatefulWidget {
   final String officeID;
 
   const OfficeDetailScreen({
     super.key,
     required this.officeID,
   });
+
+  @override
+  State<OfficeDetailScreen> createState() => _OfficeDetailScreenState();
+}
+
+class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final reviewProvider =
+        Provider.of<ReviewViewmodels>(context, listen: false);
+    if (reviewProvider.listOfReviewOffice.isEmpty) {
+      Future.delayed(Duration.zero, () {
+        reviewProvider.getReviewByOffice(officeId: widget.officeID);
+      });
+    }
+
+    final locationProvider =
+        Provider.of<GetLocationViewModel>(context, listen: false);
+
+    if (locationProvider.posisi == null) {
+      locationProvider.checkAndGetPosition();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +75,15 @@ class OfficeDetailScreen extends StatelessWidget {
         officeListAlloffice.listOfAllOfficeModels;
 
     final officeById = officeModelFilterByOfficeId(
-        listOfModels: listOfAllOfficeContainers, requestedOfficeId: officeID);
+        listOfModels: listOfAllOfficeContainers,
+        requestedOfficeId: widget.officeID);
+
+    final officeReviewsProvider =
+        Provider.of<ReviewViewmodels>(context, listen: false);
+    final reviewById = officeReviewsProvider.listOfReviewOffice
+        .where(
+            (element) => element.reviewedOfficeId == int.parse(widget.officeID))
+        .toList();
 
     return Scaffold(
       body: NetworkAware(
@@ -297,14 +331,12 @@ class OfficeDetailScreen extends StatelessWidget {
                               usedIcon: Icons.location_on_outlined,
                               labelText: value.posisi != null
                                   ? value.calculateDistances(
-                                        value.lat,
-                                        value.lng,
-                                        officeById
-                                            ?.officeLocation.officeLatitude,
-                                        officeById
-                                            ?.officeLocation.officeLongitude,
-                                      ) ??
-                                      '-'
+                                      value.lat,
+                                      value.lng,
+                                      officeById?.officeLocation.officeLatitude,
+                                      officeById
+                                          ?.officeLocation.officeLongitude,
+                                    )!
                                   : '-',
                               spacer: AdaptSize.pixel4);
                         }),
@@ -557,7 +589,7 @@ class OfficeDetailScreen extends StatelessWidget {
                           ),
                     ),
 
-                    /// fitur google maps
+                    /// fitur google maaps
                     InkWell(
                       onTap: () {
                         context
@@ -591,42 +623,87 @@ class OfficeDetailScreen extends StatelessWidget {
                       height: AdaptSize.pixel8,
                     ),
 
-                    /// review
-                    Text(
-                      "Review",
-                      style: Theme.of(context).textTheme.headline6!.copyWith(
-                            color: MyColor.neutral100,
-                            fontSize: AdaptSize.pixel16,
-                          ),
-                    ),
+                    /// card review
+                    Consumer<ReviewViewmodels>(
+                        builder: (context, value, child) {
+                      if (value.connectionState ==
+                          stateOfConnections.isLoading) {
+                        return reviewById.isNotEmpty
+                            ? shimmerLoading(
+                                child: commonShimmerLoadWidget(
+                                  sizeHeight:
+                                      AdaptSize.screenWidth / 1000 * 470,
+                                  sizeWidth: double.infinity,
+                                ),
+                              )
+                            : const SizedBox();
+                      }
+                      if (value.connectionState == stateOfConnections.isReady) {
+                        return reviewById.isNotEmpty
+                            ? Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "Review",
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .headline6!
+                                        .copyWith(
+                                          color: MyColor.neutral100,
+                                          fontSize: AdaptSize.pixel16,
+                                        ),
+                                  ),
+                                  SizedBox(
+                                    height: AdaptSize.screenWidth / 1000 * 470,
+                                    width: double.infinity,
+                                    child: ListView.builder(
+                                        padding: EdgeInsets.only(
+                                            bottom:
+                                                AdaptSize.screenHeight * .01),
+                                        shrinkWrap: true,
+                                        scrollDirection: Axis.horizontal,
+                                        itemCount: reviewById.length,
+                                        itemBuilder: (context, index) {
+                                          return cardReview(
+                                            context: context,
+                                            userImage: listOfDummyOffice[index]
+                                                .officeLeadImage,
+                                            userNameReview:
+                                                listOfDummyOffice[index]
+                                                    .officeName,
+                                            dateReview: DateFormat('MMM y')
+                                                .format(reviewById[index]
+                                                    .createdAt!)
+                                                .toString(),
+                                            descriptionReview:
+                                                reviewById[index].reviewComment,
+                                            totalHelpful: Random().nextInt(10),
+                                            reviewStarLength: reviewById[index]
+                                                .reviewRating
+                                                .toInt(),
+                                          );
+                                        }),
+                                  ),
+                                ],
+                              )
+                            : SizedBox(
+                                height: AdaptSize.screenHeight * .01,
+                              );
+                      }
+                      if (value.connectionState ==
+                          stateOfConnections.isFailed) {
+                        return reviewById.isNotEmpty
+                            ? commonShimmerFailedLoadWidget(
+                                context: context,
+                                sizeHeight: AdaptSize.screenWidth / 1000 * 470,
+                                sizeWidth: double.infinity,
+                              )
+                            : const SizedBox();
+                      }
+                      return const SizedBox();
+                    }),
 
                     /// card review
-                    SizedBox(
-                      height: AdaptSize.screenWidth / 1000 * 470,
-                      width: double.infinity,
-                      child: ListView.builder(
-                          padding: EdgeInsets.only(
-                              bottom: AdaptSize.screenHeight * .01),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            return
-
-                                /// card review
-                                cardReview(
-                              context: context,
-                              userImage:
-                                  listOfDummyOffice[index].officeLeadImage,
-                              userNameReview:
-                                  listOfDummyOffice[index].officeName,
-                              dateReview: '9 Jan',
-                              descriptionReview:
-                                  listOfDummyOffice[index].officeDescription,
-                              totalHelpful: Random().nextInt(10),
-                            );
-                          }),
-                    ),
 
                     SizedBox(
                       height: AdaptSize.screenWidth / 1000 * 180,
@@ -647,7 +724,7 @@ class OfficeDetailScreen extends StatelessWidget {
                 bookingButton: () {
                   context
                       .read<NavigasiViewModel>()
-                      .navigasiToCheckOut(context, officeID);
+                      .navigasiToCheckOut(context, widget.officeID);
                 },
               ),
             ),
