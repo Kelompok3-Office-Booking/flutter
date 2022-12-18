@@ -560,30 +560,9 @@ class OfficeDetailScreen extends StatelessWidget {
                     /// fitur google maps
                     InkWell(
                       onTap: () {
-                        // context
-                        //     .read<GetLocationViewModel>()
-                        //     .permissionLocationGMap(
-                        //   context,
-                        //   officeById!,
-                        // );
-
                         context
                             .read<GetLocationViewModel>()
                             .permissionLocationGMap(context, officeById!);
-
-                        // modalBottomSheed(
-                        //   context,
-                        //   showMaps(
-                        //       context: context,
-                        //       onPressed: () {
-                        //         context
-                        //             .read<GetLocationViewModel>()
-                        //             .permissionLocationGMap(
-                        //               context,
-                        //               officeById!,
-                        //             );
-                        //       }),
-                        // );
                       },
                       splashColor: MyColor.transparanColor,
                       child: Container(
@@ -887,75 +866,6 @@ class OfficeDetailScreen extends StatelessWidget {
                     color: MyColor.neutral900,
                   ),
             ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  /// ------------------------------------------------------------------------
-
-  /// maps bottom sheed
-  Widget showMaps({
-    context,
-    Function()? onPressed,
-  }) {
-    return Padding(
-      padding: EdgeInsets.only(
-        left: AdaptSize.screenWidth * .016,
-        right: AdaptSize.screenWidth * .016,
-        bottom: AdaptSize.screenHeight * .008,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          dividerWdiget(
-            width: AdaptSize.screenWidth * 0.1,
-            opacity: .4,
-          ),
-          SizedBox(
-            height: AdaptSize.screenHeight * .016,
-          ),
-          Text(
-            'Want to location?',
-            style: Theme.of(context)
-                .textTheme
-                .headline6!
-                .copyWith(fontSize: AdaptSize.screenHeight * .02),
-          ),
-          SizedBox(
-            height: AdaptSize.screenHeight * .016,
-          ),
-          Text(
-            'You will be directed using Google Maps to the Office location',
-            style: Theme.of(context).textTheme.headline6!.copyWith(
-                  fontSize: AdaptSize.screenHeight * .016,
-                  color: MyColor.neutral300,
-                ),
-          ),
-          SizedBox(
-            height: AdaptSize.screenHeight * .024,
-          ),
-
-          /// button open google maps widget
-          buttonWidget(
-            onPressed: onPressed,
-            sizeheight: AdaptSize.screenHeight * .044,
-            sizeWidth: double.infinity,
-            borderRadius: BorderRadius.circular(10),
-            backgroundColor: MyColor.secondary400,
-            child: Text(
-              'Yes, Open Google Maps',
-              style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                    color: MyColor.neutral900,
-                    fontSize: AdaptSize.screenHeight * .016,
-                  ),
-            ),
-          ),
-
-          SizedBox(
-            height: AdaptSize.screenHeight * .03,
           ),
         ],
       ),

@@ -5,6 +5,7 @@ import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/bottom_detail_maps.dart';
+import 'package:betterspace/src/widget/widget/bottom_sheed_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:provider/provider.dart';
@@ -49,8 +50,7 @@ class _GoogleMapsWidgetState extends State<GoogleMapsWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: EdgeInsets.only(top: AdaptSize.paddingTop),
+      body: SafeArea(
         child: Consumer<GetLocationViewModel>(builder: (context, value, child) {
           return Stack(
             children: [
@@ -62,7 +62,7 @@ class _GoogleMapsWidgetState extends State<GoogleMapsWidget> {
                       widget.officeData.officeLocation.officeLatitude,
                       widget.officeData.officeLocation.officeLongitude,
                     ),
-                    zoom: 9),
+                    zoom: 11),
                 myLocationEnabled: true,
                 tiltGesturesEnabled: true,
                 compassEnabled: true,
@@ -136,11 +136,19 @@ class _GoogleMapsWidgetState extends State<GoogleMapsWidget> {
                               widget.officeData.officeLocation.officeLongitude)!
                           : '-',
                       onPressed: () {
-                        value.launchGMap(
-                            posLat:
-                                widget.officeData.officeLocation.officeLatitude,
-                            posLng: widget
-                                .officeData.officeLocation.officeLongitude);
+                        /// confirm maps bottom sheed
+                        modalBottomSheed(
+                          context,
+                          goToGMaps(
+                              context: context,
+                              onPressed: () {
+                                value.launchGMap(
+                                    posLat: widget.officeData.officeLocation
+                                        .officeLatitude,
+                                    posLng: widget.officeData.officeLocation
+                                        .officeLongitude);
+                              }),
+                        );
                       }),
                 ),
               ),
