@@ -7,6 +7,7 @@ class TransactionBookingTime {
   late String checkInDate;
   String? checkOutHour;
   String? checkOutDate;
+  String? transactionCreatedAt;
   DateTime? checkInDateTime;
   DateTime? checkOutDateTime;
   TransactionBookingTime(
@@ -14,6 +15,7 @@ class TransactionBookingTime {
       required this.checkInDate,
       this.checkOutHour,
       this.checkOutDate,
+      this.transactionCreatedAt,
       this.checkInDateTime,
       this.checkOutDateTime});
 }

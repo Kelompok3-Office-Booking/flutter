@@ -7,11 +7,11 @@ import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/hex_color_convert.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/whislist_view_model.dart';
-import 'package:betterspace/src/widget/office_card_widget/card_review_widget.dart';
 import 'package:betterspace/src/widget/widget/bottom_sheed_widget.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
@@ -114,8 +114,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                       officeRanting: officeById
                                               ?.officeStarRating ??
                                           listOfDummyOffice[0].officeStarRating,
-                                      officeImage: officeById
-                                              ?.officeLeadImage ??
+                                      officeImage: officeById?.officeLeadImage ??
                                           listOfDummyOffice[0].officeLeadImage,
                                       officeLocation:
                                           '${officeById?.officeLocation.district}, ${officeById?.officeLocation.city}',
@@ -166,11 +165,11 @@ class OfficeDetailScreen extends StatelessWidget {
                         physics: const NeverScrollableScrollPhysics(),
                         itemBuilder: (context, index) {
                           return CachedNetworkImage(
-                            imageUrl: officeById?.officeGridImage[index] !=
-                                        null &&
-                                    officeById?.officeGridImage[index] != ''
-                                ? officeById?.officeGridImage[index]
-                                : listOfDummyOffice[0].officeGridImage[index],
+                            imageUrl:
+                                officeById?.officeGridImage[index] != null &&
+                                        officeById?.officeGridImage[index] != ''
+                                    ? officeById?.officeGridImage[index]
+                                    : listOfDummyOffice[0].officeGridImage[index],
                             imageBuilder: (context, imageProvider) => Padding(
                               padding: EdgeInsets.only(right: AdaptSize.pixel8),
                               child: SizedBox(
@@ -302,7 +301,8 @@ class OfficeDetailScreen extends StatelessWidget {
                                 officeById?.officeLocation.officeLatitude,
                                 officeById
                                     ?.officeLocation.officeLongitude,
-                              )! : '-',
+                              )
+                                  : '-',
                               spacer: AdaptSize.pixel4);
                         }),
 
@@ -323,8 +323,8 @@ class OfficeDetailScreen extends StatelessWidget {
                               .textTheme
                               .bodyMedium!
                               .copyWith(
-                                  color: MyColor.neutral100,
-                                  fontSize: AdaptSize.pixel14),
+                              color: MyColor.neutral100,
+                              fontSize: AdaptSize.pixel14),
                         ),
 
                         const Spacer(),
@@ -371,8 +371,7 @@ class OfficeDetailScreen extends StatelessWidget {
                     Text(
                       "Description",
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: MyColor.neutral100,
-                          fontSize: AdaptSize.pixel16),
+                          color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
                     ),
                     SizedBox(
                       height: AdaptSize.pixel8,
@@ -418,8 +417,8 @@ class OfficeDetailScreen extends StatelessWidget {
                                 children: [
                                   /// icon
                                   Padding(
-                                    padding: EdgeInsets.only(
-                                        right: AdaptSize.pixel8),
+                                    padding:
+                                        EdgeInsets.only(right: AdaptSize.pixel8),
                                     child: officeById
                                                     ?.listOfOfficeCapcityModels[
                                                         index]
@@ -433,8 +432,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                         ? customSVGIconParsers(
                                             size: AdaptSize.pixel22,
                                             iconSlug: officeById
-                                                ?.listOfOfficeCapcityModels[
-                                                    index]
+                                                ?.listOfOfficeCapcityModels[index]
                                                 .capacityIconSlug)
                                         : Icon(
                                             CupertinoIcons
@@ -495,8 +493,7 @@ class OfficeDetailScreen extends StatelessWidget {
                                   ),
                                 ],
                               ),
-                              dividerWdiget(
-                                  width: double.infinity, opacity: .1),
+                              dividerWdiget(width: double.infinity, opacity: .1),
                             ],
                           );
                         },
@@ -518,52 +515,12 @@ class OfficeDetailScreen extends StatelessWidget {
                     /// list fasilitas
                     listFacilities(
                       context: context,
+                      moreFacilitiesButton: () {
+                        modalBottomSheed(context, listFacilityItem(context));
+                      },
                       officeFacility:
                           officeById?.listOfOfficeFacilitiesModels ?? [],
                     ),
-
-                    /// see more facility button
-                    officeById?.listOfOfficeFacilitiesModels.length == 4
-                        ? InkWell(
-                            splashColor: MyColor.transparanColor,
-                            onTap: () {
-                              modalBottomSheed(
-                                context,
-                                listFacilityItem(
-                                  context: context,
-                                  officeFacility: officeById
-                                          ?.listOfOfficeFacilitiesModels ??
-                                      [],
-                                ),
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.grid_view_rounded,
-                                      size: AdaptSize.screenHeight * .024,
-                                      color: MyColor.secondary400,
-                                    ),
-                                    SizedBox(
-                                      width: AdaptSize.pixel8,
-                                    ),
-                                    Text(
-                                      'See more facilities (${officeById?.listOfOfficeFacilitiesModels.length.toString()})',
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .bodyMedium!
-                                          .copyWith(color: MyColor.neutral200),
-                                    ),
-                                  ],
-                                ),
-                                dividerWdiget(
-                                    width: double.infinity, opacity: .1),
-                              ],
-                            ),
-                          )
-                        : const SizedBox(),
 
                     Text(
                       "Address",
@@ -619,8 +576,7 @@ class OfficeDetailScreen extends StatelessWidget {
                           ],
                           image: const DecorationImage(
                             fit: BoxFit.cover,
-                            image:
-                                AssetImage('assets/image_assets/mapimage.jpg'),
+                            image: AssetImage('assets/image_assets/mapimage.jpg'),
                           ),
                         ),
                       ),
@@ -639,33 +595,12 @@ class OfficeDetailScreen extends StatelessWidget {
                     ),
 
                     /// card review
-                    SizedBox(
-                      height: AdaptSize.screenWidth / 1000 * 470,
-                      width: double.infinity,
-                      child: ListView.builder(
-                          padding: EdgeInsets.only(
-                              bottom: AdaptSize.screenHeight * .01),
-                          shrinkWrap: true,
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 5,
-                          itemBuilder: (context, index) {
-                            /// canvas
-                            return cardReview(
-                                context: context,
-                                buttonHelpful: () {},
-                                userImage:
-                                    listOfDummyOffice[index].officeLeadImage,
-                                userNameReview:
-                                    listOfDummyOffice[index].officeName,
-                                dateReview: 'Jan 2022',
-                                descriptionReview:
-                                    listOfDummyOffice[index].officeDescription,
-                                totalHelpful: 0);
-                          }),
+                    cardReview(
+                      buttonHelpfull: () {},
                     ),
 
                     SizedBox(
-                      height: AdaptSize.screenWidth / 1000 * 180,
+                      height: AdaptSize.screenWidth / 1000 * 150,
                     ),
                   ],
                 ),
@@ -694,7 +629,10 @@ class OfficeDetailScreen extends StatelessWidget {
 
   /// list of facilities widget
   Widget listFacilities(
-      {context, required List<OfficeFacilitiesModels> officeFacility}) {
+      {context,
+      Function()? moreFacilitiesButton,
+      required List<OfficeFacilitiesModels> officeFacility,
+      required}) {
     return MediaQuery.removePadding(
       removeTop: true,
       context: context,
@@ -706,27 +644,51 @@ class OfficeDetailScreen extends StatelessWidget {
           itemBuilder: (context, index) {
             return Column(
               children: [
-                Row(
-                  children: [
-                    Icon(
-                      Icons.wifi,
-                      size: AdaptSize.screenHeight * .024,
-                      color: MyColor.secondary400,
-                    ),
-                    SizedBox(
-                      width: AdaptSize.pixel8,
-                    ),
-                    Text(
-                      officeFacility.isNotEmpty
-                          ? officeFacility[index].facilitiesTitle
-                          : 'Facilities',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium!
-                          .copyWith(color: MyColor.neutral200),
-                    ),
-                  ],
-                ),
+                index >= 4
+                    ? InkWell(
+                        splashColor: MyColor.transparanColor,
+                        onTap: moreFacilitiesButton,
+                        child: Row(
+                          children: [
+                            Icon(
+                              Icons.grid_view_rounded,
+                              size: AdaptSize.screenHeight * .024,
+                              color: MyColor.secondary400,
+                            ),
+                            SizedBox(
+                              width: AdaptSize.pixel8,
+                            ),
+                            Text(
+                              'See more facilities (${officeFacility.length.toString()})',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(color: MyColor.neutral200),
+                            ),
+                          ],
+                        ),
+                      )
+                    : Row(
+                        children: [
+                          Icon(
+                            Icons.wifi,
+                            size: AdaptSize.screenHeight * .024,
+                            color: MyColor.secondary400,
+                          ),
+                          SizedBox(
+                            width: AdaptSize.pixel8,
+                          ),
+                          Text(
+                            officeFacility.isNotEmpty
+                                ? officeFacility[index].facilitiesTitle
+                                : 'Facilities',
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(color: MyColor.neutral200),
+                          ),
+                        ],
+                      ),
                 dividerWdiget(width: double.infinity, opacity: .1),
               ],
             );
@@ -737,10 +699,7 @@ class OfficeDetailScreen extends StatelessWidget {
   /// ------------------------------------------------------------------------
 
   /// list facility item
-  Widget listFacilityItem({
-    context,
-    required List<OfficeFacilitiesModels> officeFacility,
-  }) {
+  Widget listFacilityItem(context) {
     return Padding(
       padding: EdgeInsets.only(
         left: AdaptSize.screenWidth * .016,
@@ -773,7 +732,7 @@ class OfficeDetailScreen extends StatelessWidget {
             height: AdaptSize.screenHeight * .42,
             width: double.infinity,
             child: ListView.builder(
-                itemCount: officeFacility.length,
+                itemCount: 10,
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemBuilder: (context, index) {
@@ -790,7 +749,7 @@ class OfficeDetailScreen extends StatelessWidget {
                             width: AdaptSize.pixel8,
                           ),
                           Text(
-                            officeFacility[index].facilitiesTitle,
+                            'Facilities',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
@@ -805,6 +764,171 @@ class OfficeDetailScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  /// ------------------------------------------------------------------------
+
+  /// split card review
+  Widget cardReview({
+    Function()? buttonHelpfull,
+  }) {
+    return SizedBox(
+      height: AdaptSize.screenWidth / 1000 * 470,
+      width: double.infinity,
+      child: ListView.builder(
+          padding: EdgeInsets.only(bottom: AdaptSize.screenHeight * .01),
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: 3,
+          itemBuilder: (context, index) {
+            /// canvas
+            return Container(
+              width: AdaptSize.screenWidth / 1000 * 840,
+              padding: EdgeInsets.all(AdaptSize.screenHeight * .01),
+              margin: index == 1
+                  ? EdgeInsets.only(
+                      left: AdaptSize.screenWidth * .03,
+                      right: AdaptSize.screenWidth * .03,
+                    )
+                  : EdgeInsets.zero,
+              decoration: BoxDecoration(
+                color: MyColor.neutral900,
+                borderRadius: BorderRadius.circular(16),
+                boxShadow: [
+                  BoxShadow(
+                    offset: const Offset(1, 2),
+                    spreadRadius: .2,
+                    color: MyColor.neutral600.withOpacity(.5),
+                    blurRadius: 3,
+                  )
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+
+                    /// user image
+                    children: [
+                      const CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage(
+                          'assets/image_assets/default_image_profile.png',
+                        ),
+                      ),
+
+                      SizedBox(
+                        width: AdaptSize.screenWidth * .008,
+                      ),
+
+                      /// user name & date post
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: AdaptSize.screenHeight * .004,
+                          ),
+                          Row(
+                            children: [
+                              ///name
+                              Text(
+                                'Shinta Arumi ',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(fontSize: AdaptSize.pixel14),
+                              ),
+
+                              Icon(
+                                Icons.brightness_1,
+                                size: AdaptSize.pixel4,
+                                color: MyColor.neutral600,
+                              ),
+
+                              /// date post
+                              Text(
+                                ' Jan 2022',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(
+                                      fontSize: AdaptSize.pixel14,
+                                      color: MyColor.neutral600,
+                                    ),
+                              ),
+                            ],
+                          ),
+
+                          /// star review
+                          Icon(
+                            Icons.star,
+                            color: HexColor('E5D11A'),
+                            size: AdaptSize.pixel22,
+                          )
+                        ],
+                      )
+                    ],
+                  ),
+
+                  SizedBox(
+                    height: AdaptSize.pixel10,
+                  ),
+
+                  /// description
+                  Text(
+                    'Hmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nihHmm, apayah, gua juga gatau nih',
+                    style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                          fontSize: AdaptSize.pixel14,
+                        ),
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+
+                  const Spacer(),
+
+                  /// helpfull button
+                  Container(
+                    width: AdaptSize.screenHeight / 1000 * 150,
+                    padding: EdgeInsets.all(AdaptSize.screenHeight * .008),
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(40),
+                      border: Border.all(color: MyColor.neutral200),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        /// icon button
+                        InkWell(
+                          splashColor: MyColor.transparanColor,
+                          onTap: buttonHelpfull,
+                          child: Icon(
+                            Icons.thumb_up_alt_outlined,
+                            size: AdaptSize.pixel14,
+                          ),
+                        ),
+
+                        SizedBox(
+                          width: AdaptSize.pixel4,
+                        ),
+
+                        /// helpfull text
+                        Text(
+                          'Helpfull (0)',
+                          style: Theme.of(context)
+                              .textTheme
+                              .subtitle2!
+                              .copyWith(fontSize: AdaptSize.pixel10),
+                        )
+                      ],
+                    ),
+                  )
+                ],
+              ),
+            );
+          }),
     );
   }
 

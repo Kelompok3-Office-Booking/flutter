@@ -12,6 +12,7 @@ class SuccessPaymentScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
     return WillPopScope(
       onWillPop: () async {
         return context.read<NavigasiViewModel>().navigasiBackToMenu(context);
