@@ -53,7 +53,7 @@ class BetterSpaceApp extends StatelessWidget {
         StreamProvider<NetworkStatus>(
           create: (context) =>
               NetworkStatusService().networkStatusController.stream,
-          initialData: NetworkStatus.offline,
+          initialData: NetworkStatus.online,
         ),
       ],
       child: MaterialApp(

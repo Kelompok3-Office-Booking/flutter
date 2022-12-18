@@ -255,7 +255,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               value.lat,
                               value.lng,
                               officeById?.officeLocation.officeLatitude,
-                              officeById?.officeLocation.officeLongitude) : '-',
+                              officeById?.officeLocation.officeLongitude)! : '-',
                           officePersonCapacity: officeById?.officePersonCapacity
                               .toString() ??
                               listOfDummyOffice[0].officePersonCapacity.toString(),

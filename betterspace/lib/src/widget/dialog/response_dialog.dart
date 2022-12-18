@@ -21,7 +21,7 @@ class ResponseDialog {
         pageBuilder: (_, __, ___) {
           return Center(
             child: Container(
-              height: AdaptSize.screenHeight * .43,
+              height: AdaptSize.screenHeight * .2,
               width: AdaptSize.screenWidth * .45,
               margin: const EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.all(AdaptSize.pixel10),
@@ -43,8 +43,8 @@ class ResponseDialog {
                   children: [
                     SvgPicture.asset(
                       'assets/svg_assets/check_list.svg',
-                      height: AdaptSize.screenHeight * .2,
-                      width: AdaptSize.screenWidth * .5,
+                      height: AdaptSize.screenHeight * .07,
+                      width: AdaptSize.screenWidth * .15,
                     ),
                     SizedBox(
                       height: AdaptSize.screenHeight * .01,
@@ -242,7 +242,7 @@ class ResponseDialog {
         pageBuilder: (_, __, ___) {
           return Center(
             child: Container(
-              height: AdaptSize.screenHeight * .3,
+              height: AdaptSize.screenHeight * .4,
               width: AdaptSize.screenWidth * .7,
               margin: const EdgeInsets.symmetric(horizontal: 20),
               padding: EdgeInsets.all(AdaptSize.pixel10),
