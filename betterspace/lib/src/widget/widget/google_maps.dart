@@ -86,9 +86,9 @@ class _GoogleMapsWidgetState extends State<GoogleMapsWidget> {
                         userAddress: value.address,
                         officeAddress:
                             '${widget.officeData.officeLocation.city}, ${widget.officeData.officeLocation.district}',
-                        distance: value.calculateDistances(value.lat,value.lng,
+                        distance: value.posisi != null ? value.calculateDistances(value.lat,value.lng,
                             widget.officeData.officeLocation.officeLatitude,
-                            widget.officeData.officeLocation.officeLongitude),
+                            widget.officeData.officeLocation.officeLongitude)! : '-',
                         onPressed: () {
                           value.launchGMap(
                               posLat: widget
