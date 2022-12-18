@@ -57,7 +57,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
     final dummyDataProviders =
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
     List<OfficeModels> listOfDummyOffice =
@@ -137,55 +136,49 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       context
                                           .read<NavigasiViewModel>()
                                           .navigasiToPaymentMetod(
-                                              context: context,
-                                              officeId: widget.officeId,
-                                              checkoutForm:
-                                                  TransactionFormModels(
-                                                transactionTotalPrice: calculateTotalPrice(
-                                                    discount: filterPromoByCode(
-                                                            promoCode:
-                                                                discountFormController
-                                                                    .text)
-                                                        ?.discountValue,
-                                                    basePrice: officeById
-                                                        .officePricing
-                                                        .officePrice,
-                                                    duration: officeById
-                                                                .officeType ==
-                                                            "Office"
-                                                        ? selectedMonth.value
-                                                        : selectedHourDuration
-                                                            .value),
-                                                transactionBookingTime:
-                                                    dateTimeParsers(
-                                                  selectedHours:
-                                                      selectedHour.value,
-                                                  selectedDate:
-                                                      selectedDate.value ??
-                                                          DateTime.now(),
-                                                  duration: selectedHourDuration
-                                                      .value,
-                                                ),
-                                                duration:
-                                                    selectedHourDuration.value,
-                                                selectedDrink:
-                                                    listOfBeverages()[
-                                                            selectedBeverageId
-                                                                    .value -
-                                                                1]
-                                                        .drinkName,
-                                                selectedOfficeId:
-                                                    int.parse(widget.officeId),
-                                                usedPromo: filterPromoByCode(
-                                                    promoCode:
-                                                        discountFormController
-                                                            .text),
-                                              ),
-                                              durationTimeUnit:
-                                                  officeById.officeType ==
-                                                          "Office"
-                                                      ? "month"
-                                                      : "hour");
+                                            durationTimeUnit:
+                                                officeById.officeType ==
+                                                        "Office"
+                                                    ? "month"
+                                                    : "hour",
+                                            context: context,
+                                            officeId: widget.officeId,
+                                            checkoutForm: TransactionFormModels(
+                                              transactionTotalPrice:
+                                                  calculateTotalPrice(
+                                                      basePrice: officeById
+                                                          .officePricing
+                                                          .officePrice,
+                                                      duration: officeById
+                                                                  .officeType ==
+                                                              "Office"
+                                                          ? selectedMonth.value
+                                                          : selectedHourDuration
+                                                              .value),
+                                              transactionBookingTime:
+                                                  dateTimeParsers(
+                                                      duration:
+                                                          selectedHourDuration
+                                                              .value,
+                                                      selectedHours:
+                                                          selectedHour.value,
+                                                      selectedDate:
+                                                          selectedDate.value ??
+                                                              DateTime.now()),
+                                              duration:
+                                                  selectedHourDuration.value,
+                                              selectedDrink: listOfBeverages()[
+                                                      selectedBeverageId.value -
+                                                          1]
+                                                  .drinkName,
+                                              selectedOfficeId:
+                                                  int.parse(widget.officeId),
+                                              usedPromo: filterPromoByCode(
+                                                  promoCode:
+                                                      discountFormController
+                                                          .text),
+                                            ),
+                                          );
                                     }
                                   },
                                   borderRadius: BorderRadius.circular(8),
@@ -262,7 +255,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               value.lat,
                               value.lng,
                               officeById?.officeLocation.officeLatitude,
-                              officeById?.officeLocation.officeLongitude)
+                              officeById?.officeLocation.officeLongitude)!
                           : '-',
                       officePersonCapacity: officeById?.officePersonCapacity
                               .toString() ??

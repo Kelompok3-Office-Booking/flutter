@@ -4,7 +4,6 @@ import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/services/constant.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:geocoding/geocoding.dart';
@@ -200,7 +199,7 @@ class GetLocationViewModel with ChangeNotifier {
   }
 
   /// string calculate distance
-  String calculateDistances(posLat, posLng, desLat, desLng) {
+  String? calculateDistances(posLat, posLng, desLat, desLng) {
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 -
