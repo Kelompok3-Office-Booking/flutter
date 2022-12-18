@@ -1,6 +1,8 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/hex_color_convert.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 /// card review
@@ -34,13 +36,27 @@ Widget cardReview({
       children: [
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-
           /// user image
           children: [
-            CircleAvatar(
-              radius: 30,
-              backgroundImage: NetworkImage(
-                userImage,
+            CachedNetworkImage(
+              imageUrl: userImage,
+              imageBuilder: (context, imageProvider) => CircleAvatar(
+                radius: 30,
+                backgroundColor: MyColor.neutral700,
+                backgroundImage: NetworkImage(
+                  userImage,
+                ),
+              ),
+              placeholder: (context, url) => shimmerLoading(
+                child: CircleAvatar(
+                  backgroundColor: MyColor.neutral700,
+                  radius: 30,
+                ),
+              ),
+              errorWidget: (context, url, error) =>
+              CircleAvatar(
+                radius: 30,
+                backgroundColor: MyColor.danger400,
               ),
             ),
 

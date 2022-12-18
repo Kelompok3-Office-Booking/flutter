@@ -234,7 +234,9 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                           ],
                         ),
                         child: BarcodeWidget(
-                          data: uuid.v4(),
+                          data: listOfPaymentModels[
+                          widget.paymentMethodPointerIndex]
+                              .qrGenerateable!,
                           barcode: Barcode.qrCode(),
                         ),
                       )
@@ -636,7 +638,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                   Text(
                     NumberFormat.currency(
                             locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                        .format(listOfPaymentModels[widget.paymentMethodPointerIndex].paymentFees),
+                        .format(100000),
                     style: Theme.of(context).textTheme.headline6!.copyWith(
                           color: MyColor.darkBlueColor,
                           fontSize: AdaptSize.pixel14,
