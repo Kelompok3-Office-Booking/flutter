@@ -52,6 +52,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
     final listOfPaymentModels = PaymentModels().listOfAvailablePaymentMethod;
     final officeListAlloffice =
         Provider.of<OfficeViewModels>(context, listen: true);

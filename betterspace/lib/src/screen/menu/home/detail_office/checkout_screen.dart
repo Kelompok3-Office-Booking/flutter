@@ -57,6 +57,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
     final dummyDataProviders =
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
     List<OfficeModels> listOfDummyOffice =
@@ -94,30 +95,26 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         children: [
                           Text(
                             'Start From',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyText1!
-                                .copyWith(
-                              color: MyColor.darkBlueColor,
-                              fontSize: AdaptSize.pixel16,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.bodyText1!.copyWith(
+                                      color: MyColor.darkBlueColor,
+                                      fontSize: AdaptSize.pixel16,
+                                    ),
                           ),
                           Text(
                             NumberFormat.currency(
-                                locale: 'id',
-                                symbol: 'Rp ',
-                                decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(
                               officeById?.officePricing.officePrice ??
                                   Random().nextDouble() * 400000,
                             ),
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6!
-                                .copyWith(
-                              color: MyColor.darkBlueColor,
-                              fontSize: AdaptSize.pixel14,
-                            ),
+                            style:
+                                Theme.of(context).textTheme.headline6!.copyWith(
+                                      color: MyColor.darkBlueColor,
+                                      fontSize: AdaptSize.pixel14,
+                                    ),
                           ),
                         ],
                       ),
@@ -140,45 +137,41 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                       context
                                           .read<NavigasiViewModel>()
                                           .navigasiToPaymentMetod(
-                                        context,
-                                        widget.officeId,
-                                        TransactionFormModels(
-                                          transactionTotalPrice:
-                                          calculateTotalPrice(
-                                              basePrice: officeById
-                                                  .officePricing
-                                                  .officePrice,
-                                              duration: officeById
-                                                  .officeType ==
-                                                  "Office"
-                                                  ? selectedMonth
-                                                  .value
-                                                  : selectedHourDuration
-                                                  .value),
-                                          transactionBookingTime:
-                                          dateTimeParsers(
-                                              selectedHours:
-                                              selectedHour.value,
-                                              selectedDate:
-                                              selectedDate
-                                                  .value ??
-                                                  DateTime.now()),
-                                          duration:
-                                          selectedHourDuration.value,
-                                          selectedDrink:
-                                          listOfBeverages()[
-                                          selectedBeverageId
-                                              .value -
-                                              1]
-                                              .drinkName,
-                                          selectedOfficeId:
-                                          int.parse(widget.officeId),
-                                          usedPromo: filterPromoByCode(
-                                              promoCode:
-                                              discountFormController
-                                                  .text),
-                                        ),
-                                      );
+                                            context,
+                                            widget.officeId,
+                                            TransactionFormModels(
+                                              transactionTotalPrice:
+                                                  calculateTotalPrice(
+                                                      basePrice: officeById
+                                                          .officePricing
+                                                          .officePrice,
+                                                      duration: officeById
+                                                                  .officeType ==
+                                                              "Office"
+                                                          ? selectedMonth.value
+                                                          : selectedHourDuration
+                                                              .value),
+                                              transactionBookingTime:
+                                                  dateTimeParsers(
+                                                      selectedHours:
+                                                          selectedHour.value,
+                                                      selectedDate:
+                                                          selectedDate.value ??
+                                                              DateTime.now()),
+                                              duration:
+                                                  selectedHourDuration.value,
+                                              selectedDrink: listOfBeverages()[
+                                                      selectedBeverageId.value -
+                                                          1]
+                                                  .drinkName,
+                                              selectedOfficeId:
+                                                  int.parse(widget.officeId),
+                                              usedPromo: filterPromoByCode(
+                                                  promoCode:
+                                                      discountFormController
+                                                          .text),
+                                            ),
+                                          );
                                     }
                                   },
                                   borderRadius: BorderRadius.circular(8),
@@ -190,9 +183,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         .textTheme
                                         .button!
                                         .copyWith(
-                                      fontSize: AdaptSize.pixel14,
-                                      color: MyColor.neutral900,
-                                    ),
+                                          fontSize: AdaptSize.pixel14,
+                                          color: MyColor.neutral900,
+                                        ),
                                   ),
                                 );
                               },
@@ -239,36 +232,37 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                   padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
                   child: Consumer<GetLocationViewModel>(
                       builder: (context, value, child) {
-                        return officeTypeItemCards(
-                          context: context,
-                          officeImage: officeById?.officeLeadImage ??
-                              listOfDummyOffice[0].officeLeadImage,
-                          officeName: officeById?.officeName ??
-                              listOfDummyOffice[0].officeName,
-                          officeLocation:
+                    return officeTypeItemCards(
+                      context: context,
+                      officeImage: officeById?.officeLeadImage ??
+                          listOfDummyOffice[0].officeLeadImage,
+                      officeName: officeById?.officeName ??
+                          listOfDummyOffice[0].officeName,
+                      officeLocation:
                           '${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}, ${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}',
-                          officeStarRanting:
+                      officeStarRanting:
                           officeById?.officeStarRating.toString() ??
                               listOfDummyOffice[0].officeStarRating.toString(),
-                          officeApproxDistance:
-                          value.posisi != null ? value.calculateDistances(
+                      officeApproxDistance: value.posisi != null
+                          ? value.calculateDistances(
                               value.lat,
                               value.lng,
                               officeById?.officeLocation.officeLatitude,
-                              officeById?.officeLocation.officeLongitude) : '-',
-                          officePersonCapacity: officeById?.officePersonCapacity
+                              officeById?.officeLocation.officeLongitude)
+                          : '-',
+                      officePersonCapacity: officeById?.officePersonCapacity
                               .toString() ??
-                              listOfDummyOffice[0].officePersonCapacity.toString(),
-                          officeArea: officeById?.officeArea.toString() ??
-                              listOfDummyOffice[0].officeArea.toString(),
-                          officeType: officeById?.officeType ??
-                              listOfDummyOffice[0].officeType,
-                        );
-                      }),
+                          listOfDummyOffice[0].officePersonCapacity.toString(),
+                      officeArea: officeById?.officeArea.toString() ??
+                          listOfDummyOffice[0].officeArea.toString(),
+                      officeType: officeById?.officeType ??
+                          listOfDummyOffice[0].officeType,
+                    );
+                  }),
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: SizedBox(
                     height: AdaptSize.pixel22,
                     child: Text(
@@ -281,7 +275,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: readOnlyWidget(
                     controller: _dateController,
                     enblBorderRadius: 16,
@@ -295,8 +289,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                     },
                     hint: 'day, date month year',
                     textStyle: Theme.of(context).textTheme.bodyText1!.copyWith(
-                      color: MyColor.grayLightColor,
-                    ),
+                          color: MyColor.grayLightColor,
+                        ),
                     onTap: () {
                       pickedDate(context, selectedDate);
                     },
@@ -308,7 +302,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: Text(
                     "Select Time To Checkin",
                     style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -317,7 +311,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: SizedBox(
                     height: AdaptSize.pixel28,
                     child: horizontalTimePicker(
@@ -326,7 +320,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: Text(
                     "For How Long?",
                     style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -335,17 +329,17 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: SizedBox(
                     height: AdaptSize.pixel28,
                     child:
-                    // officeById
-                    officeById?.officeType == "Office"
-                        ? horizontalMonthPicker(
-                        contexts: context, isSelected: selectedMonth)
-                        : horizontalHoursPicker(
-                        contexts: context,
-                        isSelected: selectedHourDuration),
+                        // officeById
+                        officeById?.officeType == "Office"
+                            ? horizontalMonthPicker(
+                                contexts: context, isSelected: selectedMonth)
+                            : horizontalHoursPicker(
+                                contexts: context,
+                                isSelected: selectedHourDuration),
                   ),
                 ),
                 SizedBox(
@@ -380,7 +374,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         itemCount: listOfBeverages().length,
                         itemBuilder: ((context, index) {
                           BeverageModels currentModel =
-                          listOfBeverages()[index];
+                              listOfBeverages()[index];
                           return Padding(
                             padding: EdgeInsets.only(bottom: AdaptSize.pixel16),
                             child: SizedBox(
@@ -393,12 +387,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                         right: AdaptSize.pixel16),
                                     child: SizedBox(
                                       width:
-                                      AdaptSize.screenWidth / 6.428571428,
+                                          AdaptSize.screenWidth / 6.428571428,
                                       height:
-                                      AdaptSize.screenWidth / 6.428571428,
+                                          AdaptSize.screenWidth / 6.428571428,
                                       child: Image(
                                         image:
-                                        AssetImage(currentModel.imagePath),
+                                            AssetImage(currentModel.imagePath),
                                         fit: BoxFit.cover,
                                       ),
                                     ),
@@ -408,7 +402,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     height: AdaptSize.screenWidth / 6.428571428,
                                     child: Column(
                                       crossAxisAlignment:
-                                      CrossAxisAlignment.start,
+                                          CrossAxisAlignment.start,
                                       children: [
                                         Text(
                                           currentModel.drinkName,
@@ -416,9 +410,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                               .textTheme
                                               .bodyMedium!
                                               .copyWith(
-                                              color: MyColor.neutral100,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: AdaptSize.pixel14),
+                                                  color: MyColor.neutral100,
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: AdaptSize.pixel14),
                                         ),
                                         const Spacer(),
                                         Text(
@@ -427,8 +421,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                               .textTheme
                                               .bodyMedium!
                                               .copyWith(
-                                              color: MyColor.neutral100,
-                                              fontSize: AdaptSize.pixel10),
+                                                  color: MyColor.neutral100,
+                                                  fontSize: AdaptSize.pixel10),
                                         ),
                                       ],
                                     ),
@@ -451,31 +445,31 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
                 Padding(
                   padding:
-                  EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
                   child: SizedBox(
                     height: AdaptSize.screenWidth / 6.4285714,
                     child: Consumer<PromoViewModel>(
                         builder: (context, value, child) {
-                          return textFormFields(
-                              prefixIcons: Padding(
-                                padding: EdgeInsets.only(
-                                    right: AdaptSize.pixel14,
-                                    left: AdaptSize.pixel14),
-                                child: SizedBox(
-                                  height: AdaptSize.pixel18,
-                                  width: AdaptSize.pixel18,
-                                  child: SvgPicture.asset(
-                                      'assets/svg_assets/discount.svg'),
-                                ),
-                              ),
-                              suffixIcon: Icon(
-                                Icons.percent,
-                                color: MyColor.primary700,
-                              ),
-                              label: "discount code",
-                              hintTexts: "AXRRR#2",
-                              controller: discountFormController);
-                        }),
+                      return textFormFields(
+                          prefixIcons: Padding(
+                            padding: EdgeInsets.only(
+                                right: AdaptSize.pixel14,
+                                left: AdaptSize.pixel14),
+                            child: SizedBox(
+                              height: AdaptSize.pixel18,
+                              width: AdaptSize.pixel18,
+                              child: SvgPicture.asset(
+                                  'assets/svg_assets/discount.svg'),
+                            ),
+                          ),
+                          suffixIcon: Icon(
+                            Icons.percent,
+                            color: MyColor.primary700,
+                          ),
+                          label: "discount code",
+                          hintTexts: "AXRRR#2",
+                          controller: discountFormController);
+                    }),
                   ),
                 ),
               ],
