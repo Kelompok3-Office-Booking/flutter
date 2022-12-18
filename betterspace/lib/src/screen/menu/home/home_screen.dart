@@ -44,9 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
     final officeData = Provider.of<OfficeViewModels>(context, listen: false);
     Future.delayed(Duration.zero, () {
-      if (officeData.listOfCoworkingSpace.isEmpty &&
-          officeData.listOfMeetingRoom.isEmpty &&
-          officeData.listOfOfficeRoom.isEmpty &&
+      if (officeData.listOfCoworkingSpace.isEmpty ||
+          officeData.listOfMeetingRoom.isEmpty ||
+          officeData.listOfOfficeRoom.isEmpty ||
           officeData.listOfOfficeByRecommendation.isEmpty) {
         officeData.fetchCoworkingSpace();
         officeData.fetchOfficeRoom();

@@ -7,8 +7,10 @@ import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/custom_icons.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/transaction_view_model.dart';
@@ -29,12 +31,14 @@ class PaymentDetailScreen extends StatefulWidget {
   final String officeId;
   final CreateTransactionModels bookingForms;
   final int paymentMethodPointerIndex;
+  final String durationTimeUnits;
 
   const PaymentDetailScreen(
       {Key? key,
       required this.officeId,
       required this.bookingForms,
-      required this.paymentMethodPointerIndex})
+      required this.paymentMethodPointerIndex,
+      required this.durationTimeUnits})
       : super(key: key);
 
   @override
@@ -53,6 +57,8 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+    final userAccountProviderListen =
+        Provider.of<LoginViewmodels>(context, listen: true);
     final listOfPaymentModels = PaymentModels().listOfAvailablePaymentMethod;
     final officeListAlloffice =
         Provider.of<OfficeViewModels>(context, listen: true);
@@ -75,6 +81,23 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
         Provider.of<TransactionViewmodels>(context, listen: false);
 
     debugPrint(widget.bookingForms.paymentMethodName);
+
+    List<ReservationDetailModel> listOfReservationDetail = ReservationDetails(
+            userName: userAccountProviderListen
+                    .userModels?.userProfileDetails.userName ??
+                "name placeholder",
+            checkInDate:
+                widget.bookingForms.transactionBookingTime.checkInDateTime ??
+                    DateTime.now(),
+            checkInTime: widget.bookingForms.transactionBookingTime.checkInHour,
+            checkOutTime:
+                widget.bookingForms.transactionBookingTime.checkOutHour ??
+                    "_hour",
+            duration: widget.bookingForms.duration,
+            durationUnit: widget.durationTimeUnits,
+            requestedDrink: widget.bookingForms.selectedDrink)
+        .reservationDetailData;
+
     return Scaffold(
       appBar: defaultAppbarWidget(
           contexts: context,
@@ -288,35 +311,39 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
 
               /// list reservation detail
               SizedBox(
-                height: AdaptSize.screenWidth / 1000 * 280,
+                height: AdaptSize.screenWidth / 3,
                 width: double.infinity,
                 child: ListView.builder(
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
-                    itemCount: 4,
+                    itemCount: listOfReservationDetail.length,
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.only(
-                            bottom: AdaptSize.screenHeight * .003),
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.account_circle,
-                              size: AdaptSize.pixel22,
-                            ),
-                            SizedBox(
-                              width: AdaptSize.screenWidth * .016,
-                            ),
-                            Text(
-                              'Username',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyText1!
-                                  .copyWith(fontSize: AdaptSize.pixel14),
-                            ),
-                          ],
-                        ),
-                      );
+                      if (listOfReservationDetail.length > 0) {
+                        var currentDetail = listOfReservationDetail[index];
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: AdaptSize.pixel8),
+                          child: Row(
+                            children: [
+                              customSVGIconParsers(
+                                  iconSlug: currentDetail.iconSlug,
+                                  size: AdaptSize.pixel20,
+                                  color: MyColor.secondary400),
+                              SizedBox(
+                                width: AdaptSize.screenWidth * .016,
+                              ),
+                              Text(
+                                currentDetail.detailData,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(fontSize: AdaptSize.pixel14),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Text("ada kesalahan");
+                      }
                     }),
               ),
 

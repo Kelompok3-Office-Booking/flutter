@@ -1,6 +1,7 @@
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/model/promo_model.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
+import 'package:intl/intl.dart';
 
 class TransactionBookingTime {
   late String checkInHour;
@@ -107,7 +108,7 @@ class TransactionFormModels {
       required this.duration,
       required this.selectedDrink,
       required this.selectedOfficeId,
-      required this.usedPromo});
+      this.usedPromo});
 }
 
 class CreateTransactionModels {
@@ -148,4 +149,36 @@ class UserTransaction {
     required this.userData,
     this.officeData,
   });
+}
+
+class ReservationDetailModel {
+  late String iconSlug;
+  late String detailData;
+  ReservationDetailModel({required this.iconSlug, required this.detailData});
+}
+
+class ReservationDetails {
+  List<ReservationDetailModel> _reservationDetail = [];
+  List<ReservationDetailModel> get reservationDetailData => _reservationDetail;
+  ReservationDetails(
+      {required String userName,
+      required DateTime checkInDate,
+      required String checkInTime,
+      required String checkOutTime,
+      required int duration,
+      required String durationUnit,
+      required String requestedDrink}) {
+    _reservationDetail = [
+      ReservationDetailModel(
+          iconSlug: "account_outlined_normal", detailData: userName),
+      ReservationDetailModel(
+          iconSlug: "calendar_outlined_normal",
+          detailData: DateFormat('EEEE, d MMMM yyyy').format(checkInDate)),
+      ReservationDetailModel(
+          iconSlug: "clock_outlined_normal",
+          detailData: "$checkInTime - $checkOutTime ($duration $durationUnit)"),
+      ReservationDetailModel(
+          iconSlug: "drink_outlined_normal", detailData: requestedDrink)
+    ];
+  }
 }

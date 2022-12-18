@@ -31,10 +31,16 @@ DateTime? parseApiFormatDateTime({required String apiFormattedDateTime}) {
 }
 
 TransactionBookingTime dateTimeParsers(
-    {required int selectedHours, required DateTime selectedDate}) {
-  String hourFormatted = selectedHours < 10 && selectedHours >= 0
+    {required int selectedHours,
+    required DateTime selectedDate,
+    required int duration}) {
+  String checkInHourFormatted = selectedHours < 10 && selectedHours >= 0
       ? ("0$selectedHours:00")
       : ("$selectedHours:00");
+  String checkOutHourFormatted =
+      (selectedHours + duration) < 10 && (selectedHours + duration) >= 0
+          ? ("0${(selectedHours + duration)}:00")
+          : ("${(selectedHours + duration)}:00");
   String dayFormatted = selectedDate.day < 10 && selectedDate.day >= 0
       ? "0${selectedDate.day}"
       : "${selectedDate.day}";
@@ -43,9 +49,12 @@ TransactionBookingTime dateTimeParsers(
       : "${selectedDate.month}";
   String dateFormatted = "$dayFormatted/$monthFormatted/${selectedDate.year}";
   print("datetime parse done");
-  print(dateFormatted + hourFormatted);
+  print(dateFormatted + checkInHourFormatted);
   return TransactionBookingTime(
-      checkInHour: hourFormatted, checkInDate: dateFormatted);
+      checkInHour: checkInHourFormatted,
+      checkOutHour: checkOutHourFormatted,
+      checkInDate: dateFormatted,
+      checkInDateTime: selectedDate);
 }
 
 int calculateTotalPrice({
@@ -80,6 +89,7 @@ PromoModel? filterPromoByCode({required String promoCode}) {
   PromoModel? filteredPromo;
   listOfPromo.forEach((element) {
     if (element.voucerCode == promoCode) {
+      print("discount found");
       filteredPromo = element;
     }
   });

@@ -194,7 +194,8 @@ class NavigasiViewModel with ChangeNotifier {
       {required BuildContext context,
       required String officeId,
       required CreateTransactionModels bookingForm,
-      required int paymentMethodIndex}) {
+      required int paymentMethodIndex,
+      required String durationTimeUnit}) {
     Navigator.push(
       context,
       CupertinoPageRoute(
@@ -202,6 +203,7 @@ class NavigasiViewModel with ChangeNotifier {
           officeId: officeId,
           bookingForms: bookingForm,
           paymentMethodPointerIndex: paymentMethodIndex,
+          durationTimeUnits: durationTimeUnit,
         ),
       ),
     );
@@ -317,14 +319,18 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi to payment method
-  void navigasiToPaymentMetod(BuildContext context, String officeId,
-      TransactionFormModels checkoutForm) {
+  void navigasiToPaymentMetod(
+      {required BuildContext context,
+      required String officeId,
+      required TransactionFormModels checkoutForm,
+      required String durationTimeUnit}) {
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (context) => PaymentMetodScreen(
           checkoutForms: checkoutForm,
           officeId: officeId,
+          durationTimeUnit: durationTimeUnit,
         ),
       ),
     );

@@ -22,6 +22,7 @@ import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:betterspace/src/view_model/whislist_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:no_context_navigation/no_context_navigation.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -60,8 +61,8 @@ class BetterSpaceApp extends StatelessWidget {
         ),
       ],
       child: MaterialApp(
-        navigatorKey: navigatorKey,
-        home: const TestingScreenAPI(),
+        navigatorKey: NavigationService.navigationKey,
+        home: const SplashScreenOne(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: MyColor.neutral900,
