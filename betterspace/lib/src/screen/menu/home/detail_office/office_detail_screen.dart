@@ -297,12 +297,14 @@ class OfficeDetailScreen extends StatelessWidget {
                               usedIcon: Icons.location_on_outlined,
                               labelText: value.posisi != null
                                   ? value.calculateDistances(
-                                      value.lat,
-                                      value.lng,
-                                      officeById?.officeLocation.officeLatitude,
-                                      officeById
-                                          ?.officeLocation.officeLongitude,
-                                    ) ?? '-'
+                                        value.lat,
+                                        value.lng,
+                                        officeById
+                                            ?.officeLocation.officeLatitude,
+                                        officeById
+                                            ?.officeLocation.officeLongitude,
+                                      ) ??
+                                      '-'
                                   : '-',
                               spacer: AdaptSize.pixel4);
                         }),
@@ -558,12 +560,17 @@ class OfficeDetailScreen extends StatelessWidget {
                     /// fitur google maps
                     InkWell(
                       onTap: () {
+                        // context
+                        //     .read<GetLocationViewModel>()
+                        //     .permissionLocationGMap(
+                        //   context,
+                        //   officeById!,
+                        // );
+
                         context
                             .read<GetLocationViewModel>()
-                            .permissionLocationGMap(
-                          context,
-                          officeById!,
-                        );
+                            .permissionLocationGMap(context, officeById!);
+
                         // modalBottomSheed(
                         //   context,
                         //   showMaps(
