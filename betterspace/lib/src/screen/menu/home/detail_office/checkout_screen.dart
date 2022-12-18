@@ -250,13 +250,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           officeStarRanting:
                           officeById?.officeStarRating.toString() ??
                               listOfDummyOffice[0].officeStarRating.toString(),
-                          officeApproxDistance:
-                          value.posisi != null
+                          officeApproxDistance: value.posisi != null
                               ? value.calculateDistances(
                               value.lat,
                               value.lng,
                               officeById?.officeLocation.officeLatitude,
-                              officeById?.officeLocation.officeLongitude)
+                              officeById?.officeLocation.officeLongitude)!
                               : '-',
                           officePersonCapacity: officeById?.officePersonCapacity
                               .toString() ??

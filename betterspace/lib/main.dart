@@ -63,7 +63,7 @@ class BetterSpaceApp extends StatelessWidget {
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
-        home: const TestingScreenAPI(),
+        home: const SplashScreenOne(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: MyColor.neutral900,
