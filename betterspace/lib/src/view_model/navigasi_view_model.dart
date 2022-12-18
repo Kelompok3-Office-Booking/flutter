@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:betterspace/src/dummy_data/transaction_data/transaction_models.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
@@ -211,11 +212,15 @@ class NavigasiViewModel with ChangeNotifier {
 
   /// belum final
   /// navigasi dari detail payment ke success payment
-  void navigasiSuccessPayment(context) {
+  void navigasiSuccessPayment(
+      {required BuildContext context,
+      required CreateTransactionModels requestedTransactionModel}) {
     Navigator.pushAndRemoveUntil(
         context,
         CupertinoModalPopupRoute(
-            builder: (context) => const SuccessPaymentScreen()),
+            builder: (context) => SuccessPaymentScreen(
+                  requestedTransactionModels: requestedTransactionModel,
+                )),
         (route) => false);
 
     notifyListeners();
@@ -274,13 +279,18 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi success screen to detail order
-  void navigasiToDetailOrder(BuildContext context) {
+  void navigasiToDetailOrder(
+      {required BuildContext context,
+      UserTransaction? requestedModel,
+      CreateTransactionModels? requestedCreateTransactionModel}) {
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (context) => ProcessDetailOrderScreens(
           statusTransaction: BookingStatusWidget.statusOnProcess(context),
           infoOnProcessed: infoOnProcess(context),
+          requestedModels: requestedModel,
+          requestedCreateTransactionModel: requestedCreateTransactionModel,
         ),
       ),
     );

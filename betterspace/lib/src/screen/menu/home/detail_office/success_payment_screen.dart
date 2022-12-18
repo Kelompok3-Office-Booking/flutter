@@ -1,3 +1,4 @@
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
@@ -8,7 +9,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class SuccessPaymentScreen extends StatelessWidget {
-  const SuccessPaymentScreen({Key? key}) : super(key: key);
+  final CreateTransactionModels requestedTransactionModels;
+  const SuccessPaymentScreen(
+      {Key? key, required this.requestedTransactionModels})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -70,9 +74,10 @@ class SuccessPaymentScreen extends StatelessWidget {
                 /// button see order detail
                 buttonWidget(
                   onPressed: () {
-                    context
-                        .read<NavigasiViewModel>()
-                        .navigasiToDetailOrder(context);
+                    context.read<NavigasiViewModel>().navigasiToDetailOrder(
+                        context: context,
+                        requestedCreateTransactionModel:
+                            requestedTransactionModels);
                   },
                   sizeheight: AdaptSize.screenHeight / 14,
                   sizeWidth: double.infinity,

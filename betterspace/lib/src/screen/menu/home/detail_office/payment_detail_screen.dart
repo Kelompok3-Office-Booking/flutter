@@ -541,9 +541,9 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                       await createUserTransaction.createTransactionRecords(
                           requestedModels: widget.bookingForms);
                       if (!mounted) return;
-                      context
-                          .read<NavigasiViewModel>()
-                          .navigasiSuccessPayment(context);
+                      context.read<NavigasiViewModel>().navigasiSuccessPayment(
+                          context: context,
+                          requestedTransactionModel: widget.bookingForms);
                     },
                     backgroundColor: MyColor.secondary400,
                     sizeheight: AdaptSize.screenHeight / 14,

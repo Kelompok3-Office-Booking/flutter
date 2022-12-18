@@ -1,9 +1,15 @@
+import 'package:betterspace/src/dummy_data/transaction_data/transaction_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
+import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:betterspace/src/widget/booking_widget/booking_button_widget.dart';
+import 'package:betterspace/src/widget/booking_widget/booking_status_widget.dart';
 import 'package:betterspace/src/widget/office_card_widget/detail_order_card.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
@@ -16,9 +22,16 @@ import 'package:provider/provider.dart';
 class ProcessDetailOrderScreens extends StatefulWidget {
   final Widget statusTransaction;
   final Widget? infoOnProcessed;
+  final UserTransaction? requestedModels;
+  final CreateTransactionModels? requestedCreateTransactionModel;
 
-  const ProcessDetailOrderScreens(
-      {super.key, required this.statusTransaction, this.infoOnProcessed});
+  const ProcessDetailOrderScreens({
+    super.key,
+    required this.statusTransaction,
+    this.requestedModels,
+    this.requestedCreateTransactionModel,
+    this.infoOnProcessed,
+  });
 
   @override
   State<ProcessDetailOrderScreens> createState() =>
@@ -29,12 +42,22 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
   @override
   void initState() {
     super.initState();
+    final providerOfUser = Provider.of<LoginViewmodels>(context, listen: false);
+    final providerOfOffice =
+        Provider.of<OfficeViewModels>(context, listen: false);
+
     widget.statusTransaction;
     widget.infoOnProcessed;
   }
 
   @override
   Widget build(BuildContext context) {
+    UserTransaction? bookingData = widget.requestedModels;
+    CreateTransactionModels? bookingData2 =
+        widget.requestedCreateTransactionModel;
+    final providerOfOffices =
+        Provider.of<OfficeViewModels>(context, listen: false);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
 
@@ -81,7 +104,19 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
 
                           /// status order widget
-                          widget.statusTransaction,
+                          bookingData != null
+                              ? (bookingData.Status == "on process"
+                                  ? BookingStatusWidget.statusOnProcess(context)
+                                  : bookingData.Status == "rejected"
+                                      ? BookingStatusWidget.statusCancelled(
+                                          context)
+                                      : BookingStatusWidget.statusSuccess(
+                                          context))
+                              : bookingData2 != null
+                                  ? (BookingStatusWidget.statusOnProcess(
+                                      context))
+                                  : (BookingStatusWidget.statusOnProcess(
+                                      context)),
                         ],
                       ),
                     ),
@@ -106,7 +141,8 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                     Text(
                       "Reservation Detail",
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
+                          color: MyColor.neutral100,
+                          fontSize: AdaptSize.pixel16),
                     ),
 
                     SizedBox(
@@ -182,8 +218,8 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                     dividerWdiget(width: double.infinity, opacity: .1),
 
                     Padding(
-                      padding:
-                          EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      padding: EdgeInsets.only(
+                          bottom: AdaptSize.screenHeight * .016),
                       child: Text(
                         "Reservation Detail",
                         style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -200,11 +236,13 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                         children: [
                           Text(
                             "Payment Method",
-                            style:
-                                Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                      color: MyColor.neutral100,
-                                      fontSize: AdaptSize.pixel14,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: MyColor.neutral100,
+                                  fontSize: AdaptSize.pixel14,
+                                ),
                           ),
                           const Spacer(),
                           Text(
@@ -237,7 +275,9 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(2343090),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -267,7 +307,9 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(35000),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -326,7 +368,9 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(10000),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -358,7 +402,9 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(5000000),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -372,8 +418,8 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
 
                     /// ppn
                     Padding(
-                      padding:
-                          EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      padding: EdgeInsets.only(
+                          bottom: AdaptSize.screenHeight * .016),
                       child: Row(
                         children: [
                           Text(
@@ -388,7 +434,9 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(23090),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
