@@ -6,6 +6,7 @@ import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/network_status.dart';
 import 'package:betterspace/src/utils/text_theme.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
+import 'package:betterspace/src/view_model/add_review_view_model.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/login_view_model.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
@@ -53,15 +54,16 @@ class BetterSpaceApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => AccountViewModel()),
         ChangeNotifierProvider(create: (_) => TransactionViewModel()),
         ChangeNotifierProvider(create: (_) => WhislistViewModel()),
+        ChangeNotifierProvider(create: (_) => AddReviewViewModel()),
         StreamProvider<NetworkStatus>(
           create: (context) =>
               NetworkStatusService().networkStatusController.stream,
-          initialData: NetworkStatus.offline,
+          initialData: NetworkStatus.online,
         ),
       ],
       child: MaterialApp(
         navigatorKey: navigatorKey,
-        home: const TestingScreenAPI(),
+        home: const SplashScreenOne(),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
           scaffoldBackgroundColor: MyColor.neutral900,

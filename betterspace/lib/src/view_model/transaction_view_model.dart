@@ -56,6 +56,22 @@ class TransactionViewModel with ChangeNotifier {
     notifyListeners();
   }
 
+  bool paymentATM = false;
+
+  /// bool only to payment via atm
+  void paymentViaATM(){
+    paymentATM = !paymentATM;
+    notifyListeners();
+  }
+
+  bool paymentMBank = false;
+
+  /// bool only to payment via m banking
+  void paymentViaMBank(){
+   paymentMBank = !paymentMBank;
+   notifyListeners();
+  }
+
   /// button need help in payment detail
   /// launch whatsapp external (aida)
   Future<void> launchWA() async {

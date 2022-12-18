@@ -1,5 +1,6 @@
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
+import 'package:betterspace/src/screen/menu/transaksi/add_review_screen.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -11,6 +12,7 @@ import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/icon_with_label.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -19,7 +21,8 @@ class SuccessDetailOrderScreens extends StatefulWidget {
   const SuccessDetailOrderScreens({super.key});
 
   @override
-  State<SuccessDetailOrderScreens> createState() => _SuccessDetailOrderScreensState();
+  State<SuccessDetailOrderScreens> createState() =>
+      _SuccessDetailOrderScreensState();
 }
 
 class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
@@ -93,7 +96,8 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                     Text(
                       "Reservation Detail",
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
+                          color: MyColor.neutral100,
+                          fontSize: AdaptSize.pixel16),
                     ),
 
                     SizedBox(
@@ -169,8 +173,8 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                     dividerWdiget(width: double.infinity, opacity: .1),
 
                     Padding(
-                      padding:
-                          EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      padding: EdgeInsets.only(
+                          bottom: AdaptSize.screenHeight * .016),
                       child: Text(
                         "Reservation Detail",
                         style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -187,11 +191,13 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                         children: [
                           Text(
                             "Payment Method",
-                            style:
-                                Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                      color: MyColor.neutral100,
-                                      fontSize: AdaptSize.pixel14,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: MyColor.neutral100,
+                                  fontSize: AdaptSize.pixel14,
+                                ),
                           ),
                           const Spacer(),
                           Text(
@@ -224,7 +230,9 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(2343090),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -254,7 +262,9 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(35000),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -313,7 +323,9 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(10000),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -345,7 +357,9 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(5000000),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -359,8 +373,8 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
 
                     /// ppn
                     Padding(
-                      padding:
-                          EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      padding: EdgeInsets.only(
+                          bottom: AdaptSize.screenHeight * .016),
                       child: Row(
                         children: [
                           Text(
@@ -375,7 +389,9 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(23090),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -409,7 +425,14 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                     ),
                     BookingButtonWidget.avaliableButton(
                         context: context,
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            CupertinoPageRoute(
+                              builder: (context) => const AddReviewScreen(),
+                            ),
+                          );
+                        },
                         paddingTop: 0,
                         paddingBottom: AdaptSize.pixel14,
                         buttonText: 'Add Review'),

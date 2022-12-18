@@ -1,3 +1,4 @@
+import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/material.dart';
 
 class LineDashWidget extends StatelessWidget {
@@ -30,4 +31,22 @@ class LineDashWidget extends StatelessWidget {
       },
     );
   }
+}
+
+/// vertical line dash
+class DashedLineVerticalPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    double dashHeight = 80, dashSpace = 3, startY = 0;
+    final paint = Paint()
+      ..color = MyColor.neutral700
+      ..strokeWidth = 1;
+    while (startY < size.height) {
+      canvas.drawLine(Offset(0, startY), Offset(0, startY + dashHeight), paint);
+      startY += dashHeight + dashSpace;
+    }
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }
