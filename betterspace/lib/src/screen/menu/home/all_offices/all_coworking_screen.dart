@@ -19,6 +19,9 @@ class AllCoworkingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final locationProvider =
         Provider.of<GetLocationViewModel>(context, listen: false);
+    final officeListCoworking =
+        Provider.of<OfficeViewModels>(context, listen: false);
+    officeListCoworking.fetchCoworkingSpace();
 
     final officeListAlloffice =
         Provider.of<OfficeViewModels>(context, listen: true);

@@ -8,9 +8,11 @@ import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:no_context_navigation/no_context_navigation.dart';
+
+final NavigationService navService = NavigationService();
 
 class UserService {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final _dio = Dio();
 
   UserService() {
@@ -26,13 +28,24 @@ class UserService {
       // Do something with response data
       return handler.next(response); // continue
     }, onError: (DioError e, handler) async {
-      if (e.response?.statusCode == 401) {
-        await refreshTokenLoopSafety();
-
-        return handler.resolve(await _retry(e.requestOptions));
+      const secureStorage = FlutterSecureStorage();
+      String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+      print(accessTokens);
+      if (accessTokens != null) {
+        // _dio.interceptors.requestLock;
+        // _dio.interceptors.responseLock;
+        if (e.response?.statusCode == 401) {
+          print("start refreshing");
+          await refreshTokenLoopSafety();
+          // _dio.unlock();
+          return handler.resolve(await _retry(e.requestOptions));
+        } else {
+          return handler.next(e);
+        }
+      } else {
+        print("no user detected");
+        navService.pushNamedAndRemoveUntil("/firstPage");
       }
-
-      return handler.next(e);
     }));
   }
 
@@ -47,43 +60,6 @@ class UserService {
   Future<Response> fetchProfile({required String accessTokens}) async {
     return await _dio.get(constantValue().userGetProfileEndpoint,
         options: Options(headers: {"Authorization": "Bearer " + accessTokens}));
-  }
-
-  Future<void> destroyUserSession() async {
-    const secureStorage = FlutterSecureStorage();
-    print("destroying this sessions");
-    await secureStorage.deleteAll();
-
-    if (navigatorKey.currentState != null) {
-      navigatorKey.currentState!
-          .pushNamedAndRemoveUntil('/firstPage', (route) => false);
-    }
-  }
-
-  Future<void> refreshTokenLoopSafety() async {
-    const secureStorage = FlutterSecureStorage();
-    String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
-    if (refreshToken != null) {
-      try {
-        Response responses = await Dio().post(
-          constantValue().userRefreshToken,
-          options:
-              Options(headers: {"Authorization": "Bearer " + refreshToken}),
-        );
-        if (responses.statusCode == 200 || responses.statusCode == 201) {
-          print("refreshed");
-          await secureStorage.write(
-              key: "access_tokens_bs", value: responses.data["access_token"]);
-          await secureStorage.write(
-              key: "refresh_token_bs", value: responses.data["refresh_token"]);
-        }
-      } catch (e) {
-        print("gagal refresh");
-        destroyUserSession();
-      }
-    } else {
-      destroyUserSession();
-    }
   }
 
   Future<void> refreshExpiredTokens() async {
@@ -359,4 +335,37 @@ class SignService {
       },
     );
   }
+}
+
+Future<void> refreshTokenLoopSafety() async {
+  const secureStorage = FlutterSecureStorage();
+  String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
+  if (refreshToken != null) {
+    try {
+      Response responses = await Dio().post(
+        constantValue().userRefreshToken,
+        options: Options(headers: {"Authorization": "Bearer " + refreshToken}),
+      );
+      print(responses);
+      if (responses.statusCode == 200 || responses.statusCode == 201) {
+        print("refreshed");
+        await secureStorage.write(
+            key: "access_tokens_bs", value: responses.data["access_token"]);
+        await secureStorage.write(
+            key: "refresh_token_bs", value: responses.data["refresh_token"]);
+      }
+    } catch (e) {
+      print("gagal refresh");
+      destroyUserSession();
+    }
+  } else {
+    print("ga ada user aktif");
+    destroyUserSession();
+  }
+}
+
+Future<void> destroyUserSession() async {
+  const secureStorage = FlutterSecureStorage();
+  print("destroying this sessions");
+  await secureStorage.deleteAll();
 }

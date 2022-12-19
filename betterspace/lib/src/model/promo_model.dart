@@ -15,7 +15,7 @@ class PromoModel {
       howToUse3,
       howToUse4;
 
-  int discountValue;
+  int? discountValue;
 
   PromoModel({
     required this.id,

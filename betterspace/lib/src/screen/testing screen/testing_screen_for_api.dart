@@ -65,6 +65,14 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                 Spacer(),
                 ElevatedButton(
                   onPressed: () async {
+                    //login panggil method loginGetToken dan masukan parameter
+                    await refreshTokenLoopSafety();
+                  },
+                  child: Text("refresh"),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () async {
                     //logout hanya bisa digunakan ketika user sudah login
                     await providerClient.logoutWithTokens();
 

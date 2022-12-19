@@ -19,6 +19,9 @@ class AllRecomendationOfficeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final locationProvider =
         Provider.of<GetLocationViewModel>(context, listen: false);
+    final officeListrecommendation =
+        Provider.of<OfficeViewModels>(context, listen: false);
+    officeListrecommendation.fetchOfficeByRecommendation();
 
     final officeListAlloffice =
         Provider.of<OfficeViewModels>(context, listen: true);

@@ -13,11 +13,13 @@ import 'package:provider/provider.dart';
 class PaymentMetodScreen extends StatelessWidget {
   final String officeId;
   final TransactionFormModels checkoutForms;
+  final String durationTimeUnit;
 
   const PaymentMetodScreen({
     Key? key,
     required this.officeId,
     required this.checkoutForms,
+    required this.durationTimeUnit,
   }) : super(key: key);
 
   @override
@@ -221,6 +223,7 @@ class PaymentMetodScreen extends StatelessWidget {
                         context: context,
                         officeId: officeId,
                         bookingForm: CreateTransactionModels(
+                            officeData: checkoutForms.officeData,
                             transactionTotalPrice:
                                 checkoutForms.transactionTotalPrice,
                             transactionBookingTime:
@@ -232,6 +235,7 @@ class PaymentMetodScreen extends StatelessWidget {
                             selectedDrink: checkoutForms.selectedDrink,
                             selectedOfficeId: checkoutForms.selectedOfficeId),
                         paymentMethodIndex: radPaymentVal.value,
+                        durationTimeUnit: durationTimeUnit,
                       );
                 },
                 sizeWidth: double.infinity,

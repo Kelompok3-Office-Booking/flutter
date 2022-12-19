@@ -20,7 +20,7 @@ class BookingButtonWidget {
         left: AdaptSize.screenWidth / 48,
       ),
       child: buttonWidget(
-        onPressed: onPressed,
+        onPressed: onPressed ?? () {},
         borderRadius: BorderRadius.circular(10),
         sizeWidth: double.infinity,
         sizeheight: AdaptSize.pixel40,
@@ -45,7 +45,7 @@ class BookingButtonWidget {
   static disableButton({
     context,
     required double paddingBottom,
-}) {
+  }) {
     return Padding(
       padding: EdgeInsets.only(
         top: AdaptSize.pixel16,

@@ -10,6 +10,9 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:no_context_navigation/no_context_navigation.dart';
+
+final NavigationService navService = NavigationService();
 
 class LoginViewmodels with ChangeNotifier {
   UserModel? userModels;
@@ -28,7 +31,8 @@ class LoginViewmodels with ChangeNotifier {
 
   get imageProfile => _imageProfile;
 
-  Future<void> pickImageProfile(context, String title, Function()? onPressed) async {
+  Future<void> pickImageProfile(
+      context, String title, Function()? onPressed) async {
     final ImagePicker imagePicker = ImagePicker();
     final XFile? pickImageProfile = await imagePicker.pickImage(
       source: ImageSource.gallery,
@@ -38,8 +42,8 @@ class LoginViewmodels with ChangeNotifier {
     notifyListeners();
     CustomDialog.singleActionDialog(
         onPressed: onPressed,
-            // Provider.of<NavigasiViewModel>(context, listen: false)
-            // .navigasiPop(context),
+        // Provider.of<NavigasiViewModel>(context, listen: false)
+        // .navigasiPop(context),
         context: context,
         title: title,
         imageAsset: 'assets/svg_assets/check_list.svg');
@@ -116,7 +120,10 @@ class LoginViewmodels with ChangeNotifier {
       print("the user token is : $accessTokens");
       apiLoginState = stateOfConnections.isReady;
       notifyListeners();
+      print("hehe");
     } else {
+      isUserExist == false;
+
       print("no user session exist");
     }
     notifyListeners();
@@ -242,6 +249,7 @@ class LoginViewmodels with ChangeNotifier {
     isUserExist = false;
     userModels = null;
     notifyListeners();
+    navService.pushNamedAndRemoveUntil("/firstPage");
   }
 
   resetLoginConnectionState() {
