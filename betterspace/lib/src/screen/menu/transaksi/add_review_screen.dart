@@ -117,7 +117,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                 debugPrint(
                     '${_addReviewDes.text}, ${rantingProvider.currentRating}');
                 ResponseDialog.dialogSuccess(
-                    context: context, description: 'Thank you !');
+                    context: context, description: 'Your review has been submitted, thank you');
                 Future.delayed(const Duration(seconds: 3), () {
                   context.read<NavigasiViewModel>().navigasiPop(context);
                   _addReviewDes.clear();

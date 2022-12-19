@@ -9,7 +9,7 @@ import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
-import 'package:betterspace/src/widget/widget/gender_radio_button.dart';
+import 'package:betterspace/src/widget/widget/string_radio_button.dart';
 import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
 import 'package:flutter/material.dart';
@@ -99,7 +99,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   Row(
                     children: [
                       /// male value
-                      genderRadioButton(
+                      stringRadioButton(
                         context: context,
                         customRadioController: stringGenderVal,
                         controlledIdValue: 'male',
@@ -115,7 +115,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
 
                       /// feemale value
-                      genderRadioButton(
+                      stringRadioButton(
                         context: context,
                         customRadioController: stringGenderVal,
                         controlledIdValue: 'female',

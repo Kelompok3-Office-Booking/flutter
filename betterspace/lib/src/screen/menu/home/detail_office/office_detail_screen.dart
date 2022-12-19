@@ -70,7 +70,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
         dummyDataProviders.listOfOfficeModels;
 
     final officeListAlloffice =
-        Provider.of<OfficeViewModels>(context, listen: true);
+        Provider.of<OfficeViewModels>(context, listen: false);
     List<OfficeModels> listOfAllOfficeContainers =
         officeListAlloffice.listOfAllOfficeModels;
 

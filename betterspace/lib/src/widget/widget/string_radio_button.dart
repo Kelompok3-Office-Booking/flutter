@@ -3,7 +3,7 @@ import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Widget genderRadioButton({
+Widget stringRadioButton({
   required BuildContext context,
   required ValueNotifier<String> customRadioController,
   required String controlledIdValue,
