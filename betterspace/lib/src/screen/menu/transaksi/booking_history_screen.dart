@@ -93,6 +93,7 @@ class _BookingHistoryScreenState extends State<BookingHistoryScreen> {
                               BookingStatusWidget.statusOnProcess(context),
                           infoOnProcessed: infoOnProcess(context),
                           requestedModels: bookingData,
+                          isNewTransaction: false,
                         ),
                       ),
                     );

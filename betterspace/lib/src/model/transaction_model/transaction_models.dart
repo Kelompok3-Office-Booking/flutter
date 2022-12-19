@@ -101,6 +101,7 @@ class TransactionFormModels {
   late int duration;
   late String selectedDrink;
   late int selectedOfficeId;
+  OfficeModels? officeData;
   PromoModel? usedPromo;
   TransactionFormModels(
       {required this.transactionTotalPrice,
@@ -108,6 +109,7 @@ class TransactionFormModels {
       required this.duration,
       required this.selectedDrink,
       required this.selectedOfficeId,
+      this.officeData,
       this.usedPromo});
 }
 
@@ -118,14 +120,15 @@ class CreateTransactionModels {
   late String paymentMethodName;
   late String selectedDrink;
   late int selectedOfficeId;
-  CreateTransactionModels({
-    required this.transactionTotalPrice,
-    required this.transactionBookingTime,
-    required this.duration,
-    required this.paymentMethodName,
-    required this.selectedDrink,
-    required this.selectedOfficeId,
-  });
+  OfficeModels? officeData;
+  CreateTransactionModels(
+      {required this.transactionTotalPrice,
+      required this.transactionBookingTime,
+      required this.duration,
+      required this.paymentMethodName,
+      required this.selectedDrink,
+      required this.selectedOfficeId,
+      this.officeData});
 }
 
 class UserTransaction {

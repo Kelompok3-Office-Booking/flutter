@@ -18,13 +18,52 @@ String positionRequestFormatter(
 }
 
 DateTime? parseApiFormatDateTime({required String apiFormattedDateTime}) {
+  print(apiFormattedDateTime + "hehehe");
   if (apiFormattedDateTime.length > 3) {
-    var splittedStrings = apiFormattedDateTime.split(" ");
-    var splitedDate = splittedStrings[0].split("-");
+    var splitedDate = apiFormattedDateTime.split("-");
     String day = splitedDate[0];
     String month = splitedDate[1];
     String year = splitedDate[2];
-    String time = splittedStrings[1];
+    String time = "00:00:00";
+    String formattedDateString = year + month + day + " " + time;
+    return DateTime.parse(formattedDateString);
+  }
+}
+
+UserTransaction? parseCreateTransactionToUserTransaction(
+    {CreateTransactionModels? requestedModel,
+    required UserModel usedUserModel}) {
+  if (requestedModel != null) {
+    final paymentModel = PaymentModels().listOfAvailablePaymentMethod;
+    PaymentMenthodModel? selectedPayment;
+    UserTransaction? selectedModel;
+    paymentModel.forEach((element) {
+      if (element.paymentMethodName == requestedModel.paymentMethodName) {
+        selectedPayment = element;
+      }
+    });
+    return selectedModel = UserTransaction(
+        officeData: requestedModel.officeData,
+        bookingId: 999,
+        bookingDuration: requestedModel.duration,
+        bookingTime: requestedModel.transactionBookingTime,
+        bookingOfficePrice: requestedModel.transactionTotalPrice,
+        Drink: requestedModel.selectedDrink,
+        Status: "on process",
+        paymentMethod: selectedPayment ?? paymentModel.last,
+        userData: usedUserModel);
+  } else {
+    return null;
+  }
+}
+
+DateTime? parseApiFormatDateTime2({required String apiFormattedDateTime}) {
+  if (apiFormattedDateTime.length > 3) {
+    var splitedDate = apiFormattedDateTime.split("/");
+    String day = splitedDate[0];
+    String month = splitedDate[1];
+    String year = splitedDate[2];
+    String time = "00:00:00";
     String formattedDateString = year + month + day + " " + time;
     return DateTime.parse(formattedDateString);
   }
@@ -64,7 +103,7 @@ int calculateTotalPrice({
 }) {
   int totalPrice =
       ((basePrice * duration) - ((basePrice / 100) * (discount ?? 0))).toInt();
-  return (totalPrice + ((totalPrice / 100) * 11).round());
+  return ((totalPrice + ((totalPrice / 100) * 11).round()) + 10000);
 }
 
 //list iterator and filter

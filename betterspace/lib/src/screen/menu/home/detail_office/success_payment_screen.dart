@@ -75,6 +75,7 @@ class SuccessPaymentScreen extends StatelessWidget {
                 buttonWidget(
                   onPressed: () {
                     context.read<NavigasiViewModel>().navigasiToDetailOrder(
+                        isNewTransaction: true,
                         context: context,
                         requestedCreateTransactionModel:
                             requestedTransactionModels);

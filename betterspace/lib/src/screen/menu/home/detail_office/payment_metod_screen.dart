@@ -232,6 +232,7 @@ class PaymentMetodScreen extends StatelessWidget {
                           context: context,
                           officeId: officeId,
                           bookingForm: CreateTransactionModels(
+                              officeData: checkoutForms.officeData,
                               transactionTotalPrice:
                                   checkoutForms.transactionTotalPrice,
                               transactionBookingTime:

@@ -282,11 +282,13 @@ class NavigasiViewModel with ChangeNotifier {
   void navigasiToDetailOrder(
       {required BuildContext context,
       UserTransaction? requestedModel,
+      required bool isNewTransaction,
       CreateTransactionModels? requestedCreateTransactionModel}) {
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (context) => ProcessDetailOrderScreens(
+          isNewTransaction: isNewTransaction,
           statusTransaction: BookingStatusWidget.statusOnProcess(context),
           infoOnProcessed: infoOnProcess(context),
           requestedModels: requestedModel,

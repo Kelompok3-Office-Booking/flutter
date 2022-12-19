@@ -6,6 +6,9 @@ import 'package:betterspace/src/services/parsers.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:no_context_navigation/no_context_navigation.dart';
+
+final NavigationService navService = NavigationService();
 
 class LoginViewmodels with ChangeNotifier {
   UserModel? userModels;
@@ -91,7 +94,10 @@ class LoginViewmodels with ChangeNotifier {
       print("the user token is : $accessTokens");
       apiLoginState = stateOfConnections.isReady;
       notifyListeners();
+      print("hehe");
     } else {
+      isUserExist == false;
+
       print("no user session exist");
     }
     notifyListeners();
@@ -217,6 +223,7 @@ class LoginViewmodels with ChangeNotifier {
     isUserExist = false;
     userModels = null;
     notifyListeners();
+    navService.pushNamedAndRemoveUntil("/firstPage");
   }
 
   resetLoginConnectionState() {

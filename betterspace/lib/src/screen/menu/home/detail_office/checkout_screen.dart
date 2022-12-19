@@ -141,6 +141,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                               officeId: widget.officeId,
                                               checkoutForm:
                                                   TransactionFormModels(
+                                                officeData: officeById,
                                                 transactionTotalPrice: calculateTotalPrice(
                                                     discount: filterPromoByCode(
                                                             promoCode:
