@@ -1,11 +1,18 @@
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/screen/menu/transaksi/add_review_screen.dart';
+import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/remove_trailing_zero.dart';
+import 'package:betterspace/src/view_model/get_location_view_model.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/widget/booking_widget/booking_button_widget.dart';
 import 'package:betterspace/src/widget/booking_widget/booking_status_widget.dart';
+import 'package:betterspace/src/widget/booking_widget/info_onprocessed_widget.dart';
 import 'package:betterspace/src/widget/booking_widget/qr_checkin_widget.dart';
 import 'package:betterspace/src/widget/office_card_widget/detail_order_card.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
@@ -17,17 +24,57 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-class SuccessDetailOrderScreens extends StatefulWidget {
-  const SuccessDetailOrderScreens({super.key});
+class ProcessDetailOrderScreens extends StatefulWidget {
+  final Widget statusTransaction;
+  final bool isNewTransaction;
+  final UserTransaction? requestedModels;
+  final CreateTransactionModels? requestedCreateTransactionModel;
+
+  const ProcessDetailOrderScreens({
+    super.key,
+    required this.isNewTransaction,
+    required this.statusTransaction,
+    this.requestedModels,
+    this.requestedCreateTransactionModel,
+  });
 
   @override
-  State<SuccessDetailOrderScreens> createState() =>
-      _SuccessDetailOrderScreensState();
+  State<ProcessDetailOrderScreens> createState() =>
+      _ProcessDetailOrderScreensState();
 }
 
-class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
+class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
+  @override
+  void initState() {
+    super.initState();
+    final providerOfUser = Provider.of<LoginViewmodels>(context, listen: false);
+    final providerOfOffice =
+        Provider.of<OfficeViewModels>(context, listen: false);
+    if (providerOfUser.userModels == null) {
+      providerOfUser.getProfile();
+    }
+    if (providerOfOffice.listOfAllOfficeModels.isEmpty) {
+      providerOfOffice.fetchAllOffice();
+    }
+
+    widget.statusTransaction;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final providerOfUser = Provider.of<LoginViewmodels>(context, listen: false);
+
+    UserTransaction? bookingData = widget.requestedModels ??
+        parseCreateTransactionToUserTransaction(
+            requestedModel: widget.requestedCreateTransactionModel,
+            usedUserModel: providerOfUser.userModels!);
+
+    final locationProvider =
+        Provider.of<GetLocationViewModel>(context, listen: false);
+
+    // final providerOfOffices =
+    //     Provider.of<OfficeViewModels>(context, listen: false);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
 
@@ -55,6 +102,15 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                 ),
                 child: ListView(
                   children: [
+                    /// status order widget
+                    bookingData != null
+                        ? bookingData.Status == "on process"
+                            ? infoOnProcess(context)
+                            : bookingData.Status == "rejected"
+                                ? const SizedBox()
+                                : const SizedBox()
+                        : const SizedBox(),
+
                     Padding(
                       padding: EdgeInsets.only(
                           top: AdaptSize.pixel8, bottom: AdaptSize.pixel16),
@@ -71,7 +127,15 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                           const Spacer(),
 
                           /// status order widget
-                          BookingStatusWidget.statusSuccess(context)
+                          bookingData != null
+                              ? bookingData.Status == "on process"
+                                  ? BookingStatusWidget.statusOnProcess(context)
+                                  : bookingData.Status == "rejected"
+                                      ? BookingStatusWidget.statusCancelled(
+                                          context)
+                                      : BookingStatusWidget.statusSuccess(
+                                          context)
+                              : BookingStatusWidget.statusOnProcess(context),
                         ],
                       ),
                     ),
@@ -79,14 +143,36 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                     /// card detail order
                     detailOrderCard(
                       context: context,
-                      officeImage:
-                          'https://cdn1-production-images-kly.akamaized.net/sBbpp2jnXav0YR8a_VVFjMtCCJQ=/1200x1200/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/882764/original/054263300_1432281574-Boruto-Naruto-the-Movie-trailer.jpg',
-                      officeName: 'Sample Office',
-                      officeLocation: 'Johar Selatan',
-                      officeApproxDistance: '10',
-                      officePersonCapacity: '100',
-                      officeArea: '200',
-                      officeType: 'coworking space',
+                      officeImage: bookingData?.officeData?.officeLeadImage !=
+                              null
+                          ? bookingData!.officeData!.officeLeadImage
+                          : 'https://cdn1-production-images-kly.akamaized.net/sBbpp2jnXav0YR8a_VVFjMtCCJQ=/1200x1200/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/882764/original/054263300_1432281574-Boruto-Naruto-the-Movie-trailer.jpg',
+                      officeName:
+                          bookingData?.officeData?.officeName ?? "placeholder",
+                      officeLocation:
+                          bookingData?.officeData?.officeName ?? "placeholder",
+                      officeApproxDistance: locationProvider.posisi != null
+                          ? locationProvider.calculateDistances(
+                                  locationProvider.lat,
+                                  locationProvider.lng,
+                                  bookingData?.officeData?.officeLocation
+                                      .officeLatitude,
+                                  bookingData?.officeData?.officeLocation
+                                      .officeLongitude) ??
+                              '-'
+                          : '-',
+                      officePersonCapacity: bookingData?.officeData != null
+                          ? bookingData!.officeData!.officePersonCapacity
+                              .toString()
+                              .replaceAll(RemoveTrailingZero.regex, '')
+                          : "999",
+                      officeArea: bookingData?.officeData != null
+                          ? bookingData!.officeData!.officeArea
+                              .toString()
+                              .replaceAll(RemoveTrailingZero.regex, '')
+                          : "999",
+                      officeType: bookingData?.officeData?.officeType ??
+                          'coworking space',
                     ),
 
                     SizedBox(
@@ -120,7 +206,10 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                                 spacer: AdaptSize.screenHeight * .016,
                                 contexts: context,
                                 usedIcon: Icons.account_circle_outlined,
-                                labelText: "Fadli Rahmadan",
+                                labelText: bookingData != null
+                                    ? bookingData
+                                        .userData.userProfileDetails.userName
+                                    : "Fadli Rahmadan",
                                 iconSize: AdaptSize.pixel24,
                                 fontSizes: AdaptSize.pixel14,
                               ),
@@ -133,7 +222,19 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                                 spacer: AdaptSize.screenHeight * .016,
                                 contexts: context,
                                 usedIcon: Icons.calendar_month_outlined,
-                                labelText: "Sunday, 21 February 2022",
+                                labelText: bookingData != null
+                                    ? widget.isNewTransaction == false
+                                        ? DateFormat('EEEE, d MMMM yyyy')
+                                            .format(parseApiFormatDateTime(
+                                                apiFormattedDateTime:
+                                                    bookingData.bookingTime
+                                                        .checkInDate)!)
+                                        : DateFormat('EEEE, d MMMM yyyy')
+                                            .format(parseApiFormatDateTime2(
+                                                apiFormattedDateTime:
+                                                    bookingData.bookingTime
+                                                        .checkInDate)!)
+                                    : "placeholder",
                                 iconSize: AdaptSize.pixel24,
                                 fontSizes: AdaptSize.pixel14,
                               ),
@@ -146,7 +247,9 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                                 spacer: AdaptSize.screenHeight * .016,
                                 contexts: context,
                                 usedIcon: Icons.access_time_outlined,
-                                labelText: "09:00",
+                                labelText:
+                                    bookingData?.bookingTime.checkInHour ??
+                                        "placeholder",
                                 iconSize: AdaptSize.pixel24,
                                 fontSizes: AdaptSize.pixel14,
                               ),
@@ -159,7 +262,7 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                                 spacer: AdaptSize.screenHeight * .016,
                                 contexts: context,
                                 usedIcon: Icons.emoji_food_beverage_outlined,
-                                labelText: "Iced Lemon Tea",
+                                labelText: bookingData?.Drink ?? "placeholder",
                                 iconSize: AdaptSize.pixel24,
                                 fontSizes: AdaptSize.pixel14,
                               ),
@@ -201,7 +304,8 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                           ),
                           const Spacer(),
                           Text(
-                            "/placeholder/",
+                            bookingData?.paymentMethod.paymentMethodName ??
+                                "placeholder",
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
@@ -233,7 +337,8 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                                     locale: 'id',
                                     symbol: 'Rp ',
                                     decimalDigits: 0)
-                                .format(2343090),
+                                .format(bookingData?.bookingOfficePrice ??
+                                    999999999),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
@@ -262,10 +367,15 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id',
-                                    symbol: 'Rp ',
-                                    decimalDigits: 0)
-                                .format(35000),
+                                        locale: 'id',
+                                        symbol: 'Rp ',
+                                        decimalDigits: 0)
+                                    .format(bookingData?.officeData
+                                            ?.officePricing.officePrice ??
+                                        35000) +
+                                (bookingData?.officeData?.officeType == "Office"
+                                    ? " /month"
+                                    : " /hour"),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
@@ -293,7 +403,17 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                           ),
                           const Spacer(),
                           Text(
-                            "x6 Hour",
+                            (((bookingData?.bookingOfficePrice ?? 90) /
+                                            (bookingData
+                                                    ?.officeData
+                                                    ?.officePricing
+                                                    .officePrice ??
+                                                4))
+                                        .round())
+                                    .toString() +
+                                (bookingData?.officeData?.officeType == "Office"
+                                    ? " month"
+                                    : " hour"),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline6!
@@ -360,7 +480,20 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                                     locale: 'id',
                                     symbol: 'Rp ',
                                     decimalDigits: 0)
-                                .format(5000000),
+                                .format(
+                                    ((((bookingData?.bookingOfficePrice ?? 90) /
+                                                    (bookingData
+                                                            ?.officeData
+                                                            ?.officePricing
+                                                            .officePrice ??
+                                                        4)) *
+                                                (bookingData
+                                                        ?.officeData
+                                                        ?.officePricing
+                                                        .officePrice ??
+                                                    2)) +
+                                            10000)
+                                        .round()),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
@@ -392,7 +525,22 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
                                     locale: 'id',
                                     symbol: 'Rp ',
                                     decimalDigits: 0)
-                                .format(23090),
+                                .format(((((((bookingData?.bookingOfficePrice ??
+                                                            90) /
+                                                        (bookingData
+                                                                ?.officeData
+                                                                ?.officePricing
+                                                                .officePrice ??
+                                                            4)) *
+                                                    (bookingData
+                                                            ?.officeData
+                                                            ?.officePricing
+                                                            .officePrice ??
+                                                        2)) +
+                                                10000)
+                                            .round()) /
+                                        100) *
+                                    11),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
@@ -408,39 +556,75 @@ class _SuccessDetailOrderScreensState extends State<SuccessDetailOrderScreens> {
             ),
 
             /// footer
-            partialRoundedCard(
-                childWidgets: Column(
-                  children: [
-                    BookingButtonWidget.checkinDetailOrderButton(
-                      context: context,
-                      onPressed: () {
-                        qrCodeCheckIn(
-                            context: context,
-                            title: 'QR Code',
-                            description: 'Show the QR Code to the staff');
-                      },
-                      buttonText: 'Check-in Now',
-                      paddingTop: AdaptSize.pixel14,
-                      paddingBottom: AdaptSize.screenHeight * .014,
-                    ),
-                    BookingButtonWidget.avaliableButton(
-                        context: context,
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            CupertinoPageRoute(
-                              builder: (context) => const AddReviewScreen(),
+            bookingData != null
+                ? bookingData.Status == "on process"
+                    ? partialRoundedCard(
+                        childWidgets: BookingButtonWidget.disableButton(
+                          context: context,
+                          paddingBottom: AdaptSize.pixel16,
+                        ),
+                        cardBottomPadding: 0,
+                        cardTopLeftRadius: 8,
+                        cardTopRightRadius: 8)
+                    : bookingData.Status == "rejected"
+                        ? partialRoundedCard(
+                            childWidgets: BookingButtonWidget.disableButton(
+                              context: context,
+                              paddingBottom: AdaptSize.pixel16,
                             ),
-                          );
-                        },
-                        paddingTop: 0,
-                        paddingBottom: AdaptSize.pixel14,
-                        buttonText: 'Add Review'),
-                  ],
-                ),
-                cardBottomPadding: 0,
-                cardTopLeftRadius: 8,
-                cardTopRightRadius: 8),
+                            cardBottomPadding: 0,
+                            cardTopLeftRadius: 8,
+                            cardTopRightRadius: 8,
+                          )
+                        : partialRoundedCard(
+                            childWidgets: Column(
+                              children: [
+                                BookingButtonWidget.checkinDetailOrderButton(
+                                  context: context,
+                                  onPressed: () {
+                                    qrCodeCheckIn(
+                                        context: context,
+                                        title: 'QR Code',
+                                        description:
+                                            'Show the QR Code to the staff',
+                                        qrCodeData:
+                                            'bookingId:${bookingData.bookingId}, paymentMethod:${bookingData.paymentMethod.paymentId}, bookingCheckInDate${bookingData.bookingTime.checkInDate}, userId:${bookingData.userData.userId} email:${bookingData.userData.userEmail}');
+                                  },
+                                  buttonText: 'Check-in Now',
+                                  paddingTop: AdaptSize.pixel14,
+                                  paddingBottom: AdaptSize.screenHeight * .014,
+                                ),
+                                BookingButtonWidget.avaliableButton(
+                                    context: context,
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        CupertinoPageRoute(
+                                          builder: (context) => AddReviewScreen(
+                                            isNewTransaction: false,
+                                            requestedModels: bookingData,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    paddingTop: 0,
+                                    paddingBottom: AdaptSize.pixel14,
+                                    buttonText: 'Add Review'),
+                              ],
+                            ),
+                            cardBottomPadding: 0,
+                            cardTopLeftRadius: 8,
+                            cardTopRightRadius: 8,
+                          )
+                : partialRoundedCard(
+                    childWidgets: BookingButtonWidget.disableButton(
+                      context: context,
+                      paddingBottom: AdaptSize.pixel16,
+                    ),
+                    cardBottomPadding: 0,
+                    cardTopLeftRadius: 8,
+                    cardTopRightRadius: 8,
+                  ),
           ],
         ),
       ),

@@ -476,11 +476,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   'assets/svg_assets/discount.svg'),
                             ),
                           ),
+                          textInputAction: TextInputAction.done,
                           suffixIcon: Icon(
                             Icons.percent,
                             color: MyColor.primary700,
+                            size: AdaptSize.pixel18,
                           ),
                           label: "discount code",
+                          textStyle: TextStyle(color: MyColor.neutral400),
                           hintTexts: "AXRRR#2",
                           controller: discountFormController);
                     }),

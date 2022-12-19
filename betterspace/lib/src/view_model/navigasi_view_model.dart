@@ -11,7 +11,7 @@ import 'package:betterspace/src/screen/menu/home/filter_search_screen.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/checkout_screen.dart';
-import 'package:betterspace/src/screen/menu/transaksi/detail_order/process_detail_order.dart';
+import 'package:betterspace/src/screen/menu/transaksi/process_detail_order.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/office_detail_screen.dart';
@@ -290,7 +290,6 @@ class NavigasiViewModel with ChangeNotifier {
         builder: (context) => ProcessDetailOrderScreens(
           isNewTransaction: isNewTransaction,
           statusTransaction: BookingStatusWidget.statusOnProcess(context),
-          infoOnProcessed: infoOnProcess(context),
           requestedModels: requestedModel,
           requestedCreateTransactionModel: requestedCreateTransactionModel,
         ),

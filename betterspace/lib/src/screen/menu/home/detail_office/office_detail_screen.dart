@@ -88,647 +88,648 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
     return Scaffold(
       body: NetworkAware(
         offlineChild: const NoConnectionScreen(),
-        onlineChild: Stack(
-          children: [
-            SingleChildScrollView(
-              physics: const ScrollPhysics(),
-              child: Padding(
-                padding: EdgeInsets.only(
-                  left: AdaptSize.screenWidth * .016,
-                  right: AdaptSize.screenWidth * .016,
-                  top: AdaptSize.paddingTop,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    /// image header
-                    CachedNetworkImage(
-                      imageUrl: officeById?.officeLeadImage != null &&
-                              officeById?.officeLeadImage != ''
-                          ? officeById!.officeLeadImage
-                          : listOfDummyOffice[0].officeLeadImage,
-                      imageBuilder: (context, imageProvider) => Container(
-                        height: AdaptSize.screenWidth / 1.3,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: imageProvider,
-                          ),
-                        ),
-                        child: Stack(
-                          children: [
-                            Align(
-                              alignment: Alignment.topLeft,
-                              child: IconButton(
-                                onPressed: () {
-                                  context
-                                      .read<NavigasiViewModel>()
-                                      .navigasiPop(context);
-                                },
-                                icon: Icon(
-                                  Icons.arrow_back_ios,
-                                  size: AdaptSize.pixel22,
-                                  color: MyColor.neutral900,
-                                ),
-                              ),
+        onlineChild: SafeArea(
+          child: Stack(
+            children: [
+              SingleChildScrollView(
+                physics: const ScrollPhysics(),
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    left: AdaptSize.screenWidth * .016,
+                    right: AdaptSize.screenWidth * .016,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// image header
+                      CachedNetworkImage(
+                        imageUrl: officeById?.officeLeadImage != null &&
+                                officeById?.officeLeadImage != ''
+                            ? officeById!.officeLeadImage
+                            : listOfDummyOffice[0].officeLeadImage,
+                        imageBuilder: (context, imageProvider) => Container(
+                          height: AdaptSize.screenWidth / 1.3,
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: imageProvider,
                             ),
-                            Align(
-                              alignment: Alignment.topRight,
-                              child: Consumer<WhislistViewModel>(
-                                  builder: (context, value, child) {
-                                return IconButton(
+                          ),
+                          child: Stack(
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: IconButton(
                                   onPressed: () {
-                                    final addNewWhislist = UserWhislistModel(
-                                      officeId:
-                                          DateTime.now().millisecondsSinceEpoch,
-                                      officeName: officeById?.officeName ??
-                                          listOfDummyOffice[0].officeName,
-                                      officeRanting: officeById
-                                              ?.officeStarRating ??
-                                          listOfDummyOffice[0].officeStarRating,
-                                      officeImage: officeById
-                                              ?.officeLeadImage ??
-                                          listOfDummyOffice[0].officeLeadImage,
-                                      officeLocation:
-                                          '${officeById?.officeLocation.district}, ${officeById?.officeLocation.city}',
-                                      officeType: officeById?.officeType ??
-                                          listOfDummyOffice[0].officeType,
-                                    );
-
-                                    value.addWhistlistOffice(addNewWhislist);
+                                    context
+                                        .read<NavigasiViewModel>()
+                                        .navigasiPop(context);
                                   },
                                   icon: Icon(
-                                    value.onTaped
-                                        ? Icons.bookmark
-                                        : Icons.bookmark_outline,
+                                    Icons.arrow_back_ios,
                                     size: AdaptSize.pixel22,
-                                    color: value.onTaped
-                                        ? MyColor.secondary300
-                                        : MyColor.neutral900,
-                                  ),
-                                );
-                              }),
-                            ),
-                          ],
-                        ),
-                      ),
-                      placeholder: (context, url) => shimmerLoading(
-                        child: commonShimmerLoadWidget(),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          commonShimmerFailedLoadWidget(
-                        context: context,
-                        sizeHeight: AdaptSize.screenWidth / 1.3,
-                        sizeWidth: double.infinity,
-                      ),
-                    ),
-
-                    SizedBox(
-                      height: AdaptSize.pixel8,
-                    ),
-
-                    /// gird image
-                    SizedBox(
-                      height: AdaptSize.screenWidth / 3.5,
-                      width: double.infinity,
-                      child: ListView.builder(
-                        itemCount: officeById?.officeGridImage.length ??
-                            listOfDummyOffice[0].officeGridImage.length,
-                        scrollDirection: Axis.horizontal,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemBuilder: (context, index) {
-                          return CachedNetworkImage(
-                            imageUrl: officeById?.officeGridImage[index] !=
-                                        null &&
-                                    officeById?.officeGridImage[index] != ''
-                                ? officeById?.officeGridImage[index]
-                                : listOfDummyOffice[0].officeGridImage[index],
-                            imageBuilder: (context, imageProvider) => Padding(
-                              padding: EdgeInsets.only(right: AdaptSize.pixel8),
-                              child: SizedBox(
-                                height: AdaptSize.screenWidth / 3.25,
-                                width: AdaptSize.screenWidth / 3.25,
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(16),
-                                  child: Image(
-                                    image: imageProvider,
-                                    fit: BoxFit.cover,
+                                    color: MyColor.neutral900,
                                   ),
                                 ),
                               ),
-                            ),
-                            placeholder: (context, url) => shimmerLoading(
-                              child: commonShimmerLoadWidget(
-                                sizeWidth: AdaptSize.screenWidth / 3.25,
-                                sizeHeight: AdaptSize.screenWidth / 3.25,
-                              ),
-                            ),
-                            errorWidget: (context, url, error) =>
-                                commonShimmerFailedLoadWidget(
-                              context: context,
-                              sizeWidth: AdaptSize.screenWidth / 3.25,
-                              sizeHeight: AdaptSize.screenWidth / 3.25,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Consumer<WhislistViewModel>(
+                                    builder: (context, value, child) {
+                                  return IconButton(
+                                    onPressed: () {
+                                      final addNewWhislist = UserWhislistModel(
+                                        officeId:
+                                            DateTime.now().millisecondsSinceEpoch,
+                                        officeName: officeById?.officeName ??
+                                            listOfDummyOffice[0].officeName,
+                                        officeRanting: officeById
+                                                ?.officeStarRating ??
+                                            listOfDummyOffice[0].officeStarRating,
+                                        officeImage: officeById
+                                                ?.officeLeadImage ??
+                                            listOfDummyOffice[0].officeLeadImage,
+                                        officeLocation:
+                                            '${officeById?.officeLocation.district}, ${officeById?.officeLocation.city}',
+                                        officeType: officeById?.officeType ??
+                                            listOfDummyOffice[0].officeType,
+                                      );
 
-                    SizedBox(
-                      height: AdaptSize.pixel8,
-                    ),
-
-                    /// text header
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(
-                          child: Text(
-                            officeById?.officeName ??
-                                listOfDummyOffice[0].officeName,
-                            style: Theme.of(context)
-                                .textTheme
-                                .headline6!
-                                .copyWith(fontSize: AdaptSize.pixel22),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                        Container(
-                          width: AdaptSize.screenWidth / 7.2,
-                          height: AdaptSize.screenWidth / 15,
-                          decoration: BoxDecoration(
-                            color: MyColor.neutral300,
-                            border:
-                                Border.all(width: 1, color: MyColor.neutral300),
-                            borderRadius: BorderRadius.circular(42),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Icon(
-                                Icons.star_rounded,
-                                color: MyColor.starYellow,
-                                size: AdaptSize.pixel16,
-                              ),
-                              Text(
-                                officeById?.officeStarRating.toString() ??
-                                    "${listOfDummyOffice[0].officeStarRating}",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .bodySmall!
-                                    .copyWith(
-                                        color: MyColor.neutral900,
-                                        fontSize: AdaptSize.pixel14),
+                                      value.addWhistlistOffice(addNewWhislist);
+                                    },
+                                    icon: Icon(
+                                      value.onTaped
+                                          ? Icons.bookmark
+                                          : Icons.bookmark_outline,
+                                      size: AdaptSize.pixel22,
+                                      color: value.onTaped
+                                          ? MyColor.secondary300
+                                          : MyColor.neutral900,
+                                    ),
+                                  );
+                                }),
                               ),
                             ],
                           ),
                         ),
-                      ],
-                    ),
-
-                    SizedBox(
-                      height: AdaptSize.pixel8,
-                    ),
-
-                    /// keterangan lokasi
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.domain,
-                          color: MyColor.neutral100,
-                          size: AdaptSize.pixel20,
+                        placeholder: (context, url) => shimmerLoading(
+                          child: commonShimmerLoadWidget(),
                         ),
-                        SizedBox(
-                          width: AdaptSize.screenWidth * .005,
+                        errorWidget: (context, url, error) =>
+                            commonShimmerFailedLoadWidget(
+                          context: context,
+                          sizeHeight: AdaptSize.screenWidth / 1.3,
+                          sizeWidth: double.infinity,
                         ),
-                        Expanded(
-                          child: Text(
-                            '${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.city}, ${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.district}',
-                            style:
-                                Theme.of(context).textTheme.subtitle1!.copyWith(
-                                      color: MyColor.neutral100,
-                                      fontSize: AdaptSize.pixel14,
+                      ),
+
+                      SizedBox(
+                        height: AdaptSize.pixel8,
+                      ),
+
+                      /// gird image
+                      SizedBox(
+                        height: AdaptSize.screenWidth / 3.5,
+                        width: double.infinity,
+                        child: ListView.builder(
+                          itemCount: officeById?.officeGridImage.length ??
+                              listOfDummyOffice[0].officeGridImage.length,
+                          scrollDirection: Axis.horizontal,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return CachedNetworkImage(
+                              imageUrl: officeById?.officeGridImage[index] !=
+                                          null &&
+                                      officeById?.officeGridImage[index] != ''
+                                  ? officeById?.officeGridImage[index]
+                                  : listOfDummyOffice[0].officeGridImage[index],
+                              imageBuilder: (context, imageProvider) => Padding(
+                                padding: EdgeInsets.only(right: AdaptSize.pixel8),
+                                child: SizedBox(
+                                  height: AdaptSize.screenWidth / 3.25,
+                                  width: AdaptSize.screenWidth / 3.25,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(16),
+                                    child: Image(
+                                      image: imageProvider,
+                                      fit: BoxFit.cover,
                                     ),
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 2,
+                                  ),
+                                ),
+                              ),
+                              placeholder: (context, url) => shimmerLoading(
+                                child: commonShimmerLoadWidget(
+                                  sizeWidth: AdaptSize.screenWidth / 3.25,
+                                  sizeHeight: AdaptSize.screenWidth / 3.25,
+                                ),
+                              ),
+                              errorWidget: (context, url, error) =>
+                                  commonShimmerFailedLoadWidget(
+                                context: context,
+                                sizeWidth: AdaptSize.screenWidth / 3.25,
+                                sizeHeight: AdaptSize.screenWidth / 3.25,
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: AdaptSize.pixel8,
+                      ),
+
+                      /// text header
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              officeById?.officeName ??
+                                  listOfDummyOffice[0].officeName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6!
+                                  .copyWith(fontSize: AdaptSize.pixel22),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                          Container(
+                            width: AdaptSize.screenWidth / 7.2,
+                            height: AdaptSize.screenWidth / 15,
+                            decoration: BoxDecoration(
+                              color: MyColor.neutral300,
+                              border:
+                                  Border.all(width: 1, color: MyColor.neutral300),
+                              borderRadius: BorderRadius.circular(42),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                Icon(
+                                  Icons.star_rounded,
+                                  color: MyColor.starYellow,
+                                  size: AdaptSize.pixel16,
+                                ),
+                                Text(
+                                  officeById?.officeStarRating.toString() ??
+                                      "${listOfDummyOffice[0].officeStarRating}",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodySmall!
+                                      .copyWith(
+                                          color: MyColor.neutral900,
+                                          fontSize: AdaptSize.pixel14),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
 
-                    /// office detail description
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        /// location
-                        Consumer<GetLocationViewModel>(
-                            builder: (context, value, child) {
-                          return IconWithLabel().asrow(
-                              contexts: context,
-                              usedIcon: Icons.location_on_outlined,
-                              labelText: value.posisi != null
-                                  ? value.calculateDistances(
-                                      value.lat,
-                                      value.lng,
-                                      officeById?.officeLocation.officeLatitude,
-                                      officeById
-                                          ?.officeLocation.officeLongitude,
-                                    )!
-                                  : '-',
-                              spacer: AdaptSize.pixel4);
-                        }),
+                      SizedBox(
+                        height: AdaptSize.pixel8,
+                      ),
 
-                        const Spacer(),
+                      /// keterangan lokasi
+                      Row(
+                        children: [
+                          Icon(
+                            Icons.domain,
+                            color: MyColor.neutral100,
+                            size: AdaptSize.pixel20,
+                          ),
+                          SizedBox(
+                            width: AdaptSize.screenWidth * .005,
+                          ),
+                          Expanded(
+                            child: Text(
+                              '${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.city}, ${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.district}',
+                              style:
+                                  Theme.of(context).textTheme.subtitle1!.copyWith(
+                                        color: MyColor.neutral100,
+                                        fontSize: AdaptSize.pixel14,
+                                      ),
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 2,
+                            ),
+                          ),
+                        ],
+                      ),
 
-                        /// office area
-                        SvgPicture.asset(
-                          'assets/svg_assets/ruler.svg',
-                          height: AdaptSize.pixel18,
-                        ),
-                        SizedBox(
-                          width: AdaptSize.pixel4,
-                        ),
-                        Text(
-                          officeById?.officeArea.toString() ??
-                              listOfDummyOffice[0].officeArea.toString(),
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium!
-                              .copyWith(
-                                  color: MyColor.neutral100,
-                                  fontSize: AdaptSize.pixel14),
-                        ),
+                      /// office detail description
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          /// location
+                          Consumer<GetLocationViewModel>(
+                              builder: (context, value, child) {
+                            return IconWithLabel().asrow(
+                                contexts: context,
+                                usedIcon: Icons.location_on_outlined,
+                                labelText: value.posisi != null
+                                    ? value.calculateDistances(
+                                        value.lat,
+                                        value.lng,
+                                        officeById?.officeLocation.officeLatitude,
+                                        officeById
+                                            ?.officeLocation.officeLongitude,
+                                      )!
+                                    : '-',
+                                spacer: AdaptSize.pixel4);
+                          }),
 
-                        const Spacer(),
+                          const Spacer(),
 
-                        /// totoal checkin
-                        SvgPicture.asset(
-                          'assets/svg_assets/available.svg',
-                          height: AdaptSize.pixel18,
-                        ),
-                        SizedBox(
-                          width: AdaptSize.pixel4,
-                        ),
-                        Text(
-                            officeById?.officePersonCapacity.toString() ??
-                                listOfDummyOffice[0]
-                                    .officePersonCapacity
-                                    .toString(),
+                          /// office area
+                          SvgPicture.asset(
+                            'assets/svg_assets/ruler.svg',
+                            height: AdaptSize.pixel18,
+                          ),
+                          SizedBox(
+                            width: AdaptSize.pixel4,
+                          ),
+                          Text(
+                            officeById?.officeArea.toString() ??
+                                listOfDummyOffice[0].officeArea.toString(),
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
                                 .copyWith(
                                     color: MyColor.neutral100,
-                                    fontSize: AdaptSize.pixel14)),
-
-                        const Spacer(),
-
-                        /// date open - close
-                        IconWithLabel().asrow(
-                            contexts: context,
-                            usedIcon: Icons.access_time,
-                            labelText: officeById != null
-                                ? "${officeById.officeOpenTime.hour}:00-${officeById.officeCloseTime.hour}:00"
-                                : "08:00-23:00",
-                            fontSizes: AdaptSize.pixel14,
-                            spacer: AdaptSize.pixel4),
-                      ],
-                    ),
-
-                    SizedBox(
-                      height: AdaptSize.pixel8,
-                    ),
-
-                    /// deskripsi
-                    Text(
-                      "Description",
-                      style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: MyColor.neutral100,
-                          fontSize: AdaptSize.pixel16),
-                    ),
-                    SizedBox(
-                      height: AdaptSize.pixel8,
-                    ),
-                    Text(
-                      officeById?.officeDescription ??
-                          listOfDummyOffice[0].officeDescription,
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: MyColor.neutral200,
-                            fontSize: AdaptSize.pixel14,
+                                    fontSize: AdaptSize.pixel14),
                           ),
-                      overflow: TextOverflow.visible,
-                      textAlign: TextAlign.justify,
-                    ),
 
-                    SizedBox(
-                      height: AdaptSize.pixel8,
-                    ),
+                          const Spacer(),
 
-                    Text(
-                      "Capacity",
-                      style: Theme.of(context).textTheme.headline6!.copyWith(
+                          /// totoal checkin
+                          SvgPicture.asset(
+                            'assets/svg_assets/available.svg',
+                            height: AdaptSize.pixel18,
+                          ),
+                          SizedBox(
+                            width: AdaptSize.pixel4,
+                          ),
+                          Text(
+                              officeById?.officePersonCapacity.toString() ??
+                                  listOfDummyOffice[0]
+                                      .officePersonCapacity
+                                      .toString(),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                      color: MyColor.neutral100,
+                                      fontSize: AdaptSize.pixel14)),
+
+                          const Spacer(),
+
+                          /// date open - close
+                          IconWithLabel().asrow(
+                              contexts: context,
+                              usedIcon: Icons.access_time,
+                              labelText: officeById != null
+                                  ? "${officeById.officeOpenTime.hour}:00-${officeById.officeCloseTime.hour}:00"
+                                  : "08:00-23:00",
+                              fontSizes: AdaptSize.pixel14,
+                              spacer: AdaptSize.pixel4),
+                        ],
+                      ),
+
+                      SizedBox(
+                        height: AdaptSize.pixel8,
+                      ),
+
+                      /// deskripsi
+                      Text(
+                        "Description",
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                            color: MyColor.neutral100,
+                            fontSize: AdaptSize.pixel16),
+                      ),
+                      SizedBox(
+                        height: AdaptSize.pixel8,
+                      ),
+                      Text(
+                        officeById?.officeDescription ??
+                            listOfDummyOffice[0].officeDescription,
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              color: MyColor.neutral200,
+                              fontSize: AdaptSize.pixel14,
+                            ),
+                        overflow: TextOverflow.visible,
+                        textAlign: TextAlign.justify,
+                      ),
+
+                      SizedBox(
+                        height: AdaptSize.pixel8,
+                      ),
+
+                      Text(
+                        "Capacity",
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                              color: MyColor.neutral100,
+                              fontSize: AdaptSize.pixel16,
+                            ),
+                      ),
+
+                      /// list capacity
+                      MediaQuery.removePadding(
+                        removeTop: true,
+                        context: context,
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.only(top: AdaptSize.pixel8),
+                          shrinkWrap: true,
+                          itemCount: (officeById?.listOfOfficeCapcityModels ??
+                                  listOfDummyOffice[0].listOfOfficeCapcityModels)
+                              .length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                Row(
+                                  children: [
+                                    /// icon
+                                    Padding(
+                                      padding: EdgeInsets.only(
+                                          right: AdaptSize.pixel8),
+                                      child: officeById
+                                                      ?.listOfOfficeCapcityModels[
+                                                          index]
+                                                      .capacityIconSlug !=
+                                                  null &&
+                                              officeById
+                                                      ?.listOfOfficeCapcityModels[
+                                                          index]
+                                                      .capacityIconSlug !=
+                                                  ''
+                                          ? customSVGIconParsers(
+                                              size: AdaptSize.pixel22,
+                                              iconSlug: officeById
+                                                  ?.listOfOfficeCapcityModels[
+                                                      index]
+                                                  .capacityIconSlug)
+                                          : Icon(
+                                              CupertinoIcons
+                                                  .rectangle_arrow_up_right_arrow_down_left,
+                                              color: MyColor.secondary400,
+                                              size: AdaptSize.pixel22,
+                                            ),
+                                    ),
+
+                                    /// text keterangan
+                                    Text(
+                                      officeById?.listOfOfficeCapcityModels[index]
+                                              .capacityTitle ??
+                                          "Can Accomodate",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .bodyMedium!
+                                          .copyWith(color: MyColor.neutral200),
+                                    ),
+                                    const Spacer(),
+
+                                    /// detail person
+                                    RichText(
+                                      text: TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: officeById
+                                                    ?.listOfOfficeCapcityModels[
+                                                        index]
+                                                    .capacityValue
+                                                    .toString() ??
+                                                listOfDummyOffice[0]
+                                                    .listOfOfficeCapcityModels[
+                                                        index]
+                                                    .capacityTitle,
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(
+                                                    color: MyColor.secondary400,
+                                                    fontSize: AdaptSize.pixel14),
+                                          ),
+                                          TextSpan(
+                                            text: officeById
+                                                    ?.listOfOfficeCapcityModels[
+                                                        index]
+                                                    .capacityUnits ??
+                                                'Units',
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(
+                                                    color: MyColor.neutral200,
+                                                    fontSize: AdaptSize.pixel14),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                dividerWdiget(
+                                    width: double.infinity, opacity: .1),
+                              ],
+                            );
+                          },
+                        ),
+                      ),
+
+                      SizedBox(
+                        height: AdaptSize.pixel8,
+                      ),
+
+                      Text(
+                        "Facilities",
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
                             color: MyColor.neutral100,
                             fontSize: AdaptSize.pixel16,
-                          ),
-                    ),
+                            fontWeight: FontWeight.bold),
+                      ),
 
-                    /// list capacity
-                    MediaQuery.removePadding(
-                      removeTop: true,
-                      context: context,
-                      child: ListView.builder(
-                        physics: const NeverScrollableScrollPhysics(),
-                        padding: EdgeInsets.only(top: AdaptSize.pixel8),
-                        shrinkWrap: true,
-                        itemCount: (officeById?.listOfOfficeCapcityModels ??
-                                listOfDummyOffice[0].listOfOfficeCapcityModels)
-                            .length,
-                        itemBuilder: (context, index) {
-                          return Column(
-                            children: [
-                              Row(
-                                children: [
-                                  /// icon
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        right: AdaptSize.pixel8),
-                                    child: officeById
-                                                    ?.listOfOfficeCapcityModels[
-                                                        index]
-                                                    .capacityIconSlug !=
-                                                null &&
-                                            officeById
-                                                    ?.listOfOfficeCapcityModels[
-                                                        index]
-                                                    .capacityIconSlug !=
-                                                ''
-                                        ? customSVGIconParsers(
-                                            size: AdaptSize.pixel22,
-                                            iconSlug: officeById
-                                                ?.listOfOfficeCapcityModels[
-                                                    index]
-                                                .capacityIconSlug)
-                                        : Icon(
-                                            CupertinoIcons
-                                                .rectangle_arrow_up_right_arrow_down_left,
-                                            color: MyColor.secondary400,
-                                            size: AdaptSize.pixel22,
-                                          ),
-                                  ),
-
-                                  /// text keterangan
-                                  Text(
-                                    officeById?.listOfOfficeCapcityModels[index]
-                                            .capacityTitle ??
-                                        "Can Accomodate",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodyMedium!
-                                        .copyWith(color: MyColor.neutral200),
-                                  ),
-                                  const Spacer(),
-
-                                  /// detail person
-                                  RichText(
-                                    text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: officeById
-                                                  ?.listOfOfficeCapcityModels[
-                                                      index]
-                                                  .capacityValue
-                                                  .toString() ??
-                                              listOfDummyOffice[0]
-                                                  .listOfOfficeCapcityModels[
-                                                      index]
-                                                  .capacityTitle,
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                                  color: MyColor.secondary400,
-                                                  fontSize: AdaptSize.pixel14),
-                                        ),
-                                        TextSpan(
-                                          text: officeById
-                                                  ?.listOfOfficeCapcityModels[
-                                                      index]
-                                                  .capacityUnits ??
-                                              'Units',
-                                          style: Theme.of(context)
-                                              .textTheme
-                                              .bodyMedium!
-                                              .copyWith(
-                                                  color: MyColor.neutral200,
-                                                  fontSize: AdaptSize.pixel14),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              dividerWdiget(
-                                  width: double.infinity, opacity: .1),
-                            ],
+                      /// list fasilitas
+                      listFacilities(
+                        context: context,
+                        moreFacilitiesButton: () {
+                          modalBottomSheed(
+                            context,
+                            listFacilityItem(
+                                context: context,
+                                officeFacility:
+                                    officeById?.listOfOfficeFacilitiesModels ??
+                                        []),
                           );
                         },
+                        officeFacility:
+                            officeById?.listOfOfficeFacilitiesModels ?? [],
                       ),
-                    ),
 
-                    SizedBox(
-                      height: AdaptSize.pixel8,
-                    ),
-
-                    Text(
-                      "Facilities",
-                      style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: MyColor.neutral100,
-                          fontSize: AdaptSize.pixel16,
-                          fontWeight: FontWeight.bold),
-                    ),
-
-                    /// list fasilitas
-                    listFacilities(
-                      context: context,
-                      moreFacilitiesButton: () {
-                        modalBottomSheed(
-                          context,
-                          listFacilityItem(
-                              context: context,
-                              officeFacility:
-                                  officeById?.listOfOfficeFacilitiesModels ??
-                                      []),
-                        );
-                      },
-                      officeFacility:
-                          officeById?.listOfOfficeFacilitiesModels ?? [],
-                    ),
-
-                    /// text alamat office
-                    Text(
-                      "Address",
-                      style: Theme.of(context).textTheme.headline6!.copyWith(
-                            color: MyColor.neutral100,
-                            fontSize: AdaptSize.pixel16,
-                          ),
-                    ),
-
-                    SizedBox(
-                      height: AdaptSize.pixel8,
-                    ),
-
-                    /// detail alamat office
-                    Text(
-                      '${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}, ${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}',
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(
-                            color: MyColor.neutral200,
-                            fontSize: AdaptSize.pixel14,
-                          ),
-                    ),
-
-                    /// fitur google maaps
-                    InkWell(
-                      onTap: () {
-                        context
-                            .read<GetLocationViewModel>()
-                            .permissionLocationGMap(context, officeById!);
-                      },
-                      splashColor: MyColor.transparanColor,
-                      child: Container(
-                        height: AdaptSize.screenHeight * .18,
-                        width: double.infinity,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(16),
-                          boxShadow: [
-                            BoxShadow(
-                              offset: const Offset(1, 2),
-                              color: MyColor.neutral600.withOpacity(.5),
-                              blurRadius: 3,
+                      /// text alamat office
+                      Text(
+                        "Address",
+                        style: Theme.of(context).textTheme.headline6!.copyWith(
+                              color: MyColor.neutral100,
+                              fontSize: AdaptSize.pixel16,
                             ),
-                          ],
-                          image: const DecorationImage(
-                            fit: BoxFit.cover,
-                            image:
-                                AssetImage('assets/image_assets/mapimage.jpg'),
+                      ),
+
+                      SizedBox(
+                        height: AdaptSize.pixel8,
+                      ),
+
+                      /// detail alamat office
+                      Text(
+                        '${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.city}, ${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.district}',
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(
+                              color: MyColor.neutral200,
+                              fontSize: AdaptSize.pixel14,
+                            ),
+                      ),
+
+                      /// fitur google maaps
+                      InkWell(
+                        onTap: () {
+                          context
+                              .read<GetLocationViewModel>()
+                              .permissionLocationGMap(context, officeById!);
+                        },
+                        splashColor: MyColor.transparanColor,
+                        child: Container(
+                          height: AdaptSize.screenHeight * .18,
+                          width: double.infinity,
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16),
+                            boxShadow: [
+                              BoxShadow(
+                                offset: const Offset(1, 2),
+                                color: MyColor.neutral600.withOpacity(.5),
+                                blurRadius: 3,
+                              ),
+                            ],
+                            image: const DecorationImage(
+                              fit: BoxFit.cover,
+                              image:
+                                  AssetImage('assets/image_assets/mapimage.jpg'),
+                            ),
                           ),
                         ),
                       ),
-                    ),
 
-                    SizedBox(
-                      height: AdaptSize.pixel8,
-                    ),
+                      SizedBox(
+                        height: AdaptSize.pixel8,
+                      ),
 
-                    /// card review
-                    Consumer<ReviewViewmodels>(
-                        builder: (context, value, child) {
-                      if (value.connectionState ==
-                          stateOfConnections.isLoading) {
-                        return reviewById.isNotEmpty
-                            ? shimmerLoading(
-                                child: commonShimmerLoadWidget(
-                                  sizeHeight:
-                                      AdaptSize.screenWidth / 1000 * 470,
+                      /// card review
+                      Consumer<ReviewViewmodels>(
+                          builder: (context, value, child) {
+                        if (value.connectionState ==
+                            stateOfConnections.isLoading) {
+                          return reviewById.isNotEmpty
+                              ? shimmerLoading(
+                                  child: commonShimmerLoadWidget(
+                                    sizeHeight:
+                                        AdaptSize.screenWidth / 1000 * 470,
+                                    sizeWidth: double.infinity,
+                                  ),
+                                )
+                              : const SizedBox();
+                        }
+                        if (value.connectionState == stateOfConnections.isReady) {
+                          return reviewById.isNotEmpty
+                              ? Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      "Review",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headline6!
+                                          .copyWith(
+                                            color: MyColor.neutral100,
+                                            fontSize: AdaptSize.pixel16,
+                                          ),
+                                    ),
+                                    SizedBox(
+                                      height: AdaptSize.screenWidth / 1000 * 470,
+                                      width: double.infinity,
+                                      child: ListView.builder(
+                                          padding: EdgeInsets.only(
+                                              bottom:
+                                                  AdaptSize.screenHeight * .01),
+                                          shrinkWrap: true,
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: reviewById.length,
+                                          itemBuilder: (context, index) {
+                                            return cardReview(
+                                              context: context,
+                                              userImage: listOfDummyOffice[index]
+                                                  .officeLeadImage,
+                                              userNameReview:
+                                                  listOfDummyOffice[index]
+                                                      .officeName,
+                                              dateReview: DateFormat('MMM y')
+                                                  .format(reviewById[index]
+                                                      .createdAt!)
+                                                  .toString(),
+                                              descriptionReview:
+                                                  reviewById[index].reviewComment,
+                                              totalHelpful: Random().nextInt(10),
+                                              reviewStarLength: reviewById[index]
+                                                  .reviewRating
+                                                  .toInt(),
+                                            );
+                                          }),
+                                    ),
+                                  ],
+                                )
+                              : SizedBox(
+                                  height: AdaptSize.screenHeight * .01,
+                                );
+                        }
+                        if (value.connectionState ==
+                            stateOfConnections.isFailed) {
+                          return reviewById.isNotEmpty
+                              ? commonShimmerFailedLoadWidget(
+                                  context: context,
+                                  sizeHeight: AdaptSize.screenWidth / 1000 * 470,
                                   sizeWidth: double.infinity,
-                                ),
-                              )
-                            : const SizedBox();
-                      }
-                      if (value.connectionState == stateOfConnections.isReady) {
-                        return reviewById.isNotEmpty
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "Review",
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headline6!
-                                        .copyWith(
-                                          color: MyColor.neutral100,
-                                          fontSize: AdaptSize.pixel16,
-                                        ),
-                                  ),
-                                  SizedBox(
-                                    height: AdaptSize.screenWidth / 1000 * 470,
-                                    width: double.infinity,
-                                    child: ListView.builder(
-                                        padding: EdgeInsets.only(
-                                            bottom:
-                                                AdaptSize.screenHeight * .01),
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.horizontal,
-                                        itemCount: reviewById.length,
-                                        itemBuilder: (context, index) {
-                                          return cardReview(
-                                            context: context,
-                                            userImage: listOfDummyOffice[index]
-                                                .officeLeadImage,
-                                            userNameReview:
-                                                listOfDummyOffice[index]
-                                                    .officeName,
-                                            dateReview: DateFormat('MMM y')
-                                                .format(reviewById[index]
-                                                    .createdAt!)
-                                                .toString(),
-                                            descriptionReview:
-                                                reviewById[index].reviewComment,
-                                            totalHelpful: Random().nextInt(10),
-                                            reviewStarLength: reviewById[index]
-                                                .reviewRating
-                                                .toInt(),
-                                          );
-                                        }),
-                                  ),
-                                ],
-                              )
-                            : SizedBox(
-                                height: AdaptSize.screenHeight * .01,
-                              );
-                      }
-                      if (value.connectionState ==
-                          stateOfConnections.isFailed) {
-                        return reviewById.isNotEmpty
-                            ? commonShimmerFailedLoadWidget(
-                                context: context,
-                                sizeHeight: AdaptSize.screenWidth / 1000 * 470,
-                                sizeWidth: double.infinity,
-                              )
-                            : const SizedBox();
-                      }
-                      return const SizedBox();
-                    }),
+                                )
+                              : const SizedBox();
+                        }
+                        return const SizedBox();
+                      }),
 
-                    /// card review
+                      /// card review
 
-                    SizedBox(
-                      height: AdaptSize.screenWidth / 1000 * 180,
-                    ),
-                  ],
+                      SizedBox(
+                        height: AdaptSize.screenWidth / 1000 * 180,
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            ),
 
-            /// footer widget
-            /// total harga
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: footerDetail(
-                context: context,
-                officePrice: officeById?.officePricing.officePrice ??
-                    Random().nextDouble() * 400000,
-                bookingButton: () {
-                  context
-                      .read<NavigasiViewModel>()
-                      .navigasiToCheckOut(context, widget.officeID);
-                },
+              /// footer widget
+              /// total harga
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: footerDetail(
+                  context: context,
+                  officePrice: officeById?.officePricing.officePrice ??
+                      Random().nextDouble() * 400000,
+                  bookingButton: () {
+                    context
+                        .read<NavigasiViewModel>()
+                        .navigasiToCheckOut(context, widget.officeID);
+                  },
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

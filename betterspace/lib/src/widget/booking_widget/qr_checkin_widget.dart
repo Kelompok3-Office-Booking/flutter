@@ -8,6 +8,7 @@ Future<Object?> qrCodeCheckIn({
   context,
   required String title,
   required String description,
+  required String qrCodeData,
 }) {
   return showGeneralDialog(
       context: context,
@@ -85,7 +86,7 @@ Future<Object?> qrCodeCheckIn({
                       ],
                     ),
                     child: BarcodeWidget(
-                      data: 'https://wa.me/6282215126377',
+                      data: qrCodeData,
                       barcode: Barcode.qrCode(),
                     ),
                   ),

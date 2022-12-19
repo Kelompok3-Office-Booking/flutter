@@ -33,7 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
+    final providerOfUser = Provider.of<LoginViewmodels>(context, listen: false);
     final userAccountProvider =
         Provider.of<LoginViewmodels>(context, listen: false);
     if (userAccountProvider.userModels == null) {
@@ -42,9 +42,10 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
-    final locationProvider = Provider.of<GetLocationViewModel>(context, listen: false);
+    final locationProvider =
+        Provider.of<GetLocationViewModel>(context, listen: false);
 
-    if(locationProvider.posisi == null){
+    if (locationProvider.posisi == null) {
       locationProvider.checkAndGetPosition();
     }
 
@@ -53,7 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
       if (officeData.listOfCoworkingSpace.isEmpty ||
           officeData.listOfMeetingRoom.isEmpty ||
           officeData.listOfOfficeRoom.isEmpty ||
-          officeData.listOfOfficeByRecommendation.isEmpty) {
+          officeData.listOfOfficeByRecommendation.isEmpty ||
+          providerOfUser.userModels == null) {
         officeData.fetchCoworkingSpace();
         officeData.fetchOfficeRoom();
         officeData.fetchMeetingRoom();
@@ -95,20 +97,19 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Consumer<LoginViewmodels>(
-                              builder: (context, value, child) {
-                                return Text(
-                                  value.userModels != null &&
-                                          value.userModels?.userProfileDetails !=
-                                              null
-                                      ? "Hi ${value.userModels!.userProfileDetails.userName}"
-                                      : 'Hi User',
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .headline6!
-                                      .copyWith(fontSize: AdaptSize.pixel18),
-                                );
-                              }
-                            ),
+                                builder: (context, value, child) {
+                              return Text(
+                                value.userModels != null &&
+                                        value.userModels?.userProfileDetails !=
+                                            null
+                                    ? "Hi ${value.userModels!.userProfileDetails.userName}"
+                                    : 'Hi User',
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headline6!
+                                    .copyWith(fontSize: AdaptSize.pixel18),
+                              );
+                            }),
                             Text(
                               'Find your best workspace!',
                               style: Theme.of(context)

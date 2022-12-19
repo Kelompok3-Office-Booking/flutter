@@ -72,7 +72,7 @@ class _GoogleMapsWidgetState extends State<GoogleMapsWidget> {
                 onMapCreated: (GoogleMapController controller) {
                   value.controllerMaps.complete(controller);
                 },
-                zoomControlsEnabled: false,
+                zoomControlsEnabled: true,
                 markers: Set<Marker>.of(value.markers.values),
                 polylines: Set<Polyline>.of(value.polylines.values),
               ),

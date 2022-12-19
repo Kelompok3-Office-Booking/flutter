@@ -3,11 +3,11 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/utils/form_validator.dart';
-import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/login_view_model.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
+import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
@@ -31,11 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   void dispose() {
     super.dispose();
     _emailController.dispose();
@@ -44,9 +39,14 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final locationProvider = Provider.of<GetLocationViewModel>(context, listen: false);
+    AdaptSize.size(context: context);
+    final providerOfUser = Provider.of<LoginViewmodels>(context, listen: false);
+    final providerOfOffice =
+        Provider.of<OfficeViewModels>(context, listen: false);
+    final providerOfTransaction =
+        Provider.of<TransactionViewmodels>(context, listen: false);
     final providerOffice =
-    Provider.of<OfficeViewModels>(context, listen: false);
+        Provider.of<OfficeViewModels>(context, listen: false);
     final providerClient = Provider.of<LoginViewmodels>(context, listen: false);
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -168,14 +168,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       /// mengatasi build context across async gaps
                       nextScreen(value.isUserExist, context);
 
-                      Future.delayed(Duration.zero, (){
+                      Future.delayed(Duration.zero, () {
                         providerClient.getProfile();
                         providerOffice.fetchAllOffice();
                         providerOffice.fetchCoworkingSpace();
                         providerOffice.fetchMeetingRoom();
                         providerOffice.fetchOfficeRoom();
                         providerOffice.fetchOfficeByRecommendation();
-                        locationProvider.checkAndGetPosition();
+                        providerOfTransaction.getTransactionByUser(
+                            userModels: providerOfUser.userModels!,
+                            ListOfAllOffice:
+                                providerOfOffice.listOfAllOfficeModels);
                       });
                     }
                   },
