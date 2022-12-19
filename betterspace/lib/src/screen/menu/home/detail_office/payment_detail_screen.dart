@@ -7,8 +7,10 @@ import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/custom_icons.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
@@ -32,12 +34,14 @@ class PaymentDetailScreen extends StatefulWidget {
   final String officeId;
   final CreateTransactionModels bookingForms;
   final int paymentMethodPointerIndex;
+  final String durationTimeUnits;
 
   const PaymentDetailScreen(
       {Key? key,
       required this.officeId,
       required this.bookingForms,
-      required this.paymentMethodPointerIndex})
+      required this.paymentMethodPointerIndex,
+      required this.durationTimeUnits})
       : super(key: key);
 
   @override
@@ -56,6 +60,8 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
   @override
   Widget build(BuildContext context) {
     final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+    final userAccountProviderListen =
+        Provider.of<LoginViewmodels>(context, listen: true);
     final listOfPaymentModels = PaymentModels().listOfAvailablePaymentMethod;
     final officeListAlloffice =
         Provider.of<OfficeViewModels>(context, listen: true);
@@ -77,10 +83,24 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
     final createUserTransaction =
         Provider.of<TransactionViewmodels>(context, listen: false);
 
-    final userAccountProviderListen =
-        Provider.of<LoginViewmodels>(context, listen: true);
-
     debugPrint(widget.bookingForms.paymentMethodName);
+
+    List<ReservationDetailModel> listOfReservationDetail = ReservationDetails(
+            userName: userAccountProviderListen
+                    .userModels?.userProfileDetails.userName ??
+                "name placeholder",
+            checkInDate:
+                widget.bookingForms.transactionBookingTime.checkInDateTime ??
+                    DateTime.now(),
+            checkInTime: widget.bookingForms.transactionBookingTime.checkInHour,
+            checkOutTime:
+                widget.bookingForms.transactionBookingTime.checkOutHour ??
+                    "_hour",
+            duration: widget.bookingForms.duration,
+            durationUnit: widget.durationTimeUnits,
+            requestedDrink: widget.bookingForms.selectedDrink)
+        .reservationDetailData;
+
     return Scaffold(
       appBar: defaultAppbarWidget(
           contexts: context,
@@ -236,7 +256,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                         ),
                         child: BarcodeWidget(
                           data: listOfPaymentModels[
-                          widget.paymentMethodPointerIndex]
+                                  widget.paymentMethodPointerIndex]
                               .qrGenerateable!,
                           barcode: Barcode.qrCode(),
                         ),
@@ -389,64 +409,40 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
               ),
 
               SizedBox(
-                height: AdaptSize.screenHeight * .003,
-              ),
-
-              ///duration checkin
-              Row(
-                children: [
-                  Icon(
-                    Icons.access_time,
-                    color: MyColor.secondary400,
-                    size: AdaptSize.pixel22,
-                  ),
-                  SizedBox(
-                    width: AdaptSize.screenWidth * .016,
-                  ),
-                  Text(
-                    widget.bookingForms.duration.toString(),
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: AdaptSize.pixel14),
-                  ),
-                  Text(
-                    officeById?.officeType == "Office" ? ' Month' : ' Hours',
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: AdaptSize.pixel14),
-                  ),
-                ],
-              ),
-
-              SizedBox(
-                height: AdaptSize.screenHeight * .003,
-              ),
-
-              ///drink
-              Row(
-                children: [
-                  Icon(
-                    Icons.coffee_outlined,
-                    size: AdaptSize.pixel22,
-                    color: MyColor.secondary400,
-                  ),
-                  SizedBox(
-                    width: AdaptSize.screenWidth * .016,
-                  ),
-                  Text(
-                    widget.bookingForms.selectedDrink,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: AdaptSize.pixel14),
-                  ),
-                ],
-              ),
-
-              SizedBox(
-                height: AdaptSize.screenHeight * .016,
+                height: AdaptSize.screenWidth / 3,
+                width: double.infinity,
+                child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: listOfReservationDetail.length,
+                    itemBuilder: (context, index) {
+                      if (listOfReservationDetail.length > 0) {
+                        var currentDetail = listOfReservationDetail[index];
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: AdaptSize.pixel8),
+                          child: Row(
+                            children: [
+                              customSVGIconParsers(
+                                  iconSlug: currentDetail.iconSlug,
+                                  size: AdaptSize.pixel20,
+                                  color: MyColor.secondary400),
+                              SizedBox(
+                                width: AdaptSize.screenWidth * .016,
+                              ),
+                              Text(
+                                currentDetail.detailData,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .bodyText1!
+                                    .copyWith(fontSize: AdaptSize.pixel14),
+                              ),
+                            ],
+                          ),
+                        );
+                      } else {
+                        return Text("ada kesalahan");
+                      }
+                    }),
               ),
 
               dividerWdiget(width: double.infinity, opacity: .2),
@@ -500,7 +496,9 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    officeById?.officeType == "Office" ? 'Price/Month' : 'Price/Hours',
+                    officeById?.officeType == "Office"
+                        ? 'Price/Month'
+                        : 'Price/Hours',
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           fontSize: AdaptSize.pixel14,
                         ),
@@ -832,9 +830,9 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                       await createUserTransaction.createTransactionRecords(
                           requestedModels: widget.bookingForms);
                       if (!mounted) return;
-                      context
-                          .read<NavigasiViewModel>()
-                          .navigasiSuccessPayment(context);
+                      context.read<NavigasiViewModel>().navigasiSuccessPayment(
+                          context: context,
+                          requestedTransactionModel: widget.bookingForms);
                     },
                     backgroundColor: MyColor.secondary400,
                     sizeheight: AdaptSize.screenHeight / 14,

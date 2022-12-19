@@ -19,7 +19,9 @@ class AllMeetingRoomScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final locationProvider =
         Provider.of<GetLocationViewModel>(context, listen: false);
-
+    final officeListOffice =
+        Provider.of<OfficeViewModels>(context, listen: false);
+    officeListOffice.fetchOfficeRoom();
     final officeListAlloffice =
         Provider.of<OfficeViewModels>(context, listen: true);
 

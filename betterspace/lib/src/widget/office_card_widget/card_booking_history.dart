@@ -14,6 +14,7 @@ Widget cardBookingHistory({
   required String dateCheckIn,
   required String hoursCheckIn,
   required Widget buttonStatus,
+  required String cardOfficeImage,
 }) {
   return GestureDetector(
     onTap: onTap,
@@ -66,11 +67,16 @@ Widget cardBookingHistory({
                     height: AdaptSize.screenWidth / 2,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: const Image(
-                        image: AssetImage(
-                            "assets/image_assets/space_image/space1.png"),
-                        fit: BoxFit.cover,
-                      ),
+                      child: cardOfficeImage != ""
+                          ? Image.network(
+                              cardOfficeImage,
+                              fit: BoxFit.cover,
+                            )
+                          : Image(
+                              image: AssetImage(
+                                  "assets/image_assets/space_image/space1.png"),
+                              fit: BoxFit.cover,
+                            ),
                     ),
                   ),
 

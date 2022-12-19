@@ -1,9 +1,17 @@
+import 'package:betterspace/src/dummy_data/transaction_data/transaction_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
+import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/enums.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
+import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:betterspace/src/widget/booking_widget/booking_button_widget.dart';
+import 'package:betterspace/src/widget/booking_widget/booking_status_widget.dart';
 import 'package:betterspace/src/widget/office_card_widget/detail_order_card.dart';
 import 'package:betterspace/src/widget/widget/bottom_card.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
@@ -16,9 +24,18 @@ import 'package:provider/provider.dart';
 class ProcessDetailOrderScreens extends StatefulWidget {
   final Widget statusTransaction;
   final Widget? infoOnProcessed;
+  final bool isNewTransaction;
+  final UserTransaction? requestedModels;
+  final CreateTransactionModels? requestedCreateTransactionModel;
 
-  const ProcessDetailOrderScreens(
-      {super.key, required this.statusTransaction, this.infoOnProcessed});
+  const ProcessDetailOrderScreens({
+    super.key,
+    required this.isNewTransaction,
+    required this.statusTransaction,
+    this.requestedModels,
+    this.requestedCreateTransactionModel,
+    this.infoOnProcessed,
+  });
 
   @override
   State<ProcessDetailOrderScreens> createState() =>
@@ -29,12 +46,32 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
   @override
   void initState() {
     super.initState();
+    final providerOfUser = Provider.of<LoginViewmodels>(context, listen: false);
+    final providerOfOffice =
+        Provider.of<OfficeViewModels>(context, listen: false);
+    if (providerOfUser.userModels == null) {
+      providerOfUser.getProfile();
+    }
+    if (providerOfOffice.listOfAllOfficeModels.length == 0) {
+      providerOfOffice.fetchAllOffice();
+    }
+
     widget.statusTransaction;
     widget.infoOnProcessed;
   }
 
   @override
   Widget build(BuildContext context) {
+    final providerOfUser = Provider.of<LoginViewmodels>(context, listen: false);
+
+    UserTransaction? bookingData = widget.requestedModels ??
+        parseCreateTransactionToUserTransaction(
+            requestedModel: widget.requestedCreateTransactionModel,
+            usedUserModel: providerOfUser.userModels!);
+
+    final providerOfOffices =
+        Provider.of<OfficeViewModels>(context, listen: false);
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
 
@@ -81,7 +118,15 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
 
                           /// status order widget
-                          widget.statusTransaction,
+                          bookingData != null
+                              ? bookingData.Status == "on process"
+                                  ? BookingStatusWidget.statusOnProcess(context)
+                                  : bookingData.Status == "rejected"
+                                      ? BookingStatusWidget.statusCancelled(
+                                          context)
+                                      : BookingStatusWidget.statusSuccess(
+                                          context)
+                              : BookingStatusWidget.statusOnProcess(context),
                         ],
                       ),
                     ),
@@ -89,14 +134,26 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                     /// card detail order
                     detailOrderCard(
                       context: context,
-                      officeImage:
-                          'https://cdn1-production-images-kly.akamaized.net/sBbpp2jnXav0YR8a_VVFjMtCCJQ=/1200x1200/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/882764/original/054263300_1432281574-Boruto-Naruto-the-Movie-trailer.jpg',
-                      officeName: 'Sample Office',
-                      officeLocation: 'Johar Selatan',
-                      officeApproxDistance: '10',
-                      officePersonCapacity: '100',
-                      officeArea: '200',
-                      officeType: 'coworking space',
+                      officeImage: bookingData?.officeData?.officeLeadImage !=
+                              null
+                          ? bookingData!.officeData!.officeLeadImage
+                          : 'https://cdn1-production-images-kly.akamaized.net/sBbpp2jnXav0YR8a_VVFjMtCCJQ=/1200x1200/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/882764/original/054263300_1432281574-Boruto-Naruto-the-Movie-trailer.jpg',
+                      officeName:
+                          bookingData?.officeData?.officeName ?? "placeholder",
+                      officeLocation:
+                          bookingData?.officeData?.officeName ?? "placeholder",
+                      officeApproxDistance:
+                          (bookingData?.officeData?.officeApproxDistance)
+                              .toString(),
+                      officePersonCapacity: bookingData?.officeData != null
+                          ? bookingData!.officeData!.officePersonCapacity
+                              .toString()
+                          : "999",
+                      officeArea: bookingData?.officeData != null
+                          ? bookingData!.officeData!.officeArea.toString()
+                          : "999",
+                      officeType: bookingData?.officeData?.officeType ??
+                          'coworking space',
                     ),
 
                     SizedBox(
@@ -106,7 +163,8 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                     Text(
                       "Reservation Detail",
                       style: Theme.of(context).textTheme.headline6!.copyWith(
-                          color: MyColor.neutral100, fontSize: AdaptSize.pixel16),
+                          color: MyColor.neutral100,
+                          fontSize: AdaptSize.pixel16),
                     ),
 
                     SizedBox(
@@ -129,7 +187,10 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                                 spacer: AdaptSize.screenHeight * .016,
                                 contexts: context,
                                 usedIcon: Icons.account_circle_outlined,
-                                labelText: "Fadli Rahmadan",
+                                labelText: bookingData != null
+                                    ? bookingData
+                                        .userData.userProfileDetails.userName
+                                    : "Fadli Rahmadan",
                                 iconSize: AdaptSize.pixel24,
                                 fontSizes: AdaptSize.pixel14,
                               ),
@@ -142,7 +203,19 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                                 spacer: AdaptSize.screenHeight * .016,
                                 contexts: context,
                                 usedIcon: Icons.calendar_month_outlined,
-                                labelText: "Sunday, 21 February 2022",
+                                labelText: bookingData != null
+                                    ? widget.isNewTransaction == false
+                                        ? DateFormat('EEEE, d MMMM yyyy')
+                                            .format(parseApiFormatDateTime(
+                                                apiFormattedDateTime:
+                                                    bookingData.bookingTime
+                                                        .checkInDate)!)
+                                        : DateFormat('EEEE, d MMMM yyyy')
+                                            .format(parseApiFormatDateTime2(
+                                                apiFormattedDateTime:
+                                                    bookingData.bookingTime
+                                                        .checkInDate)!)
+                                    : "placeholder",
                                 iconSize: AdaptSize.pixel24,
                                 fontSizes: AdaptSize.pixel14,
                               ),
@@ -155,7 +228,9 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                                 spacer: AdaptSize.screenHeight * .016,
                                 contexts: context,
                                 usedIcon: Icons.access_time_outlined,
-                                labelText: "09:00",
+                                labelText:
+                                    bookingData?.bookingTime.checkInHour ??
+                                        "placeholder",
                                 iconSize: AdaptSize.pixel24,
                                 fontSizes: AdaptSize.pixel14,
                               ),
@@ -168,7 +243,7 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                                 spacer: AdaptSize.screenHeight * .016,
                                 contexts: context,
                                 usedIcon: Icons.emoji_food_beverage_outlined,
-                                labelText: "Iced Lemon Tea",
+                                labelText: bookingData?.Drink ?? "placeholder",
                                 iconSize: AdaptSize.pixel24,
                                 fontSizes: AdaptSize.pixel14,
                               ),
@@ -182,8 +257,8 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                     dividerWdiget(width: double.infinity, opacity: .1),
 
                     Padding(
-                      padding:
-                          EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      padding: EdgeInsets.only(
+                          bottom: AdaptSize.screenHeight * .016),
                       child: Text(
                         "Reservation Detail",
                         style: Theme.of(context).textTheme.headline6!.copyWith(
@@ -200,15 +275,18 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                         children: [
                           Text(
                             "Payment Method",
-                            style:
-                                Theme.of(context).textTheme.bodyMedium!.copyWith(
-                                      color: MyColor.neutral100,
-                                      fontSize: AdaptSize.pixel14,
-                                    ),
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: MyColor.neutral100,
+                                  fontSize: AdaptSize.pixel14,
+                                ),
                           ),
                           const Spacer(),
                           Text(
-                            "/placeholder/",
+                            bookingData?.paymentMethod.paymentMethodName ??
+                                "placeholder",
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
@@ -237,8 +315,11 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                .format(2343090),
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
+                                .format(bookingData?.bookingOfficePrice ??
+                                    999999999),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
@@ -267,8 +348,15 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                .format(35000),
+                                        locale: 'id',
+                                        symbol: 'Rp ',
+                                        decimalDigits: 0)
+                                    .format(bookingData?.officeData
+                                            ?.officePricing.officePrice ??
+                                        35000) +
+                                (bookingData?.officeData?.officeType == "Office"
+                                    ? " /month"
+                                    : " /hour"),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
@@ -296,7 +384,17 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           ),
                           const Spacer(),
                           Text(
-                            "x6 Hour",
+                            (((bookingData?.bookingOfficePrice ?? 90) /
+                                            (bookingData
+                                                    ?.officeData
+                                                    ?.officePricing
+                                                    .officePrice ??
+                                                4))
+                                        .round())
+                                    .toString() +
+                                (bookingData?.officeData?.officeType == "Office"
+                                    ? " month"
+                                    : " hour"),
                             style: Theme.of(context)
                                 .textTheme
                                 .headline6!
@@ -326,7 +424,9 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
                                 .format(10000),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
@@ -358,8 +458,23 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                .format(5000000),
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
+                                .format(
+                                    ((((bookingData?.bookingOfficePrice ?? 90) /
+                                                    (bookingData
+                                                            ?.officeData
+                                                            ?.officePricing
+                                                            .officePrice ??
+                                                        4)) *
+                                                (bookingData
+                                                        ?.officeData
+                                                        ?.officePricing
+                                                        .officePrice ??
+                                                    2)) +
+                                            10000)
+                                        .round()),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
@@ -372,8 +487,8 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
 
                     /// ppn
                     Padding(
-                      padding:
-                          EdgeInsets.only(bottom: AdaptSize.screenHeight * .016),
+                      padding: EdgeInsets.only(
+                          bottom: AdaptSize.screenHeight * .016),
                       child: Row(
                         children: [
                           Text(
@@ -388,8 +503,25 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                           const Spacer(),
                           Text(
                             NumberFormat.currency(
-                                    locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                                .format(23090),
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
+                                .format(((((((bookingData?.bookingOfficePrice ??
+                                                            90) /
+                                                        (bookingData
+                                                                ?.officeData
+                                                                ?.officePricing
+                                                                .officePrice ??
+                                                            4)) *
+                                                    (bookingData
+                                                            ?.officeData
+                                                            ?.officePricing
+                                                            .officePrice ??
+                                                        2)) +
+                                                10000)
+                                            .round()) /
+                                        100) *
+                                    11),
                             style:
                                 Theme.of(context).textTheme.headline6!.copyWith(
                                       color: MyColor.neutral100,
