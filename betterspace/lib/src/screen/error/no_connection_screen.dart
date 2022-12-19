@@ -33,7 +33,7 @@ class NoConnectionScreen extends StatelessWidget {
                 height: AdaptSize.screenHeight * .016,
               ),
               Text(
-                'Internet connection is bad, but no worries, we got it! Try reload the app',
+                'Internet connection not detected, but don\'t worry, we understand that! Please check your internet network, we will detect it automatically',
                 style: Theme.of(context)
                     .textTheme
                     .bodyText1!

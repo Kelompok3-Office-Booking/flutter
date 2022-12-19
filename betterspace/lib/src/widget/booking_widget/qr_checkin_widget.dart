@@ -11,14 +11,14 @@ Future<Object?> qrCodeCheckIn({
 }) {
   return showGeneralDialog(
       context: context,
-      barrierLabel: "Response Failed",
+      barrierLabel: "QR Code Check-in",
       barrierDismissible: true,
       barrierColor: Colors.black.withOpacity(0.5),
       transitionDuration: const Duration(milliseconds: 500),
       pageBuilder: (_, __, ___) {
         return Center(
           child: Container(
-            height: AdaptSize.screenHeight * .55,
+            height: AdaptSize.screenWidth / 1000 * 950,
             width: AdaptSize.screenWidth * .8,
             margin: const EdgeInsets.symmetric(horizontal: 20),
             padding: EdgeInsets.all(AdaptSize.pixel10),

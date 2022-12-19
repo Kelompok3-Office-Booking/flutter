@@ -60,7 +60,6 @@ dependencies:
   barcode_widget: ^2.0.3
   webview_flutter: ^3.0.4
   shared_preferences: ^2.0.15
-  lottie: ^2.0.0
   geocoding: ^2.0.5
   url_launcher: ^6.1.7
   connectivity: any

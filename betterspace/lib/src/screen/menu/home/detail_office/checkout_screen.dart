@@ -57,7 +57,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
     final dummyDataProviders =
         Provider.of<OfficeDummyDataViewModels>(context, listen: false);
     List<OfficeModels> listOfDummyOffice =
@@ -263,7 +262,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               value.lat,
                               value.lng,
                               officeById?.officeLocation.officeLatitude,
-                              officeById?.officeLocation.officeLongitude)
+                              officeById?.officeLocation.officeLongitude)!
                           : '-',
                       officePersonCapacity: officeById?.officePersonCapacity
                               .toString() ??
