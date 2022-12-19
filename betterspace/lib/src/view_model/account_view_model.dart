@@ -44,7 +44,7 @@ class AccountViewModel with ChangeNotifier {
 
   get isLoading => _isLoading;
 
-  void changeProfile(BuildContext context, String title) async {
+  void changeProfileMessage(BuildContext context, String title) async {
     _isLoading = !_isLoading;
     notifyListeners();
     await Future.delayed(const Duration(seconds: 2));

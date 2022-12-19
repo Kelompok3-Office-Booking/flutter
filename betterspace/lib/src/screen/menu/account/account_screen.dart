@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/services/page_validators.dart';
@@ -12,8 +13,22 @@ import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class AccountScreen extends StatelessWidget {
+class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
+
+  @override
+  State<AccountScreen> createState() => _AccountScreenState();
+}
+
+class _AccountScreenState extends State<AccountScreen> {
+  @override
+  void initState() {
+    super.initState();
+    final userProfile = Provider.of<LoginViewmodels>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      userProfile.getProfile();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +41,9 @@ class AccountScreen extends StatelessWidget {
     final userAccountProviderListen =
         Provider.of<LoginViewmodels>(context, listen: true);
     if (userAccountProviderListen.userModels == null) {
-     Future.delayed(Duration.zero, (){
-       userAccountProvider.getProfile();
-     });
+      Future.delayed(Duration.zero, () {
+        userAccountProvider.getProfile();
+      });
     }
 
     return Scaffold(
@@ -92,32 +107,40 @@ class AccountScreen extends StatelessWidget {
                       Positioned(
                         bottom: AdaptSize.screenHeight * .01,
                         right: 0,
-                        child: Container(
-                          height: AdaptSize.screenWidth * .1,
-                          width: AdaptSize.screenWidth * .1,
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: MyColor.neutral600,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: MyColor.neutral900,
-                              width: AdaptSize.screenWidth * .004,
+                        child: Consumer<LoginViewmodels>(
+                            builder: (context, value, child) {
+                          return Container(
+                            height: AdaptSize.screenWidth * .1,
+                            width: AdaptSize.screenWidth * .1,
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              color: MyColor.neutral600,
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: MyColor.neutral900,
+                                width: AdaptSize.screenWidth * .004,
+                              ),
                             ),
-                          ),
-                          child: InkWell(
-                            onTap: () async {
-                              await context
-                                  .read<AccountViewModel>()
-                                  .pickImageProfile(context,
-                                      'Your profile has been updated successfully !');
-                            },
-                            child: Icon(
-                              Icons.camera_alt_outlined,
-                              color: MyColor.neutral900,
-                              size: AdaptSize.pixel18,
+                            child: InkWell(
+                              /// unfinal
+                              onTap: () async {
+                                value.pickImageProfile(context,
+                                    'Your profile has been updated successfully !',
+                                    () {
+                                  Navigator.pop(context);
+                                  // value.setUserProfilePicture(
+                                  //     filePath: 'file://${value.imageProfile.toString()}',
+                                  //     fileName:'file://${value.imageProfile.toString()}');
+                                });
+                              },
+                              child: Icon(
+                                Icons.camera_alt_outlined,
+                                color: MyColor.neutral900,
+                                size: AdaptSize.pixel18,
+                              ),
                             ),
-                          ),
-                        ),
+                          );
+                        }),
                       ),
                     ],
                   ),
@@ -128,15 +151,16 @@ class AccountScreen extends StatelessWidget {
                 ),
 
                 /// username
-                Text(
-                  userAccountProviderListen
-                          .userModels?.userProfileDetails.userName ??
-                      'Erick Cahya',
-                  style: Theme.of(context).textTheme.headline6!.copyWith(
-                        fontSize: AdaptSize.pixel16,
-                        color: MyColor.neutral200,
-                      ),
-                ),
+                Consumer<LoginViewmodels>(builder: (context, value, child) {
+                  return Text(
+                    value.userModels?.userProfileDetails.userName ??
+                        'Loading..',
+                    style: Theme.of(context).textTheme.headline6!.copyWith(
+                          fontSize: AdaptSize.pixel16,
+                          color: MyColor.neutral200,
+                        ),
+                  );
+                }),
 
                 SizedBox(
                   height: AdaptSize.screenHeight * .004,
@@ -145,7 +169,7 @@ class AccountScreen extends StatelessWidget {
                 /// email user
                 Text(
                   userAccountProviderListen.userModels?.userEmail ??
-                      "erickcahya2@gmail.com",
+                      "Loading..",
                   style: Theme.of(context).textTheme.bodyText1!.copyWith(
                         fontSize: AdaptSize.pixel14,
                         color: MyColor.neutral400,

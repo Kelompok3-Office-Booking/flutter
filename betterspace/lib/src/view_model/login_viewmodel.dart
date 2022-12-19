@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/services/api_services.dart';
 import 'package:betterspace/src/services/constant.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/services/parsers.dart';
+import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class LoginViewmodels with ChangeNotifier {
   UserModel? userModels;
@@ -19,6 +23,27 @@ class LoginViewmodels with ChangeNotifier {
   stateOfConnections profileSetterConnectionState =
       stateOfConnections.isDoingNothing;
   var _dio = Dio();
+
+  File? _imageProfile;
+
+  get imageProfile => _imageProfile;
+
+  Future<void> pickImageProfile(context, String title, Function()? onPressed) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? pickImageProfile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 55,
+    );
+    _imageProfile = File(pickImageProfile!.path);
+    notifyListeners();
+    CustomDialog.singleActionDialog(
+        onPressed: onPressed,
+            // Provider.of<NavigasiViewModel>(context, listen: false)
+            // .navigasiPop(context),
+        context: context,
+        title: title,
+        imageAsset: 'assets/svg_assets/check_list.svg');
+  }
 
   logoutWithTokens() async {
     final _secureStorage = FlutterSecureStorage();

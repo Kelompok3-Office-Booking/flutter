@@ -74,7 +74,7 @@ class GetLocationViewModel with ChangeNotifier {
           onPressed: () async {
             Provider.of<NavigasiViewModel>(context, listen: false)
                 .navigasiPop(context);
-            await GeolocatorPlatform.instance.requestPermission();
+            await Geolocator.openLocationSettings();
           });
     }
 
