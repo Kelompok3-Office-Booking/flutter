@@ -9,7 +9,6 @@ import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/office_card_widget/office_type_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:provider/provider.dart';
 
 class FilterSearchScreen extends StatefulWidget {

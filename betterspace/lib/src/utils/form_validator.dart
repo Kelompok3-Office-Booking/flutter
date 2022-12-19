@@ -17,10 +17,9 @@ class FormValidator {
     // else if (!RegExp('.*[a-z].*').hasMatch(value1)) {
     //   return '$title should contain a lowercase letter a-z';
     // }
-    // else if (!RegExp('.*[A-Z].*').hasMatch(value1)) {
-    //   return '$title should contain an uppercase letter A-Z';
-    // }
-    else if (value2 != value1) {
+    else if (RegExp('.*[A-Z].*').hasMatch(value1)) {
+      return '$title only lowercase letters are allowed';
+    } else if (value2 != value1) {
       return 'Please enter confirm $title that match';
     }
     return null;

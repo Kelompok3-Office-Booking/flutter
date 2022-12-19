@@ -1,9 +1,11 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:betterspace/src/widget/widget/line_dash_widget.dart';
 import 'package:flutter/material.dart';
 
+/// detial maps
 Widget bottomDetailMaps({
   context,
   required String userAddress,
@@ -120,6 +122,73 @@ Widget bottomDetailMaps({
         ),
         SizedBox(
           height: AdaptSize.pixel16,
+        ),
+      ],
+    ),
+  );
+}
+
+/// launch maps in bottom sheed
+Widget goToGMaps({
+  context,
+  Function()? onPressed,
+}) {
+  return Padding(
+    padding: EdgeInsets.only(
+      left: AdaptSize.screenWidth * .016,
+      right: AdaptSize.screenWidth * .016,
+      bottom: AdaptSize.screenHeight * .008,
+    ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        dividerWdiget(
+          width: AdaptSize.screenWidth * 0.1,
+          opacity: .4,
+        ),
+        SizedBox(
+          height: AdaptSize.screenHeight * .016,
+        ),
+        Text(
+          'Want to location?',
+          style: Theme.of(context)
+              .textTheme
+              .headline6!
+              .copyWith(fontSize: AdaptSize.screenHeight * .02),
+        ),
+        SizedBox(
+          height: AdaptSize.screenHeight * .016,
+        ),
+        Text(
+          'You will be directed using Google Maps to the Office location',
+          style: Theme.of(context).textTheme.headline6!.copyWith(
+            fontSize: AdaptSize.screenHeight * .016,
+            color: MyColor.neutral300,
+          ),
+        ),
+        SizedBox(
+          height: AdaptSize.screenHeight * .024,
+        ),
+
+        /// button open google maps widget
+        buttonWidget(
+          onPressed: onPressed,
+          sizeheight: AdaptSize.pixel40,
+          sizeWidth: double.infinity,
+          borderRadius: BorderRadius.circular(10),
+          backgroundColor: MyColor.secondary400,
+          child: Text(
+            'Yes, Open Google Maps',
+            style: Theme.of(context).textTheme.button!.copyWith(
+              color: MyColor.neutral900,
+              fontSize: AdaptSize.pixel14,
+            ),
+          ),
+        ),
+
+        SizedBox(
+          height: AdaptSize.screenHeight * .03,
         ),
       ],
     ),

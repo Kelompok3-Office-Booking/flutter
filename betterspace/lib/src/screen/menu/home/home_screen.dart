@@ -42,6 +42,12 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     }
 
+    final locationProvider = Provider.of<GetLocationViewModel>(context, listen: false);
+
+    if(locationProvider.posisi == null){
+      locationProvider.checkAndGetPosition();
+    }
+
     final officeData = Provider.of<OfficeViewModels>(context, listen: false);
     Future.delayed(Duration.zero, () {
       if (officeData.listOfCoworkingSpace.isEmpty ||
@@ -58,12 +64,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+    // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
     final locationProvider =
         Provider.of<GetLocationViewModel>(context, listen: false);
-
-    final userAccountProviderListen =
-        Provider.of<LoginViewmodels>(context, listen: true);
 
     return Scaffold(
       body: NetworkAware(
@@ -91,17 +94,20 @@ class _HomeScreenState extends State<HomeScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              userAccountProviderListen.userModels != null &&
-                                      userAccountProviderListen
-                                              .userModels?.userProfileDetails !=
-                                          null
-                                  ? "Hi ${userAccountProviderListen.userModels!.userProfileDetails.userName}"
-                                  : 'Hi User',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .headline6!
-                                  .copyWith(fontSize: AdaptSize.pixel18),
+                            Consumer<LoginViewmodels>(
+                              builder: (context, value, child) {
+                                return Text(
+                                  value.userModels != null &&
+                                          value.userModels?.userProfileDetails !=
+                                              null
+                                      ? "Hi ${value.userModels!.userProfileDetails.userName}"
+                                      : 'Hi User',
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headline6!
+                                      .copyWith(fontSize: AdaptSize.pixel18),
+                                );
+                              }
                             ),
                             Text(
                               'Find your best workspace!',

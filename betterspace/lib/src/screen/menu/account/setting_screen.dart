@@ -3,6 +3,7 @@ import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/account_view_model.dart';
+import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
@@ -10,15 +11,22 @@ import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class SettingScreen extends StatelessWidget {
+class SettingScreen extends StatefulWidget {
   const SettingScreen({Key? key}) : super(key: key);
 
+  @override
+  State<SettingScreen> createState() => _SettingScreenState();
+}
+
+class _SettingScreenState extends State<SettingScreen> {
   @override
   Widget build(BuildContext context) {
     final settingProvider =
         Provider.of<AccountViewModel>(context, listen: false);
     final navigasiProvider =
         Provider.of<NavigasiViewModel>(context, listen: false);
+    final userAccountProvider =
+        Provider.of<LoginViewmodels>(context, listen: false);
 
     AdaptSize.size(context: context);
     return Scaffold(
@@ -64,7 +72,10 @@ class SettingScreen extends StatelessWidget {
                                   title:
                                       'Are you sure want to delete your account ?',
                                   imageAsset: 'assets/svg_assets/delete.svg',
-                                  onTap1: () {
+                                  onTap1: () async {
+                                    await userAccountProvider
+                                        .deleteUserAccount();
+                                    if (!mounted) return;
                                     navigasiProvider.navigasiLogout(context);
                                   },
                                   onTap2: () {

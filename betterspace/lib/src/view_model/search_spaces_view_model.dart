@@ -1,4 +1,3 @@
-import 'package:betterspace/src/model/data/sample_data.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -28,7 +27,37 @@ class SearchSpacesViewModel with ChangeNotifier {
   }
 
   /// ------------------------------------------------------------------------
-  /// feature filtering
+
+  /// feature filtering in search by selecting
+
+  List foundAllOfficeBySelecting = [];
+
+  List officeFilterBySelecting = OfficeViewModels().listOfAllOfficeModels;
+
+  void filterAllOfficeBySelecting(context, String enteredKeyword) {
+    final officeSearch = Provider.of<OfficeViewModels>(context, listen: false);
+    List results = [];
+    if (enteredKeyword.isEmpty) {
+      results = officeSearch.listOfAllOfficeModels;
+    } else {
+      results = officeSearch.listOfAllOfficeModels
+          .where((place) =>
+              place.officeLocation.city
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()) &&
+              place.officeType
+                  .toLowerCase()
+                  .contains(enteredKeyword.toLowerCase()))
+          .toList();
+    }
+
+    foundAllOfficeBySelecting = results;
+    notifyListeners();
+  }
+
+  /// ------------------------------------------------------------------------
+
+  /// filtering search by keywoard
 
   List foundOffice = [];
 
