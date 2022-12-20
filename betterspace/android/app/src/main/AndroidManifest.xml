@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
    <application
-        android:label="betterspace"
+        android:label="BetterSpace"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
