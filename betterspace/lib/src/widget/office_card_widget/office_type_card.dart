@@ -1,12 +1,15 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 Widget officeTypeItemCards({
   context,
   Function()? onTap,
-  required ImageProvider<Object> officeImage,
+  required String officeImage,
   required String officeName,
   required String officeLocation,
   required String officeStarRanting,
@@ -40,15 +43,23 @@ Widget officeTypeItemCards({
           /// space image
           Stack(
             children: [
-              Container(
-                width: AdaptSize.screenWidth * .36,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16),
-                  image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: officeImage,
+              CachedNetworkImage(
+                imageUrl: officeImage,
+                imageBuilder: (context, imageProvider) => Container(
+                  width: AdaptSize.screenWidth * .36,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    image: DecorationImage(
+                      fit: BoxFit.cover,
+                      image: imageProvider,
+                    ),
                   ),
                 ),
+                placeholder: (context, url) => shimmerLoading(
+                  child: CardShimmerHomeLoading.horizontalLoadShimmerHome,
+                ),
+                errorWidget: (context, url, error) =>
+                CardShimmerHomeLoading.horizontalFailedShimmerHome(context),
               ),
               Positioned(
                 left: 10,
@@ -97,7 +108,7 @@ Widget officeTypeItemCards({
 
           /// jarak samping
           SizedBox(
-            width: AdaptSize.screenWidth * .008,
+            width: AdaptSize.screenWidth * .01,
           ),
 
           /// keterangan
@@ -157,7 +168,30 @@ Widget officeTypeItemCards({
                       ),
 
                       SizedBox(
-                        width: AdaptSize.screenHeight * .012,
+                        width: AdaptSize.screenWidth * .008,
+                      ),
+
+                      /// icon penggaris
+                      SvgPicture.asset(
+                        'assets/svg_assets/ruler.svg',
+                        height: AdaptSize.pixel18,
+                      ),
+
+                      const SizedBox(
+                        width: 2,
+                      ),
+
+                      /// luas area lokasi
+                      Text(
+                        '${officeArea}m2',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontSize: AdaptSize.pixel12),
+                      ),
+
+                      SizedBox(
+                        width: AdaptSize.screenWidth * .008,
                       ),
 
                       /// total person asset
@@ -179,28 +213,7 @@ Widget officeTypeItemCards({
                             .copyWith(fontSize: AdaptSize.pixel12),
                       ),
 
-                      SizedBox(
-                        width: AdaptSize.screenHeight * .012,
-                      ),
 
-                      /// icon penggaris
-                      SvgPicture.asset(
-                        'assets/svg_assets/ruler.svg',
-                        height: AdaptSize.pixel18,
-                      ),
-
-                      const SizedBox(
-                        width: 2,
-                      ),
-
-                      /// luas area lokasi
-                      Text(
-                        officeArea,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: AdaptSize.pixel12),
-                      ),
                     ],
                   ),
                 ),

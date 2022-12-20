@@ -1,4 +1,6 @@
 //do api service here
+import 'package:betterspace/src/model/review_model/review_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/model/user_models/user_models_for_regist.dart';
 import 'package:betterspace/src/services/constant.dart';
@@ -6,9 +8,11 @@ import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:no_context_navigation/no_context_navigation.dart';
+
+final NavigationService navService = NavigationService();
 
 class UserService {
-  final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
   final _dio = Dio();
 
   UserService() {
@@ -24,13 +28,24 @@ class UserService {
       // Do something with response data
       return handler.next(response); // continue
     }, onError: (DioError e, handler) async {
-      if (e.response?.statusCode == 400 || e.response?.statusCode == 401) {
-        await refreshTokenLoopSafety();
-
-        return handler.resolve(await _retry(e.requestOptions));
+      const secureStorage = FlutterSecureStorage();
+      String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+      print(accessTokens);
+      if (accessTokens != null) {
+        // _dio.interceptors.requestLock;
+        // _dio.interceptors.responseLock;
+        if (e.response?.statusCode == 401) {
+          print("start refreshing");
+          await refreshTokenLoopSafety();
+          // _dio.unlock();
+          return handler.resolve(await _retry(e.requestOptions));
+        } else {
+          return handler.next(e);
+        }
+      } else {
+        print("no user detected");
+        navService.pushNamedAndRemoveUntil("/firstPage");
       }
-
-      return handler.next(e);
     }));
   }
 
@@ -45,34 +60,6 @@ class UserService {
   Future<Response> fetchProfile({required String accessTokens}) async {
     return await _dio.get(constantValue().userGetProfileEndpoint,
         options: Options(headers: {"Authorization": "Bearer " + accessTokens}));
-  }
-
-  Future<void> destroyUserSession() async {
-    const secureStorage = FlutterSecureStorage();
-    print("destroying this sessions");
-    await secureStorage.deleteAll();
-    navigatorKey.currentState!
-        .pushNamedAndRemoveUntil('/firstPage', (route) => false);
-  }
-
-  Future<void> refreshTokenLoopSafety() async {
-    const secureStorage = FlutterSecureStorage();
-    String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
-    if (refreshToken != null) {
-      Response responses = await Dio().post(
-        constantValue().userRefreshToken,
-        options: Options(headers: {"Authorization": "Bearer " + refreshToken}),
-      );
-      if (responses.statusCode == 200 || responses.statusCode == 201) {
-        print("refreshed");
-        await secureStorage.write(
-            key: "access_tokens_bs", value: responses.data["access_token"]);
-        await secureStorage.write(
-            key: "refresh_token_bs", value: responses.data["refresh_token"]);
-      } else {
-        destroyUserSession();
-      }
-    }
   }
 
   Future<void> refreshExpiredTokens() async {
@@ -192,6 +179,135 @@ class UserService {
       options: Options(headers: {"Authorization": "Bearer " + accessToken}),
     );
   }
+
+  Future<Response> createTransactionRecordServices(
+      CreateTransactionModels formattedTransactionModels,
+      String accessToken) async {
+    FormData formData = FormData.fromMap({
+      "price": formattedTransactionModels.transactionTotalPrice,
+      "check_in_hour":
+          formattedTransactionModels.transactionBookingTime.checkInHour,
+      "check_in_date":
+          formattedTransactionModels.transactionBookingTime.checkInDate,
+      "duration": formattedTransactionModels.duration,
+      "payment_method": formattedTransactionModels.paymentMethodName,
+      "drink": formattedTransactionModels.selectedDrink,
+      "office_id": formattedTransactionModels.selectedOfficeId,
+    });
+    print(formData.fields);
+    return _dio.post(constantValue().createTransactionRecord,
+        options: Options(
+            contentType: 'multipart/form-data',
+            headers: {"Authorization": "Bearer " + accessToken}),
+        data: formData);
+  }
+
+  Future<Response> getUserTransactionServices(
+      {required String accessToken}) async {
+    return _dio.get(
+      constantValue().getAllTransactionByUser,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> getUserTransactionDetailByIdServices(
+      {required String accessToken, required String requestedID}) async {
+    return _dio.get(
+      constantValue().getTransactionDetails + requestedID,
+      options: Options(headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> cancelTransaction(
+      {required String accessToken,
+      required String requestedTransactionId}) async {
+    return _dio.put(
+        constantValue().cancelTransactionByIdBaseUrl +
+            requestedTransactionId +
+            "/cancel",
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
+  }
+
+  Future<Response> changeProfileData(
+      {required String newName,
+      required String newEmail,
+      required String newGenders,
+      required String accessToken}) async {
+    return _dio.put(constantValue().userChangeProfileData,
+        data: {
+          "full_name": newName,
+          "email": newEmail,
+          "gender": newGenders,
+        },
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
+  }
+
+  Future<Response> setProfilePicture(
+      {required String filePath,
+      required String fileName,
+      required String accessToken}) async {
+    var formData = FormData.fromMap(
+        {"photo": await MultipartFile.fromFile(fileName, filename: fileName)});
+    return _dio.put(
+      constantValue().userSetProfilePhoto,
+      data: formData,
+      options: Options(
+          contentType: 'multipart/form-data',
+          headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> deleteUserAccountServices(
+      {required String accessToken}) async {
+    return _dio.delete(constantValue().userDeleteAccount,
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
+  }
+
+  Future<Response> createOfficeReview(
+      {required ReviewModels requestedReviewModel,
+      required String accessToken}) async {
+    var formData = FormData.fromMap({
+      "comment": requestedReviewModel.reviewComment,
+      "score": requestedReviewModel.reviewRating,
+      "office_id": requestedReviewModel.reviewedOfficeId,
+    });
+    return _dio.post(
+      constantValue().createReview,
+      data: formData,
+      options: Options(
+          contentType: 'multipart/form-data',
+          headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
+
+  Future<Response> getAllReviewByUser({required String accessToken}) async {
+    return _dio.get(constantValue().getAllReviewsByUser,
+        options: Options(headers: {"Authorization": "Bearer " + accessToken}));
+  }
+
+  Future<Response> getAllReviewByOffice(
+      {required String accessTokens, required String officeId}) {
+    return _dio.get(constantValue().getReviewsByOfficeIdBaseUrl + officeId,
+        options: Options(headers: {"Authorization": "Bearer " + accessTokens}));
+  }
+
+  Future<Response> editOfficeReview(
+      {required ReviewModels requestedReviewModel,
+      required String accessToken,
+      required int requestedReviewId}) async {
+    var formData = FormData.fromMap({
+      "comment": requestedReviewModel.reviewComment,
+      "score": requestedReviewModel.reviewRating,
+      "office_id": requestedReviewModel.reviewedOfficeId,
+    });
+    return _dio.put(
+      constantValue().editReviewsBaseUrl + "$requestedReviewId",
+      data: formData,
+      options: Options(
+          contentType: 'multipart/form-data',
+          headers: {"Authorization": "Bearer " + accessToken}),
+    );
+  }
 }
 
 class SignService {
@@ -219,4 +335,37 @@ class SignService {
       },
     );
   }
+}
+
+Future<void> refreshTokenLoopSafety() async {
+  const secureStorage = FlutterSecureStorage();
+  String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
+  if (refreshToken != null) {
+    try {
+      Response responses = await Dio().post(
+        constantValue().userRefreshToken,
+        options: Options(headers: {"Authorization": "Bearer " + refreshToken}),
+      );
+      print(responses);
+      if (responses.statusCode == 200 || responses.statusCode == 201) {
+        print("refreshed");
+        await secureStorage.write(
+            key: "access_tokens_bs", value: responses.data["access_token"]);
+        await secureStorage.write(
+            key: "refresh_token_bs", value: responses.data["refresh_token"]);
+      }
+    } catch (e) {
+      print("gagal refresh");
+      destroyUserSession();
+    }
+  } else {
+    print("ga ada user aktif");
+    destroyUserSession();
+  }
+}
+
+Future<void> destroyUserSession() async {
+  const secureStorage = FlutterSecureStorage();
+  print("destroying this sessions");
+  await secureStorage.deleteAll();
 }

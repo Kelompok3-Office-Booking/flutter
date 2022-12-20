@@ -1,8 +1,12 @@
 import 'package:betterspace/src/model/data/sample_data.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/services/api_services.dart';
+import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
+import 'package:betterspace/src/view_model/review_viewmodel.dart';
+import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
@@ -33,6 +37,14 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
         Provider.of<OfficeViewModels>(context, listen: false);
     final providerOfficeListen =
         Provider.of<OfficeViewModels>(context, listen: true);
+    final providerOfTransaction =
+        Provider.of<TransactionViewmodels>(context, listen: false);
+    final providerOfTransactionListen =
+        Provider.of<TransactionViewmodels>(context, listen: true);
+    final providerOfReview =
+        Provider.of<ReviewViewmodels>(context, listen: false);
+    final providerOfReviewListern =
+        Provider.of<ReviewViewmodels>(context, listen: true);
 
     return Scaffold(
       appBar: AppBar(),
@@ -49,6 +61,14 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                         userPassword: "testtest2");
                   },
                   child: Text("login"),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () async {
+                    //login panggil method loginGetToken dan masukan parameter
+                    await refreshTokenLoopSafety();
+                  },
+                  child: Text("refresh"),
                 ),
                 Spacer(),
                 ElevatedButton(
@@ -165,7 +185,26 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                     style: TextStyle(fontSize: 10),
                   ),
                 ),
-                Spacer(),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                      providerOfTransaction.createTransactionRecords(
+                          requestedModels: CreateTransactionModels(
+                              transactionTotalPrice: 20000,
+                              transactionBookingTime: TransactionBookingTime(
+                                  checkInHour: "12:00",
+                                  checkInDate: "13/12/2022"),
+                              duration: 4,
+                              paymentMethodName: "BRI",
+                              selectedDrink: "ice tea",
+                              selectedOfficeId: 1));
+                    },
+                    child: Text("test create transaction",
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(fontSize: 10)),
+                  ),
+                ),
                 ElevatedButton(
                   onPressed: () {
                     //fetchOfficeAll hanya bisa digunakan ketika user sudah login
@@ -173,6 +212,128 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                         latitudes: "-6.1981045", longitudes: "106.100777");
                   },
                   child: Text("nearest office", style: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    if (providerClientListen.userModels == null) {
+                      print("no user profile exist");
+                    } else {
+                      providerOfTransaction.getTransactionByUser(
+                          userModels: providerClientListen.userModels!,
+                          ListOfAllOffice:
+                              providerOfficeListen.listOfAllOfficeModels);
+                    }
+                  },
+                  child: Text(
+                    "trans by user",
+                    style: TextStyle(fontSize: 10),
+                  ),
+                ),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: () async {
+                      //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                      await providerOfTransaction.getTransactionDetail(
+                          userModels: providerClientListen.userModels!,
+                          ListOfAllOffice:
+                              providerOfficeListen.listOfAllOfficeModels,
+                          requestedId: "46");
+                    },
+                    child: Text("trans by id",
+                        overflow: TextOverflow.clip,
+                        style: TextStyle(fontSize: 10)),
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOfTransaction.cancelUserTransactions(
+                        TransactionID: "46");
+                  },
+                  child: Text("cancel trans", style: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerClient.setUserProfilePicture(
+                        filePath: "", fileName: "");
+                  },
+                  child:
+                      Text("set profile pic", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    if (providerClientListen.userModels != null) {
+                      providerClient.updateProfileData(
+                          currentUserModels: providerClientListen.userModels!,
+                          newName: "hehe aja ga sih");
+                    }
+                  },
+                  child: Text("edit user", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerClient.deleteUserAccount();
+                  },
+                  child: Text("delete user", style: TextStyle(fontSize: 10)),
+                ),
+              ],
+            ),
+            Row(
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOfReview.createOfficeReviews(
+                        reviewComment: "hehe aja sih",
+                        rating: 4.5,
+                        officeId: 1);
+                  },
+                  child: Text("cr review", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () async {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    await providerOfReview.getReviewByUser();
+                  },
+                  child: Text("get rev user", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () {
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOfReview.getReviewByOffice(officeId: "1");
+                  },
+                  child: Text("get by ofc id", style: TextStyle(fontSize: 10)),
+                ),
+                Spacer(),
+                ElevatedButton(
+                  onPressed: () async {
+                    await providerOfReview.getReviewByOffice(officeId: "1");
+                    print(providerOfReviewListern.listOfReviewOffice.length);
+                    final currentReviewModel =
+                        providerOfReviewListern.listOfReviewOffice[0];
+                    //fetchOfficeAll hanya bisa digunakan ketika user sudah login
+                    providerOfReview.editOfficeReviews(
+                        newComment: "hehe aja sih",
+                        reviewId: currentReviewModel.reviewId ?? 1,
+                        currentReviewModel: currentReviewModel);
+                  },
+                  child: Text("edit", style: TextStyle(fontSize: 10)),
                 ),
               ],
             ),
@@ -400,6 +561,27 @@ class _TestingScreenAPIState extends State<TestingScreenAPI> {
                                 return Text(
                                     dataChunks.officeLocation.officeLatitude
                                         .toString(),
+                                    style: TextStyle(fontSize: 10));
+                              }));
+                        } else {
+                          return Text("no data");
+                        }
+                      }),
+                    ),
+                  ),
+                  Spacer(),
+                  Expanded(
+                    child: Consumer<TransactionViewmodels>(
+                      builder: ((context, value, child) {
+                        if (providerOfTransactionListen.allTransaction.length >
+                            0) {
+                          return ListView.builder(
+                              itemCount: providerOfTransactionListen
+                                  .allTransaction.length,
+                              itemBuilder: ((context, index) {
+                                final dataChunks = providerOfTransactionListen
+                                    .allTransaction[index];
+                                return Text(dataChunks.Status,
                                     style: TextStyle(fontSize: 10));
                               }));
                         } else {

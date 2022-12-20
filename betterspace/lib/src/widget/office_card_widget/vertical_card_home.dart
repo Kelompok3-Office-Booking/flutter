@@ -29,7 +29,7 @@ Widget verticalCardHome({
         right: 5,
         bottom: 10,
       ),
-      width: AdaptSize.screenWidth * .5,
+      width: AdaptSize.screenWidth * .54,
       decoration: BoxDecoration(
         color: MyColor.neutral900,
         borderRadius: BorderRadius.circular(16),
@@ -62,7 +62,7 @@ Widget verticalCardHome({
                   child: CardShimmerHomeLoading.verticalShimmerHome,
                 ),
                 errorWidget: (context, url, error) =>
-                    CardShimmerHomeLoading.verticalFailedLoadShimmer,
+                    CardShimmerHomeLoading.verticalFailedLoadShimmer(context),
               ),
 
               /// image space
@@ -74,8 +74,8 @@ Widget verticalCardHome({
                   children: [
                     /// ranting
                     Container(
-                      height: AdaptSize.screenHeight * .035,
-                      width: AdaptSize.screenHeight * .068,
+                      height: AdaptSize.screenWidth / 1000 * 80,
+                      width: AdaptSize.screenWidth / 1000 * 180,
                       alignment: Alignment.center,
                       padding: EdgeInsets.only(
                           left: AdaptSize.screenHeight * .005,
@@ -124,7 +124,7 @@ Widget verticalCardHome({
                     style: Theme.of(context)
                         .textTheme
                         .headline6!
-                        .copyWith(fontSize: AdaptSize.pixel16),
+                        .copyWith(fontSize: AdaptSize.pixel15),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -156,29 +156,11 @@ Widget verticalCardHome({
                         style: Theme.of(context)
                             .textTheme
                             .bodyText1!
-                            .copyWith(fontSize: AdaptSize.pixel12),
+                            .copyWith(fontSize: AdaptSize.pixel10),
                       ),
 
                       SizedBox(
-                        width: AdaptSize.screenHeight * .008,
-                      ),
-
-                      /// keterangan available
-                      SvgPicture.asset('assets/svg_assets/available.svg',
-                          height: AdaptSize.pixel18),
-                      const SizedBox(
-                        width: 1,
-                      ),
-                      Text(
-                        officePersonCapacity,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: AdaptSize.pixel12),
-                      ),
-
-                      SizedBox(
-                        width: AdaptSize.screenHeight * .008,
+                        width: AdaptSize.screenWidth * .004,
                       ),
 
                       /// keteranganan jarak
@@ -186,17 +168,31 @@ Widget verticalCardHome({
                         'assets/svg_assets/ruler.svg',
                         height: AdaptSize.pixel18,
                       ),
-                      const SizedBox(
-                        width: 1,
+                      Text(
+                        '${officeArea}m2',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontSize: AdaptSize.pixel10),
+                      ),
+
+                      SizedBox(
+                        width: AdaptSize.screenWidth * .004,
+                      ),
+
+                      /// keterangan available
+                      SvgPicture.asset(
+                        'assets/svg_assets/available.svg',
+                        height: AdaptSize.pixel18,
                       ),
                       Flexible(
                         fit: FlexFit.loose,
                         child: Text(
-                          officeArea,
+                          officePersonCapacity,
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!
-                              .copyWith(fontSize: AdaptSize.pixel12),
+                              .copyWith(fontSize: AdaptSize.pixel10),
                         ),
                       ),
                     ],

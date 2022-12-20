@@ -1,4 +1,3 @@
-import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ Widget partialRoundedCard({
 }) {
   return Container(
     decoration: BoxDecoration(
+      color: MyColor.neutral900,
       borderRadius: BorderRadius.only(
         topLeft: Radius.circular(cardTopLeftRadius ?? 0),
         topRight: Radius.circular(cardTopRightRadius ?? 0),
@@ -29,17 +29,6 @@ Widget partialRoundedCard({
         ),
       ],
     ),
-    child: Container(
-      decoration: BoxDecoration(
-        color: MyColor.neutral900,
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(cardTopLeftRadius ?? 0),
-          topRight: Radius.circular(cardTopRightRadius ?? 0),
-          bottomLeft: Radius.circular(cardBottomLeftRadius ?? 0),
-          bottomRight: Radius.circular(cardBottomRightRadius ?? 0),
-        ),
-      ),
-      child: childWidgets,
-    ),
+    child: childWidgets
   );
 }

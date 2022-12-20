@@ -4,12 +4,12 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class LoadingWidget {
   /// white loading color
-  static Widget whiteButtonLoading = SpinKitSpinningLines(
+  static Widget whiteButtonLoading = SpinKitFadingCircle(
     color: MyColor.whiteColor,
     size: 45,
   );
 
-  static Widget darkBlueButtonLoading = SpinKitSpinningLines(
+  static Widget darkBlueButtonLoading = SpinKitFadingCircle(
     color: MyColor.secondary400,
     size: 50,
   );

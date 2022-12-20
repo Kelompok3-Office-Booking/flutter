@@ -1,26 +1,33 @@
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
-import 'package:betterspace/src/view_model/transaction_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/custom_radio_button.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
-import 'package:betterspace/src/utils/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class PaymentMetodScreen extends StatelessWidget {
   final String officeId;
+  final TransactionFormModels checkoutForms;
+  final String durationTimeUnit;
 
-  const PaymentMetodScreen({Key? key, required this.officeId})
-      : super(key: key);
+  const PaymentMetodScreen({
+    Key? key,
+    required this.officeId,
+    required this.checkoutForms,
+    required this.durationTimeUnit,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    ValueNotifier<PaymentMetodEnum> radPaymentVal =
-        ValueNotifier<PaymentMetodEnum>(PaymentMetodEnum.qris);
-    final transactionsMetod =
-        Provider.of<TransactionViewModel>(context, listen: false);
+    final listOfPaymentModels = PaymentModels().listOfAvailablePaymentMethod;
+    ValueNotifier<int> radPaymentVal = ValueNotifier<int>(0);
+    debugPrint("calculated price : ${checkoutForms.transactionTotalPrice}");
 
     return Scaffold(
       appBar: defaultAppbarWidget(
@@ -29,10 +36,10 @@ class PaymentMetodScreen extends StatelessWidget {
             context.read<NavigasiViewModel>().navigasiPop(context);
           },
           isCenterTitle: false,
-          titles: 'Payment Metod'),
-      body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        child: Padding(
+          titles: 'Payment Method'),
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: Padding(
           padding: EdgeInsets.only(
             left: AdaptSize.screenWidth * .016,
             right: AdaptSize.screenWidth * .016,
@@ -97,18 +104,10 @@ class PaymentMetodScreen extends StatelessWidget {
                           const Spacer(),
 
                           /// qris value
-                          ValueListenableBuilder<PaymentMetodEnum>(
-                            valueListenable: radPaymentVal,
-                            builder: ((context, values, child) {
-                              return Radio<PaymentMetodEnum>(
-                                activeColor: Colors.deepPurple.shade600,
-                                value: transactionsMetod.virtualAccountMetod,
-                                groupValue: values,
-                                onChanged: ((value) {
-                                  radPaymentVal.value = value!;
-                                }),
-                              );
-                            }),
+                          customRadioButton(
+                              context: context,
+                              customRadioController: radPaymentVal,
+                              controlledIdValue: radPaymentVal.value,
                           ),
                         ],
                       )
@@ -145,8 +144,9 @@ class PaymentMetodScreen extends StatelessWidget {
                         width: double.infinity,
                         child: ListView.builder(
                             physics: const NeverScrollableScrollPhysics(),
-                            itemCount: transactionsMetod.itemTransaction.length,
+                            itemCount: listOfPaymentModels.length - 1,
                             itemBuilder: (context, index) {
+                              int formattedIndex = index + 1;
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
@@ -156,8 +156,8 @@ class PaymentMetodScreen extends StatelessWidget {
                                     mainAxisAlignment: MainAxisAlignment.start,
                                     children: [
                                       Image.asset(
-                                        transactionsMetod.itemTransaction[index]
-                                            [0],
+                                        listOfPaymentModels[formattedIndex]
+                                            .paymentMethodImageSlug,
                                         height: AdaptSize.screenHeight * .03,
                                         width: AdaptSize.screenHeight * .05,
                                       ),
@@ -165,8 +165,8 @@ class PaymentMetodScreen extends StatelessWidget {
                                         width: AdaptSize.screenWidth * .016,
                                       ),
                                       Text(
-                                        transactionsMetod.itemTransaction[index]
-                                            [1],
+                                        listOfPaymentModels[formattedIndex]
+                                            .paymentMethodName,
                                         style: Theme.of(context)
                                             .textTheme
                                             .bodyText2!
@@ -178,20 +178,10 @@ class PaymentMetodScreen extends StatelessWidget {
                                       const Spacer(),
 
                                       ///bank transfer value
-                                      ValueListenableBuilder<PaymentMetodEnum>(
-                                        valueListenable: radPaymentVal,
-                                        builder: ((context, values, child) {
-                                          return Radio<PaymentMetodEnum>(
-                                            activeColor:
-                                                Colors.deepPurple.shade600,
-                                            value: transactionsMetod
-                                                .bankTransferMetod[index],
-                                            groupValue: values,
-                                            onChanged: ((value) {
-                                              radPaymentVal.value = value!;
-                                            }),
-                                          );
-                                        }),
+                                      customRadioButton(
+                                        context: context,
+                                        customRadioController: radPaymentVal,
+                                        controlledIdValue: formattedIndex,
                                       ),
                                     ],
                                   ),
@@ -206,15 +196,28 @@ class PaymentMetodScreen extends StatelessWidget {
                 ),
               ),
 
-              SizedBox(
-                height: AdaptSize.pixel30,
-              ),
+              const Spacer(),
 
               buttonWidget(
                 onPressed: () {
+                  debugPrint(radPaymentVal.value.toString());
                   context.read<NavigasiViewModel>().navigasiToPaymentDetail(
-                        context,
-                        officeId,
+                        context: context,
+                        officeId: officeId,
+                        bookingForm: CreateTransactionModels(
+                            officeData: checkoutForms.officeData,
+                            transactionTotalPrice:
+                                checkoutForms.transactionTotalPrice,
+                            transactionBookingTime:
+                                checkoutForms.transactionBookingTime,
+                            duration: checkoutForms.duration,
+                            paymentMethodName:
+                                listOfPaymentModels[radPaymentVal.value]
+                                    .paymentMethodName,
+                            selectedDrink: checkoutForms.selectedDrink,
+                            selectedOfficeId: checkoutForms.selectedOfficeId),
+                        paymentMethodIndex: radPaymentVal.value,
+                        durationTimeUnit: durationTimeUnit,
                       );
                 },
                 sizeWidth: double.infinity,

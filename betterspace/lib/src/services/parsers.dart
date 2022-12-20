@@ -1,6 +1,9 @@
 //do custom parsing here
-
+import 'package:betterspace/src/model/data/promo_data.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/model/promo_model.dart';
+import 'package:betterspace/src/model/review_model/review_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/utils/custom_icons.dart';
 import 'package:betterspace/src/utils/enums.dart';
@@ -14,23 +17,136 @@ String positionRequestFormatter(
   return "lat=" + latitude + "&long=" + longitude;
 }
 
+DateTime? parseApiFormatDateTime({required String apiFormattedDateTime}) {
+  print(apiFormattedDateTime + "hehehe");
+  if (apiFormattedDateTime.length > 3) {
+    var splitedDate = apiFormattedDateTime.split("-");
+    String day = splitedDate[0];
+    String month = splitedDate[1];
+    String year = splitedDate[2];
+    String time = "00:00:00";
+    String formattedDateString = year + month + day + " " + time;
+    return DateTime.parse(formattedDateString);
+  }
+}
+
+DateTime? parseApiFormatDateTime3({required String apiFormattedDateTime}) {
+  print(apiFormattedDateTime + "hehehe");
+  if (apiFormattedDateTime.length > 3) {
+    var currentDate = apiFormattedDateTime.split(" ");
+    var splitedDate = currentDate[0].split("-");
+    String day = splitedDate[0];
+    String month = splitedDate[1];
+    String year = splitedDate[2];
+    String time = "00:00:00";
+    String formattedDateString = year + month + day + " " + time;
+    return DateTime.parse(formattedDateString);
+  }
+}
+
+UserTransaction? parseCreateTransactionToUserTransaction(
+    {CreateTransactionModels? requestedModel,
+    required UserModel usedUserModel}) {
+  if (requestedModel != null) {
+    final paymentModel = PaymentModels().listOfAvailablePaymentMethod;
+    PaymentMenthodModel? selectedPayment;
+    UserTransaction? selectedModel;
+    paymentModel.forEach((element) {
+      if (element.paymentMethodName == requestedModel.paymentMethodName) {
+        selectedPayment = element;
+      }
+    });
+    return selectedModel = UserTransaction(
+        officeData: requestedModel.officeData,
+        bookingId: 999,
+        bookingDuration: requestedModel.duration,
+        bookingTime: requestedModel.transactionBookingTime,
+        bookingOfficePrice: requestedModel.transactionTotalPrice,
+        Drink: requestedModel.selectedDrink,
+        Status: "on process",
+        paymentMethod: selectedPayment ?? paymentModel.last,
+        userData: usedUserModel);
+  } else {
+    return null;
+  }
+}
+
+DateTime? parseApiFormatDateTime2({required String apiFormattedDateTime}) {
+  if (apiFormattedDateTime.length > 3) {
+    var splitedDate = apiFormattedDateTime.split("/");
+    String day = splitedDate[0];
+    String month = splitedDate[1];
+    String year = splitedDate[2];
+    String time = "00:00:00";
+    String formattedDateString = year + month + day + " " + time;
+    return DateTime.parse(formattedDateString);
+  }
+}
+
+TransactionBookingTime dateTimeParsers(
+    {required int selectedHours,
+    required DateTime selectedDate,
+    required int duration}) {
+  String checkInHourFormatted = selectedHours < 10 && selectedHours >= 0
+      ? ("0$selectedHours:00")
+      : ("$selectedHours:00");
+  String checkOutHourFormatted =
+      (selectedHours + duration) < 10 && (selectedHours + duration) >= 0
+          ? ("0${(selectedHours + duration)}:00")
+          : ("${(selectedHours + duration)}:00");
+  String dayFormatted = selectedDate.day < 10 && selectedDate.day >= 0
+      ? "0${selectedDate.day}"
+      : "${selectedDate.day}";
+  String monthFormatted = selectedDate.month < 10 && selectedDate.month >= 0
+      ? "0${selectedDate.month}"
+      : "${selectedDate.month}";
+  String dateFormatted = "$dayFormatted/$monthFormatted/${selectedDate.year}";
+  print("datetime parse done");
+  print(dateFormatted + checkInHourFormatted);
+  return TransactionBookingTime(
+      checkInHour: checkInHourFormatted,
+      checkOutHour: checkOutHourFormatted,
+      checkInDate: dateFormatted,
+      checkInDateTime: selectedDate);
+}
+
+int calculateTotalPrice({
+  required double basePrice,
+  required int duration,
+  int? discount,
+}) {
+  int totalPrice =
+      ((basePrice * duration) - ((basePrice / 100) * (discount ?? 0))).toInt();
+  return ((totalPrice + ((totalPrice / 100) * 11).round()) + 10000);
+}
+
 //list iterator and filter
 //office list iterator
 OfficeModels? officeModelFilterByOfficeId(
     {required List<OfficeModels> listOfModels,
     required String requestedOfficeId}) {
   OfficeModels? tempModels;
-  print("coba parse");
+  print("coba parse all office");
   listOfModels.forEach((element) {
     if (element.officeID == requestedOfficeId) {
       print("parse berhasil");
-      print("requested id = " + requestedOfficeId);
-      print("get target id " + element.officeID);
-      print(element.officeLocation.city);
+
       tempModels = element;
     }
   });
   return tempModels;
+}
+
+PromoModel? filterPromoByCode({required String promoCode}) {
+  final listOfPromo = getListOfPromo();
+  PromoModel? filteredPromo;
+  listOfPromo.forEach((element) {
+    if (element.voucerCode == promoCode) {
+      print("discount found");
+      filteredPromo = element;
+    }
+  });
+  return filteredPromo;
 }
 
 //gender enums to string parser
@@ -251,4 +367,72 @@ OfficeModels singleOfficeModelParser(Map<String, dynamic> jsonResponse) {
           reviewHelpRateCount: 99 + 1 * 2),
     ],
   );
+}
+
+//transaction parser
+PaymentMenthodModel? paymentMenthodModelFilter(
+    {required String paymentMethodName}) {
+  PaymentMenthodModel? PaymentMenthodModelFinalize;
+  PaymentModels().listOfAvailablePaymentMethod.forEach((element) {
+    if (element.paymentMethodName == paymentMethodName) {
+      PaymentMenthodModelFinalize = element;
+    }
+  });
+  return PaymentMenthodModelFinalize;
+}
+
+UserTransaction userTransactionParsers(
+    {required Map<String, dynamic> jsonResponse,
+    required UserModel requestedUserModel,
+    required List<OfficeModels> listOfficeModels}) {
+  return UserTransaction(
+      bookingId: jsonResponse["id"],
+      bookingDuration: jsonResponse["duration"],
+      bookingTime: TransactionBookingTime(
+          checkInHour: jsonResponse["check_in"]["time"],
+          checkInDate: jsonResponse["check_in"]["date"]),
+      bookingOfficePrice: jsonResponse["price"],
+      Drink: jsonResponse["drink"],
+      Status: jsonResponse["status"],
+      paymentMethod: paymentMenthodModelFilter(
+              paymentMethodName: jsonResponse["payment_method"]) ??
+          PaymentModels().listOfAvailablePaymentMethod.last,
+      userData: requestedUserModel,
+      officeData: officeModelFilterByOfficeId(
+          listOfModels: listOfficeModels,
+          requestedOfficeId: (jsonResponse["office"]["office_id"]).toString()));
+}
+
+List<UserTransaction> listedUserTransactionParser(
+    {required List requestedResponses,
+    required UserModel requestedUserModel,
+    required List<OfficeModels> listOfOfficeModels}) {
+  List<UserTransaction> finalizeParser = [];
+  requestedResponses.forEach((element) {
+    finalizeParser.add(userTransactionParsers(
+        jsonResponse: element,
+        requestedUserModel: requestedUserModel,
+        listOfficeModels: listOfOfficeModels));
+  });
+  return finalizeParser;
+}
+
+ReviewModels reviewModelParser(Map<String, dynamic> jsonResponse) {
+  print(jsonResponse["created_at"]);
+  return ReviewModels(
+      reviewComment: jsonResponse["comment"],
+      reviewRating: jsonResponse["score"].toDouble(),
+      reviewedOfficeId: jsonResponse["office"]["office_id"],
+      reviewId: jsonResponse["id"],
+      userId: jsonResponse["user"]["user_id"],
+      createdAt: parseApiFormatDateTime3(
+          apiFormattedDateTime: jsonResponse["created_at"]));
+}
+
+List<ReviewModels> listOfReviewModelParser({required List listOfResponse}) {
+  List<ReviewModels> parsedList = [];
+  listOfResponse.forEach((element) {
+    parsedList.add(reviewModelParser(element));
+  });
+  return parsedList;
 }

@@ -18,6 +18,10 @@ class constantValue {
       "https://api-better-space-staging.herokuapp.com/api/v1/logout";
   String userSetProfilePhoto =
       "https://api-better-space-staging.herokuapp.com/api/v1/profile/photo";
+  String userChangeProfileData =
+      "https://api-better-space-staging.herokuapp.com/api/v1/profile";
+  String userDeleteAccount =
+      "https://api-better-space-staging.herokuapp.com/api/v1/profile";
 
   //office endpoint
   String getAllOffice =
@@ -42,4 +46,31 @@ class constantValue {
       "https://api-better-space-staging.herokuapp.com/api/v1/offices/title?search=";
   String getNearestOfficeBaseUrl =
       "https://api-better-space-staging.herokuapp.com/api/v1/offices/nearest?";
+
+  //Transaction Endpoint
+  String createTransactionRecord =
+      "https://api-better-space-staging.herokuapp.com/api/v1/transactions/details";
+  String getAllTransactionByUser =
+      "https://api-better-space-staging.herokuapp.com/api/v1/transactions";
+  String getTransactionDetails =
+      "https://api-better-space-staging.herokuapp.com/api/v1/transactions/details/";
+
+  //cancel endpoint need o be tampered with transactionId/cancel
+  String cancelTransactionByIdBaseUrl =
+      "https://api-better-space-staging.herokuapp.com/api/v1/transactions/details/";
+
+  //Google maps API key
+  String gmapApiKey = 'AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k';
+
+  //Reviews Endpoint
+  String createReview =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review/details";
+  String getAllReviewsByUser =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review";
+  String editReviewsBaseUrl =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review/details/";
+  String getReviewDetailBaseUrl =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review/details/";
+  String getReviewsByOfficeIdBaseUrl =
+      "https://api-better-space-staging.herokuapp.com/api/v1/review/details/office/";
 }

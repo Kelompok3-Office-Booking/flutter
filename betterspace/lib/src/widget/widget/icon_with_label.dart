@@ -28,7 +28,7 @@ class IconWithLabel {
         Text(
           labelText,
           style: textStyles ??
-              (Theme.of(contexts).textTheme.bodyMedium!.copyWith(
+              (Theme.of(contexts).textTheme.bodyText1!.copyWith(
                     color: fontColor ?? MyColor.neutral100,
                     fontSize: fontSizes ?? AdaptSize.pixel14,
                   )),

@@ -1,20 +1,25 @@
 import 'dart:async';
+import 'package:betterspace/src/dummy_data/transaction_data/transaction_models.dart';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/model/transaction_model/transaction_models.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/login_screen.dart';
 import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart';
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
 import 'package:betterspace/src/screen/menu/account/setting_item_screen/term_condition_screen.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/payment_metod_screen.dart';
-import 'package:betterspace/src/screen/menu/home/filter_search_screen.dart';
+import 'package:betterspace/src/screen/menu/home/office_filter/filter_by_keyword.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
+import 'package:betterspace/src/screen/menu/home/office_filter/filter_by_selection.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
-import 'package:betterspace/src/screen/menu/transaksi/checkout_screen.dart';
-import 'package:betterspace/src/screen/menu/transaksi/detail_order.dart';
+import 'package:betterspace/src/screen/menu/home/detail_office/checkout_screen.dart';
+import 'package:betterspace/src/screen/menu/transaksi/process_detail_order.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/office_detail_screen.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/payment_detail_screen.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/success_payment_screen.dart';
+import 'package:betterspace/src/widget/booking_widget/booking_status_widget.dart';
+import 'package:betterspace/src/widget/booking_widget/info_onprocessed_widget.dart';
 import 'package:betterspace/src/widget/widget/google_maps.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -139,7 +144,7 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (contex) => settingItem,
+        builder: (context) => settingItem,
       ),
     );
   }
@@ -187,12 +192,20 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi open google maps
-  void navigasiToPaymentDetail(context, String officeId) {
+  void navigasiToPaymentDetail(
+      {required BuildContext context,
+      required String officeId,
+      required CreateTransactionModels bookingForm,
+      required int paymentMethodIndex,
+      required String durationTimeUnit}) {
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (context) => PaymentDetailScreen(
           officeId: officeId,
+          bookingForms: bookingForm,
+          paymentMethodPointerIndex: paymentMethodIndex,
+          durationTimeUnits: durationTimeUnit,
         ),
       ),
     );
@@ -200,11 +213,15 @@ class NavigasiViewModel with ChangeNotifier {
 
   /// belum final
   /// navigasi dari detail payment ke success payment
-  void navigasiSuccessPayment(context) {
+  void navigasiSuccessPayment(
+      {required BuildContext context,
+      required CreateTransactionModels requestedTransactionModel}) {
     Navigator.pushAndRemoveUntil(
         context,
         CupertinoModalPopupRoute(
-            builder: (context) => const SuccessPaymentScreen()),
+            builder: (context) => SuccessPaymentScreen(
+                  requestedTransactionModels: requestedTransactionModel,
+                )),
         (route) => false);
 
     notifyListeners();
@@ -223,7 +240,7 @@ class NavigasiViewModel with ChangeNotifier {
         Navigator.of(context).push(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondAnimation) =>
-                const FilterSearchScreen(),
+                const KeywordFilterScreen(),
             transitionsBuilder: (context, animation, secondAnimation, child) =>
                 FadeTransition(
               opacity: animation,
@@ -263,11 +280,20 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi success screen to detail order
-  void navigasiToDetailOrder(BuildContext context) {
+  void navigasiToDetailOrder(
+      {required BuildContext context,
+      UserTransaction? requestedModel,
+      required bool isNewTransaction,
+      CreateTransactionModels? requestedCreateTransactionModel}) {
     Navigator.push(
       context,
       CupertinoPageRoute(
-        builder: (context) => const DetailOrderScreens(),
+        builder: (context) => ProcessDetailOrderScreens(
+          isNewTransaction: isNewTransaction,
+          statusTransaction: BookingStatusWidget.statusOnProcess(context),
+          requestedModels: requestedModel,
+          requestedCreateTransactionModel: requestedCreateTransactionModel,
+        ),
       ),
     );
     notifyListeners();
@@ -305,12 +331,18 @@ class NavigasiViewModel with ChangeNotifier {
   }
 
   /// navigasi to payment method
-  void navigasiToPaymentMetod(BuildContext context, String officeId) {
+  void navigasiToPaymentMetod(
+      {required BuildContext context,
+      required String officeId,
+      required TransactionFormModels checkoutForm,
+      required String durationTimeUnit}) {
     Navigator.push(
       context,
       CupertinoPageRoute(
         builder: (context) => PaymentMetodScreen(
+          checkoutForms: checkoutForm,
           officeId: officeId,
+          durationTimeUnit: durationTimeUnit,
         ),
       ),
     );
@@ -321,6 +353,21 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => routeOffice),
+    );
+  }
+
+  /// navigasi search by item selected
+  void navigasiToSearchBySelected(BuildContext context, String officeLocation,
+      String officeType, String dateSelected) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => SelectedFilterScreen(
+          officeLocation: officeLocation,
+          officeType: officeType,
+          dateSelected: dateSelected,
+        ),
+      ),
     );
   }
 }

@@ -1,12 +1,15 @@
+import 'package:betterspace/src/screen/error/no_connection_screen.dart';
+import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
+import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
-import 'package:betterspace/src/widget/home_widget/search_screen_widget/amount_guest_widget.dart';
-import 'package:betterspace/src/widget/home_widget/search_screen_widget/search_map_widget.dart';
+import 'package:betterspace/src/widget/home_widget/search_screen_widget/list_radio_button.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
+import 'package:betterspace/src/widget/widget/horizontal_filter_location.dart';
 import 'package:betterspace/src/widget/widget/read_only_form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -22,6 +25,20 @@ class SearchSpaceScreen extends StatefulWidget {
 class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
   final TextEditingController _searchController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
+  ValueNotifier<String> stringOfficeTypeVal =
+      ValueNotifier<String>('coworking space');
+  ValueNotifier<String> stringOfficeLocationVal =
+      ValueNotifier<String>('South Jakarta');
+
+  @override
+  void initState() {
+    super.initState();
+    final officeProvider =
+        Provider.of<OfficeViewModels>(context, listen: false);
+    Future.delayed(Duration.zero, () {
+      officeProvider.fetchAllOffice();
+    });
+  }
 
   @override
   void dispose() {
@@ -41,182 +58,213 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
         isCenterTitle: false,
         titles: 'Search',
       ),
-      body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        child: Padding(
-          padding: EdgeInsets.only(
-            left: AdaptSize.screenWidth * .016,
-            right: AdaptSize.screenWidth * .016,
-          ),
+      body: NetworkAware(
+        offlineChild: const NoConnectionScreen(),
+        onlineChild: SingleChildScrollView(
+          physics: const ScrollPhysics(),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
-                elevation: 2.5,
-                color: MyColor.neutral900,
-                shadowColor: MyColor.grayLightColor.withOpacity(.4),
-                child: Padding(
-                  padding: EdgeInsets.only(
-                    left: AdaptSize.screenWidth * .008,
-                    bottom: AdaptSize.screenHeight * .022,
-                    top: AdaptSize.screenHeight * .022,
-                    right: AdaptSize.screenWidth * .008,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'With whom did you come here ?',
-                        style: Theme.of(context).textTheme.headline6!.copyWith(
-                              fontSize: AdaptSize.pixel16,
-                            ),
-                      ),
-
-                      /// text field
-                      searchPlace(
-                        /// search field
-                        context: context,
-                        margin: EdgeInsets.only(
-                          top: AdaptSize.screenHeight * 0.016,
-                          bottom: AdaptSize.screenHeight * 0.016,
-                        ),
-                        hintText: 'Mau kerja dimana hari ini ?',
-                        controller: _searchController,
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: MyColor.darkColor.withOpacity(.8),
-                        ),
-                        onTap: () {
-                          context
-                              .read<NavigasiViewModel>()
-                              .navigasiToFilterSearch(context);
-                        },
-                        readOnly: true,
-                      ),
-
-                      /// list map search
-                      searchMapWidget(),
-                    ],
-                  ),
-                ),
-              ),
-
-              SizedBox(
-                height: AdaptSize.screenHeight * 0.034,
-              ),
-
-              /// date picker
-              Container(
-                height: AdaptSize.screenWidth / 1000 * 260,
-                width: double.infinity,
-                padding: EdgeInsets.all(AdaptSize.screenHeight * .01),
-                decoration: BoxDecoration(
-                  color: MyColor.neutral900,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      offset: const Offset(1, 2),
-                      color: MyColor.grayLightColor.withOpacity(.4),
-                      blurRadius: 3,
-                    ),
-                  ],
+              Padding(
+                padding: EdgeInsets.only(
+                  left: AdaptSize.screenWidth * .016,
+                  right: AdaptSize.screenWidth * .016,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'When you\'r come ?',
-                      style: Theme.of(context)
-                          .textTheme
-                          .headline6!
-                          .copyWith(fontSize: AdaptSize.pixel16),
+                    Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 2.5,
+                      color: MyColor.neutral900,
+                      shadowColor: MyColor.grayLightColor.withOpacity(.4),
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                          left: AdaptSize.screenWidth * .008,
+                          bottom: AdaptSize.screenHeight * .022,
+                          top: AdaptSize.screenHeight * .022,
+                          right: AdaptSize.screenWidth * .008,
+                        ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'With whom did you come here ?',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .headline6!
+                                  .copyWith(
+                                    fontSize: AdaptSize.pixel16,
+                                  ),
+                            ),
+
+                            /// text field
+                            searchPlace(
+                              /// search field
+                              context: context,
+                              margin: EdgeInsets.only(
+                                top: AdaptSize.screenHeight * 0.016,
+                                bottom: AdaptSize.screenHeight * 0.016,
+                              ),
+                              hintText: 'Search Office',
+
+                              controller: _searchController,
+                              prefixIcon: Icon(
+                                Icons.search,
+                                color: MyColor.darkColor.withOpacity(.8),
+                              ),
+                              onTap: () {
+                                context
+                                    .read<NavigasiViewModel>()
+                                    .navigasiToFilterSearch(context);
+                              },
+                              readOnly: true,
+                            ),
+
+                            /// list of all office by location
+                            SizedBox(
+                              height: AdaptSize.screenHeight * 0.193,
+                              width: double.infinity,
+                              child: horizontalFilterLocation(
+                                contexts: context,
+                                isSelected: stringOfficeLocationVal,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
 
                     SizedBox(
-                      height: AdaptSize.screenHeight * 0.014,
+                      height: AdaptSize.screenHeight * 0.034,
                     ),
 
-                    /// date text field
-                    Flexible(
-                      fit: FlexFit.loose,
-                      child: readOnlyWidget(
-                        controller: _dateController,
-                        enblBorderRadius: 16,
-                        errBorderRadius: 16,
-                        fcsBorderRadius: 16,
-                        hint: 'day, date month year',
-                        textStyle:
-                            Theme.of(context).textTheme.bodyText1!.copyWith(
-                                  color: MyColor.grayLightColor,
-                                ),
-                        onTap: () {
-                          pickedDate(context);
-                        },
-                        suffixIcon: Icon(
-                          CupertinoIcons.calendar,
-                          color: MyColor.grayLightColor,
-                          size: AdaptSize.pixel24,
-                        ),
+                    /// date picker
+                    Container(
+                      height: AdaptSize.screenWidth / 1000 * 310,
+                      width: double.infinity,
+                      padding: EdgeInsets.all(AdaptSize.screenHeight * .01),
+                      decoration: BoxDecoration(
+                        color: MyColor.neutral900,
+                        borderRadius: BorderRadius.circular(16),
+                        boxShadow: [
+                          BoxShadow(
+                            offset: const Offset(1, 2),
+                            color: MyColor.grayLightColor.withOpacity(.4),
+                            blurRadius: 3,
+                          ),
+                        ],
                       ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'When you\'r come ?',
+                            style: Theme.of(context)
+                                .textTheme
+                                .headline6!
+                                .copyWith(fontSize: AdaptSize.pixel16),
+                          ),
+
+                          SizedBox(
+                            height: AdaptSize.screenHeight * 0.014,
+                          ),
+
+                          /// date text field
+                          Flexible(
+                            fit: FlexFit.loose,
+                            child: readOnlyWidget(
+                              controller: _dateController,
+                              enblBorderRadius: 16,
+                              errBorderRadius: 16,
+                              fcsBorderRadius: 16,
+                              hint: 'day, date month year',
+                              textStyle: Theme.of(context)
+                                  .textTheme
+                                  .bodyText1!
+                                  .copyWith(
+                                    color: MyColor.grayLightColor,
+                                  ),
+                              onTap: () {
+                                pickedDate(context);
+                              },
+                              suffixIcon: Icon(
+                                CupertinoIcons.calendar,
+                                color: MyColor.grayLightColor,
+                                size: AdaptSize.pixel24,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(
+                      height: AdaptSize.screenHeight * 0.034,
+                    ),
+
+                    /// list of value button
+                    listValueButton(
+                      context: context,
+                      stringOfficeTypeVal: stringOfficeTypeVal,
+                      controllerValue1: 'coworking space',
+                      controllerValue2: 'meeting room',
+                      controllerValue3: 'office',
+                    ),
+
+                    SizedBox(
+                      height: AdaptSize.pixel18,
                     ),
                   ],
                 ),
               ),
 
-              SizedBox(
-                height: AdaptSize.screenHeight * 0.034,
-              ),
-
-              Padding(
-                padding: EdgeInsets.only(
-                  left: AdaptSize.screenWidth * .025,
-                  bottom: AdaptSize.screenHeight * .022,
-                ),
-                child: Text(
-                  'With whom did you come here ?',
-                  style: Theme.of(context)
-                      .textTheme
-                      .headline6!
-                      .copyWith(fontSize: AdaptSize.pixel16),
-                ),
-              ),
-
-              /// personality
-              amountGuestWidget(
-                context,
-                () {},
-                'Personality',
-                '',
-              ),
-
-              /// with friends
-              amountGuestWidget(
-                context,
-                () {},
-                'Meeting Room',
-                '10',
-              ),
-
               /// find place button
-              buttonWidget(
-                sizeheight: AdaptSize.screenHeight / 14,
-                sizeWidth: double.infinity,
-                onPressed: () {},
-                margin: EdgeInsets.only(
-                  left: AdaptSize.screenWidth * .025,
-                  right: AdaptSize.screenWidth * .025,
+              Container(
+                height: AdaptSize.screenWidth / 1000 * 200,
+                width: double.infinity,
+                padding: EdgeInsets.only(
+                  left: AdaptSize.pixel8,
+                  right: AdaptSize.pixel8,
+                  top: AdaptSize.pixel14,
+                  bottom: AdaptSize.pixel14,
                 ),
-                borderRadius: BorderRadius.circular(10),
-                backgroundColor: MyColor.darkBlueColor,
-                child: Text(
-                  'Find Place',
-                  style: Theme.of(context).textTheme.button!.copyWith(
-                        color: MyColor.whiteColor,
-                        fontSize: AdaptSize.screenHeight * 0.018,
-                      ),
+                decoration: BoxDecoration(
+                  color: MyColor.neutral800,
+                  borderRadius: const BorderRadius.only(
+                    topRight: Radius.circular(16),
+                    topLeft: Radius.circular(16),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                        color: MyColor.grayLightColor.withOpacity(.4),
+                        blurRadius: 3,
+                        blurStyle: BlurStyle.solid),
+                  ],
+                ),
+                child: buttonWidget(
+                  sizeheight: AdaptSize.pixel40,
+                  sizeWidth: double.infinity,
+                  onPressed: () {
+                    context
+                        .read<NavigasiViewModel>()
+                        .navigasiToSearchBySelected(
+                      context,
+                      stringOfficeLocationVal.value,
+                      stringOfficeTypeVal.value,
+                      _dateController.text.isNotEmpty ? _dateController.text : 'Date Unselected',
+                    );
+                  },
+                  borderRadius: BorderRadius.circular(10),
+                  backgroundColor: MyColor.darkBlueColor,
+                  child: Text(
+                    'Find Place',
+                    style: Theme.of(context).textTheme.button!.copyWith(
+                          color: MyColor.whiteColor,
+                          fontSize: AdaptSize.screenHeight * 0.018,
+                        ),
+                  ),
                 ),
               ),
             ],

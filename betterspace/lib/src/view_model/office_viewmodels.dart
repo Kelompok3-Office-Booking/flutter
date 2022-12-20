@@ -133,7 +133,7 @@ class OfficeViewModels with ChangeNotifier {
             await UserService().fetchMeetingRoom(accessToken: accessTokens);
 
         if (getResponse.statusCode == 200) {
-          print(getResponse.statusCode);
+          print(getResponse);
           _listOfMeetingRoom = officeModelParsers(getResponse.data["data"]);
           notifyListeners();
           isUserExist = true;
@@ -166,7 +166,7 @@ class OfficeViewModels with ChangeNotifier {
             await UserService().fetchCoworkingSpace(accessToken: accessTokens);
 
         if (getResponse.statusCode == 200) {
-          print(getResponse.statusCode);
+          print(getResponse);
           _listOfCoworkingSpace = officeModelParsers(getResponse.data["data"]);
           notifyListeners();
           isUserExist = true;
@@ -199,7 +199,7 @@ class OfficeViewModels with ChangeNotifier {
             await UserService().fetchOfficeRoom(accessToken: accessTokens);
 
         if (getResponse.statusCode == 200) {
-          print(getResponse.statusCode);
+          print(getResponse);
           _listOfOfficeRoom = officeModelParsers(getResponse.data["data"]);
           notifyListeners();
           isUserExist = true;
@@ -266,7 +266,7 @@ class OfficeViewModels with ChangeNotifier {
             .fetchOfficeByCity(accessToken: accessTokens, cityName: city);
 
         if (getResponse.statusCode == 200) {
-          print(getResponse.statusCode);
+          print(getResponse);
           _listOfOfficeByCity = officeModelParsers(getResponse.data["data"]);
           notifyListeners();
           isUserExist = true;

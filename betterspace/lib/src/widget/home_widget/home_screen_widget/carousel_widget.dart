@@ -39,8 +39,8 @@ Widget carouselWidget(context) {
     },
     options: CarouselOptions(
       height: AdaptSize.screenWidth / 2000 * 700,
-      aspectRatio: AdaptSize.screenWidth / 270 * 20,
-      viewportFraction: .7,
+      aspectRatio: AdaptSize.screenWidth / 1000 * 150,
+      viewportFraction: .72,
       autoPlay: true,
       autoPlayCurve: Curves.fastOutSlowIn,
       autoPlayInterval: const Duration(seconds: 3),

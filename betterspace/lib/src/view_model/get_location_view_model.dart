@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
+import 'package:betterspace/src/services/constant.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
@@ -24,7 +25,6 @@ class GetLocationViewModel with ChangeNotifier {
   late double? lng;
 
   LocationPermission? locationPermission;
-
 
   /// permission lokasi chekker
   Future checkAndGetPosition() async {
@@ -56,6 +56,7 @@ class GetLocationViewModel with ChangeNotifier {
     }
   }
 
+
   /// permission lokasi chekker
   Future permissionLocationGMap(context, OfficeModels officeId) async {
     bool serviceEnabled;
@@ -73,7 +74,7 @@ class GetLocationViewModel with ChangeNotifier {
           onPressed: () async {
             Provider.of<NavigasiViewModel>(context, listen: false)
                 .navigasiPop(context);
-            await GeolocatorPlatform.instance.requestPermission();
+            await Geolocator.openLocationSettings();
           });
     }
 
@@ -144,7 +145,7 @@ class GetLocationViewModel with ChangeNotifier {
     poly.PolylinePoints polylinePoints = poly.PolylinePoints();
     poly.PolylineResult result = await polylinePoints
         .getRouteBetweenCoordinates(
-      'AIzaSyA1MgLuZuyqR_OGY3ob3M52N46TDBRI_9k',
+      constantValue().gmapApiKey,
       poly.PointLatLng(
         posisi!.latitude,
         posisi!.longitude,
@@ -198,35 +199,29 @@ class GetLocationViewModel with ChangeNotifier {
   }
 
   /// string calculate distance
-  String calculateDistances(posLat, posLng,desLat, desLng) {
+  String? calculateDistances(posLat, posLng, desLat, desLng) {
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 -
         c((desLat - posLat) * p) / 2 +
-        c(posLat * p) *
-            c(desLat * p) *
-            (1 - c((desLng - posLng) * p)) /
-            2;
+        c(posLat * p) * c(desLat * p) * (1 - c((desLng - posLng) * p)) / 2;
     var dis = 12742 * asin(sqrt(a));
     return dis < 1
-        ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
-        : "${double.parse(dis.toStringAsFixed(1))} km";
+        ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]}m"
+        : "${double.parse(dis.toStringAsFixed(2))}km";
   }
 
   /// string calculate distance in home
-  String homeScreenCalculateDistances(posLat, posLng,desLat, desLng) {
+  String? homeScreenCalculateDistances(posLat, posLng, desLat, desLng) {
     var p = 0.017453292519943295;
     var c = cos;
     var a = 0.5 -
         c((desLat - posLat) * p) / 2 +
-        c(posLat * p) *
-            c(desLat * p) *
-            (1 - c((desLng - posLng) * p)) /
-            2;
+        c(posLat * p) * c(desLat * p) * (1 - c((desLng - posLng) * p)) / 2;
     var dis = 12742 * asin(sqrt(a));
     return dis < 1
-        ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
-        : "${double.parse(dis.toStringAsFixed(1))} km";
+        ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]}m"
+        : "${double.parse(dis.toStringAsFixed(1))}km";
   }
 
   /// detail lokasi

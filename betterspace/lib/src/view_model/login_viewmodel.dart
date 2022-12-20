@@ -1,11 +1,18 @@
+import 'dart:io';
+
 import 'package:betterspace/src/model/user_data/user_models.dart';
 import 'package:betterspace/src/services/api_services.dart';
 import 'package:betterspace/src/services/constant.dart';
 import 'package:betterspace/src/utils/enums.dart';
 import 'package:betterspace/src/services/parsers.dart';
+import 'package:betterspace/src/widget/dialog/custom_dialog.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:no_context_navigation/no_context_navigation.dart';
+
+final NavigationService navService = NavigationService();
 
 class LoginViewmodels with ChangeNotifier {
   UserModel? userModels;
@@ -16,7 +23,31 @@ class LoginViewmodels with ChangeNotifier {
   stateOfConnections apiLoginState = stateOfConnections.isDoingNothing;
   stateOfConnections apiProfileState = stateOfConnections.isDoingNothing;
   stateOfConnections apiLogoutState = stateOfConnections.isDoingNothing;
+  stateOfConnections profileSetterConnectionState =
+      stateOfConnections.isDoingNothing;
   var _dio = Dio();
+
+  File? _imageProfile;
+
+  get imageProfile => _imageProfile;
+
+  Future<void> pickImageProfile(
+      context, String title, Function()? onPressed) async {
+    final ImagePicker imagePicker = ImagePicker();
+    final XFile? pickImageProfile = await imagePicker.pickImage(
+      source: ImageSource.gallery,
+      imageQuality: 55,
+    );
+    _imageProfile = File(pickImageProfile!.path);
+    notifyListeners();
+    CustomDialog.singleActionDialog(
+        onPressed: onPressed,
+        // Provider.of<NavigasiViewModel>(context, listen: false)
+        // .navigasiPop(context),
+        context: context,
+        title: title,
+        imageAsset: 'assets/svg_assets/check_list.svg');
+  }
 
   logoutWithTokens() async {
     final _secureStorage = FlutterSecureStorage();
@@ -89,23 +120,32 @@ class LoginViewmodels with ChangeNotifier {
       print("the user token is : $accessTokens");
       apiLoginState = stateOfConnections.isReady;
       notifyListeners();
+      print("hehe");
     } else {
+      isUserExist == false;
+
       print("no user session exist");
     }
     notifyListeners();
   }
 
   getProfile() async {
+    apiProfileState = stateOfConnections.isStart;
+    notifyListeners();
     const secureStorage = FlutterSecureStorage();
     String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
     String? refreshTokens = await secureStorage.read(key: "refresh_token_bs");
     if (accessTokens != null) {
+      apiProfileState = stateOfConnections.isLoading;
+      notifyListeners();
       try {
         Response profResponse =
             await UserService().fetchProfile(accessTokens: accessTokens);
         print("fetch pertama : ${profResponse.statusCode}");
 
         if (profResponse.statusCode == 200) {
+          apiProfileState = stateOfConnections.isReady;
+          notifyListeners();
           userModels = userModelParser(
               profResponse.data,
               UserToken(
@@ -113,23 +153,94 @@ class LoginViewmodels with ChangeNotifier {
           print(profResponse.data["data"]['email'] + "fetch success");
         }
       } catch (e) {
+        apiProfileState = stateOfConnections.isFailed;
+        notifyListeners();
         print("error: $e");
       }
     } else {
+      apiProfileState = stateOfConnections.isFailed;
+      notifyListeners();
       print("no active user");
     }
     notifyListeners();
   }
 
-  refreshToken() async {
+  setUserProfilePicture(
+      {required String filePath, required String fileName}) async {
+    profileSetterConnectionState = stateOfConnections.isStart;
+    notifyListeners();
     const secureStorage = FlutterSecureStorage();
-    String? refreshToken = await secureStorage.read(key: "refresh_token_bs");
-    if (refreshToken != null) {
-      await UserService().refreshExpiredTokens();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
+      print("user exist : $accessTokens");
+      profileSetterConnectionState = stateOfConnections.isLoading;
+      notifyListeners();
+
+      Response response = await UserService().setProfilePicture(
+          filePath: filePath, fileName: fileName, accessToken: accessTokens);
+    }
+  }
+
+  deleteUserAccount() async {
+    apiProfileState = stateOfConnections.isStart;
+    notifyListeners();
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
+      print("user exist : $accessTokens");
+      apiProfileState = stateOfConnections.isLoading;
+      notifyListeners();
+      try {
+        Response response = await UserService()
+            .deleteUserAccountServices(accessToken: accessTokens);
+        print(response);
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          destroyActiveUser(secureStorage);
+          apiProfileState = stateOfConnections.isReady;
+        }
+      } on DioError catch (e) {
+        print("error : " + e.toString());
+      }
     } else {
+      apiProfileState = stateOfConnections.isFailed;
+      notifyListeners();
       print("no active user");
     }
+  }
+
+  updateProfileData(
+      {String? newName,
+      String? newEmail,
+      String? newGenders,
+      required UserModel currentUserModels}) async {
+    profileSetterConnectionState = stateOfConnections.isStart;
     notifyListeners();
+    const secureStorage = FlutterSecureStorage();
+    String? accessTokens = await secureStorage.read(key: "access_tokens_bs");
+    if (accessTokens != null) {
+      print("user exist : $accessTokens");
+      profileSetterConnectionState = stateOfConnections.isLoading;
+      notifyListeners();
+      try {
+        Response response = await UserService().changeProfileData(
+            newName: newName ?? currentUserModels.userProfileDetails.userName,
+            newEmail: newEmail ?? currentUserModels.userEmail,
+            newGenders:
+                newGenders ?? currentUserModels.userProfileDetails.userGender,
+            accessToken: accessTokens);
+        print(response);
+        profileSetterConnectionState = stateOfConnections.isReady;
+        notifyListeners();
+      } catch (e) {
+        profileSetterConnectionState = stateOfConnections.isFailed;
+        notifyListeners();
+        print("eror update data use : $e");
+      }
+    } else {
+      profileSetterConnectionState = stateOfConnections.isFailed;
+      notifyListeners();
+      print("no active user");
+    }
   }
 
   destroyActiveUser(FlutterSecureStorage flutterStorage) async {
@@ -138,6 +249,7 @@ class LoginViewmodels with ChangeNotifier {
     isUserExist = false;
     userModels = null;
     notifyListeners();
+    navService.pushNamedAndRemoveUntil("/firstPage");
   }
 
   resetLoginConnectionState() {
