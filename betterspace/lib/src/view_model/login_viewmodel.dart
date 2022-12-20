@@ -11,6 +11,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:no_context_navigation/no_context_navigation.dart';
+import 'package:uuid/uuid.dart';
 
 final NavigationService navService = NavigationService();
 
@@ -29,7 +30,9 @@ class LoginViewmodels with ChangeNotifier {
 
   File? _imageProfile;
 
-  get imageProfile => _imageProfile;
+  File? get imageProfile => _imageProfile;
+
+  late String pathImage;
 
   Future<void> pickImageProfile(
       context, String title, Function()? onPressed) async {
@@ -39,6 +42,11 @@ class LoginViewmodels with ChangeNotifier {
       imageQuality: 55,
     );
     _imageProfile = File(pickImageProfile!.path);
+
+    // pathImage = Uuid().v1();
+    pathImage = _imageProfile!.path;
+
+
     notifyListeners();
     CustomDialog.singleActionDialog(
         onPressed: onPressed,

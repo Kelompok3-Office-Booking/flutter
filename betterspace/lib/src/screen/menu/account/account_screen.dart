@@ -87,17 +87,21 @@ class _AccountScreenState extends State<AccountScreen> {
                             ),
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: value.userModels?.userProfileDetails
-                                              .userProfilePicture !=
-                                          "" &&
-                                      value.userModels?.userProfileDetails
-                                              .userProfilePicture !=
-                                          null
-                                  ? NetworkImage(value.userModels!
-                                      .userProfileDetails.userProfilePicture)
-                                  : const AssetImage(
-                                      'assets/image_assets/default_image_profile.png',
-                                    ) as ImageProvider,
+                              image: value.imageProfile != null
+                                  ? FileImage(value.imageProfile!)
+                                  : value.userModels?.userProfileDetails
+                                                  .userProfilePicture !=
+                                              "" &&
+                                          value.userModels?.userProfileDetails
+                                                  .userProfilePicture !=
+                                              null
+                                      ? NetworkImage(value
+                                          .userModels!
+                                          .userProfileDetails
+                                          .userProfilePicture)
+                                      : const AssetImage(
+                                          'assets/image_assets/default_image_profile.png',
+                                        ) as ImageProvider,
                             ),
                           ),
                         );
@@ -127,10 +131,15 @@ class _AccountScreenState extends State<AccountScreen> {
                                 value.pickImageProfile(context,
                                     'Your profile has been updated successfully !',
                                     () {
-                                  Navigator.pop(context);
-                                  // value.setUserProfilePicture(
-                                  //     filePath: 'file://${value.imageProfile.toString()}',
-                                  //     fileName:'file://${value.imageProfile.toString()}');
+                                  debugPrint("${value.pathImage}");
+
+                                  /// note
+                                  value.setUserProfilePicture(
+                                      filePath: value.pathImage,
+                                      fileName: value.pathImage);
+                                  Future.delayed(Duration(seconds: 1), () {
+                                    Navigator.pop(context);
+                                  });
                                 });
                               },
                               child: Icon(
