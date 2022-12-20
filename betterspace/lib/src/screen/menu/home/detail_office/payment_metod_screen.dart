@@ -5,6 +5,7 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
+import 'package:betterspace/src/widget/widget/custom_radio_button.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
 import 'package:flutter/material.dart';
@@ -26,8 +27,6 @@ class PaymentMetodScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final listOfPaymentModels = PaymentModels().listOfAvailablePaymentMethod;
     ValueNotifier<int> radPaymentVal = ValueNotifier<int>(0);
-    // final transactionsMethod =
-    //     Provider.of<TransactionViewModel>(context, listen: false);
     debugPrint("calculated price : ${checkoutForms.transactionTotalPrice}");
 
     return Scaffold(
@@ -105,18 +104,10 @@ class PaymentMetodScreen extends StatelessWidget {
                           const Spacer(),
 
                           /// qris value
-                          ValueListenableBuilder<int>(
-                            valueListenable: radPaymentVal,
-                            builder: ((context, values, child) {
-                              return Radio<int>(
-                                activeColor: Colors.deepPurple.shade600,
-                                value: 0,
-                                groupValue: values,
-                                onChanged: ((value) {
-                                  radPaymentVal.value = value!;
-                                }),
-                              );
-                            }),
+                          customRadioButton(
+                              context: context,
+                              customRadioController: radPaymentVal,
+                              controlledIdValue: radPaymentVal.value,
                           ),
                         ],
                       )
@@ -187,19 +178,10 @@ class PaymentMetodScreen extends StatelessWidget {
                                       const Spacer(),
 
                                       ///bank transfer value
-                                      ValueListenableBuilder<int>(
-                                        valueListenable: radPaymentVal,
-                                        builder: ((context, values, child) {
-                                          return Radio<int>(
-                                            activeColor:
-                                                Colors.deepPurple.shade600,
-                                            value: formattedIndex,
-                                            groupValue: values,
-                                            onChanged: ((value) {
-                                              radPaymentVal.value = value!;
-                                            }),
-                                          );
-                                        }),
+                                      customRadioButton(
+                                        context: context,
+                                        customRadioController: radPaymentVal,
+                                        controlledIdValue: formattedIndex,
                                       ),
                                     ],
                                   ),

@@ -7,6 +7,7 @@ import 'package:betterspace/src/screen/menu/home/all_offices/all_rent_office_scr
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/enums.dart';
+import 'package:betterspace/src/utils/remove_trailing_zero.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -217,13 +218,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             return verticalCardHome(
                               context: context,
                               onTap: () {
-                                context
-                                    .read<NavigasiViewModel>()
-                                    .navigasiToDetailSpace(
-                                      context: context,
-                                      officeId: value
-                                          .listOfCoworkingSpace[index].officeID,
-                                    );
+                                if (value.connectionState ==
+                                    stateOfConnections.isReady) {
+                                  context
+                                      .read<NavigasiViewModel>()
+                                      .navigasiToDetailSpace(
+                                        context: context,
+                                        officeId: value
+                                            .listOfCoworkingSpace[index]
+                                            .officeID,
+                                      );
+                                }
                               },
                               officeImage: value
                                   .listOfCoworkingSpace[index].officeLeadImage,
@@ -252,10 +257,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               officePersonCapacity: value
                                   .listOfCoworkingSpace[index]
                                   .officePersonCapacity
-                                  .toString(),
+                                  .toString()
+                                  .replaceAll(RemoveTrailingZero.regex, ''),
                               officeArea: value
                                   .listOfCoworkingSpace[index].officeArea
-                                  .toString(),
+                                  .toString()
+                                  .replaceAll(RemoveTrailingZero.regex, ''),
                               hours: '/Hours',
                               officePricing: value.listOfCoworkingSpace[index]
                                   .officePricing.officePrice,
@@ -316,13 +323,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             return verticalCardHome(
                               context: context,
                               onTap: () {
-                                context
-                                    .read<NavigasiViewModel>()
-                                    .navigasiToDetailSpace(
-                                      context: context,
-                                      officeId: value
-                                          .listOfOfficeRoom[index].officeID,
-                                    );
+                                if (value.connectionState ==
+                                    stateOfConnections.isReady) {
+                                  context
+                                      .read<NavigasiViewModel>()
+                                      .navigasiToDetailSpace(
+                                        context: context,
+                                        officeId: value
+                                            .listOfOfficeRoom[index].officeID,
+                                      );
+                                }
                               },
                               officeImage:
                                   value.listOfOfficeRoom[index].officeLeadImage,
@@ -350,10 +360,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       : '-',
                               officePersonCapacity: value
                                   .listOfOfficeRoom[index].officePersonCapacity
-                                  .toString(),
+                                  .toString()
+                                  .replaceAll(RemoveTrailingZero.regex, ''),
                               officeArea: value
                                   .listOfOfficeRoom[index].officeArea
-                                  .toString(),
+                                  .toString()
+                                  .replaceAll(RemoveTrailingZero.regex, ''),
                               hours: '/Month',
                               officePricing: value.listOfOfficeRoom[index]
                                   .officePricing.officePrice,
@@ -413,13 +425,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             return verticalCardHome(
                               context: context,
                               onTap: () {
-                                context
-                                    .read<NavigasiViewModel>()
-                                    .navigasiToDetailSpace(
-                                      context: context,
-                                      officeId: value
-                                          .listOfMeetingRoom[index].officeID,
-                                    );
+                                if (value.connectionState ==
+                                    stateOfConnections.isReady) {
+                                  context
+                                      .read<NavigasiViewModel>()
+                                      .navigasiToDetailSpace(
+                                        context: context,
+                                        officeId: value
+                                            .listOfMeetingRoom[index].officeID,
+                                      );
+                                }
                               },
                               officeImage: value
                                   .listOfMeetingRoom[index].officeLeadImage,
@@ -447,10 +462,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                       : '-',
                               officePersonCapacity: value
                                   .listOfMeetingRoom[index].officePersonCapacity
-                                  .toString(),
+                                  .toString()
+                                  .replaceAll(RemoveTrailingZero.regex, ''),
                               officeArea: value
                                   .listOfMeetingRoom[index].officeArea
-                                  .toString(),
+                                  .toString()
+                                  .replaceAll(RemoveTrailingZero.regex, ''),
                               hours: '/Hours',
                               officePricing: value.listOfMeetingRoom[index]
                                   .officePricing.officePrice,
@@ -522,14 +539,17 @@ class _HomeScreenState extends State<HomeScreen> {
                             return horizontalCardHome(
                               context: context,
                               onTap: () {
-                                context
-                                    .read<NavigasiViewModel>()
-                                    .navigasiToDetailSpace(
-                                      context: context,
-                                      officeId: value
-                                          .listOfOfficeByRecommendation[index]
-                                          .officeID,
-                                    );
+                                if (value.connectionState ==
+                                    stateOfConnections.isReady) {
+                                  context
+                                      .read<NavigasiViewModel>()
+                                      .navigasiToDetailSpace(
+                                        context: context,
+                                        officeId: value
+                                            .listOfOfficeByRecommendation[index]
+                                            .officeID,
+                                      );
+                                }
                               },
                               officeImage: value
                                   .listOfOfficeByRecommendation[index]
@@ -563,11 +583,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               officePersonCapacity: value
                                   .listOfOfficeByRecommendation[index]
                                   .officePersonCapacity
-                                  .toString(),
+                                  .toString()
+                                  .replaceAll(RemoveTrailingZero.regex, ''),
                               officeArea: value
                                   .listOfOfficeByRecommendation[index]
                                   .officeArea
-                                  .toString(),
+                                  .toString()
+                                  .replaceAll(RemoveTrailingZero.regex, ''),
                               hours: '/Hours',
                               officePricing: value
                                   .listOfOfficeByRecommendation[index]

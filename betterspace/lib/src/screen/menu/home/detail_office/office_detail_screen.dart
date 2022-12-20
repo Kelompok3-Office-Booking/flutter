@@ -8,6 +8,7 @@ import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/enums.dart';
+import 'package:betterspace/src/utils/remove_trailing_zero.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
@@ -80,10 +81,10 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
 
     final officeReviewsProvider =
         Provider.of<ReviewViewmodels>(context, listen: false);
-    final reviewById = officeReviewsProvider.listOfReviewOffice
-        .where(
-            (element) => element.reviewedOfficeId == int.parse(widget.officeID))
-        .toList();
+    final reviewById = officeReviewsProvider.listOfReviewOffice;
+        // .where(
+        //     (element) => element.reviewedOfficeId == int.parse(widget.officeID))
+        // .toList();
 
     return Scaffold(
       body: NetworkAware(
@@ -141,16 +142,18 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                   return IconButton(
                                     onPressed: () {
                                       final addNewWhislist = UserWhislistModel(
-                                        officeId:
-                                            DateTime.now().millisecondsSinceEpoch,
+                                        officeId: DateTime.now()
+                                            .millisecondsSinceEpoch,
                                         officeName: officeById?.officeName ??
                                             listOfDummyOffice[0].officeName,
-                                        officeRanting: officeById
-                                                ?.officeStarRating ??
-                                            listOfDummyOffice[0].officeStarRating,
-                                        officeImage: officeById
-                                                ?.officeLeadImage ??
-                                            listOfDummyOffice[0].officeLeadImage,
+                                        officeRanting:
+                                            officeById?.officeStarRating ??
+                                                listOfDummyOffice[0]
+                                                    .officeStarRating,
+                                        officeImage:
+                                            officeById?.officeLeadImage ??
+                                                listOfDummyOffice[0]
+                                                    .officeLeadImage,
                                         officeLocation:
                                             '${officeById?.officeLocation.district}, ${officeById?.officeLocation.city}',
                                         officeType: officeById?.officeType ??
@@ -206,7 +209,8 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                   ? officeById?.officeGridImage[index]
                                   : listOfDummyOffice[0].officeGridImage[index],
                               imageBuilder: (context, imageProvider) => Padding(
-                                padding: EdgeInsets.only(right: AdaptSize.pixel8),
+                                padding:
+                                    EdgeInsets.only(right: AdaptSize.pixel8),
                                 child: SizedBox(
                                   height: AdaptSize.screenWidth / 3.25,
                                   width: AdaptSize.screenWidth / 3.25,
@@ -261,8 +265,8 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                             height: AdaptSize.screenWidth / 15,
                             decoration: BoxDecoration(
                               color: MyColor.neutral300,
-                              border:
-                                  Border.all(width: 1, color: MyColor.neutral300),
+                              border: Border.all(
+                                  width: 1, color: MyColor.neutral300),
                               borderRadius: BorderRadius.circular(42),
                             ),
                             child: Row(
@@ -307,11 +311,13 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                           Expanded(
                             child: Text(
                               '${officeById?.officeLocation.district ?? listOfDummyOffice[0].officeLocation.city}, ${officeById?.officeLocation.city ?? listOfDummyOffice[0].officeLocation.district}',
-                              style:
-                                  Theme.of(context).textTheme.subtitle1!.copyWith(
-                                        color: MyColor.neutral100,
-                                        fontSize: AdaptSize.pixel14,
-                                      ),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .subtitle1!
+                                  .copyWith(
+                                    color: MyColor.neutral100,
+                                    fontSize: AdaptSize.pixel14,
+                                  ),
                               overflow: TextOverflow.ellipsis,
                               maxLines: 2,
                             ),
@@ -333,7 +339,8 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                     ? value.calculateDistances(
                                         value.lat,
                                         value.lng,
-                                        officeById?.officeLocation.officeLatitude,
+                                        officeById
+                                            ?.officeLocation.officeLatitude,
                                         officeById
                                             ?.officeLocation.officeLongitude,
                                       )!
@@ -352,8 +359,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                             width: AdaptSize.pixel4,
                           ),
                           Text(
-                            officeById?.officeArea.toString() ??
-                                listOfDummyOffice[0].officeArea.toString(),
+                            '${officeById?.officeArea.toString().replaceAll(RemoveTrailingZero.regex, '') ?? listOfDummyOffice[0].officeArea.toString()}m2',
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
@@ -373,10 +379,14 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                             width: AdaptSize.pixel4,
                           ),
                           Text(
-                              officeById?.officePersonCapacity.toString() ??
+                              officeById?.officePersonCapacity
+                                      .toString()
+                                      .replaceAll(
+                                          RemoveTrailingZero.regex, '') ??
                                   listOfDummyOffice[0]
                                       .officePersonCapacity
-                                      .toString(),
+                                      .toString()
+                                      .replaceAll(RemoveTrailingZero.regex, ''),
                               style: Theme.of(context)
                                   .textTheme
                                   .bodyMedium!
@@ -444,7 +454,8 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                           padding: EdgeInsets.only(top: AdaptSize.pixel8),
                           shrinkWrap: true,
                           itemCount: (officeById?.listOfOfficeCapcityModels ??
-                                  listOfDummyOffice[0].listOfOfficeCapcityModels)
+                                  listOfDummyOffice[0]
+                                      .listOfOfficeCapcityModels)
                               .length,
                           itemBuilder: (context, index) {
                             return Column(
@@ -475,19 +486,22 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                               CupertinoIcons
                                                   .rectangle_arrow_up_right_arrow_down_left,
                                               color: MyColor.secondary400,
-                                              size: AdaptSize.pixel22,
+                                              size: AdaptSize.pixel18,
                                             ),
                                     ),
 
                                     /// text keterangan
                                     Text(
-                                      officeById?.listOfOfficeCapcityModels[index]
+                                      officeById
+                                              ?.listOfOfficeCapcityModels[index]
                                               .capacityTitle ??
                                           "Can Accomodate",
                                       style: Theme.of(context)
                                           .textTheme
                                           .bodyMedium!
-                                          .copyWith(color: MyColor.neutral200),
+                                          .copyWith(
+                                              color: MyColor.neutral200,
+                                              fontSize: AdaptSize.pixel14),
                                     ),
                                     const Spacer(),
 
@@ -500,7 +514,11 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                                     ?.listOfOfficeCapcityModels[
                                                         index]
                                                     .capacityValue
-                                                    .toString() ??
+                                                    .toString()
+                                                    .replaceAll(
+                                                        RemoveTrailingZero
+                                                            .regex,
+                                                        '') ??
                                                 listOfDummyOffice[0]
                                                     .listOfOfficeCapcityModels[
                                                         index]
@@ -510,20 +528,19 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                                 .bodyMedium!
                                                 .copyWith(
                                                     color: MyColor.secondary400,
-                                                    fontSize: AdaptSize.pixel14),
+                                                    fontSize:
+                                                        AdaptSize.pixel14),
                                           ),
                                           TextSpan(
-                                            text: officeById
-                                                    ?.listOfOfficeCapcityModels[
-                                                        index]
-                                                    .capacityUnits ??
-                                                'Units',
+                                            text:
+                                                ' ${officeById?.listOfOfficeCapcityModels[index].capacityUnits ?? 'Units'}',
                                             style: Theme.of(context)
                                                 .textTheme
                                                 .bodyMedium!
                                                 .copyWith(
                                                     color: MyColor.neutral200,
-                                                    fontSize: AdaptSize.pixel14),
+                                                    fontSize:
+                                                        AdaptSize.pixel14),
                                           ),
                                         ],
                                       ),
@@ -550,21 +567,121 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                             fontWeight: FontWeight.bold),
                       ),
 
-                      /// list fasilitas
-                      listFacilities(
+                      /// list facility
+                      MediaQuery.removePadding(
+                        removeTop: true,
                         context: context,
-                        moreFacilitiesButton: () {
-                          modalBottomSheed(
-                            context,
-                            listFacilityItem(
-                                context: context,
-                                officeFacility:
-                                    officeById?.listOfOfficeFacilitiesModels ??
-                                        []),
-                          );
-                        },
-                        officeFacility:
-                            officeById?.listOfOfficeFacilitiesModels ?? [],
+                        child: ListView.builder(
+                          physics: const NeverScrollableScrollPhysics(),
+                          padding: EdgeInsets.only(top: AdaptSize.pixel8),
+                          shrinkWrap: true,
+                          itemCount:
+                              (officeById?.listOfOfficeFacilitiesModels ??
+                                              listOfDummyOffice[0]
+                                                  .listOfOfficeFacilitiesModels)
+                                          .length >=
+                                      5
+                                  ? 5
+                                  : (officeById?.listOfOfficeFacilitiesModels ??
+                                          listOfDummyOffice[0]
+                                              .listOfOfficeFacilitiesModels)
+                                      .length,
+                          itemBuilder: (context, index) {
+                            return Column(
+                              children: [
+                                index >= 4
+                                    ? InkWell(
+                                        splashColor: MyColor.transparanColor,
+                                        onTap: () {
+                                          modalBottomSheed(
+                                            context,
+                                            listFacilityItem(
+                                                context: context,
+                                                officeFacility: officeById
+                                                        ?.listOfOfficeFacilitiesModels ??
+                                                    []),
+                                          );
+                                        },
+                                        child: Row(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.only(
+                                                  right: AdaptSize.pixel8),
+                                              child: Icon(
+                                                Icons.grid_view_outlined,
+                                                size: AdaptSize.pixel22,
+                                                color: MyColor.secondary400,
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: AdaptSize.pixel8,
+                                            ),
+                                            Text(
+                                              'See more facilities (${(officeById?.listOfOfficeFacilitiesModels ?? listOfDummyOffice[0].listOfOfficeFacilitiesModels).length})',
+                                              style: Theme.of(context)
+                                                  .textTheme
+                                                  .bodyMedium!
+                                                  .copyWith(
+                                                      color: MyColor.neutral200,
+                                                      fontSize:
+                                                          AdaptSize.pixel14),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Row(
+                                        children: [
+                                          /// icon
+                                          Padding(
+                                            padding: EdgeInsets.only(
+                                                right: AdaptSize.pixel8),
+                                            child: officeById
+                                                            ?.listOfOfficeFacilitiesModels[
+                                                                index]
+                                                            .facilitiesIconSlug !=
+                                                        null &&
+                                                    officeById
+                                                            ?.listOfOfficeFacilitiesModels[
+                                                                index]
+                                                            .facilitiesIconSlug !=
+                                                        ''
+                                                ? customSVGIconParsers(
+                                                    size: AdaptSize.pixel22,
+                                                    iconSlug: officeById
+                                                        ?.listOfOfficeFacilitiesModels[
+                                                            index]
+                                                        .facilitiesIconSlug)
+                                                : Icon(
+                                                    CupertinoIcons
+                                                        .rectangle_arrow_up_right_arrow_down_left,
+                                                    color: MyColor.secondary400,
+                                                    size: AdaptSize.pixel18,
+                                                  ),
+                                          ),
+
+                                          /// text keterangan
+                                          Text(
+                                            officeById
+                                                    ?.listOfOfficeFacilitiesModels[
+                                                        index]
+                                                    .facilitiesTitle ??
+                                                "Can Accomodate",
+                                            style: Theme.of(context)
+                                                .textTheme
+                                                .bodyMedium!
+                                                .copyWith(
+                                                    color: MyColor.neutral200,
+                                                    fontSize:
+                                                        AdaptSize.pixel14),
+                                          ),
+                                        ],
+                                      ),
+                                dividerWdiget(
+                                    width: double.infinity, opacity: .1),
+                              ],
+                            );
+                          },
+                        ),
                       ),
 
                       /// text alamat office
@@ -612,8 +729,8 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                             ],
                             image: const DecorationImage(
                               fit: BoxFit.cover,
-                              image:
-                                  AssetImage('assets/image_assets/mapimage.jpg'),
+                              image: AssetImage(
+                                  'assets/image_assets/mapimage.jpg'),
                             ),
                           ),
                         ),
@@ -628,8 +745,9 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                           builder: (context, value, child) {
                         if (value.connectionState ==
                             stateOfConnections.isLoading) {
-                          return reviewById.isNotEmpty
-                              ? shimmerLoading(
+                          return value.listOfReviewOffice.isNotEmpty
+                              ?
+                          shimmerLoading(
                                   child: commonShimmerLoadWidget(
                                     sizeHeight:
                                         AdaptSize.screenWidth / 1000 * 470,
@@ -638,8 +756,9 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                 )
                               : const SizedBox();
                         }
-                        if (value.connectionState == stateOfConnections.isReady) {
-                          return reviewById.isNotEmpty
+                        if (value.connectionState ==
+                            stateOfConnections.isReady) {
+                          return value.listOfReviewOffice.isNotEmpty
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -654,7 +773,8 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                           ),
                                     ),
                                     SizedBox(
-                                      height: AdaptSize.screenWidth / 1000 * 470,
+                                      height:
+                                          AdaptSize.screenWidth / 1000 * 470,
                                       width: double.infinity,
                                       child: ListView.builder(
                                           padding: EdgeInsets.only(
@@ -662,25 +782,28 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                                   AdaptSize.screenHeight * .01),
                                           shrinkWrap: true,
                                           scrollDirection: Axis.horizontal,
-                                          itemCount: reviewById.length,
+                                          itemCount: value.listOfReviewOffice.length,
                                           itemBuilder: (context, index) {
                                             return cardReview(
                                               context: context,
-                                              userImage: listOfDummyOffice[index]
-                                                  .officeLeadImage,
-                                              userNameReview:
-                                                  listOfDummyOffice[index]
-                                                      .officeName,
+                                              userImage:
+                                                  value.listOfReviewUser[index]
+                                                      .reviewComment,
+                                              userNameReview: value.listOfReviewUser[index]
+                                                  .reviewComment,
                                               dateReview: DateFormat('MMM y')
-                                                  .format(reviewById[index]
+                                                  .format(value.listOfReviewOffice[index]
                                                       .createdAt!)
                                                   .toString(),
                                               descriptionReview:
-                                                  reviewById[index].reviewComment,
-                                              totalHelpful: Random().nextInt(10),
-                                              reviewStarLength: reviewById[index]
-                                                  .reviewRating
-                                                  .toInt(),
+                                              value.listOfReviewOffice[index]
+                                                      .reviewComment,
+                                              totalHelpful:
+                                                  Random().nextInt(10),
+                                              reviewStarLength:
+                                              value.listOfReviewOffice[index]
+                                                      .reviewRating
+                                                      .toInt(),
                                             );
                                           }),
                                     ),
@@ -695,7 +818,8 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                           return reviewById.isNotEmpty
                               ? commonShimmerFailedLoadWidget(
                                   context: context,
-                                  sizeHeight: AdaptSize.screenWidth / 1000 * 470,
+                                  sizeHeight:
+                                      AdaptSize.screenWidth / 1000 * 470,
                                   sizeWidth: double.infinity,
                                 )
                               : const SizedBox();
@@ -736,76 +860,6 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
   }
 
   ///split
-  /// ------------------------------------------------------------------------
-  /// list of facilities widget
-  Widget listFacilities(
-      {context,
-      Function()? moreFacilitiesButton,
-      required List<OfficeFacilitiesModels> officeFacility,
-      required}) {
-    return MediaQuery.removePadding(
-      removeTop: true,
-      context: context,
-      child: ListView.builder(
-          physics: const NeverScrollableScrollPhysics(),
-          padding: EdgeInsets.only(top: AdaptSize.pixel8),
-          shrinkWrap: true,
-          itemCount: officeFacility.length >= 5 ? 5 : officeFacility.length,
-          itemBuilder: (context, index) {
-            return Column(
-              children: [
-                index >= 4
-                    ? InkWell(
-                        splashColor: MyColor.transparanColor,
-                        onTap: moreFacilitiesButton,
-                        child: Row(
-                          children: [
-                            Icon(
-                              Icons.grid_view_rounded,
-                              size: AdaptSize.screenHeight * .024,
-                              color: MyColor.secondary400,
-                            ),
-                            SizedBox(
-                              width: AdaptSize.pixel8,
-                            ),
-                            Text(
-                              'See more facilities (${officeFacility.length.toString()})',
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .bodyMedium!
-                                  .copyWith(color: MyColor.neutral200),
-                            ),
-                          ],
-                        ),
-                      )
-                    : Row(
-                        children: [
-                          Icon(
-                            Icons.wifi,
-                            size: AdaptSize.screenHeight * .024,
-                            color: MyColor.secondary400,
-                          ),
-                          SizedBox(
-                            width: AdaptSize.pixel8,
-                          ),
-                          Text(
-                            officeFacility.isNotEmpty
-                                ? officeFacility[index].facilitiesTitle
-                                : 'Facilities',
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium!
-                                .copyWith(color: MyColor.neutral200),
-                          ),
-                        ],
-                      ),
-                dividerWdiget(width: double.infinity, opacity: .1),
-              ],
-            );
-          }),
-    );
-  }
-
   /// ------------------------------------------------------------------------
 
   /// list facility item
@@ -850,10 +904,21 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                   children: [
                     Row(
                       children: [
-                        Icon(
-                          Icons.grid_view_outlined,
-                          size: AdaptSize.screenHeight * .024,
-                          color: MyColor.secondary400,
+                        Padding(
+                          padding: EdgeInsets.only(right: AdaptSize.pixel8),
+                          child: officeFacility[index].facilitiesIconSlug !=
+                                      null &&
+                                  officeFacility[index].facilitiesIconSlug != ''
+                              ? customSVGIconParsers(
+                                  size: AdaptSize.pixel22,
+                                  iconSlug:
+                                      officeFacility[index].facilitiesIconSlug)
+                              : Icon(
+                                  CupertinoIcons
+                                      .rectangle_arrow_up_right_arrow_down_left,
+                                  color: MyColor.secondary400,
+                                  size: AdaptSize.pixel18,
+                                ),
                         ),
                         SizedBox(
                           width: AdaptSize.pixel8,
@@ -863,7 +928,9 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                           style: Theme.of(context)
                               .textTheme
                               .bodyMedium!
-                              .copyWith(color: MyColor.neutral200),
+                              .copyWith(
+                                  color: MyColor.neutral200,
+                                  fontSize: AdaptSize.pixel14),
                         ),
                       ],
                     ),

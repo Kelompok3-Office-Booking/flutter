@@ -7,7 +7,6 @@ import 'package:betterspace/src/view_model/login_view_model.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
-import 'package:betterspace/src/view_model/transaction_viewmodels.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
@@ -40,11 +39,6 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     AdaptSize.size(context: context);
-    final providerOfUser = Provider.of<LoginViewmodels>(context, listen: false);
-    final providerOfOffice =
-        Provider.of<OfficeViewModels>(context, listen: false);
-    final providerOfTransaction =
-        Provider.of<TransactionViewmodels>(context, listen: false);
     final providerOffice =
         Provider.of<OfficeViewModels>(context, listen: false);
     final providerClient = Provider.of<LoginViewmodels>(context, listen: false);
@@ -175,10 +169,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         providerOffice.fetchMeetingRoom();
                         providerOffice.fetchOfficeRoom();
                         providerOffice.fetchOfficeByRecommendation();
-                        providerOfTransaction.getTransactionByUser(
-                            userModels: providerOfUser.userModels!,
-                            ListOfAllOffice:
-                                providerOfOffice.listOfAllOfficeModels);
                       });
                     }
                   },

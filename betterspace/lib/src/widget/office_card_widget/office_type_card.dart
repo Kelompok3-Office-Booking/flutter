@@ -168,7 +168,30 @@ Widget officeTypeItemCards({
                       ),
 
                       SizedBox(
-                        width: AdaptSize.screenHeight * .012,
+                        width: AdaptSize.screenWidth * .008,
+                      ),
+
+                      /// icon penggaris
+                      SvgPicture.asset(
+                        'assets/svg_assets/ruler.svg',
+                        height: AdaptSize.pixel18,
+                      ),
+
+                      const SizedBox(
+                        width: 2,
+                      ),
+
+                      /// luas area lokasi
+                      Text(
+                        '${officeArea}m2',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontSize: AdaptSize.pixel12),
+                      ),
+
+                      SizedBox(
+                        width: AdaptSize.screenWidth * .008,
                       ),
 
                       /// total person asset
@@ -190,28 +213,7 @@ Widget officeTypeItemCards({
                             .copyWith(fontSize: AdaptSize.pixel12),
                       ),
 
-                      SizedBox(
-                        width: AdaptSize.screenHeight * .012,
-                      ),
 
-                      /// icon penggaris
-                      SvgPicture.asset(
-                        'assets/svg_assets/ruler.svg',
-                        height: AdaptSize.pixel18,
-                      ),
-
-                      const SizedBox(
-                        width: 2,
-                      ),
-
-                      /// luas area lokasi
-                      Text(
-                        officeArea,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: AdaptSize.pixel12),
-                      ),
                     ],
                   ),
                 ),

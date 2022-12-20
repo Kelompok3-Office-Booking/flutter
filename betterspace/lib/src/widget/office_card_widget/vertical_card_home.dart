@@ -160,25 +160,7 @@ Widget verticalCardHome({
                       ),
 
                       SizedBox(
-                        width: AdaptSize.screenHeight * .008,
-                      ),
-
-                      /// keterangan available
-                      SvgPicture.asset('assets/svg_assets/available.svg',
-                          height: AdaptSize.pixel18),
-                      const SizedBox(
-                        width: 1,
-                      ),
-                      Text(
-                        officePersonCapacity,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyText1!
-                            .copyWith(fontSize: AdaptSize.pixel10),
-                      ),
-
-                      SizedBox(
-                        width: AdaptSize.screenHeight * .008,
+                        width: AdaptSize.screenWidth * .004,
                       ),
 
                       /// keteranganan jarak
@@ -186,13 +168,27 @@ Widget verticalCardHome({
                         'assets/svg_assets/ruler.svg',
                         height: AdaptSize.pixel18,
                       ),
-                      const SizedBox(
-                        width: 1,
+                      Text(
+                        '${officeArea}m2',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyText1!
+                            .copyWith(fontSize: AdaptSize.pixel10),
+                      ),
+
+                      SizedBox(
+                        width: AdaptSize.screenWidth * .004,
+                      ),
+
+                      /// keterangan available
+                      SvgPicture.asset(
+                        'assets/svg_assets/available.svg',
+                        height: AdaptSize.pixel18,
                       ),
                       Flexible(
                         fit: FlexFit.loose,
                         child: Text(
-                          officeArea,
+                          officePersonCapacity,
                           style: Theme.of(context)
                               .textTheme
                               .bodyText1!

@@ -356,7 +356,9 @@ class _ProcessDetailOrderScreensState extends State<ProcessDetailOrderScreens> {
                       child: Row(
                         children: [
                           Text(
-                            "Price/Hour",
+                            bookingData?.officeData?.officeType == "Office"
+                                ? " Price/Month"
+                                : " Price/Hour",
                             style: Theme.of(context)
                                 .textTheme
                                 .bodyMedium!
