@@ -8,7 +8,10 @@ import 'package:provider/provider.dart';
 nextScreen(bool isUserExist, BuildContext context) {
   if (isUserExist == true) {
     ResponseDialog.dialogLoginSuccess(
-        context: context, title: 'Success Login', description: 'You have successfully login. Let\'s find a comfortable workplace to work');
+        context: context,
+        title: 'Success Login',
+        description:
+            'You have successfully login. Let\'s find a comfortable workplace to work');
     Future.delayed(const Duration(milliseconds: 2500), () {
       Provider.of<NavigasiViewModel>(context, listen: false)
           .navigasiToMenuScreen(context);
@@ -17,8 +20,7 @@ nextScreen(bool isUserExist, BuildContext context) {
     ResponseDialog.dialogFailed(
         context: context,
         title: 'Invalid Login',
-        description:
-            'Please double check email and password you entered');
+        description: 'Please double check email and password you entered');
     // const snackbars =
     //     SnackBar(content: Text("login gagal, cek email dan password anda"));
     // ScaffoldMessenger.of(context).showSnackBar(snackbars);
@@ -38,10 +40,10 @@ isLogoutSuccess({
   } else {
     dynamic snackbar;
     if (logoutStatusCode == "400") {
-    // return  ResponseDialog.dialogFailed(
-    //       context: context,
-    //       title: 'Logout Error',
-    //       description: 'Your session has expired');
+      // return  ResponseDialog.dialogFailed(
+      //       context: context,
+      //       title: 'Logout Error',
+      //       description: 'Your session has expired');
       snackbar =
           SnackBar(content: Text("logout error, sesi anda telah berakhir"));
     } else {

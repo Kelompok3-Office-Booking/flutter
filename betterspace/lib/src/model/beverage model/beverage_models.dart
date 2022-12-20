@@ -19,13 +19,13 @@ List<BeverageModels> listOfBeverages() {
         drinkDescription: "Hot chocolate can warm the body from cold air"),
     BeverageModels(
         drinkId: 2,
-        imagePath: "assets/image_assets/beverages_image/beverage2.png",
+        imagePath: "assets/image_assets/beverages_image/beverage3.png",
         drinkName: "Iced Coffe Brown Sugar",
         drinkDescription:
             "Iced coffee made using natural brown sugar so it's healthy"),
     BeverageModels(
         drinkId: 3,
-        imagePath: "assets/image_assets/beverages_image/beverage3.png",
+        imagePath: "assets/image_assets/beverages_image/beverage2.png",
         drinkName: "Iced Lemon Tea",
         drinkDescription:
             "Very refreshing for the throat with a sour lemon taste"),

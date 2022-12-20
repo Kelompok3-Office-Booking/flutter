@@ -65,9 +65,6 @@ class TransactionViewmodels with ChangeNotifier {
             requestedUserModel: userModels,
             listOfOfficeModels: ListOfAllOffice);
         notifyListeners();
-
-        print(_allTransaction[1].bookingId.toString() +
-            _allTransaction[1].Status);
         connectionState = stateOfConnections.isReady;
         notifyListeners();
       } catch (e) {

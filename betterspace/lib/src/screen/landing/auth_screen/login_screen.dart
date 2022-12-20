@@ -142,7 +142,8 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
 
               /// button login
-              Consumer<LoginViewmodels>(builder: (context, value, child) {
+              Consumer<LoginViewmodels>(builder: (context, logValue, child) {
+                final logConsumerVal = logValue;
                 return buttonWidget(
                   sizeheight: AdaptSize.screenHeight / 14,
                   sizeWidth: double.infinity,
@@ -156,11 +157,12 @@ class _LoginScreenState extends State<LoginScreen> {
                       await providerClient.loginGetToken(
                           userEmail: _emailController.text,
                           userPassword: _passwordController.text);
-                      value.apiLoginState = stateOfConnections.isDoingNothing;
+                      logConsumerVal.apiLoginState =
+                          stateOfConnections.isDoingNothing;
                       if (!mounted) return;
 
                       /// mengatasi build context across async gaps
-                      nextScreen(value.isUserExist, context);
+                      nextScreen(logConsumerVal.isUserExist, context);
 
                       Future.delayed(Duration.zero, () {
                         providerClient.getProfile();
@@ -172,7 +174,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       });
                     }
                   },
-                  child: value.apiLoginState == stateOfConnections.isLoading
+                  child: logConsumerVal.apiLoginState ==
+                          stateOfConnections.isLoading
                       ? LoadingWidget.whiteButtonLoading
                       : Text(
                           "Login",

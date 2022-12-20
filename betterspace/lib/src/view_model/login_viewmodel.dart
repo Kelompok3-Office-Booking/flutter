@@ -101,6 +101,8 @@ class LoginViewmodels with ChangeNotifier {
       }
       await validateTokenIsExist();
     } catch (e) {
+      apiLoginState = stateOfConnections.isFailed;
+      notifyListeners();
       statusConnection = e.toString();
       print("error on" + '$e');
     }
@@ -118,6 +120,8 @@ class LoginViewmodels with ChangeNotifier {
           UserToken(accessToken: accessTokens, refreshToken: refreshTokens);
       isUserExist = true;
       print("the user token is : $accessTokens");
+      apiLoginState = stateOfConnections.isReady;
+      print("the user refresh token is : $refreshTokens");
       apiLoginState = stateOfConnections.isReady;
       notifyListeners();
       print("hehe");
