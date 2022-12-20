@@ -2,6 +2,7 @@ import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
+import 'package:betterspace/src/utils/remove_trailing_zero.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
@@ -78,11 +79,10 @@ class AllRecomendationOfficeScreen extends StatelessWidget {
                     : '-',
                 officePersonCapacity: listOfRecomendationRoom[index]
                     .officePersonCapacity
-                    .toString(),
+                    .toString().replaceAll(RemoveTrailingZero.regex, ''),
                 officeArea:
-                    listOfRecomendationRoom[index].officeArea.toString(),
-                hours:
-                    listOfRecomendationRoom[index].officeOpenTime.timeZoneName,
+                    listOfRecomendationRoom[index].officeArea.toString().replaceAll(RemoveTrailingZero.regex, ''),
+                hours: listOfRecomendationRoom[index].officeType == "Office" ? '/Month' : '/Hours',
                 officePricing:
                     listOfRecomendationRoom[index].officePricing.officePrice,
               );

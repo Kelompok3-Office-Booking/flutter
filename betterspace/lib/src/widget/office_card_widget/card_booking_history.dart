@@ -1,6 +1,9 @@
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/widget/widget/card_shimmer_widget.dart';
 import 'package:betterspace/src/widget/widget/divider_widget.dart';
+import 'package:betterspace/src/widget/widget/shimmer_widget.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 Widget cardBookingHistory({
@@ -61,22 +64,36 @@ Widget cardBookingHistory({
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  /// image
-                  SizedBox(
-                    width: AdaptSize.screenWidth / 2.8,
-                    height: AdaptSize.screenWidth / 2,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: cardOfficeImage != ""
-                          ? Image.network(
-                              cardOfficeImage,
-                              fit: BoxFit.cover,
-                            )
-                          : Image(
-                              image: AssetImage(
-                                  "assets/image_assets/space_image/space1.png"),
-                              fit: BoxFit.cover,
-                            ),
+                  CachedNetworkImage(
+                    imageUrl: cardOfficeImage,
+                    imageBuilder: (context, imageProvider) => SizedBox(
+                      width: AdaptSize.screenWidth / 2.8,
+                      height: AdaptSize.screenWidth / 2,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: cardOfficeImage != ""
+                            ? Image(
+                                image: imageProvider,
+                                fit: BoxFit.cover,
+                              )
+                            : const Image(
+                                image: AssetImage(
+                                    "assets/image_assets/space_image/space1.png"),
+                                fit: BoxFit.cover,
+                              ),
+                      ),
+                    ),
+                    placeholder: (context, url) => shimmerLoading(
+                      child: commonShimmerLoadWidget(
+                        sizeWidth: AdaptSize.screenWidth / 2.9,
+                        sizeHeight: AdaptSize.screenWidth / 2,
+                      ),
+                    ),
+                    errorWidget: (context, url, error) =>
+                        commonShimmerFailedLoadWidget(
+                      context: context,
+                      sizeWidth: AdaptSize.screenWidth / 2.9,
+                      sizeHeight: AdaptSize.screenWidth / 2,
                     ),
                   ),
 

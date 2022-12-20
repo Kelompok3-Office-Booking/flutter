@@ -207,8 +207,8 @@ class GetLocationViewModel with ChangeNotifier {
         c(posLat * p) * c(desLat * p) * (1 - c((desLng - posLng) * p)) / 2;
     var dis = 12742 * asin(sqrt(a));
     return dis < 1
-        ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
-        : "${double.parse(dis.toStringAsFixed(1))} km";
+        ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]}m"
+        : "${double.parse(dis.toStringAsFixed(2))}km";
   }
 
   /// string calculate distance in home
@@ -220,8 +220,8 @@ class GetLocationViewModel with ChangeNotifier {
         c(posLat * p) * c(desLat * p) * (1 - c((desLng - posLng) * p)) / 2;
     var dis = 12742 * asin(sqrt(a));
     return dis < 1
-        ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]} m"
-        : "${double.parse(dis.toStringAsFixed(1))} km";
+        ? "${(double.parse(dis.toStringAsFixed(3)) * 1000).toString().split(".")[0]}m"
+        : "${double.parse(dis.toStringAsFixed(1))}km";
   }
 
   /// detail lokasi

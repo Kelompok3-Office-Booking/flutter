@@ -9,8 +9,8 @@ import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/custom_icons.dart';
 import 'package:betterspace/src/utils/enums.dart';
+import 'package:betterspace/src/utils/remove_trailing_zero.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
-import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/login_viewmodel.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
@@ -28,7 +28,6 @@ import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class PaymentDetailScreen extends StatefulWidget {
   final String officeId;
@@ -49,17 +48,9 @@ class PaymentDetailScreen extends StatefulWidget {
 }
 
 class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
-  var uuid = const Uuid();
-
-  @override
-  void initState() {
-    super.initState();
-    debugPrint(uuid.v4());
-  }
-
   @override
   Widget build(BuildContext context) {
-    final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+    // final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
     final userAccountProviderListen =
         Provider.of<LoginViewmodels>(context, listen: true);
     final listOfPaymentModels = PaymentModels().listOfAvailablePaymentMethod;
@@ -190,10 +181,13 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                           officeById?.officeLocation.officeLongitude,
                         )!
                       : '-',
-                  officePersonCapacity:
-                      officeById?.officePersonCapacity.toString() ??
-                          listOfDummyOffice[0].officePersonCapacity.toString(),
-                  officeArea: officeById?.officeArea.toString() ??
+                  officePersonCapacity: officeById?.officePersonCapacity
+                          .toString()
+                          .replaceAll(RemoveTrailingZero.regex, '') ??
+                      listOfDummyOffice[0].officePersonCapacity.toString(),
+                  officeArea: officeById?.officeArea
+                          .toString()
+                          .replaceAll(RemoveTrailingZero.regex, '') ??
                       listOfDummyOffice[0].officeArea.toString(),
                   officeType:
                       officeById?.officeType ?? listOfDummyOffice[0].officeType,
@@ -361,53 +355,6 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                 height: AdaptSize.screenHeight * .016,
               ),
 
-              ///user name
-              Row(
-                children: [
-                  Icon(
-                    Icons.account_circle_outlined,
-                    color: MyColor.secondary400,
-                    size: AdaptSize.pixel22,
-                  ),
-                  SizedBox(
-                    width: AdaptSize.screenWidth * .016,
-                  ),
-                  Text(
-                    userAccountProviderListen
-                        .userModels!.userProfileDetails.userName,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: AdaptSize.pixel14),
-                  ),
-                ],
-              ),
-
-              SizedBox(
-                height: AdaptSize.screenHeight * .003,
-              ),
-
-              ///date checkin
-              Row(
-                children: [
-                  Icon(
-                    Icons.date_range_outlined,
-                    size: AdaptSize.pixel22,
-                    color: MyColor.secondary400,
-                  ),
-                  SizedBox(
-                    width: AdaptSize.screenWidth * .016,
-                  ),
-                  Text(
-                    widget.bookingForms.transactionBookingTime.checkInDate,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodyText1!
-                        .copyWith(fontSize: AdaptSize.pixel14),
-                  ),
-                ],
-              ),
-
               SizedBox(
                 height: AdaptSize.screenWidth / 3,
                 width: double.infinity,
@@ -416,7 +363,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                     physics: const NeverScrollableScrollPhysics(),
                     itemCount: listOfReservationDetail.length,
                     itemBuilder: (context, index) {
-                      if (listOfReservationDetail.length > 0) {
+                      if (listOfReservationDetail.isNotEmpty) {
                         var currentDetail = listOfReservationDetail[index];
                         return Padding(
                           padding: EdgeInsets.only(bottom: AdaptSize.pixel8),
@@ -440,7 +387,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                           ),
                         );
                       } else {
-                        return Text("ada kesalahan");
+                        return const Text("ada kesalahan");
                       }
                     }),
               ),
@@ -506,7 +453,12 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                   Text(
                     NumberFormat.currency(
                             locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                        .format(100000),
+                        .format(widget.bookingForms.officeData
+                        ?.officePricing.officePrice ??
+                        35000) +
+                        (widget.bookingForms.officeData?.officeType == "Office"
+                            ? " /month"
+                            : " /hour"),
                     style: Theme.of(context).textTheme.headline6!.copyWith(
                           color: MyColor.darkBlueColor,
                           fontSize: AdaptSize.pixel14,
@@ -524,7 +476,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Disc(25%)',
+                    'Disc(11%)',
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           fontSize: AdaptSize.pixel14,
                         ),
@@ -555,10 +507,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                           fontSize: AdaptSize.pixel14,
                         ),
                   ),
-                  Text(
-                    NumberFormat.currency(
-                            locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                        .format(100000),
+                  Text('x${widget.bookingForms.duration} ${widget.durationTimeUnits}',
                     style: Theme.of(context).textTheme.headline6!.copyWith(
                           color: MyColor.darkBlueColor,
                           fontSize: AdaptSize.pixel14,
@@ -583,7 +532,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                   Text(
                     NumberFormat.currency(
                             locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                        .format(100000),
+                        .format(10000),
                     style: Theme.of(context).textTheme.headline6!.copyWith(
                           color: MyColor.darkBlueColor,
                           fontSize: AdaptSize.pixel14,
@@ -611,7 +560,16 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                   Text(
                     NumberFormat.currency(
                             locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                        .format(100000),
+                        .format(((((widget.bookingForms.transactionTotalPrice) /
+                        (widget.bookingForms.officeData?.officePricing
+                            .officePrice ??
+                            4)) *
+                        (widget.bookingForms.officeData
+                            ?.officePricing
+                            .officePrice ??
+                            2)) +
+                        10000)
+                        .round()),
                     style: Theme.of(context).textTheme.headline6!.copyWith(
                           color: MyColor.darkBlueColor,
                           fontSize: AdaptSize.pixel14,
@@ -629,7 +587,7 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'PPN(25%)',
+                    'PPN(11%)',
                     style: Theme.of(context).textTheme.bodyText1!.copyWith(
                           fontSize: AdaptSize.pixel14,
                         ),
@@ -637,7 +595,19 @@ class _PaymentDetailScreenState extends State<PaymentDetailScreen> {
                   Text(
                     NumberFormat.currency(
                             locale: 'id', symbol: 'Rp ', decimalDigits: 0)
-                        .format(100000),
+                        .format(((((((widget.bookingForms.transactionTotalPrice) /
+                        (widget.bookingForms.officeData
+                            ?.officePricing
+                            .officePrice ??
+                            4)) *
+                        (widget.bookingForms.officeData
+                            ?.officePricing
+                            .officePrice ??
+                            2)) +
+                        10000)
+                        .round()) /
+                        100) *
+                        11),
                     style: Theme.of(context).textTheme.headline6!.copyWith(
                           color: MyColor.darkBlueColor,
                           fontSize: AdaptSize.pixel14,

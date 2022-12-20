@@ -8,6 +8,7 @@ import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/remove_trailing_zero.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
@@ -265,9 +266,12 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               officeById?.officeLocation.officeLongitude)!
                           : '-',
                       officePersonCapacity: officeById?.officePersonCapacity
-                              .toString() ??
+                              .toString()
+                              .replaceAll(RemoveTrailingZero.regex, '') ??
                           listOfDummyOffice[0].officePersonCapacity.toString(),
-                      officeArea: officeById?.officeArea.toString() ??
+                      officeArea: officeById?.officeArea
+                              .toString()
+                              .replaceAll(RemoveTrailingZero.regex, '') ??
                           listOfDummyOffice[0].officeArea.toString(),
                       officeType: officeById?.officeType ??
                           listOfDummyOffice[0].officeType,
@@ -476,11 +480,14 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   'assets/svg_assets/discount.svg'),
                             ),
                           ),
+                          textInputAction: TextInputAction.done,
                           suffixIcon: Icon(
                             Icons.percent,
                             color: MyColor.primary700,
+                            size: AdaptSize.pixel18,
                           ),
                           label: "discount code",
+                          textStyle: TextStyle(color: MyColor.neutral400),
                           hintTexts: "AXRRR#2",
                           controller: discountFormController);
                     }),

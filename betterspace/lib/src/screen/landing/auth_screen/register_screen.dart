@@ -3,7 +3,6 @@ import 'package:betterspace/src/services/page_validators.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
 import 'package:betterspace/src/utils/enums.dart';
-import 'package:betterspace/src/services/parsers.dart';
 import 'package:betterspace/src/utils/form_validator.dart';
 import 'package:betterspace/src/view_model/login_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
@@ -11,6 +10,7 @@ import 'package:betterspace/src/view_model/register_viemodel.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/loading_widget.dart';
 import 'package:betterspace/src/widget/widget/rich_text_widget.dart';
+import 'package:betterspace/src/widget/widget/string_radio_button.dart';
 import 'package:betterspace/src/widget/widget/text_filed_widget.dart';
 import 'package:email_validator/email_validator.dart';
 import 'package:flutter/gestures.dart';
@@ -33,6 +33,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       TextEditingController();
   ValueNotifier<GenderEnum> radGenderVal =
       ValueNotifier<GenderEnum>(GenderEnum.male);
+  ValueNotifier<String> _stringGenderVal = ValueNotifier<String>('male');
 
   @override
   void dispose() {
@@ -109,38 +110,30 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Row(
                   children: [
                     /// male value
-                    ValueListenableBuilder<GenderEnum>(
-                      valueListenable: radGenderVal,
-                      builder: ((context, values, child) {
-                        return Radio<GenderEnum>(
-                          activeColor: Colors.deepPurple.shade600,
-                          value: GenderEnum.male,
-                          groupValue: values,
-                          onChanged: ((value) {
-                            radGenderVal.value = value!;
-                          }),
-                        );
-                      }),
+                    stringRadioButton(
+                      context: context,
+                      customRadioController: _stringGenderVal,
+                      controlledIdValue: 'male',
                     ),
+
+                    SizedBox(width: AdaptSize.screenWidth * .011,),
+
                     Text(
                       "Male",
                       style: Theme.of(context).textTheme.bodyMedium,
                     ),
 
+                    SizedBox(width: AdaptSize.screenWidth * .014,),
+
                     /// feemale value
-                    ValueListenableBuilder<GenderEnum>(
-                      valueListenable: radGenderVal,
-                      builder: ((context, values, child) {
-                        return Radio<GenderEnum>(
-                          activeColor: Colors.deepPurple.shade600,
-                          value: GenderEnum.female,
-                          groupValue: values,
-                          onChanged: ((value) {
-                            radGenderVal.value = value!;
-                          }),
-                        );
-                      }),
+                    stringRadioButton(
+                      context: context,
+                      customRadioController: _stringGenderVal,
+                      controlledIdValue: 'female',
                     ),
+
+                    SizedBox(width: AdaptSize.screenWidth * .01,),
+
                     Text(
                       "Female",
                       style: Theme.of(context).textTheme.bodyMedium,
@@ -285,7 +278,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             await registerProvider.createUser(
                               userInfo: UserModelForRegist(
                                 full_name: _fullnameController.text,
-                                gender: genderEnumParsers(radGenderVal.value),
+                                gender: _stringGenderVal.value,
                                 email: _emailController.text,
                                 password: _passwordController.text,
                                 confirmation_password:

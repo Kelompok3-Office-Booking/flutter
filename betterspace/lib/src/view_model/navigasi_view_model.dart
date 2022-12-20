@@ -7,11 +7,12 @@ import 'package:betterspace/src/screen/landing/auth_screen/register_screen.dart'
 import 'package:betterspace/src/screen/landing/on_boarding_screen/on_boarding_view.dart';
 import 'package:betterspace/src/screen/menu/account/setting_item_screen/term_condition_screen.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/payment_metod_screen.dart';
-import 'package:betterspace/src/screen/menu/home/filter_search_screen.dart';
+import 'package:betterspace/src/screen/menu/home/office_filter/filter_by_keyword.dart';
 import 'package:betterspace/src/screen/menu/home/notification_screen.dart';
+import 'package:betterspace/src/screen/menu/home/office_filter/filter_by_selection.dart';
 import 'package:betterspace/src/screen/menu/home/search_space_screen.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/checkout_screen.dart';
-import 'package:betterspace/src/screen/menu/transaksi/detail_order/process_detail_order.dart';
+import 'package:betterspace/src/screen/menu/transaksi/process_detail_order.dart';
 import 'package:betterspace/src/screen/menu_screen.dart';
 import 'package:betterspace/src/screen/testing%20screen/testing_screen_for_api.dart';
 import 'package:betterspace/src/screen/menu/home/detail_office/office_detail_screen.dart';
@@ -239,7 +240,7 @@ class NavigasiViewModel with ChangeNotifier {
         Navigator.of(context).push(
           PageRouteBuilder(
             pageBuilder: (context, animation, secondAnimation) =>
-                const FilterSearchScreen(),
+                const KeywordFilterScreen(),
             transitionsBuilder: (context, animation, secondAnimation, child) =>
                 FadeTransition(
               opacity: animation,
@@ -290,7 +291,6 @@ class NavigasiViewModel with ChangeNotifier {
         builder: (context) => ProcessDetailOrderScreens(
           isNewTransaction: isNewTransaction,
           statusTransaction: BookingStatusWidget.statusOnProcess(context),
-          infoOnProcessed: infoOnProcess(context),
           requestedModels: requestedModel,
           requestedCreateTransactionModel: requestedCreateTransactionModel,
         ),
@@ -353,6 +353,21 @@ class NavigasiViewModel with ChangeNotifier {
     Navigator.push(
       context,
       CupertinoPageRoute(builder: (context) => routeOffice),
+    );
+  }
+
+  /// navigasi search by item selected
+  void navigasiToSearchBySelected(BuildContext context, String officeLocation,
+      String officeType, String dateSelected) {
+    Navigator.push(
+      context,
+      CupertinoPageRoute(
+        builder: (context) => SelectedFilterScreen(
+          officeLocation: officeLocation,
+          officeType: officeType,
+          dateSelected: dateSelected,
+        ),
+      ),
     );
   }
 }

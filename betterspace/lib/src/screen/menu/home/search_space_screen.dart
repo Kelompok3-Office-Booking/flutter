@@ -1,4 +1,3 @@
-import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
@@ -8,9 +7,9 @@ import 'package:betterspace/src/view_model/office_viewmodels.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
 import 'package:betterspace/src/widget/home_widget/search_field.dart';
 import 'package:betterspace/src/widget/home_widget/search_screen_widget/list_radio_button.dart';
-import 'package:betterspace/src/widget/home_widget/search_screen_widget/search_map_widget.dart';
 import 'package:betterspace/src/widget/widget/button_widget.dart';
 import 'package:betterspace/src/widget/widget/default_appbar_widget.dart';
+import 'package:betterspace/src/widget/widget/horizontal_filter_location.dart';
 import 'package:betterspace/src/widget/widget/read_only_form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -28,6 +27,8 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
   final TextEditingController _dateController = TextEditingController();
   ValueNotifier<String> stringOfficeTypeVal =
       ValueNotifier<String>('coworking space');
+  ValueNotifier<String> stringOfficeLocationVal =
+      ValueNotifier<String>('South Jakarta');
 
   @override
   void initState() {
@@ -48,11 +49,6 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final officeListAlloffice =
-        Provider.of<OfficeViewModels>(context, listen: false);
-    final listOfAllOffice =
-        officeListAlloffice.listOfAllOfficeModels.where((element) =>
-            element.officeID == element.officeLocation.city).toSet().toList();
     return Scaffold(
       appBar: defaultAppbarWidget(
         contexts: context,
@@ -111,7 +107,8 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                                 top: AdaptSize.screenHeight * 0.016,
                                 bottom: AdaptSize.screenHeight * 0.016,
                               ),
-                              hintText: 'Mau kerja dimana hari ini ?',
+                              hintText: 'Search Office',
+
                               controller: _searchController,
                               prefixIcon: Icon(
                                 Icons.search,
@@ -129,15 +126,10 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                             SizedBox(
                               height: AdaptSize.screenHeight * 0.193,
                               width: double.infinity,
-                              child: ListView.builder(
-                                  shrinkWrap: true,
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: listOfAllOffice.length,
-                                  itemBuilder: (context, index) {
-                                    return searchMapWidget(
-                                        context: context,
-                                        allOfficeCity: listOfAllOffice[index].officeLocation.city);
-                                  }),
+                              child: horizontalFilterLocation(
+                                contexts: context,
+                                isSelected: stringOfficeLocationVal,
+                              ),
                             ),
                           ],
                         ),
@@ -150,7 +142,7 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
 
                     /// date picker
                     Container(
-                      height: AdaptSize.screenWidth / 1000 * 260,
+                      height: AdaptSize.screenWidth / 1000 * 310,
                       width: double.infinity,
                       padding: EdgeInsets.all(AdaptSize.screenHeight * .01),
                       decoration: BoxDecoration(
@@ -218,7 +210,7 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                       stringOfficeTypeVal: stringOfficeTypeVal,
                       controllerValue1: 'coworking space',
                       controllerValue2: 'meeting room',
-                      controllerValue3: 'office building',
+                      controllerValue3: 'office',
                     ),
 
                     SizedBox(
@@ -254,7 +246,16 @@ class _SearchSpaceScreenState extends State<SearchSpaceScreen> {
                 child: buttonWidget(
                   sizeheight: AdaptSize.pixel40,
                   sizeWidth: double.infinity,
-                  onPressed: () {},
+                  onPressed: () {
+                    context
+                        .read<NavigasiViewModel>()
+                        .navigasiToSearchBySelected(
+                      context,
+                      stringOfficeLocationVal.value,
+                      stringOfficeTypeVal.value,
+                      _dateController.text.isNotEmpty ? _dateController.text : 'Date Unselected',
+                    );
+                  },
                   borderRadius: BorderRadius.circular(10),
                   backgroundColor: MyColor.darkBlueColor,
                   child: Text(
