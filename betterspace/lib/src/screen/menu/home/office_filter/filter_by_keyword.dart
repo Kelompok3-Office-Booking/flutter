@@ -2,6 +2,7 @@ import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
 import 'package:betterspace/src/utils/colors.dart';
+import 'package:betterspace/src/utils/remove_trailing_zero.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/search_spaces_view_model.dart';
@@ -11,14 +12,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-class FilterSearchScreen extends StatefulWidget {
-  const FilterSearchScreen({Key? key}) : super(key: key);
+class KeywordFilterScreen extends StatefulWidget {
+  const KeywordFilterScreen({Key? key}) : super(key: key);
 
   @override
-  State<FilterSearchScreen> createState() => _FilterSearchScreenState();
+  State<KeywordFilterScreen> createState() => _KeywordFilterScreenState();
 }
 
-class _FilterSearchScreenState extends State<FilterSearchScreen> {
+class _KeywordFilterScreenState extends State<KeywordFilterScreen> {
   final TextEditingController _searchController = TextEditingController();
 
   @override
@@ -135,9 +136,9 @@ class _FilterSearchScreenState extends State<FilterSearchScreen> {
                                         : '-',
                                 officePersonCapacity: values
                                     .foundOffice[index].officePersonCapacity
-                                    .toString(),
+                                    .toString().replaceAll(RemoveTrailingZero.regex, ''),
                                 officeArea: values.foundOffice[index].officeArea
-                                    .toString(),
+                                    .toString().replaceAll(RemoveTrailingZero.regex, ''),
                                 officeType:
                                     values.foundOffice[index].officeType,
                               ),

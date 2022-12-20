@@ -2,6 +2,7 @@ import 'package:betterspace/src/model/office_models/office_dummy_models.dart';
 import 'package:betterspace/src/screen/error/no_connection_screen.dart';
 import 'package:betterspace/src/screen/landing/network_aware.dart';
 import 'package:betterspace/src/utils/adapt_size.dart';
+import 'package:betterspace/src/utils/remove_trailing_zero.dart';
 import 'package:betterspace/src/view_model/get_location_view_model.dart';
 import 'package:betterspace/src/view_model/navigasi_view_model.dart';
 import 'package:betterspace/src/view_model/office_viewmodels.dart';
@@ -75,9 +76,9 @@ class AllCoworkingScreen extends StatelessWidget {
                       )!
                     : '-',
                 officePersonCapacity:
-                    listOfAllCoworking[index].officePersonCapacity.toString(),
-                officeArea: listOfAllCoworking[index].officeArea.toString(),
-                hours: listOfAllCoworking[index].officeOpenTime.timeZoneName,
+                    listOfAllCoworking[index].officePersonCapacity.toString().replaceAll(RemoveTrailingZero.regex, ''),
+                officeArea: listOfAllCoworking[index].officeArea.toString().replaceAll(RemoveTrailingZero.regex, ''),
+                hours: '/Hours',
                 officePricing:
                     listOfAllCoworking[index].officePricing.officePrice,
               );

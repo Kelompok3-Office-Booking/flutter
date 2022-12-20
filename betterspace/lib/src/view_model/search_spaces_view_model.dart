@@ -28,26 +28,28 @@ class SearchSpacesViewModel with ChangeNotifier {
 
   /// ------------------------------------------------------------------------
 
+  late String dateCheckin = '';
+
   /// feature filtering in search by selecting
 
   List foundAllOfficeBySelecting = [];
 
   List officeFilterBySelecting = OfficeViewModels().listOfAllOfficeModels;
 
-  void filterAllOfficeBySelecting(context, String enteredKeyword) {
+  void filterAllOfficeBySelecting(context, String officeLocation, String officeType) {
     final officeSearch = Provider.of<OfficeViewModels>(context, listen: false);
     List results = [];
-    if (enteredKeyword.isEmpty) {
+    if (officeLocation.isEmpty && officeType.isEmpty) {
       results = officeSearch.listOfAllOfficeModels;
     } else {
       results = officeSearch.listOfAllOfficeModels
           .where((place) =>
               place.officeLocation.city
                   .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()) &&
+                  .contains(officeLocation.toLowerCase()) &&
               place.officeType
                   .toLowerCase()
-                  .contains(enteredKeyword.toLowerCase()))
+                  .contains(officeType.toLowerCase()))
           .toList();
     }
 
