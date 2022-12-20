@@ -30,6 +30,20 @@ DateTime? parseApiFormatDateTime({required String apiFormattedDateTime}) {
   }
 }
 
+DateTime? parseApiFormatDateTime3({required String apiFormattedDateTime}) {
+  print(apiFormattedDateTime + "hehehe");
+  if (apiFormattedDateTime.length > 3) {
+    var currentDate = apiFormattedDateTime.split(" ");
+    var splitedDate = currentDate[0].split("-");
+    String day = splitedDate[0];
+    String month = splitedDate[1];
+    String year = splitedDate[2];
+    String time = "00:00:00";
+    String formattedDateString = year + month + day + " " + time;
+    return DateTime.parse(formattedDateString);
+  }
+}
+
 UserTransaction? parseCreateTransactionToUserTransaction(
     {CreateTransactionModels? requestedModel,
     required UserModel usedUserModel}) {
@@ -404,13 +418,14 @@ List<UserTransaction> listedUserTransactionParser(
 }
 
 ReviewModels reviewModelParser(Map<String, dynamic> jsonResponse) {
+  print(jsonResponse["created_at"]);
   return ReviewModels(
       reviewComment: jsonResponse["comment"],
       reviewRating: jsonResponse["score"].toDouble(),
       reviewedOfficeId: jsonResponse["office"]["office_id"],
       reviewId: jsonResponse["id"],
       userId: jsonResponse["user"]["user_id"],
-      createdAt: parseApiFormatDateTime(
+      createdAt: parseApiFormatDateTime3(
           apiFormattedDateTime: jsonResponse["created_at"]));
 }
 

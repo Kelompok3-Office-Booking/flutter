@@ -82,9 +82,9 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
     final officeReviewsProvider =
         Provider.of<ReviewViewmodels>(context, listen: false);
     final reviewById = officeReviewsProvider.listOfReviewOffice;
-        // .where(
-        //     (element) => element.reviewedOfficeId == int.parse(widget.officeID))
-        // .toList();
+    // .where(
+    //     (element) => element.reviewedOfficeId == int.parse(widget.officeID))
+    // .toList();
 
     return Scaffold(
       body: NetworkAware(
@@ -742,12 +742,11 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
 
                       /// card review
                       Consumer<ReviewViewmodels>(
-                          builder: (context, value, child) {
-                        if (value.connectionState ==
+                          builder: (context, reviewModels, child) {
+                        if (reviewModels.connectionState ==
                             stateOfConnections.isLoading) {
-                          return value.listOfReviewOffice.isNotEmpty
-                              ?
-                          shimmerLoading(
+                          return reviewModels.listOfReviewOffice.isNotEmpty
+                              ? shimmerLoading(
                                   child: commonShimmerLoadWidget(
                                     sizeHeight:
                                         AdaptSize.screenWidth / 1000 * 470,
@@ -756,9 +755,9 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                 )
                               : const SizedBox();
                         }
-                        if (value.connectionState ==
+                        if (reviewModels.connectionState ==
                             stateOfConnections.isReady) {
-                          return value.listOfReviewOffice.isNotEmpty
+                          return reviewModels.listOfReviewOffice.isNotEmpty
                               ? Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
@@ -782,26 +781,29 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                                   AdaptSize.screenHeight * .01),
                                           shrinkWrap: true,
                                           scrollDirection: Axis.horizontal,
-                                          itemCount: value.listOfReviewOffice.length,
+                                          itemCount: reviewModels
+                                              .listOfReviewOffice.length,
                                           itemBuilder: (context, index) {
+                                            final currentReviewModel =
+                                                reviewModels
+                                                    .listOfReviewOffice[index];
                                             return cardReview(
                                               context: context,
-                                              userImage:
-                                                  value.listOfReviewUser[index]
-                                                      .reviewComment,
-                                              userNameReview: value.listOfReviewUser[index]
+                                              userImage: currentReviewModel
+                                                  .reviewComment,
+                                              userNameReview: currentReviewModel
                                                   .reviewComment,
                                               dateReview: DateFormat('MMM y')
-                                                  .format(value.listOfReviewOffice[index]
+                                                  .format(currentReviewModel
                                                       .createdAt!)
                                                   .toString(),
                                               descriptionReview:
-                                              value.listOfReviewOffice[index]
+                                                  currentReviewModel
                                                       .reviewComment,
                                               totalHelpful:
                                                   Random().nextInt(10),
                                               reviewStarLength:
-                                              value.listOfReviewOffice[index]
+                                                  currentReviewModel
                                                       .reviewRating
                                                       .toInt(),
                                             );
@@ -813,7 +815,7 @@ class _OfficeDetailScreenState extends State<OfficeDetailScreen> {
                                   height: AdaptSize.screenHeight * .01,
                                 );
                         }
-                        if (value.connectionState ==
+                        if (reviewModels.connectionState ==
                             stateOfConnections.isFailed) {
                           return reviewById.isNotEmpty
                               ? commonShimmerFailedLoadWidget(

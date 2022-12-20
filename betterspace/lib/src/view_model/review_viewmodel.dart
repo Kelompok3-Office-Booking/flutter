@@ -64,6 +64,7 @@ class ReviewViewmodels with ChangeNotifier {
             await UserService().getAllReviewByUser(accessToken: accessTokens);
         _listOfReviewByUser =
             listOfReviewModelParser(listOfResponse: response.data["data"]);
+        notifyListeners();
         connectionState = stateOfConnections.isReady;
         notifyListeners();
         print(_listOfReviewByUser);
